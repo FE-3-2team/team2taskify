@@ -1,0 +1,222 @@
+@import "tailwindcss";
+
+@theme {
+    --font-pretendard: "Pretendard", sans-serif;
+
+    --font-3xl-bold: 32px;
+    --line-3xl-bold: 42px;
+    --font-3xl-semibold: 32px;
+    --line-3xl-semibold: 42px;
+
+    --font-2xl-bold: 24px;
+    --line-2xl-bold: 32px;
+    --font-2xl-semibold: 24px;
+    --line-2xl-semibold: 32px;
+    --font-2xl-medium: 24px;
+    --line-2xl-medium: 32px;
+    --font-2xl-regular: 24px;
+    --line-2xl-regular: 32px;
+
+    --font-xl-bold: 20px;
+    --line-xl-bold: 32px;
+    --font-xl-semibold: 20px;
+    --line-xl-semibold: 32px;
+    --font-xl-medium: 20px;
+    --line-xl-medium: 32px;
+    --font-xl-regular: 20px;
+    --line-xl-regular: 32px;
+
+    --font-2lg-bold: 18px;
+    --line-2lg-bold: 26px;
+    --font-2lg-semibold: 18px;
+    --line-2lg-semibold: 26px;
+    --font-2lg-medium: 18px;
+    --line-2lg-medium: 26px;
+    --font-2lg-regular: 18px;
+    --line-2lg-regular: 26px;
+
+    --font-lg-bold: 16px;
+    --line-lg-bold: 26px;
+    --font-lg-semibold: 16px;
+    --line-lg-semibold: 26px;
+    --font-lg-medium: 16px;
+    --line-lg-medium: 26px;
+    --font-lg-regular: 16px;
+    --line-lg-regular: 26px;
+
+    --font-md-bold: 14px;
+    --line-md-bold: 24px;
+    --font-md-semibold: 14px;
+    --line-md-semibold: 24px;
+    --font-md-medium: 14px;
+    --line-md-medium: 24px;
+    --font-md-regular: 14px;
+    --line-md-regular: 24px;
+
+    --font-sm-semibold: 13px;
+    --line-sm-semibold: 22px;
+    --font-sm-medium: 13px;
+    --line-sm-medium: 22px;
+
+    --font-xs-semibold: 12px;
+    --line-xs-semibold: 20px;
+    --font-xs-medium: 12px;
+    --line-xs-medium: 18px;
+    --font-xs-regular: 12px;
+    --line-xs-regular: 18px;
+    
+    --breakpoint-tablet: 743px;
+    --breakpoint-laptop: 1023px;
+    --breakpoint-desktop: 1920px;
+}
+
+@layer components {
+    .text-3xl-bold {
+      font-size: var(--font-3xl-bold);
+      line-height: var(--line-3xl-bold);
+      font-weight: 700;
+      font-family: var(--font-pretendard);
+    }
+    .text-3xl-semibold {
+      font-size: var(--font-3xl-semibold);
+      line-height: var(--line-3xl-semibold);
+      font-weight: 600;
+      font-family: var(--font-pretendard);
+    }
+  
+    .text-2xl-bold {
+      font-size: var(--font-2xl-bold);
+      line-height: var(--line-2xl-bold);
+      font-weight: 700;
+      font-family: var(--font-pretendard);
+    }
+    .text-2xl-semibold {
+      font-size: var(--font-2xl-semibold);
+      line-height: var(--line-2xl-semibold);
+      font-weight: 600;
+      font-family: var(--font-pretendard);
+    }
+    .text-2xl-medium {
+      font-size: var(--font-2xl-medium);
+      line-height: var(--line-2xl-medium);
+      font-weight: 500;
+      font-family: var(--font-pretendard);
+    }
+    .text-2xl-regular {
+      font-size: var(--font-2xl-regular);
+      line-height: var(--line-2xl-regular);
+      font-weight: 400;
+      font-family: var(--font-pretendard);
+    }
+  
+    .text-xl-bold {
+      font-size: var(--font-xl-bold);
+      line-height: var(--line-xl-bold);
+      font-weight: 700;
+      font-family: var(--font-pretendard);
+    }
+    .text-xl-semibold {
+      font-size: var(--font-xl-semibold);
+      line-height: var(--line-xl-semibold);
+      font-weight: 600;
+      font-family: var(--font-pretendard);
+    }
+    .text-xl-medium {
+      font-size: var(--font-xl-medium);
+      line-height: var(--line-xl-medium);
+      font-weight: 500;
+      font-family: var(--font-pretendard);
+    }
+    .text-xl-regular {
+      font-size: var(--font-xl-regular);
+      line-height: var(--line-xl-regular);
+      font-weight: 400;
+      font-family: var(--font-pretendard);
+    }
+  
+    .text-lg-bold {
+      font-size: var(--font-lg-bold);
+      line-height: var(--line-lg-bold);
+      font-weight: 700;
+      font-family: var(--font-pretendard);
+    }
+    .text-lg-semibold {
+      font-size: var(--font-lg-semibold);
+      line-height: var(--line-lg-semibold);
+      font-weight: 600;
+      font-family: var(--font-pretendard);
+    }
+    .text-lg-medium {
+      font-size: var(--font-lg-medium);
+      line-height: var(--line-lg-medium);
+      font-weight: 500;
+      font-family: var(--font-pretendard);
+    }
+    .text-lg-regular {
+      font-size: var(--font-lg-regular);
+      line-height: var(--line-lg-regular);
+      font-weight: 400;
+      font-family: var(--font-pretendard);
+    }
+  
+    .text-md-bold {
+      font-size: var(--font-md-bold);
+      line-height: var(--line-md-bold);
+      font-weight: 700;
+      font-family: var(--font-pretendard);
+    }
+    .text-md-semibold {
+      font-size: var(--font-md-semibold);
+      line-height: var(--line-md-semibold);
+      font-weight: 600;
+      font-family: var(--font-pretendard);
+    }
+    .text-md-medium {
+      font-size: var(--font-md-medium);
+      line-height: var(--line-md-medium);
+      font-weight: 500;
+      font-family: var(--font-pretendard);
+    }
+    .text-md-regular {
+      font-size: var(--font-md-regular);
+      line-height: var(--line-md-regular);
+      font-weight: 400;
+      font-family: var(--font-pretendard);
+    }
+  
+    .text-sm-semibold {
+      font-size: var(--font-sm-semibold);
+      line-height: var(--line-sm-semibold);
+      font-weight: 600;
+      font-family: var(--font-pretendard);
+    }
+    .text-sm-medium {
+      font-size: var(--font-sm-medium);
+      line-height: var(--line-sm-medium);
+      font-weight: 500;
+      font-family: var(--font-pretendard);
+    }
+  
+    .text-xs-semibold {
+      font-size: var(--font-xs-semibold);
+      line-height: var(--line-xs-semibold);
+      font-weight: 600;
+      font-family: var(--font-pretendard);
+    }
+    .text-xs-medium {
+      font-size: var(--font-xs-medium);
+      line-height: var(--line-xs-medium);
+      font-weight: 500;
+      font-family: var(--font-pretendard);
+    }
+    .text-xs-regular {
+      font-size: var(--font-xs-regular);
+      line-height: var(--line-xs-regular);
+      font-weight: 400;
+      font-family: var(--font-pretendard);
+    }
+  }
+
+/* .text-3xl-bold { @apply text-3xl font-bold font-pretendard;}
+.text-3xl-semibold { @apply text-[32px]} */
+
