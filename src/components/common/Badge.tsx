@@ -13,15 +13,37 @@ const RANDOM_COLOR = [
   "bg-red-50",
   "bg-red-700",
 ];
-const RANDOM_NUM = Math.floor(Math.random() * RANDOM_COLOR.length);
 
 export function Badges({ badges }: BadgesProps) {
+  const RANDOM_NUM = Math.floor(Math.random() * RANDOM_COLOR.length);
+  if (badges.length < 1) return;
+  const badgesArray = badges.slice(0, 4);
+
   return (
-    <div className="">
-      {badges.map((badge) => {
-        return <Badge value={badge}></Badge>;
+    <div className="relative flex flex-row w-auto h-[38px]">
+      {badgesArray.map((badge, idx) => {
+        return (
+          <div
+            key={idx}
+            className="absolute"
+            style={{ left: `${idx * 20}px`, zIndex: 0 + idx }}
+          >
+            <Badge value={badge} />
+          </div>
+        );
       })}
-      <div className={`${RANDOM_COLOR[RANDOM_NUM]}`}>{badges.length - 3}</div>
+
+      {badges.length > 4 && (
+        <div
+          className={`absolute border-2 border-white flex justify-center items-center 
+          rounded-full w-[38px] h-[38px] text-white text-[16px] 
+          ${RANDOM_COLOR[RANDOM_NUM]}
+          left-[80px] z-10
+          `}
+        >
+          +{badges.length - 3}
+        </div>
+      )}
     </div>
   );
 }
@@ -30,6 +52,8 @@ interface Props {
 }
 
 export function Badge({ value }: Props) {
+  const RANDOM_NUM = Math.floor(Math.random() * RANDOM_COLOR.length);
+
   const { nickname, profileImageUrl } = value;
   const firstChar = nickname.charAt(0).toUpperCase();
 
