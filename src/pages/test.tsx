@@ -1,3 +1,4 @@
+import { Tags } from "@/components/common/Chip/Tag.chip";
 import Header from "@/components/common/Header";
 
 const user = {
