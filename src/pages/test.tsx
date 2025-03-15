@@ -1,3 +1,4 @@
+import Status from "@/components/common/Chip/Status.chip";
 import { Tags } from "@/components/common/Chip/Tag.chip";
 import Header from "@/components/common/Header";
 
@@ -58,6 +59,7 @@ export default function Test() {
     <div>
       <div>컴포넌트등 테스트 페이지 입니다.</div>
       <Header user={user} members={members} />
+      <Status value="Test" />
     </div>
   );
 }
