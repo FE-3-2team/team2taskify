@@ -4,10 +4,6 @@ import Image from "next/image";
 interface Props {
   onClick: (value: string) => void;
 }
-/**
- * todo
- * 컬러 팔레트 후에 배경색 컬러변경
- */
 
 export default function ColorChip({ onClick }: Props) {
   const [selected, setSelected] = useState<string>("");
