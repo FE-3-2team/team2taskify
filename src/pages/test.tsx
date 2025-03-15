@@ -1,3 +1,4 @@
+import ColorChip from "@/components/common/Chip/Color.chip";
 import Plus from "@/components/common/Chip/Plus.chip";
 import Header from "@/components/common/Header";
 
@@ -58,7 +59,7 @@ export default function Test() {
     <div>
       <div>컴포넌트등 테스트 페이지 입니다.</div>
       <Header user={user} members={members} />
-      <Plus onClick={() => {}} />
+      <ColorChip onClick={() => {}} />
     </div>
   );
 }
