@@ -1,5 +1,4 @@
-import Status from "@/components/common/Chip/Status.chip";
-import { Tags } from "@/components/common/Chip/Tag.chip";
+import Plus from "@/components/common/Chip/Plus.chip";
 import Header from "@/components/common/Header";
 
 const user = {
@@ -59,7 +58,7 @@ export default function Test() {
     <div>
       <div>컴포넌트등 테스트 페이지 입니다.</div>
       <Header user={user} members={members} />
-      <Status value="Test" />
+      <Plus onClick={() => {}} />
     </div>
   );
 }

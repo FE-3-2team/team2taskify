@@ -1,11 +1,6 @@
 interface Props {
   value: string;
 }
-/**
- * todo
- * 점 , 배경색 컬러변경, 글씨 색깔, font-
- */
-
 export default function Status({ value }: Props) {
   return (
     <div className=" flex items-center w-fit min-h-[26px] bg-violet-F1EFFD rounded-2xl text-xs-regular px-2 ">
