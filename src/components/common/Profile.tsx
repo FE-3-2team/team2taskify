@@ -5,9 +5,9 @@ interface Props {
 }
 export default function ({ value }: Props) {
   return (
-    <div>
+    <div className="flex flex-row items-center gap-3">
       <Badge value={value} />
-      <p>{value.nickname}</p>
+      <p className="text-base">{value.nickname}</p>
     </div>
   );
 }

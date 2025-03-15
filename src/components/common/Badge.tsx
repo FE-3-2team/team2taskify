@@ -54,8 +54,8 @@ interface Props {
 export function Badge({ value }: Props) {
   const RANDOM_NUM = Math.floor(Math.random() * RANDOM_COLOR.length);
 
-  const { nickname, profileImageUrl } = value;
-  const firstChar = nickname.charAt(0).toUpperCase();
+  const { email, profileImageUrl } = value;
+  const firstChar = email.charAt(0).toUpperCase();
 
   return (
     <div
