@@ -1,3 +1,5 @@
+import useWindowSize from "@/hooks/useWindow";
+
 interface BadgesProps {
   badges: Member[];
 }
@@ -15,9 +17,11 @@ const RANDOM_COLOR = [
 ];
 
 export function Badges({ badges }: BadgesProps) {
+  const device = useWindowSize();
   const RANDOM_NUM = Math.floor(Math.random() * RANDOM_COLOR.length);
   if (badges.length < 1) return;
-  const badgesArray = badges.slice(0, 4);
+  const badgesArray =
+    device === "mobile" ? badges.slice(0, 2) : badges.slice(0, 4);
 
   return (
     <div className="relative flex flex-row w-auto h-[38px]">
@@ -38,8 +42,9 @@ export function Badges({ badges }: BadgesProps) {
           className={`absolute border-2 border-white flex justify-center items-center 
           rounded-full w-[38px] h-[38px] text-white text-[16px] 
           ${RANDOM_COLOR[RANDOM_NUM]}
-          left-[80px] z-10
+           z-10 
           `}
+          style={{ left: `${device === "mobile" ? 40 : 80}px` }}
         >
           +{badges.length - 3}
         </div>
@@ -64,7 +69,7 @@ export function Badge({ value }: Props) {
       {profileImageUrl ? (
         <img src={profileImageUrl} alt="프로필 이미지" />
       ) : (
-        <div className="text-white text-[16px]">{firstChar}</div> //여기 font,color 바꿔줘야함
+        <div className="text-white text-[16px] ">{firstChar}</div> //여기 font,color 바꿔줘야함
       )}
     </div>
   );
