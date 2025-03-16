@@ -17,10 +17,9 @@ const RANDOM_COLOR = [
 
 export function Badges({ badges }: BadgesProps) {
   const device = useWindowSize();
-  const RANDOM_NUM = Math.floor(Math.random() * RANDOM_COLOR.length);
   if (badges.length < 1) return;
   const badgesArray =
-    device === "mobile" ? badges.slice(0, 2) : badges.slice(0, 4);
+    device === "desktop" ? badges.slice(0, 4) : badges.slice(0, 2);
   const count = badgesArray.length === 2 ? 2 : 4;
   return (
     <div className="relative flex flex-row w-auto h-[38px]">
