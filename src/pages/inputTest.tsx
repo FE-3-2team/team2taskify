@@ -1,6 +1,7 @@
 import EmailInput from "../components/common/Input/EmailInput";
 import PasswordInput from "@/components/common/Input/PasswordInput";
 import TitleInput from "@/components/common/Input/TitleInput";
+import DeadlineInput from "@/components/common/Input/DateInput";
 
 export default function TestPage() {
   return (
@@ -8,6 +9,7 @@ export default function TestPage() {
       <EmailInput />
       <PasswordInput />
       <TitleInput />
+      <DeadlineInput />
     </div>
   );
 }

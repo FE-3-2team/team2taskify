@@ -30,11 +30,13 @@ const TitleInput: React.FC = () => {
 
   return (
     <div className="mb-4">
-      <label
-        htmlFor="title-input"
-        className="block mb-2 text-sm font-medium text-gray-700"
-      >
-        제목*
+      <label htmlFor="title-input" className="block mb-2 text-sm font-medium">
+        제목
+        <span
+          className={title && !error ? "text-violet-5534DA" : "text-gray-700"}
+        >
+          *
+        </span>
       </label>
       <input
         id="title-input"
@@ -43,7 +45,7 @@ const TitleInput: React.FC = () => {
         value={title}
         onChange={handleChange}
         style={titleInputStyle}
-        maxLength={12} // 13자 미만, 즉 최대 12자까지만 입력 가능
+        maxLength={12}
         className={`border rounded focus:outline-none ${
           error ? "border-red-500" : "border-gray-300"
         }`}

@@ -19,12 +19,8 @@ const EmailInput: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
-
-    // 이메일 형식 검사 정규식
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // 한글 문자가 포함되어 있는지 검사 (가-힣 범위)
     const hangulRegex = /[가-힣]/;
-
     if (value && hangulRegex.test(value)) {
       setError("이메일 형식으로 입력해주세요");
     } else if (value && !emailRegex.test(value)) {

@@ -26,6 +26,9 @@
   --pink-F7DBF0: #f7dbf0;
   --blue-DBE6F7: #dbe6f7;
 }
+:root {
+  --violet-5534DA: #5534da;
+}
 
 @layer utilities {
   .bg-black-000000 {
