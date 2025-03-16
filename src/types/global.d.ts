@@ -41,4 +41,14 @@ declare global {
       id: number;
     };
   }
+
+  interface Dashboards {
+    id: number;
+    title: string;
+    color: string;
+    createdAt: string;
+    updatedAt: string;
+    createdByMe: boolean;
+    userId: number;
+  }
 }
