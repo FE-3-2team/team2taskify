@@ -1,7 +1,6 @@
 export {};
 
 declare global {
-  // users/me 데이터 + members: 멤버조회 데이터
   interface User {
     id: number;
     email: string;
@@ -11,6 +10,16 @@ declare global {
     updatedAt: string;
     userId?: number;
     isOwner?: boolean;
+  }
+  interface Member {
+    id: number;
+    email: string;
+    nickname: string;
+    profileImageUrl: string | null;
+    createdAt: string;
+    updatedAt: string;
+    userId: number;
+    isOwner: boolean;
   }
   interface Card {
     id: number;
@@ -50,5 +59,13 @@ declare global {
     updatedAt: string;
     createdByMe: boolean;
     userId: number;
+  }
+  interface Invitations {
+    id: number;
+    inviter: {
+      nickname: string;
+      email: string;
+      id: number;
+    };
   }
 }
