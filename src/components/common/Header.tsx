@@ -5,23 +5,17 @@ import Edit from "@/assets/icons/Edit.icon.svg";
 import Invite from "@/assets/icons/Invite.icon.svg";
 import Crown from "@/assets/icons/Crown.icon.svg";
 import { Badges } from "./Badge";
-import { useState } from "react";
 
 interface Props {
   user: User;
   title?: string;
   members: User[];
+  createdByMe: boolean;
 }
 
-export default function Header({ user, members, title }: Props) {
+export default function Header({ user, members, title, createdByMe }: Props) {
   const router = useRouter();
-  const [isMine, setIsMine] = useState(false);
   const dashboardTitle = title ? title : "내 대시보드";
-  const Owner = members.find((member) => member.isOwner === true);
-  //대시보드 목록 조회로 바꾸기
-  if (Owner && Owner.id === user.id) {
-    setIsMine(true);
-  }
 
   return (
     <div className="flex flex-row justify-between w-full h-[70px] py-[15px] px-[20px] laptop:pl-10 laptop:pr-20  border-b-[1px]  items-center border-gray-D9D9D9 ">
@@ -29,7 +23,7 @@ export default function Header({ user, members, title }: Props) {
         <p className="hidden tablet:block text-black-333236 text-xl-bold ">
           {dashboardTitle}
         </p>
-        {isMine && <Image src={Crown} width={20} height={24} alt="mine" />}
+        {createdByMe && <Image src={Crown} width={20} height={24} alt="mine" />}
       </div>
 
       <div className="flex flex-row gap-4 tablet:gap-8 laptop:gap-10">
