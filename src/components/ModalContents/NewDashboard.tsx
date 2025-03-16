@@ -18,7 +18,7 @@ export default function NewDashboard() {
   const handleClick = (value: string) => {
     setNewDashboardData((prev) => ({ ...prev, color: value }));
   };
-
+  console.log(newDashboardData);
   return (
     <div className="w-[327px] tablet:w-[584px]  h-fit px-4 py-5 tablet:py-8 tablet:px-8 rounded-b-2xl">
       <div className="flex flex-col gap-6">
