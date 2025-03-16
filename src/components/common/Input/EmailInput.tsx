@@ -26,7 +26,7 @@ const EmailInput: React.FC = () => {
     const hangulRegex = /[가-힣]/;
 
     if (value && hangulRegex.test(value)) {
-      setError("영문 이메일만 입력 가능합니다");
+      setError("이메일 형식으로 입력해주세요");
     } else if (value && !emailRegex.test(value)) {
       setError("이메일 형식으로 입력해주세요");
     } else {
@@ -49,6 +49,7 @@ const EmailInput: React.FC = () => {
         value={email}
         onChange={handleChange}
         style={emailInputStyle}
+        maxLength={25}
         className={`border rounded focus:outline-none ${
           error ? "border-red-500" : "border-gray-300"
         }`}
