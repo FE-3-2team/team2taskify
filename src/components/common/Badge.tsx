@@ -1,7 +1,7 @@
 import useWindowSize from "@/hooks/useWindow";
 
 interface BadgesProps {
-  badges: User[];
+  badges: string[];
 }
 
 const RANDOM_COLOR = [
@@ -51,7 +51,7 @@ export function Badges({ badges }: BadgesProps) {
   );
 }
 interface Props {
-  value: User;
+  value: string;
 }
 
 export function Badge({ value }: Props) {
