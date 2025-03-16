@@ -3,15 +3,12 @@ import { useEffect, useState } from "react";
 interface Props {
   value?: string;
 }
-/**
- * todo
- *  배경색 컬러변경, 글씨 색깔, font-
- */
+
 const colorClasses = [
-  "bg-red-500 text-red-800",
-  "bg-green-500 text-green-800",
-  "bg-blue-500 text-blue-800",
-  "bg-yellow-500 text-yellow-800",
+  "bg-brown-F9EEE3 text-orange-FFA500",
+  "bg-green-E7F7DB text-green-7AC555",
+  "bg-pink-F7DBF0 text-pink-E876EA",
+  "bg-blue-DBE6F7 text-blue-76A6EA",
 ];
 
 export function Tag({ value }: Props) {
@@ -23,7 +20,7 @@ export function Tag({ value }: Props) {
   }, []);
   return (
     <div
-      className={`flex justify-center py-[2px] px-[6px] w-fit rounded-sm text-[14px] ${randomClass}`}
+      className={`flex justify-center items-center py-[2px] px-[6px] w-fit rounded-sm text-xs-regular ${randomClass}`}
     >
       {value}
     </div>
@@ -35,7 +32,7 @@ interface TagsProps {
 }
 export function Tags({ tags }: TagsProps) {
   return (
-    <div className="flex justify-center text-[#787486] w-fit h-[20px] gap-2 ">
+    <div className="flex justify-center w-fit h-[20px] gap-2 ">
       {tags.map((tag) => {
         return <Tag key={tag} value={tag} />;
       })}

@@ -1,24 +1,15 @@
 export {};
 
 declare global {
-  // users/me: 내 정보 조회
-  interface Me {
+  // users/me 데이터 + members: 멤버조회 데이터
+  interface User {
     id: number;
     email: string;
     nickname: string;
     profileImageUrl: string | null;
     createdAt: string;
     updatedAt: string;
-  }
-  // /members : 멤버 조회
-  interface Member {
-    id: number;
-    userId: number;
-    email: string;
-    nickname: string;
-    profileImageUrl: string | null;
-    createdAt: string;
-    updatedAt: string;
-    isOwner: boolean;
+    userId?: number;
+    isOwner?: boolean;
   }
 }
