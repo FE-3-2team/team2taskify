@@ -6,7 +6,6 @@ import { createDashboard } from "@/api/dashboard";
 /**
  * Todo
  * input 부분 공통 컴포넌트로 변경
- * submit 함수 에러 핸들링
  */
 export default function NewDashboard() {
   const router = useRouter();
