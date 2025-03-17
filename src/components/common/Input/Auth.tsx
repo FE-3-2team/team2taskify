@@ -107,7 +107,7 @@ const PasswordInput: React.FC = () => {
 // EmailInput과 PasswordInput을 하나의 컴포넌트로 결합한 AuthForm
 const AuthForm: React.FC = () => {
   return (
-    <div className="container p-4 mx-auto space-y-4">
+    <div className="w-full mx-auto space-y-4 ">
       <EmailInput />
       <PasswordInput />
     </div>
