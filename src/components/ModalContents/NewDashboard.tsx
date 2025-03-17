@@ -30,6 +30,7 @@ export default function NewDashboard() {
     // 대시보드 생성시 위의 {} 안의 데이터 리스폰스 옴
     //대시보드 '생성' 버튼을 클릭하면 대시보드가 생성되고 /dashboard/{dashboardid}로 이동하게 하세요.
   };
+  console.log(DashboardData);
   return (
     <div className="w-[327px] tablet:w-[584px]  h-fit px-4 py-5 tablet:py-8 tablet:px-8 rounded-b-2xl">
       <div className="flex flex-col gap-6">
@@ -42,6 +43,9 @@ export default function NewDashboard() {
             <input onChange={handleChange} type="text" />
           </div>
           <ColorChip onClick={handleClick} />
+          <button className="bg-amber-200" onClick={handleSubmit}>
+            등록
+          </button>
         </div>
       </div>
     </div>

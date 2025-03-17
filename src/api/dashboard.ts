@@ -8,7 +8,8 @@ export async function createDashboard(data: Data) {
   const { title, color } = data;
   try {
     const res = await instance.post("/dashboards", {
-      params: { title, color },
+      title,
+      color,
     });
     return res.data;
   } catch (error) {
