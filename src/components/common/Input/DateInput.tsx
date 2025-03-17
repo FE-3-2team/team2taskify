@@ -3,17 +3,6 @@ import DatePicker from "react-datepicker";
 import Image from "next/image";
 import CalendarIcon from "../../../assets/icons/Calendar.svg";
 
-const commonInputStyle: React.CSSProperties = {
-  width: "520px",
-  height: "50px",
-  borderRadius: "8px",
-  borderWidth: "1px",
-  borderStyle: "solid",
-  paddingTop: "15px",
-  paddingRight: "16px",
-  paddingBottom: "15px",
-};
-
 type CustomInputProps = {
   value?: string;
   onClick?: () => void;
@@ -23,8 +12,7 @@ const CustomDateInput = forwardRef<HTMLInputElement, CustomInputProps>(
   ({ value, onClick }, ref) => {
     const placeholder = value ? "" : "날짜를 입력해 주세요";
     return (
-      <div className="relative w-[520px]">
-        {/* 인풋은 readOnly이고 onClick을 제거하여 달력이 열리지 않게 함 */}
+      <div className="relative w-full">
         <input
           id="deadline-input"
           type="text"
@@ -32,10 +20,9 @@ const CustomDateInput = forwardRef<HTMLInputElement, CustomInputProps>(
           readOnly
           value={value}
           placeholder={placeholder}
-          style={commonInputStyle}
-          className="w-full border rounded focus:outline-none pl-10 pr-3 border-gray-300"
+          onClick={onClick}
+          className="w-full h-[50px] rounded-[8px] border border-gray-300 pt-[15px] pr-[16px] pb-[15px] pl-[56px] focus:outline-none text-lg-regular"
         />
-        {/* 달력 아이콘 버튼에만 onClick 핸들러를 부여 */}
         <button
           type="button"
           onClick={onClick}
@@ -52,10 +39,10 @@ const DeadlineInput: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   return (
-    <div className="mb-4">
+    <div className="w-full mb-4">
       <label
         htmlFor="deadline-input"
-        className="block mb-2 text-sm font-medium text-gray-700"
+        className="block mb-2 text-sm text-gray-700 text-lg-regular"
       >
         마감일
       </label>

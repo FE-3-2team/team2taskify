@@ -3,18 +3,6 @@ import Image from "next/image";
 import EyeCloseIcon from "../../../assets/icons/EyeVisibility_off.svg";
 import EyeOpenIcon from "../../../assets/icons/EyeVisibility_on.svg";
 
-const commonInputStyle: React.CSSProperties = {
-  width: "520px",
-  height: "50px",
-  borderRadius: "8px",
-  borderWidth: "1px",
-  borderStyle: "solid",
-  paddingTop: "15px",
-  paddingRight: "16px",
-  paddingBottom: "15px",
-  paddingLeft: "16px",
-};
-
 const PasswordInput: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,7 +12,6 @@ const PasswordInput: React.FC = () => {
     const value = e.target.value;
     setPassword(value);
 
-    // 값이 존재하면 길이가 8 미만일 때만 에러 메시지 출력.
     if (value && value.length < 8) {
       setError("8 ~ 15자만 입력 가능합니다");
     } else {
@@ -40,20 +27,19 @@ const PasswordInput: React.FC = () => {
     <div className="mb-4">
       <label
         htmlFor="password-input"
-        className="block mb-2 text-sm font-medium text-gray-700"
+        className="block mb-2 text-sm text-gray-700 text-lg-regular"
       >
         비밀번호
       </label>
-      <div className="relative w-[520px]">
+      <div className="relative w-full">
         <input
           id="password-input"
           type={showPassword ? "text" : "password"}
           placeholder="비밀번호를 입력 해주세요"
           value={password}
           onChange={handleChange}
-          style={commonInputStyle}
           maxLength={15}
-          className={`w-full border rounded focus:outline-none pr-10 ${
+          className={`w-full h-12 rounded-lg border p-4 pr-10 focus:outline-none text-lg-regular ${
             error ? "border-red-500" : "border-gray-300"
           }`}
         />
@@ -70,7 +56,7 @@ const PasswordInput: React.FC = () => {
           />
         </button>
       </div>
-      {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
+      {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
     </div>
   );
 };

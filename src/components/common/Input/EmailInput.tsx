@@ -1,17 +1,5 @@
 import { useState } from "react";
 
-const emailInputStyle: React.CSSProperties = {
-  width: "520px",
-  height: "50px",
-  borderRadius: "8px",
-  borderWidth: "1px",
-  borderStyle: "solid",
-  paddingTop: "15px",
-  paddingRight: "16px",
-  paddingBottom: "15px",
-  paddingLeft: "16px",
-};
-
 const EmailInput: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -34,7 +22,7 @@ const EmailInput: React.FC = () => {
     <div className="mb-4">
       <label
         htmlFor="email-input"
-        className="block mb-2 text-sm font-medium text-gray-700"
+        className="block mb-2 text-sm text-gray-700 text-lg-regular"
       >
         이메일
       </label>
@@ -44,13 +32,12 @@ const EmailInput: React.FC = () => {
         placeholder="이메일을 입력 해주세요"
         value={email}
         onChange={handleChange}
-        style={emailInputStyle}
         maxLength={25}
-        className={`border rounded focus:outline-none ${
+        className={`w-full h-[50px] rounded-[8px] border pt-[15px] pr-[16px] pb-[15px] pl-[16px] focus:outline-none text-lg-regular ${
           error ? "border-red-500" : "border-gray-300"
         }`}
       />
-      {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
+      {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
     </div>
   );
 };
