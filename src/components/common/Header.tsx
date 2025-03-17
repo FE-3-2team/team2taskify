@@ -68,7 +68,7 @@ export default function Header({ user, members, title, createdByMe }: Props) {
             <Badges badges={members} />
           </div>
           <div className="h-[38px]  w-[1px] bg-gray-D9D9D9" />
-          <Profile value={user} />
+          <Profile value={user} isProfile />
         </div>
       </div>
     </div>
