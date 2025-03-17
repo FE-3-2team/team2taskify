@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Kebab from "@/assets/icons/Kebabmenu.icon.svg";
 
@@ -12,12 +12,32 @@ const DropdownEditDel: React.FC<DropdownEditDelProps> = ({
   onDelete,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setTimeout(() => setIsOpen(false), 0); // Prevents event order conflicts
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="relative w-[28px] h-[28px] flex items-center justify-center">
+    <div
+      className="relative w-[28px] h-[28px] flex items-center justify-center"
+      ref={dropdownRef}
+    >
       <button
         className="flex items-center justify-center w-full h-full text-gray-600 rounded-full hover:bg-gray-100"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen((prev) => !prev)}
       >
         <Image src={Kebab} alt="menu" className="h-full" />
       </button>
