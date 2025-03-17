@@ -44,7 +44,7 @@ const DropdownProgress: React.FC<DropdownProgressProps> = ({
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 w-full h-fit mt-[2px] bg-white border border-gray-300 rounded-lg shadow-md top-full z-50">
+        <div className="absolute left-0 w-full h-fit mt-[2px] bg-white border border-gray-300 rounded-md shadow-md top-full z-50">
           {options.map((title) => (
             <button
               key={title}
