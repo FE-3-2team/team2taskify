@@ -3,6 +3,7 @@ import PrevPage from "@/assets/icons/PrevPage.icon.svg";
 import NextPage from "@/assets/icons/NextPage.icon.svg";
 import Image from "next/image";
 import Profile from "./common/Profile";
+import { deleteMember } from "@/api/member";
 //
 interface Props {
   members: User[];
@@ -22,8 +23,8 @@ export default function EditMember({ members }: Props) {
     if (currentPage === totalPage) return;
     setCurrentPage((prev) => prev + 1);
   };
-  const handleClick = () => {
-    //member 삭제 함수
+  const handleClick = async (id: number) => {
+    await deleteMember(id);
   };
   //
   return (
@@ -54,7 +55,9 @@ export default function EditMember({ members }: Props) {
             <div>
               <div className="flex items-center justify-between px-5 tablet:px-7 h-[34px] tablet:h-[38px]">
                 <Profile value={member} />
-                <button onClick={handleClick}>삭제</button>
+                <button onClick={() => handleClick(member.userId || 0)}>
+                  삭제
+                </button>
               </div>
               <div
                 className="h-[1px] w-full bg-gray-EEEEEE my-3"

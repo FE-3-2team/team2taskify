@@ -60,9 +60,19 @@ declare global {
     createdByMe: boolean;
     userId: number;
   }
-  interface Invitations {
+  interface Invitation {
     id: number;
     inviter: {
+      nickname: string;
+      email: string;
+      id: number;
+    };
+    teamId: string;
+    dashboard: {
+      title: string;
+      id: number;
+    };
+    invitee: {
       nickname: string;
       email: string;
       id: number;
