@@ -1,5 +1,3 @@
-import Header from "@/components/common/Header";
-
 const user = {
   id: 0,
   email: "gbtm@naver.com",
