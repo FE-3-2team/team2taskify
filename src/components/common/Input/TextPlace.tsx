@@ -52,7 +52,7 @@ const CommentBox: React.FC = () => {
       </label>
 
       {/* 컨테이너: 520px 너비, 8px border-radius, 1px border, 16px 패딩 */}
-      <div className="w-full max-w-[520px] rounded-[8px] border p-4">
+      <div className="w-full  rounded-[8px] border p-4 text-lg-regular">
         {/* 텍스트영역: 전체 너비, 높이 100px, resize 방지, border 제거 */}
         <textarea
           id="comment-input"
@@ -68,7 +68,7 @@ const CommentBox: React.FC = () => {
         <div className="flex justify-end mt-2">
           <button
             onClick={handleSubmit}
-            className="w-[83px] h-[32px] rounded-[4px] border bg-white border-[#D9D9D9] pt-[9px] pr-[31px] pb-[9px] pl-[31px] text-gray-700 hover:bg-gray-100"
+            className="w-[83px] h-[36px] rounded-[4px] border bg-white border-[#D9D9D9] pt-[9px] pr-[8px] pb-[9px] pl-[8px] text-violet-5534DA hover:bg-gray-100 text-xs-medium"
           >
             입력
           </button>
