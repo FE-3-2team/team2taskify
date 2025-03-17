@@ -32,12 +32,13 @@ const TitleInput: React.FC = () => {
     <div className="mb-4">
       <label htmlFor="title-input" className="block mb-2 text-sm font-medium">
         제목
-        <span
-          className={title && !error ? "text-violet-5534DA" : "text-gray-700"}
-        >
-          *
-        </span>
+        {title && !error ? (
+          <span className="text-[#5534DA]">*</span>
+        ) : (
+          <span className="text-gray-700">*</span>
+        )}
       </label>
+
       <input
         id="title-input"
         type="text"
