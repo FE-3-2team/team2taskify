@@ -133,7 +133,26 @@
       font-weight: 400;
       font-family: var(--font-pretendard);
     }
-  
+    .text-2lg-bold {
+      font-size: 18px;
+      line-height: 26px;
+      font-weight: 700;
+    }
+    .text-2lg-semibold {
+      font-size: 18px;
+      line-height: 26px;
+      font-weight: 600;
+    }
+    .text-2lg-medium {
+      font-size: 18px;
+      line-height: 26px;
+      font-weight: 500;
+    }
+    .text-2lg-regular {
+      font-size: 18px;
+      line-height: 26px;
+      font-weight: 400;
+    }
     .text-lg-bold {
       font-size: var(--font-lg-bold);
       line-height: var(--line-lg-bold);

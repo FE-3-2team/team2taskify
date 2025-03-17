@@ -1,15 +1,19 @@
-import { LoginButton } from "@/components/common/Button";
+import { LoginButton, InviteButton } from "@/components/common/Button";
 
 
 export default function Home() {
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-screen gap-4 mt-10 mb-10 text-center">
-        <div className="w-full max-w-[800px] flex flex-col items-center justify-center gap-2">
+        <div className="flex flex-col items-center justify-center w-full gap-2">
           <LoginButton onClick={() => console.log("Large 버튼 클릭")} size="large" />
           <LoginButton onClick={() => console.log("비활성화 버튼 클릭")} size="large" disabled />
           <LoginButton onClick={() => console.log("Small 버튼 클릭")} size="small" />
           <LoginButton onClick={() => console.log("비활성화 버튼 클릭")} size="small" disabled />
+          <InviteButton 
+            onAccept={() => console.log("수락 버튼 클릭!")}
+            onReject={() => console.log("거절 버튼 클릭!")}
+          />
         </div>
         <div className="w-full max-w-[800px] flex flex-col items-center justify-center">
           <p className="text-3xl-bold">Pretendard 3XL Bold (32px / 42px)</p>

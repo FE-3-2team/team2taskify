@@ -17,7 +17,7 @@ export default function LoginButton({
     <button
       className={
         `w-full ${size === "small" ? "max-w-[351px]" : "max-w-[520px]"} px-[14px] py-[14px] 
-      ${disabled ? "bg-gray-9FA6B2 cursor-not-allowed" : "bg-violet-5534DA"} text-white text-md-semibold rounded-[8px] flex items-center justify-center`}
+      ${disabled ? "bg-gray-9FA6B2 cursor-not-allowed" : "bg-violet-5534DA"} text-white text-2lg-medium rounded-[8px] flex items-center justify-center`}
       onClick={onClick}
       disabled={disabled} // 비활성화 여부 적용
     >
