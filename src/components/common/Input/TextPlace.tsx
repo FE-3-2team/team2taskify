@@ -8,7 +8,8 @@ const CommentBox: React.FC = () => {
     const value = e.target.value;
     setComment(value);
 
-    if (value && (value.length < 2 || value.length > 300)) {
+    // 300자에 도달하면 오류 메시지 표시, 그 전에는 메시지 없음
+    if (value.length === 300) {
       setError("최대 300자 까지 입력 할 수 있습니다.");
     } else {
       setError("");
@@ -51,9 +52,7 @@ const CommentBox: React.FC = () => {
         )}
       </label>
 
-      {/* 컨테이너: 520px 너비, 8px border-radius, 1px border, 16px 패딩 */}
-      <div className="w-full  rounded-[8px] border p-4 text-lg-regular">
-        {/* 텍스트영역: 전체 너비, 높이 100px, resize 방지, border 제거 */}
+      <div className="w-full rounded-[8px] border p-4 text-lg-regular">
         <textarea
           id="comment-input"
           placeholder="댓글을 입력해주세요"
@@ -62,9 +61,6 @@ const CommentBox: React.FC = () => {
           maxLength={300}
           className="w-full h-[100px] resize-none outline-none border-0 focus:outline-none"
         />
-        {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
-
-        {/* 버튼: 너비 83px, 높이 32px, 4px border-radius, 1px border, 지정된 패딩, 배경 흰색, border 색상 #D9D9D9 */}
         <div className="flex justify-end mt-2">
           <button
             onClick={handleSubmit}
@@ -74,6 +70,9 @@ const CommentBox: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* 오류 메시지를 댓글 입력 컨테이너 밑에 표시 */}
+      {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
     </div>
   );
 };
