@@ -17,9 +17,10 @@
       "@/*": ["./src/*"]
     },
     "outDir": "./dist",
-    "rootDir": "/"
+    "rootDir": "./"
+    //rootDir에 .이 없어서 오류가 발생하는거 같아서 찍으니까 오류 사라져서 일단 찍어둠 [성준]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
   "exclude": ["node_modules"],
   "noImplicitAny": true, // 암시적인 any 금지
   "sourceMap": true //TypeScript 코드와 컴파일된 JavaScript 코드 간의 매핑 정보를 포함하는 .map 파일 생성 👉 브라우저 개발자 도구에서 TypeScript 코드로 디버깅 가능!
