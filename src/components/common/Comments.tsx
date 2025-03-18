@@ -1,17 +1,21 @@
+import { Badge } from "./Badge";
+
 interface Props {
-  comments: Comment;
+  comment: Comment;
 }
 
-export default function Comments({ comments }: Props) {
+export default function Comment({ comment }: Props) {
   return (
     <div>
-      <img src={comments.author.profileImageUrl} />
+      {}
+      <img src={comment.author.profileImageUrl} />
+
       <div>
         <div>
-          <p>{comments.author.nickname}</p>
-          <p>{comments.createdAt}</p>
+          <p>{comment.author.nickname}</p>
+          <p>{comment.createdAt}</p>
         </div>
-        {comments.content}
+        {comment.content}
         <div>
           <button>수정</button>
           <button>삭제</button>
