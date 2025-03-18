@@ -16,19 +16,21 @@ export const instance = axios.create({
 
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+    const isClient = typeof window !== "undefined";
+    //서버에서 실행중인지 브라우져에서 실행중인지
     const accessToken = getItem("accessToken");
     if (config.url === "/login") {
       delete config.headers.Authorization;
-    } else if (accessToken) {
+    } else if (isClient && accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
-
     return config;
   }
 );
 instance.interceptors.response.use((response) => {
+  const isClient = typeof window !== "undefined";
   const accessToken = response.data.accessToken;
-  if (accessToken) {
+  if (isClient && accessToken) {
     setItem("accessToken", accessToken);
   }
   return response;
