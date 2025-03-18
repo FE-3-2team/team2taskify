@@ -52,7 +52,8 @@ const CommentBox: React.FC = () => {
         )}
       </label>
 
-      <div className="w-full rounded-[8px] border p-4 text-lg-regular">
+      {/* border-gray-300 클래스를 추가하여 회색 테두리 적용 */}
+      <div className="w-full rounded-[8px] border border-gray-300 p-4 text-lg-regular">
         <textarea
           id="comment-input"
           placeholder="댓글을 입력해주세요"
@@ -64,14 +65,13 @@ const CommentBox: React.FC = () => {
         <div className="flex justify-end mt-2">
           <button
             onClick={handleSubmit}
-            className="w-[83px] h-[36px] rounded-[4px] border bg-white border-[#D9D9D9] pt-[9px] pr-[8px] pb-[9px] pl-[8px] text-violet-5534DA hover:bg-gray-100 text-xs-medium"
+            className="w-[83px] h-[36px] rounded-[4px] border bg-white border-[#D9D9D9] pt-[9px] pr-[8px] pb-[9px] pl-[8px] text-violet-5534DA hover:bg-gray-100 text-xs-medium cursor-pointer transition-all duration-300"
           >
             입력
           </button>
         </div>
       </div>
 
-      {/* 오류 메시지를 댓글 입력 컨테이너 밑에 표시 */}
       {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
     </div>
   );

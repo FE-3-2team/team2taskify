@@ -3,9 +3,10 @@ import Image from "next/image";
 import EyeCloseIcon from "../../../assets/icons/EyeVisibility_off.svg";
 import EyeOpenIcon from "../../../assets/icons/EyeVisibility_on.svg";
 
-// 이메일 입력 컴포넌트 (EmailInput)
-const EmailInput: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
+const EmailInput: React.FC<{
+  email: string;
+  setEmail: (email: string) => void;
+}> = ({ email, setEmail }) => {
   const [error, setError] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,9 +47,10 @@ const EmailInput: React.FC = () => {
   );
 };
 
-// 비밀번호 입력 컴포넌트 (PasswordInput)
-const PasswordInput: React.FC = () => {
-  const [password, setPassword] = useState("");
+const PasswordInput: React.FC<{
+  password: string;
+  setPassword: (password: string) => void;
+}> = ({ password, setPassword }) => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -104,12 +106,61 @@ const PasswordInput: React.FC = () => {
   );
 };
 
-// EmailInput과 PasswordInput을 하나의 컴포넌트로 결합한 AuthForm
 const AuthForm: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const teamId = "1234";
+      const response = await fetch(
+        `https://sp-taskify-api.vercel.app/${teamId}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        alert("로그인 성공!");
+        console.log("로그인 성공:", data);
+      } else {
+        alert(data.message || "로그인 실패");
+      }
+    } catch (error) {
+      console.error("로그인 요청 중 오류 발생:", error);
+      alert("서버 오류 발생");
+    } finally {
+      setLoading(false);
+    }
+  };
+  //임시
   return (
-    <div className="w-full mx-auto space-y-4 ">
-      <EmailInput />
-      <PasswordInput />
+    <div className="w-full mx-auto space-y-4">
+      <EmailInput email={email} setEmail={setEmail} />
+      <PasswordInput password={password} setPassword={setPassword} />
+      <button
+        onClick={handleLogin}
+        disabled={loading}
+        className="w-full text-white rounded-lg cursor-pointer bg-gray-9FA6B2 text-lg-regular h-14 hover:bg-violet-700 disabled:bg-gray-300"
+      >
+        {loading ? "로그인 중..." : "로그인"}
+      </button>
     </div>
   );
 };
