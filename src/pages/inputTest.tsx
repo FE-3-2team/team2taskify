@@ -4,6 +4,7 @@ import TitleInput from "@/components/common/Input/TitleInput";
 import DeadlineInput from "@/components/common/Input/DateInput";
 import CommentBox from "@/components/common/Input/TextPlace";
 import AuthForm from "@/components/common/Input/Auth";
+import NewColumnCreation from "@/components/common/Input/NewColumn";
 export default function TestPage() {
   return (
     <div className="container p-4 mx-auto">
@@ -13,6 +14,7 @@ export default function TestPage() {
       <DeadlineInput />
       <CommentBox />
       <AuthForm />
+      <NewColumnCreation />
     </div>
   );
 }
