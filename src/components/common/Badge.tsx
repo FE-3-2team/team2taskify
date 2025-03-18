@@ -5,14 +5,14 @@ interface BadgesProps {
 }
 
 const RANDOM_COLOR = [
-  "bg-violet-5534DA",
-  "bg-violet-F1EFFD",
-  "bg-red-D6173A",
-  "bg-green-7AC555",
-  "bg-purple-760DDE",
-  "bg-orange-FFA500 ",
-  "bg-blue-76A6EA",
-  "bg-pink-E876EA",
+  "bg-violet-200",
+  "bg-violet-100",
+  "bg-red",
+  "bg-green",
+  "bg-purple",
+  "bg-orange",
+  "bg-blue",
+  "bg-pink",
 ];
 
 export function Badges({ memberList }: BadgesProps) {
@@ -38,9 +38,8 @@ export function Badges({ memberList }: BadgesProps) {
       {memberList.length > 3 && (
         <div
           className={`absolute border-2 border-white flex justify-center items-center 
-          rounded-full w-[38px] h-[38px] text-[#D25B68] text-lg-semibold 
-          bg-[#F4D7DA]
-           z-10 
+          rounded-full w-[38px] h-[38px] text-pink200 text-lg-semibold bg-pink300
+          z-10 
           `}
           style={{ left: `${memberArray.length * 20}px` }}
         >
@@ -66,7 +65,7 @@ export function Badge({ value }: Props) {
       {profileImageUrl ? (
         <img src={profileImageUrl} alt="프로필 이미지" />
       ) : (
-        <div className="text-white-FFFFFF text-lg-semibold ">{firstChar}</div> //여기 font,color 바꿔줘야함
+        <div className="text-white text-lg-semibold ">{firstChar}</div>
       )}
     </div>
   );

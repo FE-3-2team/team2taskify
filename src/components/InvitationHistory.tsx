@@ -37,7 +37,7 @@ export default function InvitationHistory({ invitations }: Props) {
     pt-6 pb-3 tablet:pt-8 tablet:pb-0"
     >
       <div className="flex items-center justify-between px-5 tablet:px-7">
-        <p className=" text-xl-bold tablet:text-2xl-bold"> 초대 내역</p>
+        <p className=" text-xl-bold tablet-text-2xl-bold"> 초대 내역</p>
         <div className="flex items-center gap-4">
           <p>
             {totalPage} 페이지 중 {page}
@@ -54,7 +54,7 @@ export default function InvitationHistory({ invitations }: Props) {
         </div>
       </div>
       <div className="flex justify-between px-5 tablet:px-7">
-        <p className="text-gray-9FA6B2 text-md-regular">이메일</p>
+        <p className="text-gray-400 text-md-regular">이메일</p>
         <button className="block tablet:hidden" onClick={AddInvite}>
           초대하기
         </button>
@@ -64,7 +64,7 @@ export default function InvitationHistory({ invitations }: Props) {
           return (
             <>
               <div className="flex justify-between px-5 py-4 tablet:px-7">
-                <p className="text-black_333236 text-lg-regular">
+                <p className="text-black-200 text-lg-regular">
                   {invitation.invitee.email}
                 </p>
                 <button
@@ -79,7 +79,7 @@ export default function InvitationHistory({ invitations }: Props) {
                 </button>
               </div>
               <div
-                className="h-[1px] w-full bg-gray-EEEEEE"
+                className="h-[1px] w-full bg-gray-200"
                 style={{ display: i === 4 ? "none" : "block" }}
               />
             </>

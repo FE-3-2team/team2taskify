@@ -34,8 +34,8 @@ export default function EditMember({ members }: Props) {
     >
       <div className="flex flex-col gap-[18px]">
         <div className="flex items-center justify-between px-5 tablet:px-7 ">
-          <p className="text-xl-bold tablet:text-2xl-bold">구성원</p>
-          <div className="flex items-center gap-3 text-xs-regular tablet:text-md-regular">
+          <p className="text-xl-bold tablet-text-2xl-bold">구성원</p>
+          <div className="flex items-center gap-3 text-xs-regular tablet-text-md-regular">
             {totalPage} 페이지 중 {currentPage}
             <div>
               <button className="cursor-pointer" onClick={handleClickPrev}>
@@ -47,7 +47,7 @@ export default function EditMember({ members }: Props) {
             </div>
           </div>
         </div>
-        <p className="px-5 tablet:px-7 md-regular text-gray-9FA6B2">이름</p>
+        <p className="px-5 text-gray-400 tablet:px-7 md-regular">이름</p>
       </div>
       <div>
         {members.map((member, i) => {
@@ -60,7 +60,7 @@ export default function EditMember({ members }: Props) {
                 </button>
               </div>
               <div
-                className="h-[1px] w-full bg-gray-EEEEEE my-3"
+                className="h-[1px] w-full bg-gray-200 my-3"
                 style={{ display: i === 3 ? "none" : "block" }}
               />
             </div>
