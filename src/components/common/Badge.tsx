@@ -1,7 +1,7 @@
 import useWindowSize from "@/hooks/useWindow";
 
 interface BadgesProps {
-  badges: Member[];
+  memberList: Member[];
 }
 
 const RANDOM_COLOR = [
@@ -15,36 +15,36 @@ const RANDOM_COLOR = [
   "bg-pink-E876EA",
 ];
 
-export function Badges({ badges }: BadgesProps) {
+export function Badges({ memberList }: BadgesProps) {
   const device = useWindowSize();
-  if (badges.length < 1) return;
-  const badgesArray =
-    device === "desktop" ? badges.slice(0, 4) : badges.slice(0, 2);
-  const count = badgesArray.length === 2 ? 2 : 4;
+  if (memberList.length < 1) return;
+  const memberArray =
+    device === "desktop" ? memberList.slice(0, 4) : memberList.slice(0, 2);
+  const count = memberArray.length === 2 ? 2 : 4;
   return (
     <div className="relative flex flex-row w-auto h-[38px]">
-      {badgesArray.map((badge, idx) => {
+      {memberArray.map((member, idx) => {
         return (
           <div
-            key={idx}
+            key={member.id}
             className="absolute"
             style={{ left: `${idx * 20}px`, zIndex: 0 + idx }}
           >
-            <Badge value={badge} />
+            <Badge value={member} />
           </div>
         );
       })}
 
-      {badges.length > 3 && (
+      {memberList.length > 3 && (
         <div
           className={`absolute border-2 border-white flex justify-center items-center 
           rounded-full w-[38px] h-[38px] text-[#D25B68] text-lg-semibold 
           bg-[#F4D7DA]
            z-10 
           `}
-          style={{ left: `${badgesArray.length * 20}px` }}
+          style={{ left: `${memberArray.length * 20}px` }}
         >
-          +{badges.length - count}
+          +{memberList.length - count}
         </div>
       )}
     </div>
