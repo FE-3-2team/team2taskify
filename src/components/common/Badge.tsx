@@ -55,14 +55,13 @@ interface Props {
 }
 
 export function Badge({ value }: Props) {
-  const RANDOM_NUM = Math.floor(Math.random() * RANDOM_COLOR.length);
-
+  const randomNum = Math.floor(Math.random() * RANDOM_COLOR.length);
   const { email, profileImageUrl } = value;
   const firstChar = email.charAt(0).toUpperCase();
 
   return (
     <div
-      className={` border-2 border-white  flex justify-center items-center rounded-full w-[38px] h-[38px] ${RANDOM_COLOR[RANDOM_NUM]} `}
+      className={` border-2 border-white  flex justify-center items-center rounded-full w-[38px] h-[38px] ${RANDOM_COLOR[randomNum]} `}
     >
       {profileImageUrl ? (
         <img src={profileImageUrl} alt="프로필 이미지" />
