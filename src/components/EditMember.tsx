@@ -15,11 +15,11 @@ interface Props {
 export default function EditMember({ members }: Props) {
   const totalPage = Math.ceil(members.length / 4);
   const [currentPage, setCurrentPage] = useState(1);
-  const handelClickPrev = () => {
+  const handleClickPrev = () => {
     if (currentPage === 1) return;
     setCurrentPage((prev) => prev - 1);
   };
-  const handelClickNext = () => {
+  const handleClickNext = () => {
     if (currentPage === totalPage) return;
     setCurrentPage((prev) => prev + 1);
   };
@@ -38,10 +38,10 @@ export default function EditMember({ members }: Props) {
           <div className="flex items-center gap-3 text-xs-regular tablet:text-md-regular">
             {totalPage} 페이지 중 {currentPage}
             <div>
-              <button className="cursor-pointer" onClick={handelClickPrev}>
+              <button className="cursor-pointer" onClick={handleClickPrev}>
                 <Image src={PrevPage} width={40} height={40} alt="<" />
               </button>
-              <button className="cursor-pointer" onClick={handelClickNext}>
+              <button className="cursor-pointer" onClick={handleClickNext}>
                 <Image src={NextPage} width={40} height={40} alt=">" />
               </button>
             </div>

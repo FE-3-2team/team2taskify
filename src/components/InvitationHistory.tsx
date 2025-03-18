@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Next from "@/assets/icons/NextPage.icon.svg";
 import Prev from "@/assets/icons/PrevPage.icon.svg";
-import { cancleInvite } from "@/api/dashboard";
+import { cancelInvite } from "@/api/dashboard";
 
 /**To Do
  * 초대하기 버튼 나중에 바꾸기
@@ -29,7 +29,7 @@ export default function InvitationHistory({ invitations }: Props) {
   };
 
   const CancelInvite = async (dashboardId: number, invitationId: number) => {
-    await cancleInvite(dashboardId, invitationId);
+    await cancelInvite(dashboardId, invitationId);
   };
   return (
     <div
