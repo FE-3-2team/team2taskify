@@ -35,8 +35,6 @@ button:hover {
   opacity: 0.9;
 }
 
-@import "tailwindcss";
-
 @theme {
 /* 컬러가이드 */
   --color-*: initial;
@@ -172,5 +170,10 @@ button:hover {
   --text-xs-regular--line-height: 18px;
   --text-xs-regular--font-weight: 400;
 
+  /* 반응형 브레이크포인트 설정 */
+  --breakpoint-*: initial;
+  --breakpoint-tablet: 744px;
+  --breakpoint-laptop: 1024px;
+  --breakpoint-desktop: 1921px;
 }
 

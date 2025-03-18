@@ -71,17 +71,17 @@ export default function Home() {
         <div className="flex flex-col gap-[10px] mb-10 w-full items-center justify-center">
           {/* to do 버튼 */}
           <button className="w-full max-w-[284px] tablet:max-w-full laptop:max-w-[314px] flex items-center justify-center 
-                          py-[6px] rounded-[6px] border border-gray-D9D9D9 
+                          py-[6px] rounded-[6px] border border-gray-300 
                           bg-white gap-[12px]"
                           onClick={() => console.log("to do 버튼 클릭됨")}>
             <PlusIconButton />
           </button>
           {/* 새로운 대시보드 버튼 */}
           <button className="w-full max-w-[260px] tablet:max-w-[247px] laptop:max-w-[332px] flex items-center justify-center 
-                          py-[20px] tablet:py-[25px] rounded-[8px] border border-gray-D9D9D9 
+                          py-[20px] tablet:py-[25px] rounded-[8px] border border-gray-300 
                           bg-white gap-[12px]"
                           onClick={() => console.log("새로운 대시보드 버튼 클릭됨")}>
-            <span className="text-md-semibold tablet-text-lg-semibold text-black-333236">새로운 대시보드</span>
+            <span className="text-md-semibold tablet:text-lg-semibold text-black-200">새로운 대시보드</span>
             <PlusIconButton />
           </button>
         </div>

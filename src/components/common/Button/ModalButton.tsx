@@ -20,7 +20,7 @@ export default function ModalButton({
     <button
       className={`
         ${fullWidth ? "w-full" : "w-full max-w-[240px]"} 
-        ${variant === "primary" ? "bg-violet-5534DA text-white" : "border border-gray-D9D9D9 bg-white-FFFFFF text-gray-787486"}
+        ${variant === "primary" ? "bg-violet-200 text-white" : "border border-gray-300 bg-white text-gray-500"}
         ${size === "small" ? "py-[12px] text-md-semibold" : "py-[14px] text-lg-semibold"}
         rounded-[8px] 
         ${grouped ? "px-[24px]" : "px-[32px]"} 
