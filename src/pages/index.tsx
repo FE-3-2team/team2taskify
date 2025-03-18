@@ -127,6 +127,11 @@ export default function Home() {
           <p className="text-xl-medium">Pretendard XL Medium (20px / 32px)</p>
           <p className="text-xl-regular">Pretendard XL Regular (20px / 32px)</p>
 
+          <p className="text-2lg-bold">Pretendard 2LG Bold (18px / 26px)</p>
+          <p className="text-2lg-semibold">Pretendard 2LG Semibold (18px / 26px)</p>
+          <p className="text-2lg-medium">Pretendard 2LG Medium (18px / 26px)</p>
+          <p className="text-2lg-regular">Pretendard 2LG Regular (18px / 26px)</p>
+
           <p className="text-lg-bold">Pretendard LG Bold (16px / 26px)</p>
           <p className="text-lg-semibold">Pretendard LG Semibold (16px / 26px)</p>
           <p className="text-lg-medium">Pretendard LG Medium (16px / 26px)</p>
