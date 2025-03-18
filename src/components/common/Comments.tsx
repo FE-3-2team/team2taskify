@@ -5,11 +5,12 @@ interface Props {
 }
 
 export default function Comment({ comment }: Props) {
+  const { nickname, profileImageUrl } = comment.author;
   return (
     <div>
-      {}
-      <img src={comment.author.profileImageUrl} />
-
+      <div className="">
+        <Badge nickname={nickname} img={profileImageUrl} />
+      </div>
       <div>
         <div>
           <p>{comment.author.nickname}</p>
