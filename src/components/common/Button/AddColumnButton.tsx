@@ -1,4 +1,3 @@
-import React from "react";
 import PlusIconButton from "./PlusIconButton"; // 새 컴포넌트 import
 
 interface AddColumnButtonProps {

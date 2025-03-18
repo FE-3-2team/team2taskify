@@ -1,4 +1,4 @@
-import React from "react";
+
 import Image from "next/image";
 import LeftArrowIcon from "@/assets/icons/LeftArrow.icon.svg"; // 좌측 화살표 아이콘
 import RightArrowIcon from "@/assets/icons/RightArrow.icon.svg"; // 우측 화살표 아이콘

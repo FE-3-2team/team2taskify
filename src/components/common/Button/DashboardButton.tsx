@@ -1,4 +1,4 @@
-import React from "react";
+
 import Image from "next/image";
 import CrownIcon from "@/assets/icons/Crown.icon.svg"; // 왕관 아이콘
 import RightArrowIcon from "@/assets/icons/RightArrow.icon.svg"; // 화살표 아이콘

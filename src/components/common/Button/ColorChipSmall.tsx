@@ -1,4 +1,3 @@
-import React from "react";
 
 interface ColorChipProps {
   color: string; // 컬러칩 색상 (hex 값)

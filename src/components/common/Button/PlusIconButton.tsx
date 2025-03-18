@@ -1,4 +1,4 @@
-import React from "react";
+
 import Image from "next/image";
 import PlusIcon from "@/assets/icons/Plus.icon.svg";
 
