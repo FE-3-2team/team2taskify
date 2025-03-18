@@ -6,6 +6,7 @@ body {
   overflow-x: hidden;
   margin: 0px;
   padding: 0px;
+  height: 100vw;
 }
 
 * {
@@ -20,6 +21,7 @@ a {
 li {
   text-decoration: none;
 }
+<<<<<<< HEAD
 
 button {
   cursor: pointer;
@@ -29,3 +31,5 @@ button {
 button:hover {
   opacity: 0.9;
 }
+=======
+>>>>>>> dev
