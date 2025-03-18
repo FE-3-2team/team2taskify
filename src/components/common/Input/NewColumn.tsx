@@ -18,16 +18,13 @@ const NewColumnCreation: React.FC = () => {
   };
 
   const handleCancel = () => {
-    // 취소 버튼 클릭 시 상태 초기화
     setName("");
     setError("");
   };
 
   const handleCreate = () => {
-    // 생성 버튼 클릭 시 로직 실행
     if (!error && name) {
       console.log("새 컬럼 생성:", name);
-      // 실제 생성 로직 추가 가능 (예: API 호출)
     }
   };
 
