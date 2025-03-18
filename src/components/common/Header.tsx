@@ -15,6 +15,7 @@ interface Props {
 
 export default function Header({ user, members, title, createdByMe }: Props) {
   const router = useRouter();
+  const display = router.pathname === "/mydashbord" ? "none" : "block";
   const dashboardTitle = title ? title : "내 대시보드";
 
   return (
@@ -60,11 +61,14 @@ export default function Header({ user, members, title, createdByMe }: Props) {
           </button>
         </div>
         <div className="flex w-fit flex-row gap-4 tablet:gap-6 laptop:gap-[38px]">
-          <div className=" w-[90px] laptop:w-[138px]">
+          <div
+            className=" w-[90px] laptop:w-[138px]"
+            style={{ display: display }}
+          >
             <Badges badges={members} />
           </div>
           <div className="h-[38px]  w-[1px] bg-gray-D9D9D9" />
-          <Profile value={user} />
+          <Profile value={user} isProfile />
         </div>
       </div>
     </div>
