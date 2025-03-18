@@ -21,3 +21,12 @@ a {
 li {
   text-decoration: none;
 }
+
+button {
+  cursor: pointer;
+  transition: opacity 0.1s ease-in-out;
+}
+
+button:hover {
+  opacity: 0.9;
+}
