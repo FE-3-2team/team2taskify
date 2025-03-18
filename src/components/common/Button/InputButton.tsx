@@ -7,7 +7,7 @@ export default function InputButton({ onClick }: InputButtonProps) {
   return (
     <button
       className="w-auto py-[7px] tablet:py-[9px] px-[31px] 
-                 border border-gray-D9D9D9 bg-white-FFFFFF text-violet-5534DA 
+                 border border-gray-300 bg-white text-violet-200 
                  text-xs-medium rounded-[4px] flex items-center justify-center"
       onClick={onClick}
     >

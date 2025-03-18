@@ -5,7 +5,7 @@ import PlusIcon from "@/assets/icons/Plus.icon.svg";
 export default function PlusIconButton() {
   return (
     <div className="w-[20px] h-[20px] tablet:w-[22px] tablet:h-[22px] flex items-center justify-center 
-                    rounded-[4px] bg-violet-F1EFFD">
+                    rounded-[4px] bg-violet-100">
       <Image src={PlusIcon} className="w-[9px] tablet:w-[10px]" alt="추가" />
     </div>
   );
