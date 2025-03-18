@@ -20,7 +20,7 @@ const DropdownEditDel: React.FC<DropdownEditDelProps> = ({
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setTimeout(() => setIsOpen(false), 0); // Prevents event order conflicts
+        setTimeout(() => setIsOpen(false), 0);
       }
     };
 
