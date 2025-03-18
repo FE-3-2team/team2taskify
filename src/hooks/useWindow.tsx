@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import throttle from "lodash.throttle";
 //
 const getCssVariable = (variable: string) => {
@@ -11,7 +11,7 @@ export default function useWindowSize() {
     "desktop" | "laptop" | "tablet" | "mobile"
   >("desktop");
 
-  const handleResize = () => {
+  const handleResize = useCallback(() => {
     const tabletBreakpoint = getCssVariable("--breakpoint-tablet"); //744px
     const laptopBreakpoint = getCssVariable("--breakpoint-laptop"); //1024px
     const desktopBreakpoint = getCssVariable("--breakpoint-laptop"); //1921px
@@ -25,9 +25,11 @@ export default function useWindowSize() {
     } else {
       setDeviceType("mobile");
     }
-  };
+  }, []);
 
-  const throttledResize = throttle(handleResize, 2000);
+  const throttledResize = useCallback(throttle(handleResize, 2000), [
+    handleResize,
+  ]);
 
   useEffect(() => {
     handleResize();
@@ -35,6 +37,6 @@ export default function useWindowSize() {
     return () => {
       window.removeEventListener("resize", throttledResize);
     };
-  }, []);
+  }, [throttledResize]);
   return deviceType;
 }
