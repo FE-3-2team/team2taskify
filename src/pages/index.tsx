@@ -1,9 +1,9 @@
-import { LoginButton, InviteButton, ModalButton, DeleteButton, InputButton, DashboardDeleteButton, AddColumnButton, PlusIconButton, PaginationButton, DashboardButton } from "@/components/common/Button";
+import { LoginButton, InviteButton, ModalButton, DeleteButton, InputButton, DashboardDeleteButton, AddColumnButton, PlusIconButton, PaginationButton, DashboardButton, Button } from "@/components/common/Button";
 import ColorChip from "@/components/common/Button/ColorChipSmall";
 import React, { useState } from "react";
 import Image from "next/image";
 import CrownIcon from "@/assets/icons/Crown.icon.svg"; // 왕관 아이콘
-
+import PlusIcon from "@/assets/icons/Plus.icon.svg";
 
 export default function Home() {
   const [page, setPage] = useState(1);
@@ -11,6 +11,20 @@ export default function Home() {
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-screen gap-4 mt-10 mb-10 text-center">
+        <strong className="text-2xl-semibold">로그인 버튼</strong>
+        <div className="flex flex-col items-center justify-center w-full gap-2 mb-10">
+          <Button size="small" onClick={() => console.log("Large 버튼 클릭")}>작은 버튼</Button>
+          <Button size="medium" onClick={() => console.log("Large 버튼 클릭")}>중간 버튼</Button>
+          <Button size="large" onClick={() => console.log("Large 버튼 클릭")}>큰 버튼</Button>
+          <Button variant="primary" onClick={() => console.log("Large 버튼 클릭")}>Primary 버튼</Button>
+          <Button variant="secondary" onClick={() => console.log("Large 버튼 클릭")}>Secondary 버튼</Button>
+          
+          <Button size="large" variant="primary" onClick={() => console.log("Clicked!")}>
+            <PlusIconButton />
+          컬럼 추가하기
+        </Button>
+        </div>
+
         <strong className="text-2xl-semibold">로그인 버튼</strong>
         <div className="flex flex-col items-center justify-center w-full gap-2 mb-10">
           <LoginButton onClick={() => console.log("Large 버튼 클릭")} size="large" />

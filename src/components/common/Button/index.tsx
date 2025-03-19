@@ -9,3 +9,5 @@ export { default as AddColumnButton } from "./AddColumnButton"; //새로운컬�
 export { default as PaginationButton } from "./PaginationButton"; //페이지네이션
 export { default as ColorChipSmall } from "./ColorChipSmall"; //컬러칩 스몰 버젼
 export { default as DashboardButton } from "./DashboardButton"; //대시보드 사이드 메뉴 및 생성된 카드 목록
+
+export { default as Button } from "./Button";
