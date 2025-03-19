@@ -20,10 +20,11 @@ interface Props {
 
 export default function Header({ members, title, createdByMe }: Props) {
   const store = useStore(useAuthStore, (state) => state);
-  console.log(store?.userNickname);
   const router = useRouter();
   const display = router.pathname === "/mydashbord" ? "none" : "block";
-  const dashboardTitle = title ? title : "내 대시보드";
+  let dashboardTitle = title ? title : "내 대시보드";
+  dashboardTitle = router.pathname === "/mypage" ? "계정관리" : dashboardTitle;
+
   if (!store?.userNickname) return;
   return (
     <div className="flex flex-row justify-between w-full h-[70px] py-[15px] px-[20px] laptop:pl-10 laptop:pr-20  border-b-[1px]  items-center border-gray-300 ">
