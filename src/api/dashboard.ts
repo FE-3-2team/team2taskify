@@ -1,4 +1,4 @@
-import instance from "./instance";
+import { instance } from "./instance";
 //
 interface Data {
   title: string;
@@ -17,7 +17,7 @@ export async function createDashboard(data: Data) {
   }
 }
 
-export async function cancleInvite(dashboardId: number, invitationId: number) {
+export async function cancelInvite(dashboardId: number, invitationId: number) {
   try {
     const res = await instance.delete(
       `/dashboards/${dashboardId}/invitations/${invitationId}`

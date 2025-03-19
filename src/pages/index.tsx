@@ -71,17 +71,17 @@ export default function Home() {
         <div className="flex flex-col gap-[10px] mb-10 w-full items-center justify-center">
           {/* to do 버튼 */}
           <button className="w-full max-w-[284px] tablet:max-w-full laptop:max-w-[314px] flex items-center justify-center 
-                          py-[6px] rounded-[6px] border border-gray-D9D9D9 
+                          py-[6px] rounded-[6px] border border-gray-300 
                           bg-white gap-[12px]"
                           onClick={() => console.log("to do 버튼 클릭됨")}>
             <PlusIconButton />
           </button>
           {/* 새로운 대시보드 버튼 */}
           <button className="w-full max-w-[260px] tablet:max-w-[247px] laptop:max-w-[332px] flex items-center justify-center 
-                          py-[20px] tablet:py-[25px] rounded-[8px] border border-gray-D9D9D9 
+                          py-[20px] tablet:py-[25px] rounded-[8px] border border-gray-300 
                           bg-white gap-[12px]"
                           onClick={() => console.log("새로운 대시보드 버튼 클릭됨")}>
-            <span className="text-md-semibold tablet-text-lg-semibold text-black-333236">새로운 대시보드</span>
+            <span className="text-md-semibold tablet:text-lg-semibold text-black-200">새로운 대시보드</span>
             <PlusIconButton />
           </button>
         </div>
@@ -127,6 +127,11 @@ export default function Home() {
           <p className="text-xl-medium">Pretendard XL Medium (20px / 32px)</p>
           <p className="text-xl-regular">Pretendard XL Regular (20px / 32px)</p>
 
+          <p className="text-2lg-bold">Pretendard 2LG Bold (18px / 26px)</p>
+          <p className="text-2lg-semibold">Pretendard 2LG Semibold (18px / 26px)</p>
+          <p className="text-2lg-medium">Pretendard 2LG Medium (18px / 26px)</p>
+          <p className="text-2lg-regular">Pretendard 2LG Regular (18px / 26px)</p>
+
           <p className="text-lg-bold">Pretendard LG Bold (16px / 26px)</p>
           <p className="text-lg-semibold">Pretendard LG Semibold (16px / 26px)</p>
           <p className="text-lg-medium">Pretendard LG Medium (16px / 26px)</p>
@@ -147,26 +152,27 @@ export default function Home() {
 
         <strong className="text-2xl-semibold">컬러가이드</strong>
         <div className="w-full max-w-[800px] flex flex-col items-center justify-center">
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-black-000000">#000000</div>
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-black-171717">#171717</div>
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-black-333236">#333236</div>
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-black-4B4B4B">#4B4B4B</div>
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-black-400">#000000 black-400</div>
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-black-300">#171717 black-300</div>
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-black-200">#333236 black-200</div>
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-black-100">#4B4B4B black-100</div>
 
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-gray-787486">#787486</div>
-          <div className="flex items-center justify-center w-64 h-12 text-black bg-gray-9FA6B2">#9FA6B2</div>
-          <div className="flex items-center justify-center w-64 h-12 text-black bg-gray-D9D9D9">#D9D9D9</div>
-          <div className="flex items-center justify-center w-64 h-12 text-black bg-gray-EEEEEE">#EEEEEE</div>
-          <div className="flex items-center justify-center w-64 h-12 text-black bg-gray-FAFAFA">#FAFAFA</div>
-          <div className="flex items-center justify-center w-64 h-12 text-black bg-white-FFFFFF">#FFFFFF</div>
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-gray-500">#787486 gray-500</div>
+          <div className="flex items-center justify-center w-64 h-12 text-black bg-gray-400">#9FA6B2 gray-400</div>
+          <div className="flex items-center justify-center w-64 h-12 text-black bg-gray-300">#D9D9D9 gray-300</div>
+          <div className="flex items-center justify-center w-64 h-12 text-black bg-gray-200">#EEEEEE gray-200</div>
+          <div className="flex items-center justify-center w-64 h-12 text-black bg-gray-100">#FAFAFA gray-100</div>
 
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-violet-5534DA">#5534DA</div>
-          <div className="flex items-center justify-center w-64 h-12 text-black bg-violet-F1EFFD">#F1EFFD</div>
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-red-D6173A">#D6173A</div>
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-green-7AC555">#7AC555</div>
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-purple-760DDE">#760DDE</div>
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-orange-FFA500">#FFA500</div>
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-blue-76A6EA">#76A6EA</div>
-          <div className="flex items-center justify-center w-64 h-12 text-white bg-pink-E876EA">#E876EA</div>
+          <div className="flex items-center justify-center w-64 h-12 text-black bg-white">#FFFFFF white</div>
+
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-violet-200">#5534DA violet-200</div>
+          <div className="flex items-center justify-center w-64 h-12 text-black bg-violet-100">#F1EFFD violet-100</div>
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-red">#D6173A red</div>
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-green">#7AC555 green</div>
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-purple">#760DDE purple</div>
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-orange">#FFA500 orange</div>
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-blue">#76A6EA blue</div>
+          <div className="flex items-center justify-center w-64 h-12 text-white bg-pink">#E876EA pink</div>
         </div>
       </div>
     </>

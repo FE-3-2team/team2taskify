@@ -33,12 +33,12 @@ export default function NewDashboard() {
   return (
     <div className="w-[327px] tablet:w-[584px]  h-fit px-4 py-5 tablet:py-8 tablet:px-8 rounded-b-2xl">
       <div className="flex flex-col gap-6">
-        <p className="text-xl-bold tablet:text-2xl-bold text-black-333236">
+        <p className="text-xl-bold tablet:text-2xl-bold text-black-200">
           새로운 대시보드
         </p>
         <div className="flex flex-col gap-4 ">
           <div className="flex flex-col gap-2">
-            <p className="text-lg-medium text-black-333236">대시보드 이름</p>
+            <p className="text-lg-medium text-black-200">대시보드 이름</p>
             <input onChange={handleChange} type="text" />
           </div>
           <ColorChip onClick={handleClick} />
