@@ -22,13 +22,13 @@ export default function DashboardButton({
   return (
     <button
       className="flex items-center justify-between w-full max-w-[284px] tablet:max-w-full laptop:max-w-[354px] 
-                 py-[18px] px-[16px] rounded-[8px] border border-gray-D9D9D9 bg-white"
+                 py-[18px] tablet:py-[20px] px-[16px] rounded-[8px] border border-gray-300 bg-white"
       onClick={onClick}
     >
       {/* 왼쪽 컬러칩 & 제목 */}
       <div className="flex items-center gap-[8px]">
         <ColorChip color={color} /> {/* 컬러칩 컴포넌트 사용 */}
-        <span className="text-md-semibold tablet-text-lg-semibold text-black-333236">{title}</span>
+        <span className="text-md-semibold tablet:text-lg-semibold text-black-200">{title}</span>
         {isOwner && <Image src={CrownIcon} className="w-[15px] tablet:w-[20px]" alt="왕관" />}
       </div>
 

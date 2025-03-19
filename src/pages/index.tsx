@@ -1,4 +1,4 @@
-import { LoginButton, InviteButton, ModalButton, DeleteButton, InputButton, DashboardDeleteButton, AddColumnButton, PlusIconButton, PaginationButton, DashboardButton, Button } from "@/components/common/Button";
+import { LoginButton, InviteButton, ModalButton, DeleteButton, InputButton, DashboardDeleteButton, AddColumnButton, PlusIconButton, PaginationButton, DashboardButton, Button, DashButton, DashCardButton } from "@/components/common/Button";
 import ColorChip from "@/components/common/Button/ColorChipSmall";
 import React, { useState } from "react";
 import Image from "next/image";
@@ -11,22 +11,46 @@ export default function Home() {
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-screen gap-4 mt-10 mb-10 text-center">
-        <strong className="text-2xl-semibold">로그인 버튼</strong>
+        <strong className="text-2xl-semibold">대시보드 버튼</strong>
         <div className="flex flex-col items-center justify-center w-full gap-2 mb-10">
-          <Button size="small" onClick={() => console.log("Large 버튼 클릭")}>작은 버튼</Button>
-          <Button size="medium" onClick={() => console.log("Large 버튼 클릭")}>중간 버튼</Button>
-          <Button size="large" onClick={() => console.log("Large 버튼 클릭")}>큰 버튼</Button>
-          <Button variant="primary" onClick={() => console.log("Large 버튼 클릭")}>Primary 버튼</Button>
-          <Button variant="secondary" onClick={() => console.log("Large 버튼 클릭")}>Secondary 버튼</Button>
-          
-          <Button size="large" variant="primary" onClick={() => console.log("Clicked!")}>
-            <PlusIconButton />
-          컬럼 추가하기
-        </Button>
+          <DashButton size="small" variant="primary" className="flex items-center gap-[12px]" onClick={() => console.log("Clicked!")}>새로운 대시보드 <PlusIconButton /></DashButton>
+          <DashButton size="medium" variant="primary" onClick={() => console.log("Clicked!")}>대시보드 삭제하기</DashButton>
+          <DashButton size="large" variant="primary" className="flex items-center gap-[12px]" onClick={() => console.log("Clicked!")}>새로운 컬럼 추가하기 <PlusIconButton /></DashButton>
+          <DashButton size="small" variant="primary" className="flex items-center gap-[12px]" onClick={() => console.log("Clicked!")}>새로운 대시보드 <PlusIconButton /></DashButton>
+          <DashButton size="xsmall" variant="primary" className="py-[6px] tablet:py-[6px]" onClick={() => console.log("Clicked!")}><PlusIconButton /></DashButton>
+          <DashButton size="small" title="비브리지" color="#7AC555" isOwner={true} hasArrow={true} onClick={() => console.log("대시보드 버튼 클릭")}/>
+          <DashButton size="small" title="코드잇" color="#760DDE" isOwner={false} hasArrow={true} onClick={() => console.log("대시보드 버튼 클릭")}/>
+          <DashButton size="small" title="3분기 계획" color="#FFA500" isOwner={false} hasArrow={true} onClick={() => console.log("대시보드 버튼 클릭")}/>
+          <DashButton size="small" title="회의록" color="#76A6EA" isOwner={true} hasArrow={true} onClick={() => console.log("대시보드 버튼 클릭")}/>
+          <DashButton size="small" title="중요 문서함" color="#E876EA" isOwner={false} hasArrow={true} onClick={() => console.log("대시보드 버튼 클릭")}/>
+          <div className="flex items-center gap-[8px]"><ColorChip color="#7AC555" /> <span>비브리지</span><Image src={CrownIcon} className="w-[15px] tablet:w-[20px]" alt="왕관" /></div>
+          <div className="flex items-center gap-[8px]"><ColorChip color="#760DDE" /> <span>코드잇</span></div>
+          <div className="flex items-center gap-[8px]"><ColorChip color="#FFA500" /> <span>3분기 계획</span></div>
+          <div className="flex items-center gap-[8px]"><ColorChip color="#76A6EA" /> <span>회의록</span></div>
+          <div className="flex items-center gap-[8px]"><ColorChip color="#E876EA" /> <span>중요 문서함</span></div>
         </div>
 
         <strong className="text-2xl-semibold">로그인 버튼</strong>
         <div className="flex flex-col items-center justify-center w-full gap-2 mb-10">
+
+          {/* 🔘 삭제 & 입력 버튼 (작은 크기) */}
+          <Button size="xsmall" variant="outline">삭제</Button>
+          <Button size="xsmall" variant="outline">입력</Button>
+
+          {/* ✅ 수락 & 거절 버튼 (초대 버튼) */}
+          <div className="flex gap-[10px] w-full">
+            <Button size="small" variant="primary">수락</Button>
+            <Button size="small" variant="outline">거절</Button>
+          </div>
+
+          {/* 🔑 로그인 버튼 */}
+          <Button size="large" variant="primary">로그인</Button>
+
+          {/* 📌 모달 버튼 */}
+          <Button size="large" variant="primary">확인</Button>
+          <Button size="large" variant="secondary">취소</Button>
+          <br></br>
+          <br></br>
           <LoginButton onClick={() => console.log("Large 버튼 클릭")} size="large" />
           <LoginButton onClick={() => console.log("비활성화 버튼 클릭")} size="large" disabled />
           <LoginButton onClick={() => console.log("Large 버튼 클릭")} size="large" text="가입하기" />
@@ -76,54 +100,11 @@ export default function Home() {
           <InputButton onClick={() => console.log("입력 버튼 클릭됨")} />
         </div>
 
-        <strong className="text-2xl-semibold">대쉬보드 삭제하기</strong>
-        <div className="flex flex-col gap-[10px] mb-10 w-full items-center justify-center">
-          <DashboardDeleteButton text="대시보드 삭제하기" onClick={() => console.log("삭제")} />
-        </div>
-
-        <strong className="text-2xl-semibold">PlusIconButton 사용</strong>
-        <div className="flex flex-col gap-[10px] mb-10 w-full items-center justify-center">
-          {/* to do 버튼 */}
-          <button className="w-full max-w-[284px] tablet:max-w-full laptop:max-w-[314px] flex items-center justify-center 
-                          py-[6px] rounded-[6px] border border-gray-D9D9D9 
-                          bg-white gap-[12px]"
-                          onClick={() => console.log("to do 버튼 클릭됨")}>
-            <PlusIconButton />
-          </button>
-          {/* 새로운 대시보드 버튼 */}
-          <button className="w-full max-w-[260px] tablet:max-w-[247px] laptop:max-w-[332px] flex items-center justify-center 
-                          py-[20px] tablet:py-[25px] rounded-[8px] border border-gray-D9D9D9 
-                          bg-white gap-[12px]"
-                          onClick={() => console.log("새로운 대시보드 버튼 클릭됨")}>
-            <span className="text-md-semibold tablet-text-lg-semibold text-black-333236">새로운 대시보드</span>
-            <PlusIconButton />
-          </button>
-        </div>
-        
-        <strong className="text-2xl-semibold">새로운 컬럼 추가하기 +</strong>
-        <div className="flex flex-col gap-[10px] mb-10 w-full items-center justify-center mb-10">
-          <AddColumnButton onClick={() => console.log("컬럼 추가 버튼 클릭됨")} />
-        </div>
-
         <strong className="text-2xl-semibold">페이지네이션</strong>
         <div className="flex flex-col gap-[10px] mb-10 w-full items-center justify-center">
           <PaginationButton hasPrev={true} hasNext={true} size="small" onPrev={() => {}} onNext={() => {}} />
           <PaginationButton hasPrev={false} hasNext={false} size="large" onPrev={() => {}} onNext={() => {}} />
           <PaginationButton hasPrev={page > 1} hasNext={page < 5} size="large" onPrev={() => setPage((prev) => prev - 1)}onNext={() => setPage((prev) => prev + 1)}/>
-        </div>
-
-        <strong className="text-2xl-semibold">대시보드</strong>
-        <div className="flex flex-col gap-[10px] mb-10 w-full items-center justify-center">
-          <DashboardButton title="비브리지" color="#7AC555" isOwner hasArrow />
-          <DashboardButton title="코드잇" color="#760DDE" isOwner hasArrow />
-          <DashboardButton title="3분기 계획" color="#FFA500" hasArrow />
-          <DashboardButton title="회의록" color="#76A6EA" hasArrow />
-          <DashboardButton title="중요 문서함" color="#E876EA" hasArrow />
-          <div className="flex items-center gap-[8px]"><ColorChip color="#7AC555" /> <span>비브리지</span><Image src={CrownIcon} className="w-[15px] tablet:w-[20px]" alt="왕관" /></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#760DDE" /> <span>코드잇</span></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#FFA500" /> <span>3분기 계획</span></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#76A6EA" /> <span>회의록</span></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#E876EA" /> <span>중요 문서함</span></div>
         </div>
 
         <strong className="text-2xl-semibold">폰트사이즈</strong>
@@ -140,6 +121,11 @@ export default function Home() {
           <p className="text-xl-semibold">Pretendard XL Semibold (20px / 32px)</p>
           <p className="text-xl-medium">Pretendard XL Medium (20px / 32px)</p>
           <p className="text-xl-regular">Pretendard XL Regular (20px / 32px)</p>
+
+          <p className="text-2lg-bold">Pretendard 2LG Bold (18px / 26px)</p>
+          <p className="text-2lg-semibold">Pretendard 2LG Semibold (18px / 26px)</p>
+          <p className="text-2lg-medium">Pretendard 2LG Medium (18px / 26px)</p>
+          <p className="text-2lg-regular">Pretendard 2LG Regular (18px / 26px)</p>
 
           <p className="text-lg-bold">Pretendard LG Bold (16px / 26px)</p>
           <p className="text-lg-semibold">Pretendard LG Semibold (16px / 26px)</p>

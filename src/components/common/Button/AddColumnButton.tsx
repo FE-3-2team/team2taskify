@@ -8,11 +8,11 @@ export default function AddColumnButton({ onClick }: AddColumnButtonProps) {
   return (
     <button
       className="w-full max-w-[284px] tablet:max-w-full laptop:max-w-[354px] flex items-center justify-center 
-                 py-[20px] rounded-[8px] border border-gray-D9D9D9 
+                 py-[20px] rounded-[8px] border border-gray-300 
                  bg-white gap-[12px]"
       onClick={onClick}
     >
-      <span className="text-lg-bold tablet-text-2lg-bold text-black-333236">새로운 컬럼 추가하기</span>
+      <span className="text-lg-bold tablet:text-2lg-bold text-black-200">새로운 컬럼 추가하기</span>
       <PlusIconButton />
       {/* <div className="w-[20px] h-[20px] tablet:w-[22px] tablet:h-[22px] flex items-center justify-center 
                       rounded-[4px] bg-violet-F1EFFD">

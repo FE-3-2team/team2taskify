@@ -1,3 +1,4 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
 @import "tailwindcss";
 
 html,
@@ -7,6 +8,9 @@ body {
   margin: 0px;
   padding: 0px;
   height: 100vh;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 
+               Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", 
+               "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
 }
 
 * {
@@ -30,3 +34,146 @@ button {
 button:hover {
   opacity: 0.9;
 }
+
+@theme {
+/* 컬러가이드 */
+  --color-*: initial;
+  
+  --color-black-400: #000000;
+  --color-black-300: #171717;
+  --color-black-200: #333236;
+  --color-black-100: #4b4b4b;
+
+  --color-gray-500: #787486;
+  --color-gray-400: #9fa6b2;
+  --color-gray-300: #d9d9d9;
+  --color-gray-200: #eeeeee;
+  --color-gray-100: #fafafa;
+
+  --color-white: #ffffff;
+
+  --color-violet-200: #5534da;
+  --color-violet-100: #f1effd;
+  --color-red: #d6173a;
+  --color-green: #7ac555;
+  --color-purple: #760dde;
+  --color-orange: #ffa500;
+  --color-blue: #76a6ea;
+  --color-pink: #e876ea;
+
+  /* 폰트가이드 */
+  --text-3xl-bold: 32px;
+  --text-3xl-bold--line-height: 42px;
+  --text-3xl-bold--font-weight: bold;
+
+  --text-3xl-semibold: 32px;
+  --text-3xl-semibold--line-height: 42px;
+  --text-3xl-semibold--font-weight: 600;
+
+  --text-2xl-bold: 24px;
+  --text-2xl-bold--line-height: 32px;
+  --text-2xl-bold--font-weight: bold;
+
+  --text-2xl-semibold: 24px;
+  --text-2xl-semibold--line-height: 32px;
+  --text-2xl-semibold--font-weight: 600;
+
+  --text-2xl-medium: 24px;
+  --text-2xl-medium--line-height: 32px;
+  --text-2xl-medium--font-weight: 500;
+
+  --text-2xl-regular: 24px;
+  --text-2xl-regular--line-height: 32px;
+  --text-2xl-regular--font-weight: 400;
+
+  --text-xl-bold: 20px;
+  --text-xl-bold--line-height: 32px;
+  --text-xl-bold--font-weight: bold;
+
+  --text-xl-semibold: 20px;
+  --text-xl-semibold--line-height: 32px;
+  --text-xl-semibold--font-weight: 600;
+
+  --text-xl-medium: 20px;
+  --text-xl-medium--line-height: 32px;
+  --text-xl-medium--font-weight: 500;
+
+  --text-xl-regular: 20px;
+  --text-xl-regular--line-height: 32px;
+  --text-xl-regular--font-weight: 400;
+
+  --text-2lg-bold: 18px;
+  --text-2lg-bold--line-height: 26px;
+  --text-2lg-bold--font-weight: bold;
+
+  --text-2lg-semibold: 18px;
+  --text-2lg-semibold--line-height: 26px;
+  --text-2lg-semibold--font-weight: 600;
+
+  --text-2lg-medium: 18px;
+  --text-2lg-medium--line-height: 26px;
+  --text-2lg-medium--font-weight: 500;
+
+  --text-2lg-regular: 18px;
+  --text-2lg-regular--line-height: 26px;
+  --text-2lg-regular--font-weight: 400;
+
+  --text-lg-bold: 16px;
+  --text-lg-bold--line-height: 26px;
+  --text-lg-bold--font-weight: bold;
+
+  --text-lg-semibold: 16px;
+  --text-lg-semibold--line-height: 26px;
+  --text-lg-semibold--font-weight: 600;
+
+  --text-lg-medium: 16px;
+  --text-lg-medium--line-height: 26px;
+  --text-lg-medium--font-weight: 500;
+
+  --text-lg-regular: 16px;
+  --text-lg-regular--line-height: 26px;
+  --text-lg-regular--font-weight: 400;
+
+  --text-md-bold: 14px;
+  --text-md-bold--line-height: 24px;
+  --text-md-bold--font-weight: bold;
+
+  --text-md-semibold: 14px;
+  --text-md-semibold--line-height: 24px;
+  --text-md-semibold--font-weight: 600;
+
+  --text-md-medium: 14px;
+  --text-md-medium--line-height: 24px;
+  --text-md-medium--font-weight: 500;
+
+  --text-md-regular: 14px;
+  --text-md-regular--line-height: 24px;
+  --text-md-regular--font-weight: 400;
+
+  --text-sm-semibold: 13px;
+  --text-sm-semibold--line-height: 22px;
+  --text-sm-semibold--font-weight: 600;
+
+  --text-sm-medium: 13px;
+  --text-sm-medium--line-height: 22px;
+  --text-sm-medium--font-weight: 500;
+
+  --text-xs-semibold: 12px;
+  --text-xs-semibold--line-height: 20px;
+  --text-xs-semibold--font-weight: 600;
+
+  --text-xs-medium: 12px;
+  --text-xs-medium--line-height: 18px;
+  --text-xs-medium--font-weight: 500;
+
+  --text-xs-regular: 12px;
+  --text-xs-regular--line-height: 18px;
+  --text-xs-regular--font-weight: 400;
+
+  /* 반응형 브레이크포인트 설정 */
+  --breakpoint-*: initial;
+  --breakpoint-tablet: 744px;
+  --breakpoint-laptop: 1024px;
+  --breakpoint-desktop: 1921px;
+}
+
