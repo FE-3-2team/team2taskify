@@ -1,5 +1,6 @@
 import { Login } from "@/api/login";
 import { Badge } from "@/components/common/Badge";
+import Profile from "@/components/common/Profile";
 
 const user = {
   id: 0,
@@ -51,7 +52,7 @@ export default function Test() {
   return (
     <div className="h-dvw">
       <div>컴포넌트등 테스트 페이지 입니다.</div>
-      <Badge nickname="name" img={null} isComment />
+      <Profile value={user} />
       <button onClick={TestLogin}>로그인</button>
     </div>
   );
