@@ -8,9 +8,22 @@ body {
   margin: 0px;
   padding: 0px;
   height: 100vh;
-  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 
-               Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", 
-               "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-family:
+    "Pretendard Variable",
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    "Helvetica Neue",
+    "Segoe UI",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    sans-serif;
 }
 
 * {
@@ -36,22 +49,18 @@ button:hover {
 }
 
 @theme {
-/* 컬러가이드 */
+  /* 컬러가이드 */
   --color-*: initial;
-  
   --color-black-400: #000000;
   --color-black-300: #171717;
   --color-black-200: #333236;
   --color-black-100: #4b4b4b;
-
   --color-gray-500: #787486;
   --color-gray-400: #9fa6b2;
   --color-gray-300: #d9d9d9;
   --color-gray-200: #eeeeee;
   --color-gray-100: #fafafa;
-
   --color-white: #ffffff;
-
   --color-violet-200: #5534da;
   --color-violet-100: #f1effd;
   --color-red: #d6173a;
@@ -59,7 +68,12 @@ button:hover {
   --color-purple: #760dde;
   --color-orange: #ffa500;
   --color-blue: #76a6ea;
+  --color-blue200: #dbe6f7;
   --color-pink: #e876ea;
+  --color-pink200: #d25b68;
+  --color-pink300: #f4d7da;
+  --color-pink400: #f7dbf0;
+  --color-brown: #f9eee3;
 
   /* 폰트가이드 */
   --text-3xl-bold: 32px;
@@ -176,4 +190,3 @@ button:hover {
   --breakpoint-laptop: 1024px;
   --breakpoint-desktop: 1921px;
 }
-
