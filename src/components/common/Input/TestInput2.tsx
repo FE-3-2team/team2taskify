@@ -1,11 +1,10 @@
-// components/common/Input/UnifiedInput.tsx
 import React, { useState, useEffect, ChangeEvent, FC, forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import Image from "next/image";
 import EyeCloseIcon from "../../../assets/icons/EyeVisibility_off.svg";
 import EyeOpenIcon from "../../../assets/icons/EyeVisibility_on.svg";
 import CalendarIcon from "../../../assets/icons/Calendar.svg";
-import InputButton from "../Button/InputButton"; // InputButton 컴포넌트 경로
+import InputButton from "../Button/InputButton";
 
 export type InputVariant = "email" | "password" | "title" | "comment" | "date";
 
@@ -127,7 +126,6 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
 
   // date variant 처리: react-datepicker 사용
   if (variant === "date") {
-    // value는 "yyyy-MM-dd" 형식의 문자열로 가정 (없으면 빈 문자열)
     const selectedDate = value ? new Date(value) : null;
     const handleDateChange = (date: Date | null) => {
       const formatted = date ? date.toISOString().slice(0, 10) : "";

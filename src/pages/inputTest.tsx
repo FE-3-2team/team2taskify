@@ -1,6 +1,5 @@
-// pages/inputTest.tsx
 import React, { useState } from "react";
-import UnifiedInput from "../components/common/Input/TestInput2"; // UnifiedInput 파일 경로를 실제 경로에 맞게 수정하세요.
+import UnifiedInput from "../components/common/Input/TestInput2";
 
 export default function InputTest() {
   const [email, setEmail] = useState("");
