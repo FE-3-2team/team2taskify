@@ -1,5 +1,5 @@
 import useWindowSize from "@/hooks/useWindow";
-
+import clsx from "clsx";
 interface BadgesProps {
   memberList: Member[];
 }
@@ -30,7 +30,7 @@ export function Badges({ memberList }: BadgesProps) {
             className="absolute"
             style={{ left: `${idx * 20}px`, zIndex: 0 + idx }}
           >
-            <Badge value={member} />
+            <Badge img={member.profileImageUrl} nickname={member.nickname} />
           </div>
         );
       })}
@@ -50,20 +50,24 @@ export function Badges({ memberList }: BadgesProps) {
   );
 }
 interface Props {
-  value: User | Member;
+  nickname: string;
+  img: string | null;
+  isComment?: boolean;
 }
-
-export function Badge({ value }: Props) {
+export function Badge({ nickname, img, isComment }: Props) {
   const randomNum = Math.floor(Math.random() * RANDOM_COLOR.length);
-  const { email, profileImageUrl } = value;
-  const firstChar = email.charAt(0).toUpperCase();
+  const firstChar = nickname.charAt(0).toUpperCase();
 
   return (
     <div
-      className={` border-2 border-white  flex justify-center items-center rounded-full w-[38px] h-[38px] ${RANDOM_COLOR[randomNum]} `}
+      className={clsx(
+        "border-2 border-white flex justify-center items-center rounded-full ",
+        isComment ? "w-[34px] h-[34px]" : "w-[38px] h-[38px]",
+        RANDOM_COLOR[randomNum]
+      )}
     >
-      {profileImageUrl ? (
-        <img src={profileImageUrl} alt="프로필 이미지" />
+      {img ? (
+        <img src={img} alt="프로필 이미지" />
       ) : (
         <div className="text-white text-lg-semibold ">{firstChar}</div>
       )}
