@@ -6,26 +6,25 @@ import Invite from "@/assets/icons/Invite.icon.svg";
 import Crown from "@/assets/icons/Crown.icon.svg";
 import { Badges } from "./Badge";
 import Link from "next/link";
-import useAuthStore from "@/utils/zustand";
+import useAuthStore from "@/utils/Zustand/zustand";
+import { useStore } from "@/utils/Zustand/useStore";
 
 /**ToDo
  * 초대하기 버튼 클릭시 모달 팝업 함수
  */
 interface Props {
   title?: string;
-  members: Member[];
-  createdByMe: boolean;
+  members?: Member[];
+  createdByMe?: boolean;
 }
 
 export default function Header({ members, title, createdByMe }: Props) {
-  const { isLoggedIn, userNickname, profileImageUrl, logout } =
-    useAuthStore.getState();
-
-  console.log(isLoggedIn);
+  const store = useStore(useAuthStore, (state) => state);
+  console.log(store?.userNickname);
   const router = useRouter();
   const display = router.pathname === "/mydashbord" ? "none" : "block";
   const dashboardTitle = title ? title : "내 대시보드";
-
+  if (!store?.userNickname) return;
   return (
     <div className="flex flex-row justify-between w-full h-[70px] py-[15px] px-[20px] laptop:pl-10 laptop:pr-20  border-b-[1px]  items-center border-gray-300 ">
       <div className="flex flex-row gap-2">
@@ -76,12 +75,12 @@ export default function Header({ members, title, createdByMe }: Props) {
             className=" w-[90px] laptop:w-[138px]"
             style={{ display: display }}
           >
-            <Badges memberList={members} />
+            {members && <Badges memberList={members} />}
           </div>
           <div className="h-[38px] w-[1px] bg-gray-300" />
           <Profile
-            nickname={userNickname}
-            profileImageUrl={profileImageUrl}
+            nickname={store.userNickname}
+            profileImageUrl={store.profileImageUrl}
             isProfile
           />
         </div>
