@@ -6,18 +6,22 @@ import Invite from "@/assets/icons/Invite.icon.svg";
 import Crown from "@/assets/icons/Crown.icon.svg";
 import { Badges } from "./Badge";
 import Link from "next/link";
+import useAuthStore from "@/utils/zustand";
 
 /**ToDo
  * 초대하기 버튼 클릭시 모달 팝업 함수
  */
 interface Props {
-  user: User;
   title?: string;
   members: Member[];
   createdByMe: boolean;
 }
 
-export default function Header({ user, members, title, createdByMe }: Props) {
+export default function Header({ members, title, createdByMe }: Props) {
+  const { isLoggedIn, userNickname, profileImageUrl, logout } =
+    useAuthStore.getState();
+
+  console.log(isLoggedIn);
   const router = useRouter();
   const display = router.pathname === "/mydashbord" ? "none" : "block";
   const dashboardTitle = title ? title : "내 대시보드";
@@ -75,7 +79,11 @@ export default function Header({ user, members, title, createdByMe }: Props) {
             <Badges memberList={members} />
           </div>
           <div className="h-[38px] w-[1px] bg-gray-300" />
-          <Profile value={user} isProfile />
+          <Profile
+            nickname={userNickname}
+            profileImageUrl={profileImageUrl}
+            isProfile
+          />
         </div>
       </div>
     </div>
