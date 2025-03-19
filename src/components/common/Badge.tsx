@@ -72,7 +72,6 @@ export function Badge({ nickname, img, isComment, isCard, ArrayId }: Props) {
   if (isKorean) nickname = hangulRomanization.convert(nickname);
   const firstChar = nickname.charAt(0).toUpperCase();
 
-  console.log(colorNum);
   return (
     <div
       className={clsx(
