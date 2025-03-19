@@ -1,5 +1,6 @@
 import { LoginButton, InviteButton, ModalButton, DeleteButton, InputButton, DashboardDeleteButton, AddColumnButton, PlusIconButton, PaginationButton, DashboardButton } from "@/components/common/Button";
 import ColorChip from "@/components/common/Button/ColorChipSmall";
+import MainHeader from "@/components/common/MainHeader";
 import React, { useState } from "react";
 import Image from "next/image";
 import CrownIcon from "@/assets/icons/Crown.icon.svg"; // 왕관 아이콘
@@ -10,6 +11,16 @@ export default function Home() {
   
   return (
     <>
+      <MainHeader />
+      {/* <footer className='mt-10 w-full bg-[#000000] pb-[5.625rem] pt-[5.03rem] text-[0.75rem] text-gray40 md:mt-40 md:h-[6.25rem] md:p-0 md:text-[1rem]'>
+        <div className='m-auto flex max-w-[120rem] flex-col items-center text-center md:h-full md:flex-row md:justify-between md:px-[8.8125rem]'>
+          <div className='h-[0.875rem] md:h-[1rem]'>©codeit - 2023</div>
+          <div className='mx-auto mb-[4.25rem] mt-3 flex h-[0.875rem] w-fit gap-5 md:m-0 md:h-[1rem]'>
+            <span>Privacy Policy</span>
+            <span>FAQ</span>
+          </div>
+        </div>
+      </footer> */}
       <div className="flex flex-col items-center justify-center min-h-screen gap-4 mt-10 mb-10 text-center">
         <strong className="text-2xl-semibold">로그인 버튼</strong>
         <div className="flex flex-col items-center justify-center w-full gap-2 mb-10">
