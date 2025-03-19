@@ -46,13 +46,11 @@ const members = [
 ];
 
 export default function Test() {
-  const TestLogin = async () => {
-    await Login();
-  };
+  const TestLogin = async () => {};
   return (
     <div className="h-dvw">
       <div>컴포넌트등 테스트 페이지 입니다.</div>
-      <Profile value={user} />
+      <Badge nickname="유선향" img={null} isCard />
       <button onClick={TestLogin}>로그인</button>
     </div>
   );

@@ -53,16 +53,24 @@ interface Props {
   nickname: string;
   img: string | null;
   isComment?: boolean;
+  isCard?: boolean;
 }
-export function Badge({ nickname, img, isComment }: Props) {
+export function Badge({ nickname, img, isComment, isCard }: Props) {
   const randomNum = Math.floor(Math.random() * RANDOM_COLOR.length);
+  const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(nickname);
+  const hangulRomanization = require("hangul-romanization");
+  if (isKorean) nickname = hangulRomanization.convert(nickname);
   const firstChar = nickname.charAt(0).toUpperCase();
 
   return (
     <div
       className={clsx(
         "border-2 border-white flex justify-center items-center rounded-full ",
-        isComment ? "w-[34px] h-[34px]" : "w-[38px] h-[38px]",
+        isComment
+          ? "w-[34px] h-[34px]"
+          : isCard
+            ? "w-[22px] h-[22px] tablet:w-[24px] tablet:h-[24px]"
+            : "w-[38px] h-[38px]",
         RANDOM_COLOR[randomNum]
       )}
     >

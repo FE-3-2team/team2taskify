@@ -1,18 +1,19 @@
 import { Badge } from "./Badge";
-
+import clsx from "clsx";
 interface Props {
   value: User;
-  isEdit?: boolean;
+  isProfile?: boolean;
 }
-export default function Profile({ value, isEdit }: Props) {
-  let nickname = value.nickname;
-  const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value.nickname);
-  const hangulRomanization = require("hangul-romanization");
-  if (isKorean) nickname = hangulRomanization.convert(nickname);
+export default function Profile({ value, isProfile }: Props) {
   return (
-    <div className="flex flex-row items-center gap-3 w-fit">
-      <Badge nickname={nickname} img={value.profileImageUrl} />
-      <p className={"hidden text-lg-medium text-black-200 tablet:block"}>
+    <div className={"flex flex-row items-center gap-3 w-fit"}>
+      <Badge nickname={value.nickname} img={value.profileImageUrl} />
+      <p
+        className={clsx(
+          "text-lg-medium text-black-200 ",
+          isProfile ? "tablet:block hidden" : "block"
+        )}
+      >
         {value.nickname}
       </p>
     </div>
