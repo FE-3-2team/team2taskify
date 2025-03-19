@@ -1,7 +1,7 @@
 import { Login } from "@/api/login";
 import { Badge } from "@/components/common/Badge";
 import Profile from "@/components/common/Profile";
-
+import Header from "@/components/common/Header";
 const user = {
   id: 0,
   email: "gbtm@naver.com",
@@ -42,15 +42,64 @@ const members = [
     profileImageUrl: null,
     createdAt: "string",
     updatedAt: "string",
+    userId: 0,
+    isOwner: false,
+  },
+  {
+    id: 0,
+    email: "gbtm@naver.com",
+    nickname: "유선향",
+    profileImageUrl: null,
+    createdAt: "string",
+    updatedAt: "string",
+    userId: 0,
+    isOwner: false,
+  },
+  {
+    id: 0,
+    email: "gbtm@naver.com",
+    nickname: "유선향",
+    profileImageUrl: null,
+    createdAt: "string",
+    updatedAt: "string",
+    userId: 0,
+    isOwner: false,
+  },
+  {
+    id: 0,
+    email: "gbtm@naver.com",
+    nickname: "유선향",
+    profileImageUrl: null,
+    createdAt: "string",
+    updatedAt: "string",
+    userId: 0,
+    isOwner: false,
+  },
+  {
+    id: 0,
+    email: "gbtm@naver.com",
+    nickname: "유선향",
+    profileImageUrl: null,
+    createdAt: "string",
+    updatedAt: "string",
+    userId: 0,
+    isOwner: false,
   },
 ];
 
 export default function Test() {
-  const TestLogin = async () => {};
+  const TestLogin = async () => {
+    await Login();
+  };
   return (
     <div className="h-dvw">
       <div>컴포넌트등 테스트 페이지 입니다.</div>
-      <Badge nickname="유선향" img={null} isCard />
+      <Header
+        user={user}
+        members={members}
+        title="테스트 대시보드"
+        createdByMe={true}
+      />
       <button onClick={TestLogin}>로그인</button>
     </div>
   );

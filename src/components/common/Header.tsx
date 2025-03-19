@@ -5,7 +5,11 @@ import Edit from "@/assets/icons/Edit.icon.svg";
 import Invite from "@/assets/icons/Invite.icon.svg";
 import Crown from "@/assets/icons/Crown.icon.svg";
 import { Badges } from "./Badge";
+import Link from "next/link";
 
+/**ToDo
+ * 초대하기 버튼 클릭시 모달 팝업 함수
+ */
 interface Props {
   user: User;
   title?: string;
@@ -24,26 +28,29 @@ export default function Header({ user, members, title, createdByMe }: Props) {
         <p className="hidden tablet:block text-black-200 text-xl-bold ">
           {dashboardTitle}
         </p>
-        {createdByMe && <Image src={Crown} width={20} height={24} alt="mine" />}
+        {createdByMe && (
+          <div className="hidden tablet:block">
+            <Image src={Crown} width={20} height={24} alt="mine" />
+          </div>
+        )}
       </div>
 
       <div className="flex flex-row gap-4 tablet:gap-8 laptop:gap-10">
         <div className="flex flex-row gap-4 ">
-          <button
-            onClick={() => router.push("/mypage")}
-            className="w-[49px] tablet:w-[88px] justify-center h-[40px] flex flex-row items-center py-[7px] px-3 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300"
-          >
-            <Image
-              className="hidden tablet:block"
-              src={Edit}
-              width={15}
-              height={15}
-              alt="톱니바퀴"
-            />
-            <div className="text-gray-500 text-xs-medium tablet-text-md-medium">
-              관리
-            </div>
-          </button>
+          <Link href="/mypage">
+            <button className="w-[49px] tablet:w-[88px] justify-center h-[40px] flex flex-row items-center py-[7px] px-3 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300">
+              <Image
+                className="hidden tablet:block"
+                src={Edit}
+                width={15}
+                height={15}
+                alt="톱니바퀴"
+              />
+              <div className="text-gray-500 text-xs-medium tablet-text-md-medium">
+                관리
+              </div>
+            </button>
+          </Link>
           <button
             onClick={() => {}}
             className="w-[73px] tablet:w-[116px] justify-center items-center h-[40px] flex flex-row  py-[7px] px-3 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300"
@@ -68,7 +75,7 @@ export default function Header({ user, members, title, createdByMe }: Props) {
             <Badges memberList={members} />
           </div>
           <div className="h-[38px] w-[1px] bg-gray-300" />
-          <Profile value={user} />
+          <Profile value={user} isProfile />
         </div>
       </div>
     </div>
