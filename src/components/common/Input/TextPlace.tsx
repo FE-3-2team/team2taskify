@@ -8,7 +8,6 @@ const CommentBox: React.FC = () => {
     const value = e.target.value;
     setComment(value);
 
-    // 300자에 도달하면 오류 메시지 표시, 그 전에는 메시지 없음
     if (value.length === 300) {
       setError("최대 300자 까지 입력 할 수 있습니다.");
     } else {
@@ -52,7 +51,6 @@ const CommentBox: React.FC = () => {
         )}
       </label>
 
-      {/* border-gray-300 클래스를 추가하여 회색 테두리 적용 */}
       <div className="w-full rounded-[8px] border border-gray-300 p-4 text-lg-regular">
         <textarea
           id="comment-input"
