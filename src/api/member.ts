@@ -1,4 +1,4 @@
-import instance from "./instance";
+import { instance } from "./instance";
 //
 export async function deleteMember(memberId: number) {
   if (memberId === 0) return;

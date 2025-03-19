@@ -9,7 +9,7 @@ import { Badges } from "./Badge";
 interface Props {
   user: User;
   title?: string;
-  members: User[];
+  members: Member[];
   createdByMe: boolean;
 }
 
@@ -19,9 +19,9 @@ export default function Header({ user, members, title, createdByMe }: Props) {
   const dashboardTitle = title ? title : "내 대시보드";
 
   return (
-    <div className="flex flex-row justify-between w-full h-[70px] py-[15px] px-[20px] laptop:pl-10 laptop:pr-20  border-b-[1px]  items-center border-gray-D9D9D9 ">
+    <div className="flex flex-row justify-between w-full h-[70px] py-[15px] px-[20px] laptop:pl-10 laptop:pr-20  border-b-[1px]  items-center border-gray-300 ">
       <div className="flex flex-row gap-2">
-        <p className="hidden tablet:block text-black-333236 text-xl-bold ">
+        <p className="hidden tablet:block text-black-200 text-xl-bold ">
           {dashboardTitle}
         </p>
         {createdByMe && <Image src={Crown} width={20} height={24} alt="mine" />}
@@ -31,7 +31,7 @@ export default function Header({ user, members, title, createdByMe }: Props) {
         <div className="flex flex-row gap-4 ">
           <button
             onClick={() => router.push("/mypage")}
-            className="w-[49px] tablet:w-[88px] justify-center h-[40px] flex flex-row items-center py-[7px] px-3 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-D9D9D9"
+            className="w-[49px] tablet:w-[88px] justify-center h-[40px] flex flex-row items-center py-[7px] px-3 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300"
           >
             <Image
               className="hidden tablet:block"
@@ -40,13 +40,13 @@ export default function Header({ user, members, title, createdByMe }: Props) {
               height={15}
               alt="톱니바퀴"
             />
-            <div className="text-xs-medium tablet:text-md-medium text-gray-787486">
+            <div className="text-gray-500 text-xs-medium tablet-text-md-medium">
               관리
             </div>
           </button>
           <button
             onClick={() => {}}
-            className="w-[73px] tablet:w-[116px] justify-center items-center h-[40px] flex flex-row  py-[7px] px-3 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-D9D9D9"
+            className="w-[73px] tablet:w-[116px] justify-center items-center h-[40px] flex flex-row  py-[7px] px-3 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300"
           >
             <Image
               className="hidden tablet:block"
@@ -55,7 +55,7 @@ export default function Header({ user, members, title, createdByMe }: Props) {
               height={15}
               alt="+"
             />
-            <div className=" text-xs-medium tablet:text-md-medium text-gray-787486">
+            <div className="text-gray-500 text-xs-medium tablet:text-md-medium">
               초대하기
             </div>
           </button>
@@ -65,10 +65,10 @@ export default function Header({ user, members, title, createdByMe }: Props) {
             className=" w-[90px] laptop:w-[138px]"
             style={{ display: display }}
           >
-            <Badges badges={members} />
+            <Badges memberList={members} />
           </div>
-          <div className="h-[38px]  w-[1px] bg-gray-D9D9D9" />
-          <Profile value={user} isProfile />
+          <div className="h-[38px] w-[1px] bg-gray-300" />
+          <Profile value={user} />
         </div>
       </div>
     </div>

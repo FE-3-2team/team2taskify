@@ -15,11 +15,11 @@ interface Props {
 export default function EditMember({ members }: Props) {
   const totalPage = Math.ceil(members.length / 4);
   const [currentPage, setCurrentPage] = useState(1);
-  const handelClickPrev = () => {
+  const handleClickPrev = () => {
     if (currentPage === 1) return;
     setCurrentPage((prev) => prev - 1);
   };
-  const handelClickNext = () => {
+  const handleClickNext = () => {
     if (currentPage === totalPage) return;
     setCurrentPage((prev) => prev + 1);
   };
@@ -34,20 +34,20 @@ export default function EditMember({ members }: Props) {
     >
       <div className="flex flex-col gap-[18px]">
         <div className="flex items-center justify-between px-5 tablet:px-7 ">
-          <p className="text-xl-bold tablet:text-2xl-bold">구성원</p>
-          <div className="flex items-center gap-3 text-xs-regular tablet:text-md-regular">
+          <p className="text-xl-bold tablet-text-2xl-bold">구성원</p>
+          <div className="flex items-center gap-3 text-xs-regular tablet-text-md-regular">
             {totalPage} 페이지 중 {currentPage}
             <div>
-              <button className="cursor-pointer" onClick={handelClickPrev}>
+              <button className="cursor-pointer" onClick={handleClickPrev}>
                 <Image src={PrevPage} width={40} height={40} alt="<" />
               </button>
-              <button className="cursor-pointer" onClick={handelClickNext}>
+              <button className="cursor-pointer" onClick={handleClickNext}>
                 <Image src={NextPage} width={40} height={40} alt=">" />
               </button>
             </div>
           </div>
         </div>
-        <p className="px-5 tablet:px-7 md-regular text-gray-9FA6B2">이름</p>
+        <p className="px-5 text-gray-400 tablet:px-7 md-regular">이름</p>
       </div>
       <div>
         {members.map((member, i) => {
@@ -60,7 +60,7 @@ export default function EditMember({ members }: Props) {
                 </button>
               </div>
               <div
-                className="h-[1px] w-full bg-gray-EEEEEE my-3"
+                className="h-[1px] w-full bg-gray-200 my-3"
                 style={{ display: i === 3 ? "none" : "block" }}
               />
             </div>
