@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, ChangeEvent } from "react";
+import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import GenericModal from "./GenericModal";
 import UnifiedInput from "../common/Input/TestInput2";
 
@@ -79,6 +79,7 @@ const ColumnModal: React.FC<ColumnModalProps> = ({
   initialTitle = "",
   texts = {},
 }) => {
+  // 모드별 텍스트 병합
   const mergedTexts: ModalTexts = {
     create: { ...defaultTexts.create, ...texts.create },
     delete: { ...defaultTexts.delete, ...texts.delete },
@@ -87,8 +88,9 @@ const ColumnModal: React.FC<ColumnModalProps> = ({
     cancel: texts.cancel || defaultTexts.cancel,
   };
 
-  const [value, setValue] = React.useState("");
-  const [error, setError] = React.useState("");
+  // mode가 "invite"인 경우 이메일 입력, 그 외는 타이틀 입력
+  const [value, setValue] = useState("");
+  const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   const validateTitle = (val: string) => {
@@ -108,13 +110,16 @@ const ColumnModal: React.FC<ColumnModalProps> = ({
     return "";
   };
 
+  // 이메일 입력용 핸들러 (invite 모드)
   const handleEmailChange = (val: string) => {
     setValue(val);
   };
 
+  // 타이틀 입력용 핸들러 (create, manage 모드)
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setValue(newValue);
+    // manage 모드일 때만 타이틀 검증 진행
     if (mode === "create" || mode === "manage") {
       const validationError = validateTitle(newValue);
       setError(validationError);
@@ -149,6 +154,7 @@ const ColumnModal: React.FC<ColumnModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
+      // 초대 모달은 빈 문자열, 그 외에는 기존 타이틀을 유지
       setValue(mode === "create" ? "" : initialTitle);
       setError("");
       if ((mode === "create" || mode === "manage") && inputRef.current) {
@@ -159,6 +165,7 @@ const ColumnModal: React.FC<ColumnModalProps> = ({
 
   let modalContent;
   if (mode === "invite") {
+    // 초대 모달: UnifiedInput의 email variant 사용
     modalContent = (
       <div>
         <UnifiedInput
@@ -190,13 +197,14 @@ const ColumnModal: React.FC<ColumnModalProps> = ({
           maxLength={12}
           ref={inputRef}
           className={`w-full h-[50px] rounded-[8px] border pt-[15px] pr-[16px] pb-[15px] pl-[16px] focus:outline-none text-lg-regular ${
-            error ? "text-red" : "border-gray-300"
+            error ? "border-red-500" : "border-gray-300"
           }`}
         />
-        {error && <p className="mt-2 text-sm text-red">{error}</p>}
+        {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
       </>
     );
   } else {
+    // 삭제 모달
     modalContent = (
       <p className="mb-6 text-center text-gray-800 text-xl-medium">
         {mergedTexts.delete.message}

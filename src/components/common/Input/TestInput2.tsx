@@ -1,12 +1,10 @@
-// UnifiedInput.tsx
 import React, { useState, useEffect, ChangeEvent, FC, forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import Image from "next/image";
 import EyeCloseIcon from "../../../assets/icons/EyeVisibility_off.svg";
 import EyeOpenIcon from "../../../assets/icons/EyeVisibility_on.svg";
 import CalendarIcon from "../../../assets/icons/Calendar.svg";
-// 새 버튼 컴포넌트 import
-import { Button } from "../Button";
+import Button from "../Button/Button";
 
 export type InputVariant = "email" | "password" | "title" | "comment" | "date";
 

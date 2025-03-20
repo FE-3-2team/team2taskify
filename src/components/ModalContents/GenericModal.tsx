@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Button from "../common/Button/Button";
+import ModalButton from "../common/Button/Button";
 
 interface GenericModalProps {
   isOpen: boolean;
@@ -37,9 +37,9 @@ const GenericModal: React.FC<GenericModalProps> = ({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
+      role="dialog" // 모달이 대화 상자임을 알림
+      aria-modal="true" // 모달이 열렸을 때 다른 영역과의 상호작용 제한
+      aria-labelledby="modal-title" // 모달의 제목을 참조
     >
       <div
         className="absolute inset-0 bg-black opacity-50"
@@ -51,12 +51,12 @@ const GenericModal: React.FC<GenericModalProps> = ({
         </h2>
         <div className="mb-6 text-left">{content}</div>
         <div className="flex justify-end mt-4 space-x-2">
-          <Button onClick={onClose} size="medium" variant="secondary">
+          <ModalButton onClick={onClose} variant="secondary">
             {cancelText}
-          </Button>
-          <Button onClick={onConfirm} size="medium" variant="primary">
+          </ModalButton>
+          <ModalButton onClick={onConfirm} variant="primary">
             {confirmText}
-          </Button>
+          </ModalButton>
         </div>
       </div>
     </div>
