@@ -1,4 +1,3 @@
-// ColumnModal.tsx
 import React, { useEffect, useRef, ChangeEvent } from "react";
 import GenericModal from "./GenericModal";
 import UnifiedInput from "../common/Input/TestInput2";
@@ -191,10 +190,10 @@ const ColumnModal: React.FC<ColumnModalProps> = ({
           maxLength={12}
           ref={inputRef}
           className={`w-full h-[50px] rounded-[8px] border pt-[15px] pr-[16px] pb-[15px] pl-[16px] focus:outline-none text-lg-regular ${
-            error ? "border-red-500" : "border-gray-300"
+            error ? "text-red" : "border-gray-300"
           }`}
         />
-        {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+        {error && <p className="mt-2 text-sm text-red">{error}</p>}
       </>
     );
   } else {

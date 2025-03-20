@@ -195,7 +195,7 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
             onChange={handleInputChange}
             maxLength={finalMaxLength}
             className={`w-full h-[50px] rounded-[8px] border pt-[15px] pr-[16px] pb-[15px] pl-[16px] focus:outline-none text-lg-regular ${
-              error ? "border-red-500" : "border-gray-300"
+              error ? "border-red" : "border-gray-300"
             }`}
           />
           {variant === "password" && (
@@ -214,7 +214,7 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
           )}
         </div>
       )}
-      {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+      {error && <p className="mt-2 text-sm text-red">{error}</p>}
     </div>
   );
 };

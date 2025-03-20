@@ -1,9 +1,7 @@
-// SJmodaltest.tsx (또는 TestColumnModalPage.tsx)
 import React, { useState } from "react";
 import ColumnModal, {
   ModalMode,
 } from "../components/ModalContents/ColumnModal";
-// 수정된 Button 컴포넌트 import
 import Button from "../components/common/Button/Button";
 
 export default function TestColumnModalPage() {
