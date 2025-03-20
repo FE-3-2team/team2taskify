@@ -6,7 +6,9 @@ import { getMember } from "@/api/member";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import { getInvitations } from "@/api/invitations.api";
 import { useState } from "react";
-import { Button, DashButton } from "@/components/common/Button";
+import { DashButton } from "@/components/common/Button";
+import { deleteDashboard } from "@/api/dashboard";
+import { useRouter } from "next/router";
 //
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -20,37 +22,48 @@ export const getStaticProps: GetStaticProps = async (
   context: GetStaticPropsContext
 ) => {
   let cursorId;
+  let initialMembers;
+  let initialInvitations;
   let result;
   const { dashboardId } = context.params!;
   try {
     const res = await getMember(Number(dashboardId));
     const invitationData = await getInvitations((cursorId = 0));
-    const members = res.data.results;
-    const { cursorId: newCursorId, invitations } = invitationData;
-    cursorId = newCursorId;
-    result = { invitations, members };
+    initialMembers = res.data.results;
+    const { cursorId: newCursorId, invitations: initialInivitations } =
+      invitationData;
+    cursorId = newCursorId === null ? 0 : newCursorId;
+    result = { initialInvitations, initialMembers };
   } catch {
-    result = { invitations: [], members: [] };
+    result = { initialInvitations: [], initialMembers: [] };
   }
-  const { invitations, members } = result;
   return {
     props: {
-      initialMembers: members,
-      initialInivitations: invitations,
+      initialMembers,
+      initialInvitations,
+      dashboardId,
     },
   };
 };
 
 interface Props {
   initialMembers: Member[];
-  initialInivitations: Invitation[];
+  initialInvitations: Invitation[];
+  dashboardId: string;
 }
 export default function EditPage({
   initialMembers,
-  initialInivitations,
+  initialInvitations,
+  dashboardId,
 }: Props) {
+  const router = useRouter();
   const [members, setMembers] = useState(initialMembers);
-  const [invitations, setInvitations] = useState(initialInivitations);
+  const [invitations, setInvitations] = useState(initialInvitations);
+
+  const DashBoardDelete = async () => {
+    await deleteDashboard(Number(dashboardId));
+    router.push("/mypage");
+  };
   return (
     <div className="px-3 py-4 tablet:px-5 tablet:py-5">
       <Header />
