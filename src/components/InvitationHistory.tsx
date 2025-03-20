@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { useState } from "react";
-import Next from "@/assets/icons/NextPage.icon.svg";
-import Prev from "@/assets/icons/PrevPage.icon.svg";
 import { cancelInvite } from "@/api/dashboard";
+import { PaginationButton } from "./common/Button";
 
 /**To Do
  * 초대하기 버튼 나중에 바꾸기
@@ -43,12 +42,12 @@ export default function InvitationHistory({ invitations }: Props) {
             {totalPage} 페이지 중 {page}
           </p>
           <div>
-            <button onClick={PrevPage}>
-              <Image src={Prev} width={40} height={40} alt="<" />
-            </button>
-            <button onClick={NextPage}>
-              <Image src={Next} width={40} height={40} alt=">" />
-            </button>
+            <PaginationButton
+              onNext={NextPage}
+              onPrev={PrevPage}
+              hasNext
+              hasPrev
+            />
           </div>
           <button className="hidden tablet:block">초대하기</button>
         </div>

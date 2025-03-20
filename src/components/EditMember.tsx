@@ -1,9 +1,8 @@
 import { useState } from "react";
-import PrevPage from "@/assets/icons/PrevPage.icon.svg";
-import NextPage from "@/assets/icons/NextPage.icon.svg";
 import Image from "next/image";
 import Profile from "./common/Profile";
 import { deleteMember } from "@/api/member";
+import { PaginationButton } from "./common/Button";
 //
 interface Props {
   members: Member[];
@@ -38,12 +37,12 @@ export default function EditMember({ members }: Props) {
           <div className="flex items-center gap-3 text-xs-regular tablet-text-md-regular">
             {totalPage} 페이지 중 {currentPage}
             <div>
-              <button className="cursor-pointer" onClick={handleClickPrev}>
-                <Image src={PrevPage} width={40} height={40} alt="<" />
-              </button>
-              <button className="cursor-pointer" onClick={handleClickNext}>
-                <Image src={NextPage} width={40} height={40} alt=">" />
-              </button>
+              <PaginationButton
+                onNext={handleClickNext}
+                onPrev={handleClickPrev}
+                hasNext
+                hasPrev
+              />
             </div>
           </div>
         </div>
