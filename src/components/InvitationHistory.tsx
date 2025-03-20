@@ -12,7 +12,8 @@ interface Props {
   invitations: Invitation[];
 }
 export default function InvitationHistory({ invitations }: Props) {
-  const totalPage = Math.ceil(invitations.length / 5);
+  if (!invitations) return;
+  const totalPage = Math.ceil(invitations?.length / 5);
   const [page, setPage] = useState(1);
 
   const PrevPage = () => {
