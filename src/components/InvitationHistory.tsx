@@ -12,7 +12,6 @@ interface Props {
   invitations: Invitation[];
 }
 export default function InvitationHistory({ invitations }: Props) {
-  if (!invitations) return;
   const totalPage = Math.ceil(invitations?.length / 5);
   const [page, setPage] = useState(1);
 
@@ -61,7 +60,7 @@ export default function InvitationHistory({ invitations }: Props) {
         </button>
       </div>
       <div>
-        {invitations.map((invitation, i) => {
+        {invitations?.map((invitation, i) => {
           return (
             <>
               <div className="flex justify-between px-5 py-4 tablet:px-7">
