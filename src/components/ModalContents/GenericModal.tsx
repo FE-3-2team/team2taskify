@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ModalButton from "../common/Button/ModalButton";
+import ModalButton from "../common/Button/Button";
 
 interface GenericModalProps {
   isOpen: boolean;
@@ -53,17 +53,13 @@ const GenericModal: React.FC<GenericModalProps> = ({
         {/* 버튼 영역 (cancelText가 있으면 투 버튼, 없으면 단일 버튼) */}
         <div className="flex justify-end mt-4 space-x-2">
           {cancelText && (
-            <ModalButton
-              onClick={onClose}
-              text={cancelText}
-              variant="secondary"
-            />
+            <ModalButton onClick={onClose} variant="secondary">
+              {cancelText}
+            </ModalButton>
           )}
-          <ModalButton
-            onClick={onConfirm}
-            text={confirmText}
-            variant="primary"
-          />
+          <ModalButton onClick={onConfirm} variant="primary">
+            {confirmText}
+          </ModalButton>
         </div>
       </div>
     </div>
