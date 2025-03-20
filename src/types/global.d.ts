@@ -38,14 +38,14 @@ declare global {
     createdAt: string;
     updatedAt: string;
   }
-  interface Comment {
+  interface CardComment {
     id: number;
     content: string;
     createdAt: string;
     updatedAt: string;
     cardId: number;
     author: {
-      profileImageUrl: string;
+      profileImageUrl: string | null;
       nickname: string;
       id: number;
     };

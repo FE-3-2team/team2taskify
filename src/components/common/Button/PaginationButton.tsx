@@ -16,7 +16,7 @@ export default function Pagination({ hasPrev, hasNext, size = "small", onPrev, o
   const buttonSize = size === "small" ? "w-[36px] h-[36px]" : "w-[40px] h-[40px]";
 
   return (
-    <div className="flex border border-gray-D9D9D9 rounded-[8px] overflow-hidden">
+    <div className="flex border border-gray-300 rounded-[8px] overflow-hidden">
       {/* 이전 버튼 */}
       <button
         className={`
@@ -34,7 +34,7 @@ export default function Pagination({ hasPrev, hasNext, size = "small", onPrev, o
       </button>
 
       {/* 구분선 */}
-      <div className="w-[1px] bg-gray-D9D9D9" />
+      <div className="w-[1px] bg-gray-300" />
 
       {/* 다음 버튼 */}
       <button 

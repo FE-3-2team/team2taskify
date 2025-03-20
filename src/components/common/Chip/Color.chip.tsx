@@ -6,13 +6,7 @@ interface Props {
 }
 
 const COLOR_VALUES = ["#7AC555", "#760DDE", "#FFA500", "#76A6EA", "#E876EA"];
-const COLORS = [
-  "bg-green-7AC555",
-  "bg-purple-760DDE",
-  "bg-orange-FFA500",
-  "bg-blue-76A6EA",
-  "bg-pink-E876EA",
-];
+const COLORS = ["bg-green", "bg-purple", "bg-orange", "bg-blue", "bg-pink"];
 export default function ColorChip({ onClick }: Props) {
   const [selected, setSelected] = useState<string>("");
 
