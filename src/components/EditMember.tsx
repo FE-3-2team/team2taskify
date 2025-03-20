@@ -11,8 +11,10 @@ interface Props {
  * 삭제 버튼 공통컴포넌트로 바꾸기
  * 멤버 삭제 버튼클릭시 함수
  */
+
 export default function EditMember({ members }: Props) {
-  const totalPage = Math.ceil(members?.length / 4);
+  const totalPage =
+    Math.ceil(members?.length / 4) < 1 ? 1 : Math.ceil(members?.length / 4);
   const [currentPage, setCurrentPage] = useState(1);
   const handleClickPrev = () => {
     if (currentPage === 1) return;
@@ -28,7 +30,7 @@ export default function EditMember({ members }: Props) {
   //
   return (
     <div
-      className="flex flex-col  max-w-[284px] max-h-[337px] tablet:max-w-[544px] tablet:max-h-[404px] laptop:max-w-[620px] laptop:max-h-[404px] 
+      className="flex flex-col rounded-lg w-full max-h-[337px]  tablet:max-h-[404px] bg-white laptop:max-h-[404px] 
       pt-[22px] pb-4 tablet:pt-[26px] tablet:pb-5 gap-[13px]"
     >
       <div className="flex flex-col gap-[18px]">
@@ -40,8 +42,8 @@ export default function EditMember({ members }: Props) {
               <PaginationButton
                 onNext={handleClickNext}
                 onPrev={handleClickPrev}
-                hasNext
-                hasPrev
+                hasNext={totalPage > currentPage}
+                hasPrev={totalPage < currentPage}
               />
             </div>
           </div>

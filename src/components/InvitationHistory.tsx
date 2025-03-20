@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { cancelInvite } from "@/api/dashboard";
-import { PaginationButton } from "./common/Button";
-
+import { Button, PaginationButton } from "./common/Button";
+import InviteIcon from "@/assets/icons/white.Invite.icons.svg";
 /**To Do
  * 초대하기 버튼 나중에 바꾸기
  *
@@ -10,8 +10,12 @@ import { PaginationButton } from "./common/Button";
 interface Props {
   invitations: Invitation[];
 }
+
 export default function InvitationHistory({ invitations }: Props) {
-  const totalPage = Math.ceil(invitations?.length / 5);
+  const totalPage =
+    Math.ceil(invitations?.length / 4) < 1
+      ? 1
+      : Math.ceil(invitations?.length / 4);
   const [page, setPage] = useState(1);
 
   const PrevPage = () => {
@@ -32,31 +36,44 @@ export default function InvitationHistory({ invitations }: Props) {
   };
   return (
     <div
-      className="rounded-b-lg w-[284px] h-[406px] tablet:w-[544px] tablet:h-[477px]  laptop:w-[620px] laptop:h-[477px] 
-    pt-6 pb-3 tablet:pt-8 tablet:pb-0"
+      className="flex flex-col gap-[26px] tablet:gap-[17px] bg-white rounded-lg w-full h-[406px]  tablet:h-[477px]   laptop:h-[477px] 
+    pt-6 pb-3 tablet:pt-8 tablet:pb-0 "
     >
-      <div className="flex items-center justify-between px-5 tablet:px-7">
-        <p className=" text-xl-bold tablet-text-2xl-bold"> 초대 내역</p>
-        <div className="flex items-center gap-4">
-          <p>
-            {totalPage} 페이지 중 {page}
-          </p>
-          <div>
-            <PaginationButton
-              onNext={NextPage}
-              onPrev={PrevPage}
-              hasNext
-              hasPrev
-            />
+      <div className="flex flex-col gap-3 tablet:gap-8">
+        <div className="flex items-center justify-between px-5 tablet:px-7">
+          <p className=" text-2lg-bold tablet-text-2xl-bold"> 초대 내역</p>
+          <div className="flex items-center gap-3 text-xs-regular tablet-text-md-regular">
+            <p>
+              {totalPage} 페이지 중 {page}
+            </p>
+            <div>
+              <PaginationButton
+                onNext={NextPage}
+                onPrev={PrevPage}
+                hasNext={totalPage > page}
+                hasPrev={totalPage < page}
+              />
+            </div>
+            <div
+              className="hidden w-[86px] h-[26px] tablet:block tablet:w-[105px] tablet:h-8"
+              onClick={AddInvite}
+            >
+              <Button size="xsmall">
+                <Image src={InviteIcon} width={16} height={16} alt="+" />
+                초대하기
+              </Button>
+            </div>
           </div>
-          <button className="hidden tablet:block">초대하기</button>
         </div>
-      </div>
-      <div className="flex justify-between px-5 tablet:px-7">
-        <p className="text-gray-400 text-md-regular">이메일</p>
-        <button className="block tablet:hidden" onClick={AddInvite}>
-          초대하기
-        </button>
+        <div className="flex items-center justify-between px-5 tablet:px-7">
+          <p className="text-gray-400 text-md-regular">이메일</p>
+          <div className="tablet:hidden w-[86px] h-[26px]" onClick={AddInvite}>
+            <Button size="xsmall">
+              <Image src={InviteIcon} width={16} height={16} alt="+" />
+              초대하기
+            </Button>
+          </div>
+        </div>
       </div>
       <div>
         {invitations?.length > 1 &&
@@ -64,7 +81,7 @@ export default function InvitationHistory({ invitations }: Props) {
             return (
               <>
                 <div className="flex justify-between px-5 py-4 tablet:px-7">
-                  <p className="text-black-200 text-lg-regular">
+                  <p className="text-black-200 text-lg-regular ">
                     {invitation.invitee.email}
                   </p>
                   <button
