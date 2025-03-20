@@ -82,7 +82,7 @@ export default function Header({ members, title, createdByMe }: Props) {
           <Profile
             nickname={store.userNickname}
             profileImageUrl={store.profileImageUrl}
-            isProfile
+            type="profile"
           />
         </div>
       </div>

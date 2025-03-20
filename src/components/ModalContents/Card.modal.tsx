@@ -19,7 +19,7 @@ export default function CardModal({ card, columnTitle, comments }: Props) {
   const handleEdit = () => {};
   return (
     <div className=" w-[327px] tablet:w-[678px] laptop:w-[730px] px-4 py-4 tablet:px-[23px] tablet:py-8 rounded-[8px] max-h-[800px] overflow-scroll">
-      <div className="flex flex-col ">
+      <div className="flex flex-col">
         <div className="flex items-start justify-between mb-6 ">
           <span className="text-xl-bold tablet:text-2xl-bold max-w-[420px]">
             {card.title}
@@ -31,8 +31,15 @@ export default function CardModal({ card, columnTitle, comments }: Props) {
             </button>
           </div>
         </div>
+        <div className="mb-4 tablet:hidden">
+          <AssigneeCard
+            assigneeName={assignee.nickname}
+            dueDate={dueDate}
+            profileImageUrl={assignee.profileImageUrl}
+          />
+        </div>
         <div className="flex tablet:gap-[13px] justify-between">
-          <div>
+          <div className="flex flex-col items-center">
             <div className="flex items-center gap-4 mb-4 tablet:gap-5">
               <Status value={columnTitle} />
               <div className="w-[1px] bg-gray-300 h-[20px]" />
@@ -64,7 +71,7 @@ export default function CardModal({ card, columnTitle, comments }: Props) {
               })}
             </div>
           </div>
-          <div className="w-fit">
+          <div className="hidden w-fit tablet:block">
             <AssigneeCard
               assigneeName={assignee.nickname}
               dueDate={dueDate}
