@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, ChangeEvent } from "react";
+// ColumnModal.tsx
+import React, { useEffect, useRef, ChangeEvent } from "react";
 import GenericModal from "./GenericModal";
 import UnifiedInput from "../common/Input/TestInput2";
 
@@ -69,6 +70,7 @@ const defaultTexts: ModalTexts = {
   },
   cancel: "취소",
 };
+
 const ColumnModal: React.FC<ColumnModalProps> = ({
   isOpen,
   mode,
@@ -78,18 +80,16 @@ const ColumnModal: React.FC<ColumnModalProps> = ({
   initialTitle = "",
   texts = {},
 }) => {
-  // cancel 텍스트 병합 시 빈 문자열("")도 유지할 수 있도록 수정
   const mergedTexts: ModalTexts = {
     create: { ...defaultTexts.create, ...texts.create },
     delete: { ...defaultTexts.delete, ...texts.delete },
     manage: { ...defaultTexts.manage, ...texts.manage },
     invite: { ...defaultTexts.invite, ...texts.invite },
-    cancel: texts.cancel !== undefined ? texts.cancel : defaultTexts.cancel,
+    cancel: texts.cancel || defaultTexts.cancel,
   };
 
-  // 모드에 따른 입력 타입 (invite는 이메일, 나머지는 타이틀)
-  const [value, setValue] = useState("");
-  const [error, setError] = useState("");
+  const [value, setValue] = React.useState("");
+  const [error, setError] = React.useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   const validateTitle = (val: string) => {
@@ -109,12 +109,10 @@ const ColumnModal: React.FC<ColumnModalProps> = ({
     return "";
   };
 
-  // 이메일 입력 핸들러 (invite 모드)
   const handleEmailChange = (val: string) => {
     setValue(val);
   };
 
-  // 타이틀 입력 핸들러 (create, manage 모드)
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setValue(newValue);
@@ -200,7 +198,6 @@ const ColumnModal: React.FC<ColumnModalProps> = ({
       </>
     );
   } else {
-    // delete 모드 (여기서는 취소 버튼을 그대로 사용해 투 버튼 디자인으로 만듦)
     modalContent = (
       <p className="mb-6 text-center text-gray-800 text-xl-medium">
         {mergedTexts.delete.message}
@@ -210,34 +207,36 @@ const ColumnModal: React.FC<ColumnModalProps> = ({
 
   let headerText = "";
   let confirmText = "";
-  let cancelText: string | undefined = mergedTexts.cancel;
-  let onCloseAction: () => void = onClose;
+  let leftButtonText = "";
+  let leftButtonAction: () => void = onClose;
 
   if (mode === "create") {
     headerText = mergedTexts.create.header;
     confirmText = mergedTexts.create.confirm;
+    leftButtonText = mergedTexts.cancel;
   } else if (mode === "invite") {
     headerText = mergedTexts.invite.header;
     confirmText = mergedTexts.invite.confirm;
+    leftButtonText = mergedTexts.cancel;
   } else if (mode === "delete") {
-    // 여기서 cancelText를 undefined로 덮어쓰지 않음
     headerText = mergedTexts.create.header;
     confirmText = mergedTexts.delete.confirm;
+    leftButtonText = mergedTexts.cancel;
   } else if (mode === "manage") {
     headerText = mergedTexts.manage.header;
     confirmText = mergedTexts.manage.confirm;
-    cancelText = mergedTexts.manage.delete;
-    onCloseAction = onDelete ? onDelete : onClose;
+    leftButtonText = mergedTexts.manage.delete;
+    leftButtonAction = onDelete ? onDelete : onClose;
   }
 
   return (
     <GenericModal
       isOpen={isOpen}
-      onClose={onCloseAction}
+      onClose={onClose}
       headerText={headerText}
       content={modalContent}
       confirmText={confirmText}
-      cancelText={cancelText}
+      cancelText={leftButtonText}
       onConfirm={handleConfirm}
     />
   );

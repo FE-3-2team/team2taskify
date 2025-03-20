@@ -1,10 +1,12 @@
+// UnifiedInput.tsx
 import React, { useState, useEffect, ChangeEvent, FC, forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import Image from "next/image";
 import EyeCloseIcon from "../../../assets/icons/EyeVisibility_off.svg";
 import EyeOpenIcon from "../../../assets/icons/EyeVisibility_on.svg";
 import CalendarIcon from "../../../assets/icons/Calendar.svg";
-import InputButton from "../Button/InputButton";
+// 새 버튼 컴포넌트 import
+import { Button } from "../Button";
 
 export type InputVariant = "email" | "password" | "title" | "comment" | "date";
 
@@ -25,7 +27,7 @@ const defaultMaxLengths: Record<InputVariant, number> = {
   password: 15,
   title: 12,
   comment: 300,
-  date: 0, // 날짜 variant는 maxLength 사용 안함
+  date: 0,
 };
 
 const defaultValidate = (value: string, variant: InputVariant): string => {
@@ -58,7 +60,6 @@ const defaultValidate = (value: string, variant: InputVariant): string => {
   return "";
 };
 
-// CustomDateInput: react-datepicker에서 사용할 커스텀 인풋
 type CustomInputProps = {
   value?: string;
   onClick?: () => void;
@@ -124,7 +125,6 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
 
   const finalMaxLength = maxLength || defaultMaxLengths[variant];
 
-  // date variant 처리: react-datepicker 사용
   if (variant === "date") {
     const selectedDate = value ? new Date(value) : null;
     const handleDateChange = (date: Date | null) => {
@@ -179,7 +179,9 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
           />
           {onSubmit && (
             <div className="flex justify-end mt-2">
-              <InputButton onClick={onSubmit} />
+              <Button onClick={onSubmit} size="xxsmall" variant="outline">
+                입력
+              </Button>
             </div>
           )}
         </div>

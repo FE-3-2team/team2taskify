@@ -1,5 +1,6 @@
+// GenericModal.tsx
 import React, { useEffect } from "react";
-import ModalButton from "../common/Button/Button";
+import Button from "../common/Button/Button"; // 새 버튼 컴포넌트
 
 interface GenericModalProps {
   isOpen: boolean;
@@ -7,7 +8,7 @@ interface GenericModalProps {
   headerText: React.ReactNode;
   content: React.ReactNode;
   confirmText: string;
-  cancelText?: string;
+  cancelText: string;
   onConfirm: () => void;
 }
 
@@ -41,25 +42,22 @@ const GenericModal: React.FC<GenericModalProps> = ({
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div className="absolute inset-0 bg-black opacity-50" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black opacity-50"
+        onClick={onClose}
+      ></div>
       <div className="relative z-10 w-full max-w-sm p-6 bg-white rounded-lg">
         <h2 id="modal-title" className="mb-4 text-2xl font-bold text-left">
           {headerText}
         </h2>
-
-        {/* 내용 영역 */}
         <div className="mb-6 text-left">{content}</div>
-
-        {/* 버튼 영역 (cancelText가 있으면 투 버튼, 없으면 단일 버튼) */}
         <div className="flex justify-end mt-4 space-x-2">
-          {cancelText && (
-            <ModalButton onClick={onClose} variant="secondary">
-              {cancelText}
-            </ModalButton>
-          )}
-          <ModalButton onClick={onConfirm} variant="primary">
+          <Button onClick={onClose} size="medium" variant="secondary">
+            {cancelText}
+          </Button>
+          <Button onClick={onConfirm} size="medium" variant="primary">
             {confirmText}
-          </ModalButton>
+          </Button>
         </div>
       </div>
     </div>
