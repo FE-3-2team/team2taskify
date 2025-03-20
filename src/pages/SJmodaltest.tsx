@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ColumnModal from "../components/ModalContents/ColumnModal";
 import Button from "../components/common/Button/Button";
-import UnifiedInput from "../components/common/Input/TestInput2";
+import UnifiedInput from "../components/common/Input";
 
 const OneButtonModal: React.FC<{
   isOpen: boolean;

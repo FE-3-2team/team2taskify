@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import GenericModal from "./GenericModal";
-import UnifiedInput from "../common/Input/TestInput2";
+import UnifiedInput from "../common/Input";
 
 export type ModalMode = "create" | "delete" | "manage" | "invite";
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import UnifiedInput from "../components/common/Input/TestInput2";
+import UnifiedInput from "../components/common/Input";
 
 export default function InputTest() {
   const [email, setEmail] = useState("");
