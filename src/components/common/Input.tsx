@@ -1,93 +1,17 @@
-import React, {
-  useState,
-  useEffect,
-  ChangeEvent,
-  FC,
-  forwardRef,
-  useReducer,
-} from "react";
+// UnifiedInput.tsx
+import React, { useState, ChangeEvent, FC, forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import Image from "next/image";
 import Button from "./Button/Button";
 import EyeCloseIcon from "../../assets/icons/EyeVisibility_off.svg";
 import EyeOpenIcon from "../../assets/icons/EyeVisibility_on.svg";
 import CalendarIcon from "../../assets/icons/Calendar.svg";
-import { useDebounce } from "../../hooks/useDebounce";
+import {
+  useValidation,
+  defaultValidate,
+  InputVariant,
+} from "../../hooks/useValidation";
 
-// 커스텀 훅: useValidation
-const useValidation = (
-  value: string,
-  variant: InputVariant,
-  validate: (value: string, variant: InputVariant) => string,
-  delay: number = 300
-): string => {
-  const debouncedValue = useDebounce(value, delay);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const validationResult = validate(debouncedValue, variant);
-    setError(validationResult);
-  }, [debouncedValue, variant, validate]);
-
-  return error;
-};
-
-export type InputVariant = "email" | "password" | "title" | "comment" | "date";
-
-export interface UnifiedInputProps {
-  variant: InputVariant;
-  label: string;
-  placeholder: string;
-  value: string;
-  onChange: (value: string) => void;
-  maxLength?: number;
-  validate?: (value: string, variant: InputVariant) => string;
-  onSubmit?: () => Promise<void>;
-  className?: string;
-  debounceDelay?: number; // 디바운스 딜레이 설정 가능
-}
-
-// 기본 최대 글자 수 설정
-const defaultMaxLengths: Record<InputVariant, number> = {
-  email: 25,
-  password: 15,
-  title: 12,
-  comment: 300,
-  date: 0,
-};
-
-// 기본 유효성 검사 함수
-const defaultValidate = (value: string, variant: InputVariant): string => {
-  if (variant === "email") {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const hangulRegex = /[가-힣]/;
-    if (value && hangulRegex.test(value)) return "이메일 형식으로 입력해주세요";
-    if (value && !emailRegex.test(value)) return "이메일 형식으로 입력해주세요";
-  } else if (variant === "password") {
-    if (value.length < 8 || value.length > 16)
-      return "비밀번호는 8~16자여야 합니다";
-    const uppercaseRegex = /[A-Z]/;
-    const lowercaseRegex = /[a-z]/;
-    const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
-    if (
-      !(
-        uppercaseRegex.test(value) &&
-        lowercaseRegex.test(value) &&
-        specialCharRegex.test(value)
-      )
-    ) {
-      return "비밀번호는 소문자,대문자,특수기호를 포함해야합니다";
-    }
-  } else if (variant === "title") {
-    if (value && (value.length < 2 || value.length > 12))
-      return "2 ~ 12자의 제목을 지어주세요";
-  } else if (variant === "comment") {
-    if (value.length === 300) return "최대 300자 까지 입력 할 수 있습니다.";
-  }
-  return "";
-};
-
-// BaseInput 컴포넌트 (rest props 활용)
 interface BaseInputProps {
   id: string;
   type: string;
@@ -124,7 +48,6 @@ const BaseInput: FC<
   );
 };
 
-// 별도의 PasswordToggle 컴포넌트
 const PasswordToggleButton: FC<{
   showPassword: boolean;
   toggleShowPassword: () => void;
@@ -144,7 +67,6 @@ const PasswordToggleButton: FC<{
   </button>
 );
 
-// 에러 메시지 표시 컴포넌트
 const ErrorMessage: FC<{ error: string; id: string }> = ({ error, id }) =>
   error ? (
     <p id={id} className="mt-2 text-sm text-red">
@@ -152,7 +74,6 @@ const ErrorMessage: FC<{ error: string; id: string }> = ({ error, id }) =>
     </p>
   ) : null;
 
-// CustomDateInput: 날짜 입력 시 커스텀 스타일 적용
 type CustomInputProps = {
   value?: string;
   onClick?: () => void;
@@ -187,7 +108,28 @@ const CustomDateInput = forwardRef<HTMLInputElement, CustomInputProps>(
 );
 CustomDateInput.displayName = "CustomDateInput";
 
-// UnifiedInput 컴포넌트
+// UnifiedInput 컴포넌트 Props
+export interface UnifiedInputProps {
+  variant: InputVariant;
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+  maxLength?: number;
+  validate?: (value: string, variant: InputVariant) => string;
+  onSubmit?: () => Promise<void>;
+  className?: string;
+  debounceDelay?: number;
+}
+
+const defaultMaxLengths: Record<InputVariant, number> = {
+  email: 25,
+  password: 15,
+  title: 12,
+  comment: 300,
+  date: 0,
+};
+
 const UnifiedInput: FC<UnifiedInputProps> = ({
   variant,
   label,
@@ -269,7 +211,7 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
           />
           {onSubmit && (
             <div className="flex justify-end mt-2">
-              <Button onClick={onSubmit} size="xxsmall" variant="outline">
+              <Button onClick={onSubmit} size="xxsmall" variant="secondary">
                 입력
               </Button>
             </div>
