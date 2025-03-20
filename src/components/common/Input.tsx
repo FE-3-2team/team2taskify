@@ -12,6 +12,7 @@ import Button from "./Button/Button";
 import EyeCloseIcon from "../../../assets/icons/EyeVisibility_off.svg";
 import EyeOpenIcon from "../../../assets/icons/EyeVisibility_on.svg";
 import CalendarIcon from "../../../assets/icons/Calendar.svg";
+import { useDebounce } from "../../hooks/useDebounce";
 
 export type InputVariant = "email" | "password" | "title" | "comment" | "date";
 
@@ -66,16 +67,6 @@ const defaultValidate = (value: string, variant: InputVariant): string => {
   }
   return "";
 };
-
-// useDebounce 훅: 입력값이 변경되고 delay 후에만 debouncedValue 업데이트
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-  useEffect(() => {
-    const handler = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-  return debouncedValue;
-}
 
 // 공통 Input 컴포넌트 (코드 중복 최소화를 위해)
 interface BaseInputProps {
@@ -175,7 +166,7 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
 }) => {
   const [state, dispatch] = useReducer(inputReducer, { error: "" });
   const [showPassword, setShowPassword] = useState(false);
-  // debouncedValue를 사용해 입력이 끝난 후 유효성 검사를 수행
+  // useDebounce 훅을 별도 파일에서 import하여 사용합니다.
   const debouncedValue = useDebounce(value, 300);
 
   useEffect(() => {
