@@ -5,7 +5,6 @@ import X from "@/assets/icons/X.icon.svg";
 import { Tags } from "../common/Chip/Tag.chip";
 import Comments from "../common/Comments";
 import DropdownEditDel from "../common/Dropdown/DropdownEditDel";
-import TestImage from "@/assets/test.svg";
 //
 interface Props {
   card: Card;
@@ -56,9 +55,6 @@ export default function CardModal({ card, columnTitle, comments }: Props) {
                 src={card.imageUrl}
               />
             )}
-            <div className="w-[290px] h-[168px] tablet:w-[420px] tablet:h-[246px] laptop:w-[445px] laptop:h-[260px]">
-              <Image src={TestImage} width={445} height={260} alt="테스ㅡㅌ" />
-            </div>
 
             <div>
               <p>댓글</p>
