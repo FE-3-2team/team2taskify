@@ -2,11 +2,8 @@ import { ChangeEvent, useState } from "react";
 import ColorChip from "../common/Chip/Color.chip";
 import { useRouter } from "next/router";
 import { createDashboard } from "@/api/dashboard";
+import UnifiedInput from "../common/Input";
 
-/**
- * Todo
- * input 부분 공통 컴포넌트로 변경
- */
 export default function NewDashboard() {
   const router = useRouter();
   const [DashboardData, setDashboardData] = useState({
@@ -39,11 +36,15 @@ export default function NewDashboard() {
           <div className="flex flex-col gap-2">
             <p className="text-lg-medium text-black-200">대시보드 이름</p>
             <input onChange={handleChange} type="text" />
+            <UnifiedInput
+              variant="title"
+              label="대시보드 이름"
+              placeholder="대시보드 이름을 입력하세요"
+              value={DashboardData.title}
+              onChange={() => handleChange}
+            />
           </div>
           <ColorChip onClick={handleClick} />
-          <button className="bg-amber-200" onClick={handleSubmit}>
-            등록
-          </button>
         </div>
       </div>
     </div>
