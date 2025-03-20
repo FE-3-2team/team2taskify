@@ -6,9 +6,9 @@ interface Props {
 
 const colorClasses = [
   "bg-brown text-orange",
-  "bg-green text-green",
-  "bg-pink400 text-pink400",
-  "bg-blue200 text-blue200",
+  "bg-green-100 text-green-200",
+  "bg-pink400 text-pink500",
+  "bg-blue-200 text-blue-300",
 ];
 
 export function Tag({ value }: Props) {
