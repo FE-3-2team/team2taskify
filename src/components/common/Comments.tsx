@@ -25,7 +25,7 @@ export default function Comments({ comment }: Props) {
   return (
     <div className="flex gap-[10px] px-2 ">
       <div className="w-fit">
-        <Badge nickname={nickname} img={profileImageUrl} isComment />
+        <Badge nickname={nickname} img={profileImageUrl} type="comment" />
       </div>
       <div className="flex flex-col w-full gap-[6px]">
         <div className="flex items-center gap-2">
