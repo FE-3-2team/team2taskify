@@ -54,7 +54,11 @@ export default function EditMember({ members }: Props) {
           return (
             <div>
               <div className="flex items-center justify-between px-5 tablet:px-7 h-[34px] tablet:h-[38px]">
-                <Profile value={member} />
+                <Profile
+                  nickname={member.nickname}
+                  profileImageUrl={member.profileImageUrl}
+                  isProfile
+                />
                 <button onClick={() => handleClick(member.userId || 0)}>
                   삭제
                 </button>

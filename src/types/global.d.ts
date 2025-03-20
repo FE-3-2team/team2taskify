@@ -38,7 +38,7 @@ declare global {
     createdAt: string;
     updatedAt: string;
   }
-  interface Comment {
+  interface CardComment {
     id: number;
     content: string;
     createdAt: string;

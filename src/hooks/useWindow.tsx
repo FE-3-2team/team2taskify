@@ -14,20 +14,20 @@ export default function useWindowSize() {
   const handleResize = useCallback(() => {
     const tabletBreakpoint = getCssVariable("--breakpoint-tablet"); //744px
     const laptopBreakpoint = getCssVariable("--breakpoint-laptop"); //1024px
-    const desktopBreakpoint = getCssVariable("--breakpoint-laptop"); //1921px
+    const desktopBreakpoint = getCssVariable("--breakpoint-desktop"); //1921px
 
-    if (window.matchMedia(`(max-width: ${tabletBreakpoint})`).matches) {
-      setDeviceType("tablet");
-    } else if (window.matchMedia(`(max-width: ${laptopBreakpoint})`).matches) {
-      setDeviceType("laptop");
-    } else if (window.matchMedia(`(max-width: ${desktopBreakpoint})`).matches) {
+    if (window.matchMedia(`(min-width: ${desktopBreakpoint})`).matches) {
       setDeviceType("desktop");
+    } else if (window.matchMedia(`(min-width: ${laptopBreakpoint})`).matches) {
+      setDeviceType("laptop");
+    } else if (window.matchMedia(`(min-width: ${tabletBreakpoint})`).matches) {
+      setDeviceType("tablet");
     } else {
       setDeviceType("mobile");
     }
   }, []);
 
-  const throttledResize = useCallback(throttle(handleResize, 2000), [
+  const throttledResize = useCallback(throttle(handleResize, 200), [
     handleResize,
   ]);
 

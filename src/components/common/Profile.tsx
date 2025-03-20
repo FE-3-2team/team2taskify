@@ -1,18 +1,25 @@
 import { Badge } from "./Badge";
-
+import clsx from "clsx";
 interface Props {
-  value: User;
-  isEdit?: boolean;
+  nickname: string;
+  profileImageUrl: string | null;
+  isProfile?: boolean;
 }
-export default function Profile({ value, isEdit }: Props) {
+export default function Profile({
+  nickname,
+  profileImageUrl,
+  isProfile,
+}: Props) {
   return (
-    <div className="flex flex-row items-center gap-3 w-fit">
-      <Badge value={value} />
+    <div className={"flex flex-row items-center gap-3 w-fit"}>
+      <Badge nickname={nickname} img={profileImageUrl} />
       <p
-        className="hidden text-lg-medium text-black-200 tablet:block"
-        style={{ display: isEdit ? "block" : "none" }}
+        className={clsx(
+          "text-lg-medium text-black-200 ",
+          isProfile ? "tablet:block hidden" : "block"
+        )}
       >
-        {value?.nickname}
+        {nickname}
       </p>
     </div>
   );
