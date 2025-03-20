@@ -86,7 +86,7 @@ const Column: React.FC<ColumnProps> = ({ title, cards, onAddCard }) => {
         </button>
       )}
 
-      <div className="flex flex-col gap-[16px] overflow-y-scroll max-h-[100vh]">
+      <div className="flex flex-col gap-[16px] overflow-y-auto max-h-[100vh]">
         {cards.map((card, index) => (
           <div
             key={card.id}
