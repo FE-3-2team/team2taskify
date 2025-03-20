@@ -1,4 +1,3 @@
-// UnifiedInput.tsx
 import React, { useState, ChangeEvent, FC, forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import Image from "next/image";
@@ -12,8 +11,8 @@ import {
   InputVariant,
 } from "../../hooks/useValidation";
 
-interface BaseInputProps {
-  id: string;
+export interface BaseInputProps {
+  id?: string;
   type: string;
   placeholder: string;
   value: string;
@@ -22,7 +21,7 @@ interface BaseInputProps {
   className?: string;
 }
 
-const BaseInput: FC<
+export const BaseInput: FC<
   BaseInputProps & React.InputHTMLAttributes<HTMLInputElement>
 > = ({
   id,
@@ -108,7 +107,6 @@ const CustomDateInput = forwardRef<HTMLInputElement, CustomInputProps>(
 );
 CustomDateInput.displayName = "CustomDateInput";
 
-// UnifiedInput 컴포넌트 Props
 export interface UnifiedInputProps {
   variant: InputVariant;
   label: string;
