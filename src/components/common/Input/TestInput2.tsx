@@ -1,10 +1,17 @@
-import React, { useState, useEffect, ChangeEvent, FC, forwardRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  ChangeEvent,
+  FC,
+  forwardRef,
+  useReducer,
+} from "react";
 import DatePicker from "react-datepicker";
 import Image from "next/image";
+import Button from "../Button/Button";
 import EyeCloseIcon from "../../../assets/icons/EyeVisibility_off.svg";
 import EyeOpenIcon from "../../../assets/icons/EyeVisibility_on.svg";
 import CalendarIcon from "../../../assets/icons/Calendar.svg";
-import Button from "../Button/Button";
 
 export type InputVariant = "email" | "password" | "title" | "comment" | "date";
 
@@ -20,6 +27,7 @@ export interface UnifiedInputProps {
   className?: string;
 }
 
+// 기본 최대 글자 수 설정
 const defaultMaxLengths: Record<InputVariant, number> = {
   email: 25,
   password: 15,
@@ -28,6 +36,7 @@ const defaultMaxLengths: Record<InputVariant, number> = {
   date: 0,
 };
 
+// 유효성 검사 함수
 const defaultValidate = (value: string, variant: InputVariant): string => {
   if (variant === "email") {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -58,6 +67,50 @@ const defaultValidate = (value: string, variant: InputVariant): string => {
   return "";
 };
 
+// useDebounce 훅: 입력값이 변경되고 delay 후에만 debouncedValue 업데이트
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+  return debouncedValue;
+}
+
+// 공통 Input 컴포넌트 (코드 중복 최소화를 위해)
+interface BaseInputProps {
+  id: string;
+  type: string;
+  placeholder: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  maxLength?: number;
+  className?: string;
+}
+
+const BaseInput: FC<BaseInputProps> = ({
+  id,
+  type,
+  placeholder,
+  value,
+  onChange,
+  maxLength,
+  className = "",
+}) => {
+  return (
+    <input
+      id={id}
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      maxLength={maxLength}
+      className={`w-full h-[50px] rounded-[8px] border pt-[15px] pr-[16px] pb-[15px] pl-[16px] focus:outline-none text-lg-regular ${className}`}
+    />
+  );
+};
+
+// CustomDateInput: 날짜 입력 시 커스텀 스타일 적용 (BaseInput 재사용 가능)
 type CustomInputProps = {
   value?: string;
   onClick?: () => void;
@@ -91,6 +144,24 @@ const CustomDateInput = forwardRef<HTMLInputElement, CustomInputProps>(
 );
 CustomDateInput.displayName = "CustomDateInput";
 
+// 상태 관리를 useReducer로 분리
+interface InputState {
+  error: string;
+}
+
+type InputAction = { type: "SET_ERROR"; payload: string } | { type: "RESET" };
+
+const inputReducer = (state: InputState, action: InputAction): InputState => {
+  switch (action.type) {
+    case "SET_ERROR":
+      return { ...state, error: action.payload };
+    case "RESET":
+      return { error: "" };
+    default:
+      return state;
+  }
+};
+
 const UnifiedInput: FC<UnifiedInputProps> = ({
   variant,
   label,
@@ -102,25 +173,25 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
   onSubmit,
   className = "",
 }) => {
-  const [error, setError] = useState("");
+  const [state, dispatch] = useReducer(inputReducer, { error: "" });
   const [showPassword, setShowPassword] = useState(false);
+  // debouncedValue를 사용해 입력이 끝난 후 유효성 검사를 수행
+  const debouncedValue = useDebounce(value, 300);
 
   useEffect(() => {
-    setError(validate(value, variant));
-  }, [value, variant, validate]);
+    const validationResult = validate(debouncedValue, variant);
+    dispatch({ type: "SET_ERROR", payload: validationResult });
+  }, [debouncedValue, variant, validate]);
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const newValue = e.target.value;
-    onChange(newValue);
+    onChange(e.target.value);
   };
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
-
   const inputType =
     variant === "password" ? (showPassword ? "text" : "password") : "text";
-
   const finalMaxLength = maxLength || defaultMaxLengths[variant];
 
   if (variant === "date") {
@@ -157,7 +228,7 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
         {variant === "title" && (
           <>
             {" "}
-            {value && !error ? (
+            {value && !state.error ? (
               <span className="text-violet-700">*</span>
             ) : (
               <span className="text-gray-700">*</span>
@@ -185,16 +256,14 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
         </div>
       ) : (
         <div className={variant === "password" ? "relative" : ""}>
-          <input
+          <BaseInput
             id={`${variant}-input`}
             type={variant === "password" ? inputType : "text"}
             placeholder={placeholder}
             value={value}
             onChange={handleInputChange}
             maxLength={finalMaxLength}
-            className={`w-full h-[50px] rounded-[8px] border pt-[15px] pr-[16px] pb-[15px] pl-[16px] focus:outline-none text-lg-regular ${
-              error ? "border-red" : "border-gray-300"
-            }`}
+            className={state.error ? "border-red" : "border-gray-300"}
           />
           {variant === "password" && (
             <button
@@ -212,7 +281,7 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
           )}
         </div>
       )}
-      {error && <p className="mt-2 text-sm text-red">{error}</p>}
+      {state.error && <p className="mt-2 text-sm text-red">{state.error}</p>}
     </div>
   );
 };
