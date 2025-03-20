@@ -6,14 +6,14 @@ import Profile from "./common/Profile";
 import { deleteMember } from "@/api/member";
 //
 interface Props {
-  members: User[];
+  members: Member[];
 }
 /**ToDo
  * 삭제 버튼 공통컴포넌트로 바꾸기
  * 멤버 삭제 버튼클릭시 함수
  */
 export default function EditMember({ members }: Props) {
-  const totalPage = Math.ceil(members.length / 4);
+  const totalPage = Math.ceil(members?.length / 4);
   const [currentPage, setCurrentPage] = useState(1);
   const handleClickPrev = () => {
     if (currentPage === 1) return;
@@ -50,14 +50,14 @@ export default function EditMember({ members }: Props) {
         <p className="px-5 text-gray-400 tablet:px-7 md-regular">이름</p>
       </div>
       <div>
-        {members.map((member, i) => {
+        {members?.map((member, i) => {
           return (
             <div>
               <div className="flex items-center justify-between px-5 tablet:px-7 h-[34px] tablet:h-[38px]">
                 <Profile
                   nickname={member.nickname}
                   profileImageUrl={member.profileImageUrl}
-                  isProfile
+                  type="profile"
                 />
                 <button onClick={() => handleClick(member.userId || 0)}>
                   삭제
