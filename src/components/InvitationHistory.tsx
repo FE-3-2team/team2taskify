@@ -12,7 +12,7 @@ interface Props {
   invitations: Invitation[];
 }
 export default function InvitationHistory({ invitations }: Props) {
-  const totalPage = Math.ceil(invitations.length / 5);
+  const totalPage = Math.ceil(invitations?.length / 5);
   const [page, setPage] = useState(1);
 
   const PrevPage = () => {
@@ -60,31 +60,32 @@ export default function InvitationHistory({ invitations }: Props) {
         </button>
       </div>
       <div>
-        {invitations.map((invitation, i) => {
-          return (
-            <>
-              <div className="flex justify-between px-5 py-4 tablet:px-7">
-                <p className="text-black-200 text-lg-regular">
-                  {invitation.invitee.email}
-                </p>
-                <button
-                  onClick={() => {
-                    CancelInvite(
-                      invitation.dashboard.id,
-                      invitation.invitee.id
-                    );
-                  }}
-                >
-                  취소
-                </button>
-              </div>
-              <div
-                className="h-[1px] w-full bg-gray-200"
-                style={{ display: i === 4 ? "none" : "block" }}
-              />
-            </>
-          );
-        })}
+        {invitations?.length > 1 &&
+          invitations?.map((invitation, i) => {
+            return (
+              <>
+                <div className="flex justify-between px-5 py-4 tablet:px-7">
+                  <p className="text-black-200 text-lg-regular">
+                    {invitation.invitee.email}
+                  </p>
+                  <button
+                    onClick={() => {
+                      CancelInvite(
+                        invitation.dashboard.id,
+                        invitation.invitee.id
+                      );
+                    }}
+                  >
+                    취소
+                  </button>
+                </div>
+                <div
+                  className="h-[1px] w-full bg-gray-200"
+                  style={{ display: i === 4 ? "none" : "block" }}
+                />
+              </>
+            );
+          })}
       </div>
     </div>
   );

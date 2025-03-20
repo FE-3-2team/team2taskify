@@ -18,6 +18,7 @@ export default function ColorChip({ onClick }: Props) {
     <div className="flex items-center gap-[10px] w-fit ">
       {COLORS.map((color, i) => (
         <button
+          key={color}
           onClick={() => handleClick(COLOR_VALUES[i], color)}
           className={`flex justify-center h-[30px] w-[30px] rounded-full ${COLORS[i]}`}
         >
