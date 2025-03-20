@@ -1,6 +1,5 @@
-// GenericModal.tsx
 import React, { useEffect } from "react";
-import Button from "../common/Button/Button"; // 새 버튼 컴포넌트
+import Button from "../common/Button/Button";
 
 interface GenericModalProps {
   isOpen: boolean;
