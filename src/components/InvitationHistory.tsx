@@ -3,10 +3,7 @@ import { useState } from "react";
 import { cancelInvite } from "@/api/dashboard";
 import { Button, PaginationButton } from "./common/Button";
 import InviteIcon from "@/assets/icons/white.Invite.icons.svg";
-/**To Do
- * 초대하기 버튼 나중에 바꾸기
- *
- */
+
 interface Props {
   invitations: Invitation[];
 }
@@ -84,16 +81,20 @@ export default function InvitationHistory({ invitations }: Props) {
                   <p className="text-black-200 text-lg-regular ">
                     {invitation.invitee.email}
                   </p>
-                  <button
-                    onClick={() => {
-                      CancelInvite(
-                        invitation.dashboard.id,
-                        invitation.invitee.id
-                      );
-                    }}
-                  >
-                    취소
-                  </button>
+                  <div className="w-[52px] h-[32px] tablet:w-[84px]">
+                    <Button
+                      onClick={() =>
+                        CancelInvite(
+                          invitation.dashboard.id,
+                          invitation.invitee.id
+                        )
+                      }
+                      size="xsmall"
+                      variant="secondary"
+                    >
+                      취소
+                    </Button>
+                  </div>
                 </div>
                 <div
                   className="h-[1px] w-full bg-gray-200"

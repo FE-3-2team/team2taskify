@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from "react";
 import ColorChip from "../common/Chip/Color.chip";
 import { useRouter } from "next/router";
 import { createDashboard } from "@/api/dashboard";
-import { BaseInput } from "../common/Input";
+import { BaseInput } from "@/components/common/Input";
 
 export default function NewDashboard() {
   const router = useRouter();

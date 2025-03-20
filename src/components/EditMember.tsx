@@ -2,7 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Profile from "./common/Profile";
 import { deleteMember } from "@/api/member";
-import { PaginationButton } from "./common/Button";
+import { Button, PaginationButton } from "./common/Button";
 //
 interface Props {
   members: Member[];
@@ -60,9 +60,15 @@ export default function EditMember({ members }: Props) {
                   profileImageUrl={member.profileImageUrl}
                   type="profile"
                 />
-                <button onClick={() => handleClick(member.userId || 0)}>
-                  삭제
-                </button>
+                <div className="w-[52px] h-[32px] tablet:w-[84px]">
+                  <Button
+                    onClick={() => handleClick(member.userId || 0)}
+                    size="xsmall"
+                    variant="secondary"
+                  >
+                    삭제
+                  </Button>
+                </div>
               </div>
               <div
                 className="h-[1px] w-full bg-gray-200 my-3"
