@@ -8,7 +8,9 @@ import { getInvitations } from "@/api/invitations.api";
 import { useState } from "react";
 import { DashButton } from "@/components/common/Button";
 import { deleteDashboard } from "@/api/dashboard";
+import arrow from "@/assets/icons/LeftArrow.icon.svg";
 import { useRouter } from "next/router";
+import Image from "next/image";
 //
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -69,27 +71,31 @@ export default function EditPage({
     await deleteDashboard(Number(dashboardId));
     router.push("/mypage");
   };
-  console.log(initialInvitations);
-  console.log(initialMembers);
-  console.log(dashboardId);
+
   return (
-    <div className="px-3 py-4 tablet:px-5 tablet:py-5">
+    <>
       <Header />
+      <div className="px-3 py-4 tablet:px-5 tablet:py-5 ml-[300px]">
+        <div className="flex flex-col gap-[10px] tablet:gap-[19px] laptop:gap-[34px]">
+          <button className="flex items-start">
+            <Image src={arrow} width={20} height={20} alt="<" />
+            돌아가기
+          </button>
 
-      <div className="flex flex-col gap-[10px] tablet:gap-[19px] laptop:gap-[34px]">
-        <button className="flex items-start">{"<돌아가기"}</button>
-
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-4">
-            <NewDashboard />
-            <EditMember members={members} />
-            <InvitationHistory invitations={invitations} />
-          </div>
-          <div className=" tablet:w-[320px] h-[52px] tablet:h-[62px] ">
-            <DashButton size="medium">대시보드 삭제하기</DashButton>
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
+              <NewDashboard />
+              <EditMember members={members} />
+              <InvitationHistory invitations={invitations} />
+            </div>
+            <div className=" tablet:w-[320px] h-[52px] tablet:h-[62px] ">
+              <DashButton onClick={DashBoardDelete} size="medium">
+                대시보드 삭제하기
+              </DashButton>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
