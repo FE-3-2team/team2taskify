@@ -8,7 +8,5 @@ export async function getInvitations(size: number = 5, cursorId: number = 0) {
     return res.data;
   } catch (error) {
     throw new Error("멤버 조회 실패");
-  } finally {
-    console.log(size, cursorId);
   }
 }

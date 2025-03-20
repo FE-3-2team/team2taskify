@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    paths: [],
+    paths: [{ params: { dashboardId: "13624" } }],
     fallback: true,
   };
 };
@@ -29,18 +29,23 @@ export const getStaticProps: GetStaticProps = async (
   try {
     const res = await getMember(Number(dashboardId));
     const invitationData = await getInvitations((cursorId = 0));
-    initialMembers = res.data.results;
-    const { cursorId: newCursorId, invitations: initialInivitations } =
-      invitationData;
-    cursorId = newCursorId === null ? 0 : newCursorId;
-    result = { initialInvitations, initialMembers };
+    initialMembers = res.data.results ?? [];
+
+    initialMembers = res?.data?.results ?? []; // undefined 방지
+    initialInvitations = invitationData?.invitations ?? []; // undefined 방지
+
+    cursorId = invitationData?.cursorId ?? 0; // null 방지
   } catch {
     result = { initialInvitations: [], initialMembers: [] };
   }
+  console.log(initialInvitations);
+  console.log(initialMembers);
+  console.log(dashboardId);
+
   return {
     props: {
-      initialMembers,
-      initialInvitations,
+      initialMembers: initialMembers ?? [],
+      initialInvitations: initialInvitations ?? [],
       dashboardId,
     },
   };
@@ -64,6 +69,9 @@ export default function EditPage({
     await deleteDashboard(Number(dashboardId));
     router.push("/mypage");
   };
+  console.log(initialInvitations);
+  console.log(initialMembers);
+  console.log(dashboardId);
   return (
     <div className="px-3 py-4 tablet:px-5 tablet:py-5">
       <Header />
