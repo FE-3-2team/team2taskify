@@ -17,7 +17,7 @@ export default function CardModal({ card, columnTitle, comments }: Props) {
   const handleDelete = () => {};
   const handleEdit = () => {};
   return (
-    <div className=" w-[327px] tablet:w-[678px] laptop:w-[730px] px-4 py-4 tablet:px-[23px] tablet:py-8 rounded-[8px] max-h-[800px] overflow-scroll">
+    <div className="w-[327px] tablet:w-[678px] laptop:w-[730px]  rounded-[8px] max-h-[800px] overflow-scroll">
       <div className="flex flex-col">
         <div className="flex items-start justify-between mb-6 ">
           <span className="text-xl-bold tablet:text-2xl-bold max-w-[420px]">
@@ -25,9 +25,7 @@ export default function CardModal({ card, columnTitle, comments }: Props) {
           </span>
           <div className="flex items-center gap-4 tablet:gap-6">
             <DropdownEditDel onDelete={handleDelete} onEdit={handleEdit} />
-            <button>
-              <Image src={X} width={32} height={32} alt="X" />
-            </button>
+            <div className="w-8 h-8" />
           </div>
         </div>
         <div className="mb-4 tablet:hidden">
