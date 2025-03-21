@@ -28,7 +28,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ todoData }) => {
             >
               <Tags tags={todoData.tags} />
               <div className="flex flex-row items-center gap-[4px]">
-                <div className="bg-[url(@/assets/icons/Calendar.svg)] w-[18px] h-[18px] w-[14px] h-[14px]" />
+                <div className="bg-[url(@/assets/icons/Calendar.svg)] tablet:w-[18px] tablet:h-[18px] w-[14px] h-[14px]" />
                 <p className="text-xs-medium text-gray-787486">
                   {todoData.dueDate}
                 </p>

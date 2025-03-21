@@ -37,6 +37,7 @@ export function Badges({ memberList }: BadgesProps) {
               img={member.profileImageUrl}
               nickname={member.nickname}
               ArrayId={idx + 1}
+              type="badges"
             />
           </div>
         );
@@ -59,11 +60,10 @@ export function Badges({ memberList }: BadgesProps) {
 interface Props {
   nickname: string;
   img: string | null;
-  isComment?: boolean;
-  isCard?: boolean;
   ArrayId?: number;
+  type: "comment" | "assignee" | "badges" | "profile" | "column";
 }
-export function Badge({ nickname, img, isComment, isCard, ArrayId }: Props) {
+export function Badge({ nickname, img, type, ArrayId }: Props) {
   const colorNum = ArrayId
     ? ArrayId
     : Math.floor(Math.random() * RANDOM_COLOR.length);
@@ -76,11 +76,14 @@ export function Badge({ nickname, img, isComment, isCard, ArrayId }: Props) {
     <div
       className={clsx(
         "border-2 border-white flex justify-center items-center rounded-full ",
-        isComment
-          ? "w-[34px] h-[34px]"
-          : isCard
-            ? "w-[22px] h-[22px] tablet:w-[24px] tablet:h-[24px]"
-            : "w-[38px] h-[38px]",
+        {
+          comment: "w-[34px] h-[34px]",
+          column: "w-[22px] h-[22px] tablet:w-[24px] tablet:h-[24px]",
+          badges: "w-[38px] h-[38px]",
+          profile: "w-[38px] h-[38px]",
+          assignee: "w-[26px] h-[26px] tablet:w-[34px] tablet:h-[34px]",
+        }[type],
+
         RANDOM_COLOR[colorNum]
       )}
     >
