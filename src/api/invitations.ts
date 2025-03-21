@@ -1,5 +1,27 @@
 import { instance } from "./instance";
 
+export interface InvitationType {
+  id: number;
+  inviter: {
+    nickname: string;
+    email: string;
+    id: number;
+  };
+  teamId: string;
+  dashboard: {
+    title: string;
+    id: number;
+  };
+  invitee: {
+    nickname: string;
+    email: string;
+    id: number;
+  };
+  inviteAccepted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export async function getInvitations(
   size: number = 10,
   cursorId?: number,
