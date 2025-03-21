@@ -15,7 +15,7 @@ export default function LoginFormLayout({
   formSection,
   buttonSection,
   footerSection,
-  logoToFormSpacingClass = "mt-[30px]", //기본
+  logoToFormSpacingClass = "mt-[30px]",
   formToButtonSpacingClass = "mt-[24px]",
   buttonToFooterSpacingClass = "mt-[10px] md:mt-[24px]",
 }: LoginFormLayoutProps) {
