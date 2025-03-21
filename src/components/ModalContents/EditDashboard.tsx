@@ -1,8 +1,7 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import ColorChip from "../common/Chip/Color.chip";
 import { editDashboard } from "@/api/dashboard";
 import { BaseInput } from "@/components/common/Input";
-import { useParams } from "next/navigation";
 import { Button } from "../common/Button";
 
 interface Props {
@@ -11,16 +10,20 @@ interface Props {
   color: string;
 }
 export default function EditDashboard({ title, color, dashboardId }: Props) {
-  const [currentTitle, setCurrentTitle] = useState(title);
+  const [currentValue, setCurrentValue] = useState("");
   const [currentColor, setCurrentColor] = useState(color);
+  const [isClient, setIsClient] = useState(false);
+  console.log(title);
   const [dashboardData, setDashboardData] = useState({
     dashboardId: dashboardId,
     title: "",
     color: "",
   });
 
-  console.log(title);
+  console.log(dashboardId);
+  console.log(dashboardData);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentValue(e.target.value);
     setDashboardData((prev) => ({ ...prev, title: e.target.value }));
   };
 
@@ -30,7 +33,6 @@ export default function EditDashboard({ title, color, dashboardId }: Props) {
 
   const handleSubmit = async (dashboardData: Props) => {
     const { newTitle, newColor } = await editDashboard(dashboardData);
-    setCurrentTitle(newTitle);
     setCurrentColor(newColor);
   };
 
@@ -38,7 +40,7 @@ export default function EditDashboard({ title, color, dashboardId }: Props) {
     <div className="w-full px-4 py-5 bg-white rounded-lg h-fit tablet:py-8 tablet:px-8">
       <div className="flex flex-col gap-6">
         <p className="text-xl-bold tablet:text-2xl-bold text-black-200">
-          {currentTitle}
+          {title}
         </p>
         <div className="flex flex-col gap-4 ">
           <div className="flex flex-col gap-2">
@@ -47,7 +49,7 @@ export default function EditDashboard({ title, color, dashboardId }: Props) {
               type="text"
               maxLength={12}
               placeholder="대시보드 이름을 입력하세요"
-              value={currentTitle}
+              value={currentValue}
               onChange={handleChange}
               className="border-gray-300"
             />

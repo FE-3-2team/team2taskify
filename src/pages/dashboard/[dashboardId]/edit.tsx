@@ -50,8 +50,11 @@ export default function EditPage() {
     const { totalCount, invitations } = await getDashboardInvitations({
       getInvitation,
     });
-    setDashboardInfo(dashboard);
-    console.log(dashboardInfo);
+    setDashboardInfo((prev) => ({
+      ...prev,
+      title: dashboard.title,
+      color: dashboard.color,
+    }));
     setMembers(members);
     setInvitations(invitations);
     pageCount = totalCount;
@@ -60,7 +63,6 @@ export default function EditPage() {
     await deleteDashboard({ dashboardId });
     router.push("/mydashboard");
   };
-
   return (
     <div className="ml-[67px] tablet:ml-[160px] laptop:ml-[300px]">
       <Header />

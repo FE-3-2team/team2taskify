@@ -36,7 +36,7 @@ export async function getDashboardInfo(dashboardId: string) {
 //대시보드 삭제
 export async function deleteDashboard(dashboardId: Props) {
   try {
-    const res = await instance.post("/dashboards", {
+    const res = await instance.delete("/dashboards", {
       params: { dashboardId },
     });
   } catch (error) {
@@ -51,16 +51,16 @@ interface editProps extends Props {
 }
 export async function editDashboard(dashboardData: editProps) {
   const { dashboardId, title, color } = dashboardData;
+  console.log(dashboardId);
   try {
-    const res = await instance.put("/dashboards", {
-      params: { dashboardId },
+    const res = await instance.put(`/dashboards/${dashboardId}`, {
       title,
       color,
     });
     const { title: newTitle, color: newColor } = res.data;
     return { newTitle, newColor };
   } catch (error) {
-    throw new Error("대시보드 삭제 실패");
+    throw new Error("대시보드 수정 실패");
   }
 }
 

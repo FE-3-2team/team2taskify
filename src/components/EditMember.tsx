@@ -53,7 +53,7 @@ export default function EditMember({ members }: Props) {
       <div>
         {members?.map((member, i) => {
           return (
-            <div>
+            <div key={member.id}>
               <div className="flex items-center justify-between px-5 tablet:px-7 h-[34px] tablet:h-[38px]">
                 <Profile
                   nickname={member.nickname}

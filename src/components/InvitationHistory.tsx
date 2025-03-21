@@ -26,7 +26,7 @@ export default function InvitationHistory({ count, invitations }: Props) {
     //초대하기 모달 팝업 됨.
   };
 
-  const CancelInvite = async (dashboardId: number, invitationId: number) => {
+  const CancelInvite = async (dashboardId: string, invitationId: number) => {
     await cancelInvite(dashboardId, invitationId);
   };
   return (
@@ -75,7 +75,10 @@ export default function InvitationHistory({ count, invitations }: Props) {
           invitations?.map((invitation, i) => {
             return (
               <>
-                <div className="flex justify-between px-5 py-4 tablet:px-7">
+                <div
+                  key={invitation.id}
+                  className="flex justify-between px-5 py-4 tablet:px-7"
+                >
                   <p className="text-black-200 text-lg-regular ">
                     {invitation.invitee.email}
                   </p>
@@ -83,7 +86,7 @@ export default function InvitationHistory({ count, invitations }: Props) {
                     <Button
                       onClick={() =>
                         CancelInvite(
-                          invitation.dashboard.id,
+                          String(invitation.dashboard.id),
                           invitation.invitee.id
                         )
                       }
