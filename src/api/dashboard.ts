@@ -8,9 +8,8 @@ interface Data {
   title: string;
   color: string;
 }
-//대시보드 상세 조회
-
-export async function getDashboardInfo(data: Data) {
+//대시보드 생성
+export async function createDashboard(data: Data) {
   const { title, color } = data;
   try {
     const res = await instance.post("/dashboards", {
@@ -22,16 +21,15 @@ export async function getDashboardInfo(data: Data) {
     throw new Error("대시보드 생성 실패");
   }
 }
+//대시보드 상세조회
 
-//대시보드 생성
-export async function createDashboard(data: Data) {
-  const { title, color } = data;
+export async function getDashboardInfo({ dashboardId }: Props) {
   try {
     const res = await instance.post("/dashboards", {
-      title,
-      color,
+      params: { dashboardId },
     });
-    return res.data;
+    const { title, color } = res.data;
+    return { title, color };
   } catch (error) {
     throw new Error("대시보드 생성 실패");
   }
