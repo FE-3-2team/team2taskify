@@ -1,16 +1,37 @@
 import { PlusIconButton, PaginationButton, Button, DashButton } from "@/components/common/Button";
 import ColorChip from "@/components/common/Button/ColorChipSmall";
+import SideMenu from "@/components/common/SideMenu";
 import React, { useState } from "react";
 import Image from "next/image";
 import CrownIcon from "@/assets/icons/Crown.icon.svg"; // 왕관 아이콘
 import PlusIcon from "@/assets/icons/Plus.icon.svg";
+
+const dashboards = [
+  { title: "비브리지비브리지비브리지비브리지비브리지", color: "#7AC555", isOwner: true },
+  { title: "코드잇 코드잇코드잇코드잇", color: "#760DDE", isOwner: false },
+  { title: "3분기 계획", color: "#FFA500", isOwner: false },
+  { title: "회의록", color: "#76A6EA", isOwner: true },
+  { title: "중요 문서함", color: "#E876EA", isOwner: false },
+  { title: "비브리지", color: "#7AC555", isOwner: true },
+  { title: "코드잇", color: "#760DDE", isOwner: false },
+  { title: "3분기 계획", color: "#FFA500", isOwner: false },
+  { title: "8", color: "#76A6EA", isOwner: true },
+  { title: "9", color: "#E876EA", isOwner: false },
+  { title: "10", color: "#760DDE", isOwner: false },
+  { title: "11", color: "#FFA500", isOwner: false },
+  { title: "12", color: "#76A6EA", isOwner: true },
+  { title: "13", color: "#E876EA", isOwner: false },
+  { title: "14", color: "#76A6EA", isOwner: true },
+  { title: "15", color: "#E876EA", isOwner: false },
+];
 
 export default function Home() {
   const [page, setPage] = useState(1);
   
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-screen gap-4 mt-10 mb-10 text-center">
+      <SideMenu dashboards={dashboards} />
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4 pt-10 mb-10 text-center">
         <strong className="text-2xl-semibold">대시보드 버튼</strong>
         <div className="flex flex-col items-center justify-center w-full gap-2 mb-10 max-w-[600px]">
           <DashButton size="small" className="flex items-center gap-[12px]" onClick={() => console.log("Clicked!")}>새로운 대시보드 <PlusIconButton /></DashButton>
