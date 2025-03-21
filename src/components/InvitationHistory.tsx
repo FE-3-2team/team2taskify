@@ -6,13 +6,11 @@ import InviteIcon from "@/assets/icons/white.Invite.icons.svg";
 
 interface Props {
   invitations: Invitation[];
+  count: number;
 }
 
-export default function InvitationHistory({ invitations }: Props) {
-  const totalPage =
-    Math.ceil(invitations?.length / 4) < 1
-      ? 1
-      : Math.ceil(invitations?.length / 4);
+export default function InvitationHistory({ count, invitations }: Props) {
+  const totalPage = Math.ceil(count / 4) < 1 ? 1 : Math.ceil(count / 4);
   const [page, setPage] = useState(1);
 
   const PrevPage = () => {
