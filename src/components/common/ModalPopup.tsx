@@ -1,7 +1,6 @@
 import { useAutoClose } from "@/hooks/useAutoClose";
 import X from "@/assets/icons/X.icon.svg";
 import { Button } from "./Button";
-import clsx from "clsx";
 import Image from "next/image";
 //
 
@@ -9,22 +8,23 @@ interface Props {
   children?: React.ReactNode;
   ModalOpenButton: React.ReactNode | string;
   ModalCloseButton?: string;
-  editButton?: string;
-  onClick?: () => void;
+  leftHandlerText?: string;
+  rightHandlerText?: string;
+  rightOnClick?: () => void;
+  leftOnClick?: () => void;
 }
 //
 export function Modal({
   children,
   ModalOpenButton,
   ModalCloseButton,
-  editButton,
-  onClick,
+  rightHandlerText,
+  leftHandlerText,
+  rightOnClick,
+  leftOnClick,
 }: Props) {
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
 
-  const handleClick = () => {
-    setIsOpen(false);
-  };
   const handleButtonClick = () => {
     setIsOpen(true);
   };
@@ -32,22 +32,52 @@ export function Modal({
   return (
     <>
       {isOpen && (
-        <div
-          className={clsx(
-            "w-full flex h-full bg-rgba(0, 0, 0, 0.6) fixed top-0 left-0 z-10"
-          )}
-        >
+        <div className="fixed inset-0 z-10 flex items-center justify-center bg-black-400/70 ">
           <div
-            className={clsx(
-              "w-fit h-fit bg-white fixed   top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-[15px] rounded-[8px] z-20 "
-            )}
+            className="px-4 py-6 relative flex flex-col tablet:px-6  w-[327px] tablet:w-[568px] h-auto bg-white rounded-[8px] z-20 "
+            style={{ gap: rightOnClick ? "24px" : "32px" }}
             ref={ref}
           >
-            <div>{children}</div>
-            <div>
-              <Button onClick={handleClick}>{ModalCloseButton}</Button>
-
-              {onClick && <Button onClick={handleClick}>확인</Button>}
+            {leftOnClick && (
+              <button
+                className="absolute top-6 right-4 tablet:top-6 tablet:right-6"
+                onClick={() => setIsOpen(false)}
+              >
+                <Image src={X} width={32} height={32} alt="X" />
+              </button>
+            )}
+            {children}
+            <div className="flex justify-center gap-2 ">
+              <div className="tablet:w-[256px] h-[54px] w-[144px]  z-20">
+                {leftOnClick ? (
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setIsOpen(false);
+                      leftOnClick;
+                    }}
+                  >
+                    {leftHandlerText}
+                  </Button>
+                ) : (
+                  <Button variant="outline" onClick={() => setIsOpen(false)}>
+                    {ModalCloseButton}
+                  </Button>
+                )}
+              </div>
+              {rightOnClick && (
+                <div className="tablet:w-[256px] h-[54px] w-[144px] z-20">
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      setIsOpen(false);
+                      rightOnClick;
+                    }}
+                  >
+                    {rightHandlerText}
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -62,9 +92,6 @@ export function DetailContent({ children, ModalOpenButton }: Props) {
   //
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
 
-  const handleClick = () => {
-    setIsOpen(false);
-  };
   const handleButtonClick = () => {
     setIsOpen(true);
   };
@@ -72,14 +99,14 @@ export function DetailContent({ children, ModalOpenButton }: Props) {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 z-10 flex items-center justify-center bg-black-400 opacity-70">
+        <div className="fixed inset-0 z-10 flex items-center justify-center bg-black-400/70">
           <div
-            className="px-4 py-4 tablet:px-[23px] tablet:py-8 relative w-auto h-auto bg-white opacity-100 rounded-[8px] z-20 "
+            className="px-4 py-4 tablet:px-[23px] tablet:py-8 relative w-auto h-auto bg-white  rounded-[8px] z-20 "
             ref={ref}
           >
             <button
               className="absolute top-4 right-4 tablet:top-8 tablet:right-8"
-              onClick={handleClick}
+              onClick={() => setIsOpen(false)}
             >
               <Image src={X} width={32} height={32} alt="X" />
             </button>
@@ -88,7 +115,7 @@ export function DetailContent({ children, ModalOpenButton }: Props) {
         </div>
       )}
 
-      <Button onClick={handleButtonClick}>{ModalOpenButton}</Button>
+      <button onClick={handleButtonClick}>{ModalOpenButton}</button>
     </>
   );
 }
