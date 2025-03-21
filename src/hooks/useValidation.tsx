@@ -31,8 +31,8 @@ export const defaultValidate = (
       return "비밀번호는 소문자,대문자,특수기호를 포함해야합니다";
     }
   } else if (variant === "title") {
-    if (value.length < 2 || value.length > 12)
-      return "2 ~ 12자의 제목을 지어주세요";
+    if (value.length < 2 || value.length > 10)
+      return "10자 이하로 작성해주세요.";
   } else if (variant === "comment") {
     if (value.length === 300) return "최대 300자 까지 입력 할 수 있습니다.";
   }
@@ -43,7 +43,7 @@ export const useValidation = (
   value: string,
   variant: InputVariant,
   validate: (value: string, variant: InputVariant) => string = defaultValidate,
-  delay: number = 100
+  delay: number = 50
 ): string => {
   const debouncedValue = useDebounce(value, delay);
   const [error, setError] = useState("");

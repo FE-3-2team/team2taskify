@@ -124,7 +124,7 @@ export interface UnifiedInputProps {
 const defaultMaxLengths: Record<InputVariant, number> = {
   email: 25,
   password: 15,
-  title: 12,
+  title: 11,
   comment: 300,
   date: 0,
 };
