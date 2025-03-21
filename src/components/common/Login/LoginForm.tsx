@@ -4,6 +4,7 @@ import Link from "next/link";
 import UnifiedInput from "../Input";
 import Button from "../Button/Button";
 import LoginFormLayout from "./LoginFormLayout";
+import { defaultValidate } from "../../../hooks/useValidation";
 
 export interface LoginResponse {
   user: {
@@ -51,6 +52,11 @@ export default function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const emailValid = email && defaultValidate(email, "email") === "";
+  const passwordValid =
+    password && defaultValidate(password, "password") === "";
+  const isFormValid = emailValid && passwordValid;
 
   const handleLogin = async () => {
     if (!email || !password) return;
@@ -101,7 +107,10 @@ export default function LoginForm({
     <div className="w-full">
       <Button
         size="xlarge"
-        className="bg-[#9FA6B2] hover:bg-[#5534da] text-white transition-colors"
+        // ! 를 붙여서 기존 variant 스타일을 덮어씌우도록 함
+        className={`text-white transition-colors ${
+          isFormValid ? "!bg-[#5534da]" : "!bg-[#9FA6B2]"
+        } hover:!bg-[#5534da]`}
         onClick={handleLogin}
         disabled={loading}
       >

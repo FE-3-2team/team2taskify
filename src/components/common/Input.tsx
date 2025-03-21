@@ -118,6 +118,7 @@ export interface UnifiedInputProps {
   onSubmit?: () => Promise<void>;
   className?: string;
   debounceDelay?: number;
+  onBlur?: () => void;
 }
 
 const defaultMaxLengths: Record<InputVariant, number> = {

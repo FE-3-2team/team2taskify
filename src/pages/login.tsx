@@ -12,9 +12,8 @@ export default function LoginPage() {
       <LoginForm
         logoSrc={MainLogo}
         onLogin={login}
-        buttonToFooterSpacingClass="mt-[24px] md:mt-[10px]"
-        logoToFormSpacingClass="30px"
-        formToButtonSpacingClass="24px"
+        logoToFormSpacingClass="mt-[36px] md:mt-[30px]"
+        formToButtonSpacingClass="mt-[10px] md:mt-[24px]"
       />
     </LoginContainer>
   );

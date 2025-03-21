@@ -17,7 +17,7 @@ export default function LoginFormLayout({
   footerSection,
   logoToFormSpacingClass = "mt-[30px]",
   formToButtonSpacingClass = "mt-[24px]",
-  buttonToFooterSpacingClass = "mt-[10px] md:mt-[24px]",
+  buttonToFooterSpacingClass = "mt-[24px] md:mt-[10px]",
 }: LoginFormLayoutProps) {
   return (
     <div className="flex flex-col items-center">
