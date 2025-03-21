@@ -12,6 +12,9 @@ interface Props {
   rightHandlerText?: string;
   rightOnClick?: () => void;
   leftOnClick?: () => void;
+  className?: string;
+  size?: "xxsmall" | "xsmall" | "small" | "medium" | "large" | "xlarge"; // 크기별 스타일 적용
+  variant?: "primary" | "secondary" | "outline" | "disabled"; // 색상/디자인 적용
 }
 //
 export function Modal({
@@ -22,6 +25,8 @@ export function Modal({
   leftHandlerText,
   rightOnClick,
   leftOnClick,
+  size,
+  variant,
 }: Props) {
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
 
@@ -83,7 +88,9 @@ export function Modal({
         </div>
       )}
 
-      <Button onClick={handleButtonClick}>{ModalOpenButton}</Button>
+      <Button size={size} variant={variant} onClick={handleButtonClick}>
+        {ModalOpenButton}
+      </Button>
     </>
   );
 }
