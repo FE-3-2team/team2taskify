@@ -1,9 +1,9 @@
 import { instance } from "./instance";
 //
 
-interface Props {
-  dashboardId?: number;
-}
+type Props = {
+  dashboardId?: string;
+};
 interface Data {
   title: string;
   color: string;
@@ -23,20 +23,18 @@ export async function createDashboard(data: Data) {
 }
 //대시보드 상세조회
 
-export async function getDashboardInfo({ dashboardId }: Props) {
+export async function getDashboardInfo(dashboardId: string) {
   try {
-    const res = await instance.post("/dashboards", {
-      params: { dashboardId },
-    });
+    const res = await instance.get(`/dashboards/${dashboardId}`);
     const { title, color } = res.data;
     return { title, color };
   } catch (error) {
-    throw new Error("대시보드 생성 실패");
+    throw new Error("대시보드 상세 조회 실패");
   }
 }
 
 //대시보드 삭제
-export async function deleteDashboard(dashboardId: number) {
+export async function deleteDashboard(dashboardId: Props) {
   try {
     const res = await instance.post("/dashboards", {
       params: { dashboardId },
@@ -51,7 +49,8 @@ interface editProps extends Props {
   title: string;
   color: string;
 }
-export async function editDashboard({ dashboardId, title, color }: editProps) {
+export async function editDashboard(dashboardData: editProps) {
+  const { dashboardId, title, color } = dashboardData;
   try {
     const res = await instance.put("/dashboards", {
       params: { dashboardId },
@@ -67,20 +66,21 @@ export async function editDashboard({ dashboardId, title, color }: editProps) {
 
 //대쉬보드 초대 불러오기
 
-interface InvitationsProps extends Props {
-  page: number;
-  size: number;
+interface InvitationsProps {
+  getInvitation: {
+    dashboardId: string;
+    page: number;
+    size?: number;
+  };
 }
 export async function getDashboardInvitations({
-  dashboardId,
-  page,
-  size = 5,
+  getInvitation,
 }: InvitationsProps) {
+  const { dashboardId, page, size } = getInvitation;
   try {
-    const res = await instance.delete(
-      `/dashboards/${dashboardId}/invitations`,
-      { params: { page, size } }
-    );
+    const res = await instance.get(`/dashboards/${dashboardId}/invitations`, {
+      params: { page, size },
+    });
     return res.data;
   } catch (error) {
     throw new Error("대시보드 초대 취소 실패");
@@ -88,7 +88,7 @@ export async function getDashboardInvitations({
 }
 
 //대시보드 초대 취소
-export async function cancelInvite(dashboardId: number, invitationId: number) {
+export async function cancelInvite(dashboardId: string, invitationId: number) {
   try {
     const res = await instance.delete(
       `/dashboards/${dashboardId}/invitations/${invitationId}`

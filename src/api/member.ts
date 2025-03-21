@@ -1,19 +1,20 @@
 import { instance } from "./instance";
-//
-
-export async function getMember(dashboardId: number) {
+// 대시 보드 멤버 조회
+export async function getMember(dashboardId: string) {
   try {
-    const res = await instance.get(`/members/${dashboardId}`);
+    const res = await instance.get(`/members`, {
+      params: { dashboardId: dashboardId },
+    });
     return res.data.members;
   } catch (error) {
     throw new Error("멤버 조회 실패");
   }
 }
+// 대시보드 멤버 삭제
 export async function deleteMember(memberId: number) {
   if (memberId === 0) return;
   try {
     await instance.delete(`/members/${memberId}`);
-    //리스폰스 nonContent
   } catch (error) {
     throw new Error("멤버 삭제 실패");
   }

@@ -1,39 +1,64 @@
-"use client";
 import Header from "@/components/common/Header";
 import EditMember from "@/components/EditMember";
 import InvitationHistory from "@/components/InvitationHistory";
 import { getMember } from "@/api/member";
-import { getInvitations } from "@/api/invitations.api";
 import { useEffect, useState } from "react";
 import { DashButton } from "@/components/common/Button";
-import { deleteDashboard } from "@/api/dashboard";
+import {
+  deleteDashboard,
+  getDashboardInfo,
+  getDashboardInvitations,
+} from "@/api/dashboard";
 import arrow from "@/assets/icons/LeftArrow.icon.svg";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import EditDashboard from "@/components/ModalContents/EditDashboard";
-import { useParams } from "next/navigation";
 //
 export default function EditPage() {
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
-  const { dashboardId } = useParams();
   const [members, setMembers] = useState([]);
   const [invitations, setInvitations] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  let pageCount;
+  const [dashboardInfo, setDashboardInfo] = useState({
+    title: "",
+    color: "",
+  });
+  let dashboardId = "";
+  let pageCount = 0;
+  useEffect(() => {
+    if (router.isReady) {
+      if (
+        router.query.dashboardId &&
+        typeof router.query.dashboardId === "string"
+      ) {
+        dashboardId = router.query.dashboardId;
+      }
+    }
+    setIsClient(true);
+    handleLoad();
+  }, [router.isReady]);
+  //
   const handleLoad = async () => {
-    const members = await getMember(Number(dashboardId));
-    const { totalCount, invitations } = await getInvitations(currentPage + 1);
+    if (!isClient) return;
+    const dashboard = await getDashboardInfo(dashboardId);
+    const getInvitation = {
+      dashboardId,
+      page: currentPage + 1,
+    };
+    const members = await getMember(dashboardId);
+    const { totalCount, invitations } = await getDashboardInvitations({
+      getInvitation,
+    });
+    setDashboardInfo(dashboard);
+    console.log(dashboardInfo);
     setMembers(members);
     setInvitations(invitations);
     pageCount = totalCount;
   };
-
-  useEffect(() => {
-    handleLoad();
-  }, []);
   const DashBoardDelete = async () => {
-    await deleteDashboard(Number(dashboardId));
-    router.push("/mypage");
+    await deleteDashboard({ dashboardId });
+    router.push("/mydashboard");
   };
 
   return (
@@ -48,7 +73,11 @@ export default function EditPage() {
 
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
-              <EditDashboard title={} color={}></EditDashboard>
+              <EditDashboard
+                title={dashboardInfo.title}
+                color={dashboardInfo.color}
+                dashboardId={dashboardId}
+              ></EditDashboard>
               <EditMember members={members} />
               <InvitationHistory count={pageCount} invitations={invitations} />
             </div>

@@ -3,7 +3,7 @@ import Check from "@/assets/icons/ColorChip.icons.svg";
 import Image from "next/image";
 interface Props {
   onClick: (value: string) => void;
-  initialSelected: string;
+  initialSelected?: string;
 }
 
 const COLOR_VALUES = ["#7AC555", "#760DDE", "#FFA500", "#76A6EA", "#E876EA"];
