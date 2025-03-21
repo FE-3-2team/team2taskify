@@ -27,7 +27,7 @@ export default function Header({ members, title, createdByMe }: Props) {
 
   if (!store?.userNickname) return;
   return (
-    <div className="flex flex-row justify-between w-full h-[70px] py-[15px] px-[20px] laptop:pl-10 laptop:pr-20  border-b-[1px]  items-center border-gray-300 ">
+    <div className="flex flex-row justify-between w-full h-[70px] py-[15px] px-[12px] laptop:pl-10 laptop:pr-20  border-b-[1px]  items-center border-gray-300 ">
       <div className="flex flex-row gap-2">
         <p className="hidden tablet:block text-black-200 text-xl-bold ">
           {dashboardTitle}
@@ -73,7 +73,7 @@ export default function Header({ members, title, createdByMe }: Props) {
         </div>
         <div className="flex w-fit flex-row gap-4 tablet:gap-6 laptop:gap-[38px]">
           <div
-            className=" w-[90px] laptop:w-[138px]"
+            className=" w-[82px] laptop:w-[138px]"
             style={{ display: display }}
           >
             {members && <Badges memberList={members} />}
