@@ -2,14 +2,14 @@ import React, { useState, ChangeEvent, FC, forwardRef } from "react";
 import DatePicker from "react-datepicker";
 import Image from "next/image";
 import Button from "./Button/Button";
-import EyeCloseIcon from "../../assets/icons/EyeVisibility_off.svg";
-import EyeOpenIcon from "../../assets/icons/EyeVisibility_on.svg";
-import CalendarIcon from "../../assets/icons/Calendar.svg";
+import EyeCloseIcon from "@/assets/icons/EyeVisibility_off.svg";
+import EyeOpenIcon from "@/assets/icons/EyeVisibility_on.svg";
+import CalendarIcon from "@/assets/icons/Calendar.svg";
 import {
   useValidation,
   defaultValidate,
   InputVariant,
-} from "../../hooks/useValidation";
+} from "@/hooks/useValidation";
 
 export interface BaseInputProps {
   id?: string;
