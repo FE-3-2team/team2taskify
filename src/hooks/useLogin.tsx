@@ -17,13 +17,17 @@ const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const toastId = "loginError";
 
+  const teamId = process.env.NEXT_PUBLIC_TEAM_ID || "13-2";
+
+  const apiUrl = `https://sp-taskify-api.vercel.app/${teamId}/auth/login`;
+
   const login = async (
     email: string,
     password: string
   ): Promise<LoginResponse | null> => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/yourTeamId/auth/login`, {
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -31,6 +35,9 @@ const useLogin = () => {
 
       if (response.ok) {
         const data: LoginResponse = await response.json();
+
+        localStorage.setItem("accessToken", data.accessToken);
+        window.location.href = "/mydashboard";
         return data;
       } else {
         if (response.status === 400) {
@@ -40,7 +47,7 @@ const useLogin = () => {
           }
         } else if (response.status === 404) {
           if (!toast.isActive(toastId)) {
-            toast.error("존재하지 않는 사용자입니다.", { toastId });
+            toast.error("존재하지 않는 유저입니다.", { toastId });
           }
         } else if (response.status === 500) {
           if (!toast.isActive(toastId)) {
