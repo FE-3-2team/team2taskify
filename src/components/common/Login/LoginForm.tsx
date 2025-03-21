@@ -3,32 +3,13 @@ import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import UnifiedInput from "../Input";
 import Button from "../Button/Button";
-import LoginFormLayout from "./LoginFormLayout";
-import { defaultValidate } from "../../../hooks/useValidation";
-
-export interface LoginResponse {
-  user: {
-    id: number;
-    email: string;
-    nickname: string;
-    profileImageUrl: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-  accessToken: string;
-}
+import LoginFormLayout from "./AuthFormLayout";
 
 interface LoginFormProps {
   logoSrc: string | StaticImageData;
   logoAlt?: string;
   logoText?: string;
-  emailLabel?: string;
-  emailPlaceholder?: string;
-  passwordLabel?: string;
-  passwordPlaceholder?: string;
-  loginButtonText?: string;
-  signUpText?: string;
-  onLogin: (email: string, password: string) => Promise<LoginResponse | null>;
+  onLogin: (email: string, password: string) => Promise<any>;
   logoToFormSpacingClass?: string;
   formToButtonSpacingClass?: string;
   buttonToFooterSpacingClass?: string;
@@ -38,12 +19,6 @@ export default function LoginForm({
   logoSrc,
   logoAlt = "Logo",
   logoText = "오늘도 만나서 반가워요!",
-  emailLabel = "이메일",
-  emailPlaceholder = "이메일을 입력해 주세요",
-  passwordLabel = "비밀번호",
-  passwordPlaceholder = "비밀번호를 입력해 주세요",
-  loginButtonText = "로그인",
-  signUpText = "회원가입하기",
   onLogin,
   logoToFormSpacingClass,
   formToButtonSpacingClass,
@@ -51,18 +26,14 @@ export default function LoginForm({
 }: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const emailValid = email && defaultValidate(email, "email") === "";
-  const passwordValid =
-    password && defaultValidate(password, "password") === "";
+  const emailValid = email && email.includes("@");
+  const passwordValid = password && password.length >= 8;
   const isFormValid = emailValid && passwordValid;
 
   const handleLogin = async () => {
-    if (!email || !password) return;
-    setLoading(true);
+    if (!isFormValid) return;
     await onLogin(email, password);
-    setLoading(false);
   };
 
   const logoSection = (
@@ -85,19 +56,19 @@ export default function LoginForm({
       <div>
         <UnifiedInput
           variant="email"
-          label={emailLabel}
-          placeholder={emailPlaceholder}
+          label="이메일"
+          placeholder="이메일을 입력해 주세요"
           value={email}
-          onChange={(val) => setEmail(val)}
+          onChange={setEmail}
         />
       </div>
       <div className="mt-[16px]">
         <UnifiedInput
           variant="password"
-          label={passwordLabel}
-          placeholder={passwordPlaceholder}
+          label="비밀번호"
+          placeholder="비밀번호를 입력해 주세요"
           value={password}
-          onChange={(val) => setPassword(val)}
+          onChange={setPassword}
         />
       </div>
     </div>
@@ -107,14 +78,12 @@ export default function LoginForm({
     <div className="w-full">
       <Button
         size="xlarge"
-        // ! 를 붙여서 기존 variant 스타일을 덮어씌우도록 함
         className={`text-white transition-colors ${
           isFormValid ? "!bg-[#5534da]" : "!bg-[#9FA6B2]"
         } hover:!bg-[#5534da]`}
         onClick={handleLogin}
-        disabled={loading}
       >
-        {loading ? "로그인 중..." : loginButtonText}
+        로그인
       </Button>
     </div>
   );
@@ -123,7 +92,7 @@ export default function LoginForm({
     <p className="text-center text-gray-600">
       회원이 아니신가요?{" "}
       <Link href="/signup">
-        <span className="underline cursor-pointer">{signUpText}</span>
+        <span className="underline cursor-pointer">회원가입하기</span>
       </Link>
     </p>
   );
