@@ -1,14 +1,21 @@
-const ListInvDash: React.FC<{ invitations: Invitation[] }> = ({
+import ItemInvDash from "@/components/common/InvitedDashboards/Item.InvDash";
+import { InvitationType } from "@/api/invitations";
+
+interface ListInvDashProps {
+  invitations: InvitationType[];
+  onRespond: (id: number, inviteAccepted: boolean) => void;
+}
+
+const ListInvDash: React.FC<ListInvDashProps> = ({
   invitations,
+  onRespond,
 }) => {
   return (
-    <ul>
-      {invitations.map((invite) => (
-        <li key={invite.id} className="">
-          {invite.dashboard.title} - 초대한 사람: {invite.inviter.nickname}
-        </li>
+    <div>
+      {invitations.map((inv) => (
+        <ItemInvDash key={inv.id} invitation={inv} onRespond={onRespond} />
       ))}
-    </ul>
+    </div>
   );
 };
 

@@ -1,28 +1,42 @@
-interface InvitedDashboardItemProps {
-  id: number;
-  title: string;
-  inviter: string;
-  onRespond: (id: number, accepted: boolean) => void;
+import { InvitationType } from "@/api/invitations";
+
+interface ItemInvDashProps {
+  invitation: InvitationType;
+  onRespond: (id: number, inviteAccepted: boolean) => void;
 }
 
 export default function ItemInvDash({
-  id,
-  title,
-  inviter,
+  invitation,
   onRespond,
-}: InvitedDashboardItemProps) {
+}: ItemInvDashProps) {
   return (
-    <div className="">
-      <div className="">
-        <p className="">{title}</p>
-        <p className="">{inviter}</p>
+    <div className="w-full h-[125px] border-b border-gray-300 flex flex-col items-start justify-center gap-[14px] tablet:gap-[20px] desktop:gap-[187px] tablet:flex-row tablet:justify-start tablet:items-center tablet:h-[72px]">
+      <div className="tablet:text-lg-regular text-md-regular flex flex-col gap-[3px] tablet:flex-row tablet:gap-[20px] desktop:gap-[187px]">
+        <div className="flex">
+          <p className="w-[62px] text-gray-400 tablet:hidden">이름</p>
+          <p className="text-black-200 tablet:w-[154px] desktop:w-[254px]">
+            {invitation.dashboard.title}
+          </p>
+        </div>
+        <div className="flex">
+          <p className="w-[62px] text-gray-400 tablet:hidden">초대자</p>
+          <p className="text-black-200 tablet:w-[100px] text-center">
+            {invitation.inviter.nickname}
+          </p>
+        </div>
       </div>
 
-      <div className="">
-        <button className="" onClick={() => onRespond(id, true)}>
+      <div className="flex gap-[10px] tablet:text-md-medium text-xs-medium">
+        <button
+          className="desktop:w-[84px] desktop:h-[32px] tablet:w-[72px] tablet:h-[30px] w-[109px] h-[32px] bg-violet-200  text-white rounded-[4px] border border-gray-300"
+          onClick={() => onRespond(invitation.id, true)}
+        >
           수락
         </button>
-        <button className="" onClick={() => onRespond(id, false)}>
+        <button
+          className="desktop:w-[84px] desktop:h-[32px] tablet:w-[72px] tablet:h-[30px] w-[109px] h-[32px] bg-white text-violet-200 rounded-[4px] border border-gray-300"
+          onClick={() => onRespond(invitation.id, false)}
+        >
           거절
         </button>
       </div>
