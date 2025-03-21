@@ -7,11 +7,14 @@ export const defaultValidate = (
   value: string,
   variant: InputVariant
 ): string => {
+  // 입력값이 비어있으면 오류 메시지를 반환하지 않음
+  if (!value) return "";
+
   if (variant === "email") {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const hangulRegex = /[가-힣]/;
-    if (value && hangulRegex.test(value)) return "이메일 형식으로 입력해주세요";
-    if (value && !emailRegex.test(value)) return "이메일 형식으로 입력해주세요";
+    if (hangulRegex.test(value)) return "이메일 형식으로 입력해주세요";
+    if (!emailRegex.test(value)) return "이메일 형식으로 입력해주세요";
   } else if (variant === "password") {
     if (value.length < 8 || value.length > 16)
       return "비밀번호는 8~16자여야 합니다";
@@ -28,7 +31,7 @@ export const defaultValidate = (
       return "비밀번호는 소문자,대문자,특수기호를 포함해야합니다";
     }
   } else if (variant === "title") {
-    if (value && (value.length < 2 || value.length > 12))
+    if (value.length < 2 || value.length > 12)
       return "2 ~ 12자의 제목을 지어주세요";
   } else if (variant === "comment") {
     if (value.length === 300) return "최대 300자 까지 입력 할 수 있습니다.";

@@ -230,7 +230,13 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
             value={value}
             onChange={handleInputChange}
             maxLength={finalMaxLength}
-            className={error ? "border-red" : "border-gray-300"}
+            className={`${
+              value && !error
+                ? "border-[#5534da]"
+                : error
+                  ? "border-red"
+                  : "border-gray-300"
+            }`}
             aria-describedby={error ? errorId : undefined}
           />
           {variant === "password" && (
