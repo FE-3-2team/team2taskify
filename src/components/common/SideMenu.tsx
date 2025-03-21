@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import addIcon from "@/assets/icons/Addbox.icon.svg";
@@ -7,9 +7,7 @@ import LogoImage from "@/assets/icons/LogoImage.svg";
 import DashButton from "./Button/DashButton";
 import PaginationButton from "./Button/PaginationButton";
 
-const ITEM_HEIGHT = 50; // DashButton 한 개의 예상 높이(px)
-
-// 🟢 SideMenu Props 타입 정의
+// 타입 정의
 interface Dashboard {
   title: string;
   color: string;
@@ -20,31 +18,15 @@ interface SideMenuProps {
   dashboards: Dashboard[];
 }
 
+const ITEMS_PER_PAGE = 15; // 🔸 한 페이지에 표시할 대시보드 개수
+
 export default function SideMenu({ dashboards }: SideMenuProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [visibleHeight, setVisibleHeight] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const observer = new ResizeObserver(() => {
-      if (containerRef.current) {
-        const availableHeight = containerRef.current.clientHeight; // 가용 높이 계산
-        setVisibleHeight(availableHeight);
-      }
-    });
-
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const itemsPerPage = Math.floor(visibleHeight / ITEM_HEIGHT) || 1; // 최소 1개는 표시
-  const totalPages = Math.ceil(dashboards.length / itemsPerPage);
-
+  const totalPages = Math.ceil(dashboards.length / ITEMS_PER_PAGE);
   const displayedDashboards = dashboards.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
 
   return (
@@ -63,8 +45,8 @@ export default function SideMenu({ dashboards }: SideMenuProps) {
         <Image src={addIcon} alt="대시보드 추가 버튼" className="h-[20px] w-[20px] cursor-pointer" />
       </div>
 
-      {/* 대시보드 리스트 (동적 높이 적용) */}
-      <div ref={containerRef} className="flex flex-col flex-grow m-auto tablet:ml-[10px] overflow-hidden tablet:w-[90%]">
+      {/* 대시보드 리스트 */}
+      <div className="flex flex-col flex-grow m-auto tablet:ml-[10px] overflow-hidden tablet:w-[90%]">
         {displayedDashboards.map((dashboard, index) => (
           <DashButton
             key={index}
@@ -79,9 +61,9 @@ export default function SideMenu({ dashboards }: SideMenuProps) {
         ))}
       </div>
 
-      {/* 페이지네이션 */}
-      {totalPages > 1 && (
-        <div className="flex justify-center gap-2 p-4 border-t">
+      {/* 페이지네이션 (15개 초과일 때만 표시) */}
+      {dashboards.length > ITEMS_PER_PAGE && (
+        <div className="flex hidden px-2 py-4 tablet:flex">
           <PaginationButton
             hasPrev={currentPage > 1}
             hasNext={currentPage < totalPages}

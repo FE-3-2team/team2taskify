@@ -1,33 +1,88 @@
 import { PlusIconButton, PaginationButton, Button, DashButton } from "@/components/common/Button";
-import ColorChip from "@/components/common/Button/ColorChipSmall";
 import SideMenu from "@/components/common/SideMenu";
-import React, { useState } from "react";
-import Image from "next/image";
-import CrownIcon from "@/assets/icons/Crown.icon.svg"; // 왕관 아이콘
-import PlusIcon from "@/assets/icons/Plus.icon.svg";
+import React, { useEffect, useState } from "react";
+import axios from 'axios';
+// import { instance } from "@/api/instance";
+// import { getItem } from "@/utils/localstorage";
+// import useAuthStore from "@/utils/Zustand/zustand";
 
-const dashboards = [
-  { title: "비브리지비브리지비브리지비브리지비브리지", color: "#7AC555", isOwner: true },
-  { title: "코드잇 코드잇코드잇코드잇", color: "#760DDE", isOwner: false },
-  { title: "3분기 계획", color: "#FFA500", isOwner: false },
-  { title: "회의록", color: "#76A6EA", isOwner: true },
-  { title: "중요 문서함", color: "#E876EA", isOwner: false },
-  { title: "비브리지", color: "#7AC555", isOwner: true },
-  { title: "코드잇", color: "#760DDE", isOwner: false },
-  { title: "3분기 계획", color: "#FFA500", isOwner: false },
-  { title: "8", color: "#76A6EA", isOwner: true },
-  { title: "9", color: "#E876EA", isOwner: false },
-  { title: "10", color: "#760DDE", isOwner: false },
-  { title: "11", color: "#FFA500", isOwner: false },
-  { title: "12", color: "#76A6EA", isOwner: true },
-  { title: "13", color: "#E876EA", isOwner: false },
-  { title: "14", color: "#76A6EA", isOwner: true },
-  { title: "15", color: "#E876EA", isOwner: false },
-];
+interface Dashboard {
+  title: string;
+  color: string;
+  isOwner: boolean;
+}
 
 export default function Home() {
   const [page, setPage] = useState(1);
+  const [dashboards, setDashboards] = useState<Dashboard[]>([]);
+  // const { userId } = useAuthStore(); // ✅ 로그인한 사용자의 ID 가져오기
+  // const accessToken = getItem("accessToken"); // ✅ 토큰 가져오기
+
+  useEffect(() => {
+    const fetchDashboards = async () => {
+      try {
+        const response = await axios.get(
+          `https://sp-taskify-api.vercel.app/13-2/dashboards`, // ✅ URL 수정
+          {
+            params: {
+              navigationMethod: "pagination",
+              page: 1,
+              size: 15,
+            },
+            headers: {
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`
+            }
+          }
+        );
   
+        console.log("응답 데이터:", response.data); // ✅ 응답 확인용 로그
+        const mapped = response.data.dashboards.map((item: any) => ({
+          title: item.title,
+          color: item.color,
+          isOwner: item.createdByMe, // ✅ createdByMe 값 사용
+        }));
+  
+        setDashboards(mapped);
+      } catch (error) {
+        console.error("대시보드 불러오기 실패:", error);
+      }
+    };
+  
+    fetchDashboards();
+  }, []);
+  // useEffect(() => {
+  //   if (!accessToken || !userId) return; // ✅ 토큰 & userId 없으면 API 요청 안 함
+
+  //   const fetchDashboards = async () => {
+  //     try {
+  //       const teamId = `13-2`; // ✅ 현재 하드코딩된 부분 -> 실제 팀 ID로 변경 필요
+  //       console.log(`Fetching dashboards for teamId: ${teamId}`);
+
+  //       const response = await instance.get(`/teams/${teamId}/dashboards`, {
+  //         params: {
+  //           navigationMethod: "pagination",
+  //           page: 1,
+  //           size: 15,
+  //         },
+  //       });
+
+  //       console.log("응답 데이터:", response.data); // ✅ 응답 확인
+  //       const mapped = response.data.dashboards.map((item: any) => ({
+  //         title: item.title,
+  //         color: item.color,
+  //         isOwner: item.createdByMe,
+  //       }));
+
+  //       setDashboards(mapped);
+  //     } catch (error) {
+  //       console.error("대시보드 불러오기 실패:", error);
+  //     }
+  //   };
+
+  //   fetchDashboards();
+  // }, [userId]); // ✅ userId가 변경될 때마다 다시 요청
+  
+
   return (
     <>
       <SideMenu dashboards={dashboards} />
@@ -39,24 +94,12 @@ export default function Home() {
           <DashButton size="large" className="flex items-center gap-[12px]" onClick={() => console.log("Clicked!")}>새로운 컬럼 추가하기 <PlusIconButton /></DashButton>
           <DashButton size="small" className="flex items-center gap-[12px]" onClick={() => console.log("Clicked!")}>새로운 대시보드 <PlusIconButton /></DashButton>
           <DashButton className="!py-[6px] !tablet:py-[6px]" onClick={() => console.log("Clicked!")}><PlusIconButton /></DashButton>
-          <DashButton size="small" title="비브리지" color="#7AC555" isOwner={true} hasArrow={true} onClick={() => console.log("Clicked!")}/>
-          <DashButton size="small" title="코드잇" color="#760DDE" isOwner={false} hasArrow={true} onClick={() => console.log("Clicked!")}/>
-          <DashButton size="small" title="3분기 계획" color="#FFA500" isOwner={false} hasArrow={true} onClick={() => console.log("Clicked!")}/>
-          <DashButton size="small" title="회의록" color="#76A6EA" isOwner={true} hasArrow={true} onClick={() => console.log("Clicked!")}/>
-          <DashButton size="small" title="중요 문서함" color="#E876EA" isOwner={false} hasArrow={true} onClick={() => console.log("Clicked!")}/>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#7AC555" /> <span>비브리지</span><Image src={CrownIcon} className="w-[15px] tablet:w-[20px]" alt="왕관" /></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#760DDE" /> <span>코드잇</span></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#FFA500" /> <span>3분기 계획</span></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#76A6EA" /> <span>회의록</span></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#E876EA" /> <span>중요 문서함</span></div>
         </div>
 
         <strong className="text-2xl-semibold">기본 버튼</strong>
         <div className="flex flex-col items-center justify-center w-full gap-2 mb-10 max-w-[500px]">
-          {/* 로그인 버튼 */}
           <Button size="xlarge" variant="primary">로그인</Button>
           <Button size="xlarge" variant="disabled">로그인</Button>
-          {/* 수락 & 거절 버튼 */}
           <div className="flex gap-[12px] w-full max-w-[160px]">
             <Button size="xsmall" variant="primary">수락</Button>
             <Button size="xsmall" variant="secondary">거절</Button>
@@ -65,7 +108,6 @@ export default function Home() {
             <Button size="xsmall" variant="primary">수락</Button>
           </div>
 
-          {/* 🔘 삭제 & 입력 버튼 (작은 크기) */}
           <div className="flex items-center justify-center gap-[12px] w-full max-w-[160px]">
             <div className="flex w-full max-w-[160px]">
               <Button size="xsmall" variant="secondary">삭제</Button>
@@ -75,7 +117,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 📌 모달 버튼 */}
           <Button size="small" variant="primary">small 확인</Button>
           <Button size="small" variant="outline">small 취소</Button>
           <Button size="medium" variant="primary">large 확인</Button>
@@ -86,7 +127,7 @@ export default function Home() {
         <div className="flex flex-col gap-[10px] mb-10 w-full items-center justify-center">
           <PaginationButton hasPrev={true} hasNext={true} size="small" onPrev={() => {}} onNext={() => {}} />
           <PaginationButton hasPrev={false} hasNext={false} size="large" onPrev={() => {}} onNext={() => {}} />
-          <PaginationButton hasPrev={page > 1} hasNext={page < 5} size="large" onPrev={() => setPage((prev) => prev - 1)}onNext={() => setPage((prev) => prev + 1)}/>
+          <PaginationButton hasPrev={page > 1} hasNext={page < 5} size="large" onPrev={() => setPage((prev) => prev - 1)} onNext={() => setPage((prev) => prev + 1)} />
         </div>
 
         <strong className="text-2xl-semibold">폰트사이즈</strong>
