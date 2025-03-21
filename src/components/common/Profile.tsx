@@ -11,10 +11,10 @@ export default function Profile({ nickname, profileImageUrl, type }: Props) {
       <Badge nickname={nickname} img={profileImageUrl} type={type} />
       <p
         className={clsx(
-          "text-lg-medium text-black-200 block ",
+          "text-lg-medium text-black-200  ",
           {
-            profile: "tablet:block hidden",
-            assignee: "text-xs-regular tablet:text-md-regular",
+            profile: " hidden tablet:block ",
+            assignee: "text-xs-regular tablet:text-md-regular ",
           }[type]
         )}
       >
