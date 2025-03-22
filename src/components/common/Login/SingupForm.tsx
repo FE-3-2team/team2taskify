@@ -4,6 +4,7 @@ import Link from "next/link";
 import UnifiedInput from "../Input";
 import Button from "../Button/Button";
 import SignupFormLayout from "./AuthFormLayout";
+import { useValidation } from "@/hooks/useValidation";
 
 interface SignupFormProps {
   logoSrc: string | StaticImageData;
@@ -30,45 +31,44 @@ export default function SignupForm({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [terms, setTerms] = useState(false);
 
-  // 에러 메시지 상태
-  const [nicknameError, setNicknameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
-
-  const validateNickname = (value: string) => {
-    if (value && value.length > 10) return "열 자 이하로 작성해주세요.";
-    return "";
-  };
-
-  const validateEmail = (value: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (value && !emailRegex.test(value))
-      return "이메일 형식으로 작성해 주세요.";
-    return "";
-  };
-
-  const validatePassword = (value: string) => {
-    if (value && value.length < 8) return "8자 이상 입력해주세요.";
-    return "";
-  };
-
-  const validateConfirmPassword = (value: string) => {
-    if (value && value !== password) return "비밀번호가 일치하지 않습니다.";
-    return "";
-  };
-
-  const handleNicknameBlur = () => setNicknameError(validateNickname(nickname));
-  const handleEmailBlur = () => setEmailError(validateEmail(email));
-  const handlePasswordBlur = () => setPasswordError(validatePassword(password));
-  const handleConfirmPasswordBlur = () =>
-    setConfirmPasswordError(validateConfirmPassword(confirmPassword));
+  // useValidation 훅을 사용한 필드 검증
+  const nicknameError = useValidation(
+    nickname,
+    "title",
+    undefined,
+    (value, variant) =>
+      value && value.length > 10 ? "열 자 이하로 작성해주세요." : ""
+  );
+  const emailError = useValidation(
+    email,
+    "email",
+    undefined,
+    (value, variant) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return value && !emailRegex.test(value)
+        ? "이메일 형식으로 작성해 주세요."
+        : "";
+    }
+  );
+  const passwordError = useValidation(
+    password,
+    "password",
+    undefined,
+    (value, variant) =>
+      value && value.length < 8 ? "8자 이상 입력해주세요." : ""
+  );
+  // confirmPassword 검증은 password 값을 비교 인자로 전달
+  const confirmPasswordError = useValidation(
+    confirmPassword,
+    "confirmPassword",
+    password
+  );
 
   const isFormValid =
-    nickname &&
-    email &&
-    password &&
-    confirmPassword &&
+    nickname.trim() !== "" &&
+    email.trim() !== "" &&
+    password.trim() !== "" &&
+    confirmPassword.trim() !== "" &&
     !nicknameError &&
     !emailError &&
     !passwordError &&
@@ -76,11 +76,6 @@ export default function SignupForm({
     terms;
 
   const handleSignup = async () => {
-    setNicknameError(validateNickname(nickname));
-    setEmailError(validateEmail(email));
-    setPasswordError(validatePassword(password));
-    setConfirmPasswordError(validateConfirmPassword(confirmPassword));
-
     if (!isFormValid) return;
     await onSignup(email, nickname, password);
   };
@@ -104,6 +99,7 @@ export default function SignupForm({
 
   const formSection = (
     <div className="flex flex-col w-full">
+      {/* 닉네임 입력 */}
       <div>
         <UnifiedInput
           variant="title"
@@ -111,12 +107,13 @@ export default function SignupForm({
           placeholder="닉네임을 입력해 주세요"
           value={nickname}
           onChange={setNickname}
-          onBlur={handleNicknameBlur}
         />
         {nicknameError && (
           <p className="mt-2 text-sm text-red">{nicknameError}</p>
         )}
       </div>
+
+      {/* 이메일 입력 */}
       <div className="mt-4">
         <UnifiedInput
           variant="email"
@@ -124,10 +121,11 @@ export default function SignupForm({
           placeholder="이메일을 입력해 주세요"
           value={email}
           onChange={setEmail}
-          onBlur={handleEmailBlur}
         />
         {emailError && <p className="mt-2 text-sm text-red">{emailError}</p>}
       </div>
+
+      {/* 비밀번호 입력 */}
       <div className="mt-4">
         <UnifiedInput
           variant="password"
@@ -135,12 +133,13 @@ export default function SignupForm({
           placeholder="비밀번호를 입력해 주세요"
           value={password}
           onChange={setPassword}
-          onBlur={handlePasswordBlur}
         />
         {passwordError && (
           <p className="mt-2 text-sm text-red">{passwordError}</p>
         )}
       </div>
+
+      {/* 비밀번호 확인 입력 */}
       <div className="mt-4">
         <UnifiedInput
           variant="password"
@@ -148,12 +147,15 @@ export default function SignupForm({
           placeholder="비밀번호를 다시 입력해 주세요"
           value={confirmPassword}
           onChange={setConfirmPassword}
-          onBlur={handleConfirmPasswordBlur}
+          // confirmPasswordError가 있을 경우 클래스 적용
+          className={confirmPasswordError ? "border-red" : ""}
         />
         {confirmPasswordError && (
           <p className="mt-2 text-sm text-red">{confirmPasswordError}</p>
         )}
       </div>
+
+      {/* 이용약관 체크박스 */}
       <div className="flex items-center mt-4">
         <input
           type="checkbox"
