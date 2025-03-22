@@ -1,11 +1,8 @@
 import { ChangeEvent, useState } from "react";
 import ColorChip from "../common/Chip/Color.chip";
-import { useRouter } from "next/router";
-import { createDashboard } from "@/api/dashboard";
 import { BaseInput } from "@/components/common/Input";
 
 export default function NewDashboard() {
-  const router = useRouter();
   const [DashboardData, setDashboardData] = useState({
     title: "",
     color: "",
@@ -17,14 +14,6 @@ export default function NewDashboard() {
 
   const handleClick = (value: string) => {
     setDashboardData((prev) => ({ ...prev, color: value }));
-  };
-
-  const handleSubmit = async () => {
-    const { id, title, color, createdAt, updatedAt, userId, createdByMe } =
-      await createDashboard(DashboardData);
-    router.push(`/dashboard/${id}`);
-    // 대시보드 생성시 위의 {} 안의 데이터 리스폰스 옴
-    //대시보드 '생성' 버튼을 클릭하면 대시보드가 생성되고 /dashboard/{dashboardid}로 이동하게 하세요.
   };
 
   return (
