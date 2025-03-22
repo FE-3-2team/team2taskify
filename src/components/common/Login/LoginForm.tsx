@@ -4,6 +4,7 @@ import Link from "next/link";
 import UnifiedInput from "../Input";
 import Button from "../Button/Button";
 import LoginFormLayout from "./AuthFormLayout";
+import { useRouter } from "next/router";
 
 interface LoginFormProps {
   logoSrc: string | StaticImageData;
@@ -24,6 +25,7 @@ export default function LoginForm({
   formToButtonSpacingClass,
   buttonToFooterSpacingClass,
 }: LoginFormProps) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -34,6 +36,7 @@ export default function LoginForm({
   const handleLogin = async () => {
     if (!isFormValid) return;
     await onLogin(email, password);
+    router.push("/mydashboard");
   };
 
   const logoSection = (
