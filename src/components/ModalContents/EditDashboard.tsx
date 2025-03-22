@@ -54,7 +54,7 @@ export default function EditDashboard({ title, color, dashboardId }: Props) {
               className="border-gray-300"
             />
           </div>
-          <ColorChip onClick={handleClick} initialSelected={currentColor} />
+          <ColorChip onClick={handleClick} />
         </div>
         <Button onClick={() => handleSubmit(dashboardData)}>변경</Button>
       </div>
