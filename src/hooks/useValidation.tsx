@@ -1,17 +1,29 @@
 import { useState, useEffect } from "react";
 import { useDebounce } from "./useDebounce";
 
-export type InputVariant = "email" | "password" | "title" | "comment" | "date";
+// InputVariant에 confirmPassword 추가
+export type InputVariant =
+  | "email"
+  | "password"
+  | "confirmPassword"
+  | "title"
+  | "comment"
+  | "date";
 
+// compareWith 매개변수를 추가하여 confirmPassword 검증 로직 포함
 export const defaultValidate = (
   value: string,
-  variant: InputVariant
+  variant: InputVariant,
+  compareWith?: string
 ): string => {
+  // 입력값이 비어있으면 오류 메시지를 반환하지 않음
+  if (!value) return "";
+
   if (variant === "email") {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const hangulRegex = /[가-힣]/;
-    if (value && hangulRegex.test(value)) return "이메일 형식으로 입력해주세요";
-    if (value && !emailRegex.test(value)) return "이메일 형식으로 입력해주세요";
+    if (hangulRegex.test(value)) return "이메일 형식으로 입력해주세요";
+    if (!emailRegex.test(value)) return "이메일 형식으로 입력해주세요";
   } else if (variant === "password") {
     if (value.length < 8 || value.length > 16)
       return "비밀번호는 8~16자여야 합니다";
@@ -27,11 +39,13 @@ export const defaultValidate = (
     ) {
       return "비밀번호는 소문자,대문자,특수기호를 포함해야합니다";
     }
+  } else if (variant === "confirmPassword") {
+    if (value !== compareWith) return "비밀번호가 일치하지 않습니다.";
   } else if (variant === "title") {
-    if (value && (value.length < 2 || value.length > 12))
-      return "2 ~ 12자의 제목을 지어주세요";
+    if (value.length < 2 || value.length > 10)
+      return "10자 이하로 작성해주세요.";
   } else if (variant === "comment") {
-    if (value.length === 300) return "최대 300자 까지 입력 할 수 있습니다.";
+    if (value.length === 300) return "최대 300자 까지 입력할 수 있습니다.";
   }
   return "";
 };
@@ -39,16 +53,22 @@ export const defaultValidate = (
 export const useValidation = (
   value: string,
   variant: InputVariant,
-  validate: (value: string, variant: InputVariant) => string = defaultValidate,
-  delay: number = 100
+  // confirmPassword 검증을 위한 추가 인자
+  compareWith?: string,
+  validate: (
+    value: string,
+    variant: InputVariant,
+    compareWith?: string
+  ) => string = defaultValidate,
+  delay: number = 50
 ): string => {
   const debouncedValue = useDebounce(value, delay);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const validationResult = validate(debouncedValue, variant);
+    const validationResult = validate(debouncedValue, variant, compareWith);
     setError(validationResult);
-  }, [debouncedValue, variant, validate]);
+  }, [debouncedValue, variant, compareWith, validate]);
 
   return error;
 };
