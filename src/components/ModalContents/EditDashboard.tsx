@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import ColorChip from "../common/Chip/Color.chip";
 import { editDashboard } from "@/api/dashboard";
 import { BaseInput } from "@/components/common/Input";
@@ -12,16 +12,12 @@ interface Props {
 export default function EditDashboard({ title, color, dashboardId }: Props) {
   const [currentValue, setCurrentValue] = useState("");
   const [currentColor, setCurrentColor] = useState(color);
-  const [isClient, setIsClient] = useState(false);
-  console.log(title);
   const [dashboardData, setDashboardData] = useState({
     dashboardId: dashboardId,
     title: "",
     color: "",
   });
 
-  console.log(dashboardId);
-  console.log(dashboardData);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentValue(e.target.value);
     setDashboardData((prev) => ({ ...prev, title: e.target.value }));
