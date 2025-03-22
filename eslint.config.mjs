@@ -23,5 +23,6 @@ export default [
     rules: {
       "prettier/prettier": "error",
     },
+    ...compat.extends("prettier"),
   },
 ];
