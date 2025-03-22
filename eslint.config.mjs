@@ -11,7 +11,7 @@ const compat = new FlatCompat({
 
 export default [
   {
-    extends: ["eslint:recommended", "plugin:prettier/recommended"],
+    extends: ["eslint:recommended", "plugin:prettier/recommended", "prettier"], // 'prettier' 추가로 Prettier 관련 설정을 활성화
     files: ["**/*.js", "**/*.ts", "**/*.tsx"],
     languageOptions: {
       parserOptions: {
@@ -23,6 +23,5 @@ export default [
     rules: {
       "prettier/prettier": "error",
     },
-    ...compat.extends("prettier"),
   },
 ];
