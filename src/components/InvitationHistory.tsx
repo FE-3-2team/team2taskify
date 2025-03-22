@@ -4,13 +4,19 @@ import { cancelInvite } from "@/api/dashboard";
 import { Button, PaginationButton } from "./common/Button";
 import InviteIcon from "@/assets/icons/white.Invite.icons.svg";
 
+//취소한뒤에 바로 사라지는지 테스트
+
 interface Props {
   invitations: Invitation[];
-  count: number;
 }
 
-export default function InvitationHistory({ count, invitations }: Props) {
-  const totalPage = Math.ceil(count / 4) < 1 ? 1 : Math.ceil(count / 4);
+export default function InvitationHistory({ invitations }: Props) {
+  const [currentList, setCureentList] = useState(invitations);
+  //
+  const totalPage =
+    Math.ceil(invitations.length / 4) < 1
+      ? 1
+      : Math.ceil(invitations.length / 4);
   const [page, setPage] = useState(1);
 
   const PrevPage = () => {
@@ -28,6 +34,7 @@ export default function InvitationHistory({ count, invitations }: Props) {
 
   const CancelInvite = async (dashboardId: string, invitationId: number) => {
     await cancelInvite(dashboardId, invitationId);
+    setCureentList(currentList.filter((item) => item.id !== invitationId));
   };
   return (
     <div
@@ -71,8 +78,8 @@ export default function InvitationHistory({ count, invitations }: Props) {
         </div>
       </div>
       <div>
-        {invitations?.length > 1 &&
-          invitations?.map((invitation, i) => {
+        {currentList.length > 1 &&
+          currentList.map((invitation, i) => {
             return (
               <>
                 <div
@@ -87,7 +94,7 @@ export default function InvitationHistory({ count, invitations }: Props) {
                       onClick={() =>
                         CancelInvite(
                           String(invitation.dashboard.id),
-                          invitation.invitee.id
+                          invitation.id
                         )
                       }
                       size="xsmall"

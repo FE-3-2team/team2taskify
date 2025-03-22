@@ -1,3 +1,4 @@
+import useAuthStore from "@/utils/Zustand/zustand";
 import { instance } from "./instance";
 //
 
@@ -26,15 +27,21 @@ export async function createDashboard(data: Data) {
 export async function getDashboardInfo(dashboardId: string) {
   try {
     const res = await instance.get(`/dashboards/${dashboardId}`);
-    const { title, color } = res.data;
-    return { title, color };
+    if (res.status == 200) {
+      useAuthStore.setState({
+        dashboardId: res.data.id,
+        dashboardTitle: res.data.title,
+      });
+    }
+
+    return res.data;
   } catch (error) {
     throw new Error("대시보드 상세 조회 실패");
   }
 }
 
 //대시보드 삭제
-export async function deleteDashboard(dashboardId: Props) {
+export async function deleteDashboard(dashboardId: string) {
   try {
     const res = await instance.delete("/dashboards", {
       params: { dashboardId },
@@ -66,24 +73,17 @@ export async function editDashboard(dashboardData: editProps) {
 
 //대쉬보드 초대 불러오기
 
-interface InvitationsProps {
-  getInvitation: {
-    dashboardId: string;
-    page: number;
-    size?: number;
-  };
-}
-export async function getDashboardInvitations({
-  getInvitation,
-}: InvitationsProps) {
-  const { dashboardId, page, size } = getInvitation;
+export async function getDashboardInvitations(
+  page: number,
+  dashboardId: string
+) {
   try {
     const res = await instance.get(`/dashboards/${dashboardId}/invitations`, {
-      params: { page, size },
+      params: { page, size: 5 },
     });
     return res.data;
   } catch (error) {
-    throw new Error("대시보드 초대 취소 실패");
+    throw new Error("대시보드 초대 조회 실패");
   }
 }
 
