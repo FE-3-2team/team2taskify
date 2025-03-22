@@ -14,7 +14,7 @@ export default [
 
   {
     plugins: {
-      prettier: require("eslint-plugin-prettier"),
+      prettier: import("eslint-plugin-prettier"),
     },
     rules: {
       "prettier/prettier": "error", // Prettier 규칙을 ESLint에서 적용
