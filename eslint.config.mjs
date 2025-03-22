@@ -10,18 +10,19 @@ const compat = new FlatCompat({
 });
 
 export default [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-
   {
-    plugins: {
-      prettier: import("eslint-plugin-prettier"),
-    },
     extends: ["eslint:recommended", "plugin:prettier/recommended"],
-
-    rules: {
-      "prettier/prettier": "error", // Prettier 규칙을 ESLint에서 적용
+    files: ["**/*.js", "**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
     },
+    plugins: { prettier },
+    rules: {
+      "prettier/prettier": "error",
+    },
+    ...compat.extends("prettier"),
   },
-
-  ...compat.extends("prettier"),
 ];
