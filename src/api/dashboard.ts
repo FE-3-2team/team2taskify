@@ -43,9 +43,7 @@ export async function getDashboardInfo(dashboardId: string) {
 //대시보드 삭제
 export async function deleteDashboard(dashboardId: string) {
   try {
-    const res = await instance.delete("/dashboards", {
-      params: { dashboardId },
-    });
+    const res = await instance.delete(`/dashboards/${dashboardId}`);
   } catch (error) {
     throw new Error("대시보드 삭제 실패");
   }
@@ -65,9 +63,26 @@ export async function editDashboard(dashboardData: editProps) {
       color,
     });
     const { title: newTitle, color: newColor } = res.data;
+    if (res.status == 200) {
+      useAuthStore.setState({
+        dashboardTitle: newTitle,
+      });
+    }
     return { newTitle, newColor };
   } catch (error) {
     throw new Error("대시보드 수정 실패");
+  }
+}
+//대쉬보드 초대하기
+
+export async function createInvite(email: string, dashboardId: string) {
+  try {
+    const res = await instance.post(`/dashboards/${dashboardId}/invitations`, {
+      email,
+    });
+    return res.data;
+  } catch (error) {
+    throw new Error("대시보드 초대 실패");
   }
 }
 

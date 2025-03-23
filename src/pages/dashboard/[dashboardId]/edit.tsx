@@ -4,23 +4,18 @@ import InvitationHistory from "@/components/InvitationHistory";
 import { getMember } from "@/api/member";
 import { useEffect, useState } from "react";
 import { DashButton } from "@/components/common/Button";
-import {
-  deleteDashboard,
-  getDashboardInfo,
-  getDashboardInvitations,
-} from "@/api/dashboard";
+import { deleteDashboard, getDashboardInfo } from "@/api/dashboard";
 import arrow from "@/assets/icons/LeftArrow.icon.svg";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import EditDashboard from "@/components/EditDashboard";
 import Link from "next/link";
-//멤버 채운뒤에 멤버 삭제 테스트 필요함
+//
 export default function EditPage() {
   const router = useRouter();
   const { dashboardId } = router.query;
   const [members, setMembers] = useState([]);
   const [invitations, setInvitations] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
   const [dashboardInfo, setDashboardInfo] = useState({
     title: "",
     color: "",
@@ -36,17 +31,13 @@ export default function EditPage() {
   const handleLoad = async () => {
     const dashboard = await getDashboardInfo(dashboardId as string);
     const members = await getMember(dashboardId as string);
-    const { invitations } = await getDashboardInvitations(
-      currentPage + 1,
-      dashboardId as string
-    );
+
     setDashboardInfo((prev) => ({
       ...prev,
       title: dashboard.title,
       color: dashboard.color,
       createdByme: dashboard.createdByMe,
     }));
-    setCurrentPage((prev) => prev + 1);
     setMembers(members);
     setInvitations(invitations);
   };
@@ -73,7 +64,7 @@ export default function EditPage() {
                 dashboardId={router.query.dashboardId as string}
               ></EditDashboard>
               <EditMember members={members} />
-              <InvitationHistory invitations={invitations} />
+              <InvitationHistory />
             </div>
             <div className=" tablet:w-[320px] h-[52px] tablet:h-[62px] ">
               <DashButton onClick={DashBoardDelete} size="medium">

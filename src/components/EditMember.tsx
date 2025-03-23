@@ -7,10 +7,6 @@ import { Button, PaginationButton } from "./common/Button";
 interface Props {
   members: Member[];
 }
-/**ToDo
- * 삭제 버튼 공통컴포넌트로 바꾸기
- * 멤버 삭제 버튼클릭시 함수
- */
 
 export default function EditMember({ members }: Props) {
   const totalPage =
