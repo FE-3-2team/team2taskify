@@ -25,7 +25,7 @@ export default function Header({ members, createdByMe }: Props) {
   dashboardTitle = router.pathname === "/mypage" ? "계정관리" : dashboardTitle;
 
   return (
-    <div className="flex flex-row justify-between w-full h-[70px] desktop:pr-20 py-[15px] px-[20px] laptop:pl-10 laptop:pr-[10px]  border-b-[1px]  items-center border-gray-300 ">
+    <div className="flex bg-white flex-row justify-between w-full h-[70px] desktop:pr-20 py-[15px] px-[20px] laptop:pl-10 laptop:pr-[10px]  border-b-[1px]  items-center border-gray-300 ">
       <div className="flex flex-row items-center gap-2">
         <p className="hidden laptop:block text-black-200 text-xl-bold ">
           {dashboardTitle}
