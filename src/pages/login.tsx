@@ -1,7 +1,6 @@
-// pages/LoginPage.tsx
 import React from "react";
-import AuthContainer from "../components/common/Login/AuthContainer";
-import LoginForm from "../components/common/Login/LoginForm";
+import AuthContainer from "../components/Login/AuthContainer";
+import LoginForm from "../components/Login/LoginForm";
 import MainLogo from "../assets/icons/MainLogo.svg";
 import { loginApi } from "@/api/auth";
 

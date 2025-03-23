@@ -1,6 +1,6 @@
 import React from "react";
-import AuthContainer from "../components/common/Login/AuthContainer";
-import SignupForm from "../components/common/Login/SingupForm";
+import AuthContainer from "../components/Login/AuthContainer";
+import SignupForm from "../components/Login/SingupForm";
 import MainLogo from "../assets/icons/MainLogo.svg";
 import { signupApi } from "@/api/auth";
 
