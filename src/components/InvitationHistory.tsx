@@ -1,40 +1,69 @@
 import Image from "next/image";
-import { useState } from "react";
-import { cancelInvite } from "@/api/dashboard";
+import { useEffect, useState } from "react";
+import * as A from "@/api/dashboard";
 import { Button, PaginationButton } from "./common/Button";
 import InviteIcon from "@/assets/icons/white.Invite.icons.svg";
+import { Modal } from "./common/ModalPopup";
+import InputModal from "./ModalContents/InputModal";
+import useAuthStore from "@/utils/Zustand/zustand";
+import { useStore } from "zustand";
 
-//취소한뒤에 바로 사라지는지 테스트
-
-interface Props {
-  invitations: Invitation[];
-}
-
-export default function InvitationHistory({ invitations }: Props) {
-  const [currentList, setCureentList] = useState(invitations);
+//To do
+//에러 코드에 따라서 토스트 띄우기
+export default function InvitationHistory() {
+  const store = useStore(useAuthStore, (state) => state);
+  const dashboardId = store.dashboardId as string;
+  const [totalPage, setTotalPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentList, setCurrentList] = useState<Invitation[]>([]);
+  const [emailValue, setEmailValue] = useState("");
   //
-  const totalPage =
-    Math.ceil(invitations.length / 4) < 1
-      ? 1
-      : Math.ceil(invitations.length / 4);
-  const [page, setPage] = useState(1);
+  useEffect(() => {
+    handleLoad();
+  }, [dashboardId, currentPage]);
+
+  const handleLoad = async () => {
+    if (!dashboardId) return;
+    const { invitations, totalCount } = await A.getDashboardInvitations(
+      currentPage,
+      dashboardId
+    );
+    setTotalPage(Math.ceil(totalCount / 5));
+    setCurrentList(invitations);
+  };
 
   const PrevPage = () => {
-    if (page === 1) return;
-    setPage((prev) => prev - 1);
+    if (currentPage === 1) return;
+    setCurrentPage((prev) => prev - 1);
   };
   const NextPage = () => {
-    if (page === totalPage) return;
-    setPage((prev) => prev + 1);
+    if (currentPage === totalPage) return;
+    setCurrentPage((prev) => prev + 1);
   };
 
-  const AddInvite = () => {
-    //초대하기 모달 팝업 됨.
+  const AddInvite = async () => {
+    const isDuplicate = currentList.some(
+      (item) => item.invitee.email === emailValue
+    );
+    if (isDuplicate) return;
+    const newInvite = await A.createInvite(emailValue, dashboardId);
+    if (currentList.length > 4) {
+      if (currentPage === 1) {
+        setCurrentPage((prev) => prev + 1);
+        return;
+      }
+      setCurrentPage(1);
+    }
+    setCurrentList((prev) => [...prev, newInvite]);
   };
 
   const CancelInvite = async (dashboardId: string, invitationId: number) => {
-    await cancelInvite(dashboardId, invitationId);
-    setCureentList(currentList.filter((item) => item.id !== invitationId));
+    await A.cancelInvite(dashboardId, invitationId);
+    setCurrentList((prev) => prev.filter((item) => item.id !== invitationId));
+    if (currentList.length === 1) {
+      if (currentPage === 1) return;
+      setCurrentPage((prev) => prev - 1);
+    }
   };
   return (
     <div
@@ -46,39 +75,64 @@ export default function InvitationHistory({ invitations }: Props) {
           <p className=" text-2lg-bold tablet-text-2xl-bold"> 초대 내역</p>
           <div className="flex items-center gap-3 text-xs-regular tablet-text-md-regular">
             <p>
-              {totalPage} 페이지 중 {page}
+              {totalPage} 페이지 중 {currentPage}
             </p>
             <div>
               <PaginationButton
                 onNext={NextPage}
                 onPrev={PrevPage}
-                hasNext={totalPage > page}
-                hasPrev={totalPage < page}
+                hasNext={totalPage > currentPage}
+                hasPrev={1 < currentPage}
               />
             </div>
-            <div
-              className="hidden w-[86px] h-[26px] tablet:block tablet:w-[105px] tablet:h-8"
-              onClick={AddInvite}
-            >
-              <Button size="xsmall">
-                <Image src={InviteIcon} width={16} height={16} alt="+" />
-                초대하기
-              </Button>
+            <div className="hidden w-[86px] h-[26px] tablet:block tablet:w-[105px] tablet:h-8">
+              <Modal
+                ModalOpenButton={
+                  <div className="flex">
+                    <Image src={InviteIcon} width={16} height={16} alt="+" />
+                    초대하기
+                  </div>
+                }
+                size="xsmall"
+                rightHandlerText="초대 하기"
+                rightOnClick={AddInvite}
+              >
+                <InputModal
+                  title="초대하기"
+                  label="이메일"
+                  placeholder="이메일을 입력해주세요"
+                  changeValue={(value) => setEmailValue(value)}
+                />
+              </Modal>
             </div>
           </div>
         </div>
         <div className="flex items-center justify-between px-5 tablet:px-7">
           <p className="text-gray-400 text-md-regular">이메일</p>
-          <div className="tablet:hidden w-[86px] h-[26px]" onClick={AddInvite}>
-            <Button size="xsmall">
-              <Image src={InviteIcon} width={16} height={16} alt="+" />
-              초대하기
-            </Button>
+          <div className="tablet:hidden w-[86px] h-[26px]">
+            <Modal
+              ModalOpenButton={
+                <div className="flex">
+                  <Image src={InviteIcon} width={16} height={16} alt="+" />
+                  초대하기
+                </div>
+              }
+              size="xsmall"
+              rightHandlerText="초대 하기"
+              rightOnClick={AddInvite}
+            >
+              <InputModal
+                title="초대하기"
+                label="이메일"
+                placeholder="이메일을 입력해주세요"
+                changeValue={(value) => setEmailValue(value)}
+              />
+            </Modal>
           </div>
         </div>
       </div>
       <div>
-        {currentList.length > 1 &&
+        {currentList.length >= 1 &&
           currentList.map((invitation, i) => {
             return (
               <>
@@ -91,12 +145,7 @@ export default function InvitationHistory({ invitations }: Props) {
                   </p>
                   <div className="w-[52px] h-[32px] tablet:w-[84px]">
                     <Button
-                      onClick={() =>
-                        CancelInvite(
-                          String(invitation.dashboard.id),
-                          invitation.id
-                        )
-                      }
+                      onClick={() => CancelInvite(dashboardId, invitation.id)}
                       size="xsmall"
                       variant="secondary"
                     >

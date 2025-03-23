@@ -78,4 +78,12 @@ declare global {
       id: number;
     };
   }
+  interface Column {
+    id: number;
+    title: string;
+    teamId: string;
+    dashboardId: number;
+    createdAt: string;
+    updatedAt: string;
+  }
 }
