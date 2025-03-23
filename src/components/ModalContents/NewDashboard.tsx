@@ -2,7 +2,10 @@ import { ChangeEvent, useState } from "react";
 import ColorChip from "../common/Chip/Color.chip";
 import { BaseInput } from "@/components/common/Input";
 
-export default function NewDashboard() {
+interface Props {
+  onChange: (value: { title: string; color: string }) => {};
+}
+export default function NewDashboard({ onChange }: Props) {
   const [DashboardData, setDashboardData] = useState({
     title: "",
     color: "",
@@ -10,10 +13,12 @@ export default function NewDashboard() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDashboardData((prev) => ({ ...prev, title: e.target.value }));
+    onChange(DashboardData);
   };
 
   const handleClick = (value: string) => {
     setDashboardData((prev) => ({ ...prev, color: value }));
+    onChange(DashboardData);
   };
 
   return (
