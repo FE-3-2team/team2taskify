@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Tags } from "./Chip/Tag.chip";
+import CalendarIcon from "@/assets/icons/Calendar.svg";
 
 interface TodoCardProps {
   todoData: Card;
@@ -27,8 +28,15 @@ const TodoCard: React.FC<TodoCardProps> = ({ todoData }) => {
               className={`flex flex-col desktop:items-start items-start tablet:items-center desktop:gap-[8px] gap-[6px] justify-between tablet:flex-row  tablet:h-[28px] desktop:flex-col h-fit desktop:h-fit ${todoData.tags.length > 0 ? "tablet:gap-[16px]" : "tablet:gap-[0]"}`}
             >
               <Tags tags={todoData.tags} />
-              <div className="flex flex-row items-center gap-[4px]">
-                <div className="bg-[url(@/assets/icons/Calendar.svg)] w-[18px] h-[18px] w-[14px] h-[14px]" />
+              <div className="flex flex-row gap-[4px]">
+                <div className="w-[18px] h-[18px] w-[14px] h-[14px] relative">
+                  <Image
+                    src={CalendarIcon}
+                    alt="calendar"
+                    fill={true}
+                    className="object-contain"
+                  />
+                </div>
                 <p className="text-xs-medium text-gray-787486">
                   {todoData.dueDate}
                 </p>
