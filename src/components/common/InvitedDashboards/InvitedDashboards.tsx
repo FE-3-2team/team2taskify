@@ -3,6 +3,8 @@ import { getInvitations, respondToInvitation } from "@/api/invitations";
 import { InvitationType } from "@/api/invitations";
 import ListInvDash from "@/components/common/InvitedDashboards/List.InvDash";
 import SearchInvDash from "@/components/common/InvitedDashboards/Search.InvDash";
+import Image from "next/image";
+import NoInvitationIcon from "@/assets/icons/NoInvitation.icon.svg";
 
 const InvitedDashboards: React.FC = () => {
   const [invitations, setInvitations] = useState<InvitationType[]>([]);
@@ -52,7 +54,14 @@ const InvitedDashboards: React.FC = () => {
           </p>
         ) : invitations.length === 0 ? (
           <div className="tablet:mt-[64px] mt-[105px] flex flex-col items-center justify-center gap-[16px]">
-            <div className="bg-[url(@/assets/icons/NoInvitation.icon.svg)] tablet:w-[100px] tablet:h-[100px] w-[60px] h-[60px] bg-contain bg-no-repeat" />
+            <div className="relative tablet:w-[100px] tablet:h-[100px] w-[60px] h-[60px]">
+              <Image
+                src={NoInvitationIcon}
+                alt="no-invitation"
+                fill
+                className="object-contain"
+              />
+            </div>
             <p className="text-gray-400 tablet:text-2lg-regular text-xs-regular">
               아직 초대받은 대시보드가 없어요
             </p>

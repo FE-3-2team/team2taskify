@@ -1,4 +1,6 @@
 import { ChangeEvent } from "react";
+import Image from "next/image";
+import MagnifierIcon from "@/assets/icons/Magnifier.icon.svg";
 
 interface SearchInvDashProps {
   value: string;
@@ -12,13 +14,20 @@ const SearchInvDash: React.FC<SearchInvDashProps> = ({ value, onChange }) => {
 
   return (
     <div className="w-full h-[36px] flex items-center justify-left bg-white border border-gray-300 rounded-[6px] px-[12px] py-[5px] tablet:px-[16px] tablet:py-[6px]">
-      <div className="bg-[url(@/assets/icons/Magnifier.icon.svg)] w-[22px] h-[22px] tablet:w-[24px] tablet:h-[24px] bg-center bg-contain bg-no-repeat" />
+      <div className="bg-[w-[22px] h-[22px] tablet:w-[24px] tablet:h-[24px] hidden tablet:block relative mr-[10px]">
+        <Image
+          src={MagnifierIcon}
+          alt="Search"
+          fill
+          className="object-contain"
+        />
+      </div>
       <input
         type="text"
         placeholder="검색"
         value={value}
         onChange={handleChange}
-        className="w-full h-full ml-[10px] text-md-regular text-black"
+        className="w-full h-full text-black text-md-regular"
       />
     </div>
   );

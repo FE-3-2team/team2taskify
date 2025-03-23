@@ -1,5 +1,8 @@
 import { useState, useRef, useCallback } from "react";
 import TodoCard from "@/components/common/TodoCard";
+import GearIcon from "@/assets/icons/Edit.icon.svg";
+import AddIcon from "@/assets/icons/Plus.icon.svg";
+import Image from "next/image";
 
 interface ColumnProps {
   title: string;
@@ -47,9 +50,11 @@ const Column: React.FC<ColumnProps> = ({ title, cards, onAddCard }) => {
         </div>
 
         <button
-          className="bg-[url(@/assets/icons/Edit.icon.svg)] tablet:w-[24px] tablet:h-[24px] w-[22px] h-[22px] bg-no-repeat bg-center"
+          className="tablet:w-[24px] tablet:h-[24px] w-[22px] h-[22px] relative"
           onClick={() => {}}
-        />
+        >
+          <Image src={GearIcon} alt="Setting" fill className="object-contain" />
+        </button>
       </div>
 
       {/*임시기능: 새 할 일 추가*/}
@@ -80,9 +85,16 @@ const Column: React.FC<ColumnProps> = ({ title, cards, onAddCard }) => {
       ) : (
         <button
           onClick={() => setIsAdding(true)}
-          className=" bg-white-FFFFFF border border-gray-D9D9D9 desktop:w-[314px] tablet:w-[544px] w-[284px] h-[40px] rounded-[6px] flex items-center justify-center mb-[16px]"
+          className=" bg-white border border-gray-D9D9D9 desktop:w-[314px] tablet:w-[544px] w-[284px] h-[40px] rounded-[6px] flex items-center justify-center mb-[16px]"
         >
-          <div className="bg-[url(@/assets/icons/Plus.icon.svg)] bg-violet-F1EFFD w-[22px] h-[22px] rounded-[4px] object-contain bg-center bg-no-repeat" />
+          <div className="relative w-[22px] h-[22px] rounded-[4px] object-contain bg-violet-100">
+            <Image
+              src={AddIcon}
+              alt="Add new todo"
+              fill
+              className="object-contain"
+            />
+          </div>
         </button>
       )}
 
