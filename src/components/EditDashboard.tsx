@@ -1,38 +1,44 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import ColorChip from "../common/Chip/Color.chip";
+import ColorChip from "./common/Chip/Color.chip";
 import { editDashboard } from "@/api/dashboard";
 import { BaseInput } from "@/components/common/Input";
-import { Button } from "../common/Button";
+import { Button } from "./common/Button";
 
 interface Props {
-  dashboardId: string;
   title: string;
   color: string;
+  dashboardId: string | undefined;
 }
 export default function EditDashboard({ title, color, dashboardId }: Props) {
+  const [currentTitle, setCurrentTitle] = useState("");
   const [currentValue, setCurrentValue] = useState("");
   const [currentColor, setCurrentColor] = useState(color);
-  const [isClient, setIsClient] = useState(false);
-  console.log(title);
   const [dashboardData, setDashboardData] = useState({
-    dashboardId: dashboardId,
+    dashboardId: "",
     title: "",
     color: "",
   });
+  useEffect(() => {
+    if (dashboardId && title) {
+      setDashboardData((prev) => ({
+        ...prev,
+        dashboardId: dashboardId,
+      }));
+      setCurrentTitle(title);
+    }
+  }, [dashboardId, title]);
 
-  console.log(dashboardId);
-  console.log(dashboardData);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentValue(e.target.value);
     setDashboardData((prev) => ({ ...prev, title: e.target.value }));
   };
-
   const handleClick = (value: string) => {
     setDashboardData((prev) => ({ ...prev, color: value }));
   };
 
   const handleSubmit = async (dashboardData: Props) => {
     const { newTitle, newColor } = await editDashboard(dashboardData);
+    setCurrentTitle(newTitle);
     setCurrentColor(newColor);
   };
 
@@ -40,7 +46,7 @@ export default function EditDashboard({ title, color, dashboardId }: Props) {
     <div className="w-full px-4 py-5 bg-white rounded-lg h-fit tablet:py-8 tablet:px-8">
       <div className="flex flex-col gap-6">
         <p className="text-xl-bold tablet:text-2xl-bold text-black-200">
-          {title}
+          {currentTitle}
         </p>
         <div className="flex flex-col gap-4 ">
           <div className="flex flex-col gap-2">

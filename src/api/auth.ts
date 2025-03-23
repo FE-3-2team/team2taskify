@@ -1,32 +1,55 @@
-const teamId = process.env.NEXT_PUBLIC_TEAM_ID || "13-2";
-const baseUrl = `https://sp-taskify-api.vercel.app/${teamId}`;
+import { instance } from "./instance";
+import useAuthStore from "@/utils/Zustand/zustand";
+import { removeItem } from "@/utils/localstorage";
+//
 
-export const loginApi = async (email: string, password: string) => {
-  const response = await fetch(`${baseUrl}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "로그인 실패");
+export async function loginApi(email: string, password: string) {
+  try {
+    const res = await instance.post("/auth/login", {
+      email,
+      password,
+    });
+
+    if (res.status == 201) {
+      useAuthStore.setState({
+        isLoggedIn: true,
+        userId: res.data.user.id,
+        userNickname: res.data.user.nickname,
+        profileImageUrl: res.data.user.profileImageUrl,
+        dashboardId: null,
+        dashboardTitle: null,
+      });
+      return res.data;
+    }
+  } catch (error) {
+    throw new Error("로그인 실패");
   }
-  return await response.json();
-};
+}
 
-export const signupApi = async (
+export async function signupApi(
   email: string,
   nickname: string,
   password: string
-) => {
-  const response = await fetch(`${baseUrl}/users`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, nickname, password }),
-  });
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "회원가입 실패");
+) {
+  try {
+    const res = await instance.post("/users", {
+      email,
+      nickname,
+      password,
+    });
+
+    if (res.status == 201) {
+      useAuthStore.setState({
+        isLoggedIn: false,
+        userId: null,
+        userNickname: "",
+        profileImageUrl: null,
+        dashboardId: null,
+        dashboardTitle: "",
+      });
+      removeItem("accessToken");
+    }
+  } catch (error) {
+    throw new Error("로그인 실패");
   }
-  return await response.json();
-};
+}

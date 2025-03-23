@@ -1,43 +1,55 @@
 import { create, createStore } from "zustand";
 import { persist } from "zustand/middleware";
 
-type AuthStore = {
+type initialType = {
   isLoggedIn: boolean;
+  userNickname: string;
+  userId: number | null;
+  profileImageUrl: string | null;
+  dashboardId: string | null;
+  dashboardTitle: string | null;
+};
+
+const initialValue = {
+  isLoggedIn: false,
+  userNickname: "",
+  userId: null,
+  profileImageUrl: null,
+  dashboardId: null,
+  dashboardTitle: null,
+};
+interface AuthStore extends initialType {
   login: () => void;
   logout: () => void;
-  userId: number | null;
   setUserId: (userId: number) => void;
-  profileImageUrl: string | null;
   setProfileImageUrl: (profileImageUrl: string | null) => void;
-  userNickname: string;
   setUserNickname: (userNickname: string) => void;
-};
+  setDashboardId: (dashboardId: string) => void;
+  setDashboardTitle: (dashboardTitles: string) => void;
+}
 
 const useAuthStore = create(
   persist<AuthStore>(
     (set) => ({
+      ...initialValue,
       isLoggedIn: false,
       login: () => set({ isLoggedIn: true }),
-      //로그인은 isLoggedIn을 true로 만든다
-      logout: () =>
-        set({
-          isLoggedIn: false,
-          userId: null,
-          profileImageUrl: null,
-          userNickname: "",
-        }),
-      //logout은 다 초기화 시킨다.
-      userId: null,
+      logout: () => {
+        set(initialValue);
+      },
       setUserId: (userId: number) => set({ userId: userId }),
-      userNickname: "",
       setUserNickname: (userNickname: string) =>
         set({ userNickname: userNickname }),
-      profileImageUrl: null,
       setProfileImageUrl: (profileImageUrl: string | null) =>
         set({ profileImageUrl: profileImageUrl }),
+
+      setDashboardId: (dashboardId: string) =>
+        set({ dashboardId: dashboardId }),
+      setDashboardTitle: (dashboardTitle: string) =>
+        set({ dashboardTitle: dashboardTitle }),
     }),
 
-    { name: "userInfoStorage" }
+    { name: "userStorage" }
   )
 );
 export default useAuthStore;

@@ -4,15 +4,19 @@ import { cancelInvite } from "@/api/dashboard";
 import { Button, PaginationButton } from "./common/Button";
 import InviteIcon from "@/assets/icons/white.Invite.icons.svg";
 
+//취소한뒤에 바로 사라지는지 테스트
+
 interface Props {
   invitations: Invitation[];
 }
 
 export default function InvitationHistory({ invitations }: Props) {
+  const [currentList, setCureentList] = useState(invitations);
+  //
   const totalPage =
-    Math.ceil(invitations?.length / 4) < 1
+    Math.ceil(invitations.length / 4) < 1
       ? 1
-      : Math.ceil(invitations?.length / 4);
+      : Math.ceil(invitations.length / 4);
   const [page, setPage] = useState(1);
 
   const PrevPage = () => {
@@ -28,8 +32,9 @@ export default function InvitationHistory({ invitations }: Props) {
     //초대하기 모달 팝업 됨.
   };
 
-  const CancelInvite = async (dashboardId: number, invitationId: number) => {
+  const CancelInvite = async (dashboardId: string, invitationId: number) => {
     await cancelInvite(dashboardId, invitationId);
+    setCureentList(currentList.filter((item) => item.id !== invitationId));
   };
   return (
     <div
@@ -73,11 +78,14 @@ export default function InvitationHistory({ invitations }: Props) {
         </div>
       </div>
       <div>
-        {invitations?.length > 1 &&
-          invitations?.map((invitation, i) => {
+        {currentList.length > 1 &&
+          currentList.map((invitation, i) => {
             return (
               <>
-                <div className="flex justify-between px-5 py-4 tablet:px-7">
+                <div
+                  key={invitation.id}
+                  className="flex justify-between px-5 py-4 tablet:px-7"
+                >
                   <p className="text-black-200 text-lg-regular ">
                     {invitation.invitee.email}
                   </p>
@@ -85,8 +93,8 @@ export default function InvitationHistory({ invitations }: Props) {
                     <Button
                       onClick={() =>
                         CancelInvite(
-                          invitation.dashboard.id,
-                          invitation.invitee.id
+                          String(invitation.dashboard.id),
+                          invitation.id
                         )
                       }
                       size="xsmall"

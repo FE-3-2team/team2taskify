@@ -2,17 +2,15 @@
 import React from "react";
 import AuthContainer from "../components/common/Login/AuthContainer";
 import LoginForm from "../components/common/Login/LoginForm";
-import useLogin from "../hooks/useLogin";
 import MainLogo from "../assets/icons/MainLogo.svg";
+import { loginApi } from "@/api/auth";
 
 export default function LoginPage() {
-  const { login } = useLogin();
-
   return (
     <AuthContainer>
       <LoginForm
         logoSrc={MainLogo}
-        onLogin={login}
+        onLogin={loginApi}
         logoToFormSpacingClass="mt-[36px] md:mt-[30px]"
         formToButtonSpacingClass="mt-[10px] md:mt-[24px]"
       />
