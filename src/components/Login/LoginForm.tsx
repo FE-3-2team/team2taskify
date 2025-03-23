@@ -92,10 +92,12 @@ export default function LoginForm({
   );
 
   const footerSection = (
-    <p className="text-center text-gray-600">
+    <p className="text-center text-lg-regular">
       회원이 아니신가요?{" "}
       <Link href="/signup">
-        <span className="underline cursor-pointer">회원가입하기</span>
+        <span className="underline cursor-pointer text-lg-regular">
+          회원가입하기
+        </span>
       </Link>
     </p>
   );

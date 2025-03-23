@@ -31,8 +31,6 @@ export default function SignupForm({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [terms, setTerms] = useState(false);
 
-  // 각 인풋의 유효성 검증은 UnifiedInput 내부에서 처리되므로
-  // isFormValid 판단을 위해 간단하게 에러 상태를 가져오게됨
   const nicknameError = useValidation(nickname, "title");
   const emailError = useValidation(email, "email");
   const passwordError = useValidation(password, "password");

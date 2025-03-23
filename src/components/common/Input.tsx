@@ -1,4 +1,10 @@
-import React, { useState, ChangeEvent, FC, forwardRef } from "react";
+import React, {
+  useState,
+  ChangeEvent,
+  FC,
+  forwardRef,
+  FocusEvent,
+} from "react";
 import DatePicker from "react-datepicker";
 import Image from "next/image";
 import Button from "./Button/Button";
@@ -123,7 +129,6 @@ export interface UnifiedInputProps {
   className?: string;
   debounceDelay?: number;
   onBlur?: () => void;
-
   compareWith?: string;
 }
 
@@ -151,13 +156,16 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
   compareWith,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const error = useValidation(
+  // 입력 필드가 포커스를 잃은 후에만 오류 메시지를 보여주기 위한 상태
+  const [isTouched, setIsTouched] = useState(false);
+  const validationError = useValidation(
     value,
     variant,
     variant === "confirmPassword" ? compareWith : undefined,
     validate,
     debounceDelay
   );
+  const error = isTouched ? validationError : "";
   const inputId = `${variant}-input`;
   const errorId = `${inputId}-error`;
   const finalMaxLength = maxLength || defaultMaxLengths[variant];
@@ -169,6 +177,11 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
   };
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
+
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+    setIsTouched(true);
+    if (onBlur) onBlur();
+  };
 
   if (variant === "date") {
     const selectedDate = value ? new Date(value) : null;
@@ -260,7 +273,7 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
                   : "border-gray-300"
             }`}
             aria-describedby={error ? errorId : undefined}
-            onBlur={onBlur}
+            onBlur={handleBlur}
           />
           {(variant === "password" || variant === "confirmPassword") && (
             <PasswordToggleButton
