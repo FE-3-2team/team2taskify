@@ -35,8 +35,10 @@ export default function LoginForm({
 
   const handleLogin = async () => {
     if (!isFormValid) return;
-    await onLogin(email, password);
-    router.push("/mydashboard");
+    const result = await onLogin(email, password);
+    if (result) {
+      router.push("/mydashboard");
+    }
   };
 
   const logoSection = (
