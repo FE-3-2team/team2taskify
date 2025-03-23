@@ -30,10 +30,6 @@ export function Modal({
 }: Props) {
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
 
-  const handleButtonClick = () => {
-    setIsOpen(true);
-  };
-
   return (
     <>
       {isOpen && (
@@ -66,7 +62,7 @@ export function Modal({
                   </Button>
                 ) : (
                   <Button variant="outline" onClick={() => setIsOpen(false)}>
-                    {ModalCloseButton}
+                    취소
                   </Button>
                 )}
               </div>
@@ -88,7 +84,7 @@ export function Modal({
         </div>
       )}
 
-      <Button size={size} variant={variant} onClick={handleButtonClick}>
+      <Button size={size} variant={variant} onClick={() => setIsOpen(true)}>
         {ModalOpenButton}
       </Button>
     </>
