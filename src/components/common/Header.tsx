@@ -13,22 +13,20 @@ import { useStore } from "@/utils/Zustand/useStore";
  * 초대하기 버튼 클릭시 모달 팝업 함수
  */
 interface Props {
-  title?: string;
   members?: Member[];
   createdByMe?: boolean;
 }
 
-export default function Header({ members, title, createdByMe }: Props) {
+export default function Header({ members, createdByMe }: Props) {
   const store = useStore(useAuthStore, (state) => state);
   const router = useRouter();
   const display = router.pathname === "/mydashbord" ? "none" : "block";
-  let dashboardTitle = title ? title : "내 대시보드";
+  let dashboardTitle = store ? store.dashboardTitle : "내 대시보드";
   dashboardTitle = router.pathname === "/mypage" ? "계정관리" : dashboardTitle;
 
-  if (!store?.userNickname) return;
   return (
     <div className="flex flex-row justify-between w-full h-[70px] py-[15px] px-[20px] laptop:pl-10 laptop:pr-20  border-b-[1px]  items-center border-gray-300 ">
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row items-center gap-2">
         <p className="hidden tablet:block text-black-200 text-xl-bold ">
           {dashboardTitle}
         </p>
@@ -38,7 +36,6 @@ export default function Header({ members, title, createdByMe }: Props) {
           </div>
         )}
       </div>
-
       <div className="flex flex-row gap-4 tablet:gap-8 laptop:gap-10">
         <div className="flex flex-row gap-4 ">
           <Link href="/mypage">
@@ -79,11 +76,13 @@ export default function Header({ members, title, createdByMe }: Props) {
             {members && <Badges memberList={members} />}
           </div>
           <div className="h-[38px] w-[1px] bg-gray-300" />
-          <Profile
-            nickname={store.userNickname}
-            profileImageUrl={store.profileImageUrl}
-            isProfile
-          />
+          {store && (
+            <Profile
+              nickname={store.userNickname}
+              profileImageUrl={store.profileImageUrl}
+              type="profile"
+            />
+          )}
         </div>
       </div>
     </div>

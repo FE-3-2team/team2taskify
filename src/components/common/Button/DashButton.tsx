@@ -48,8 +48,16 @@ export default function DashButton({
           {/* 왼쪽 컬러칩 & 제목 & 왕관 */}
           <div className="flex items-center gap-[8px]">
             {color && <ColorChip color={color} />} {/* 컬러칩 컴포넌트 */}
-            <span className="text-md-semibold tablet:text-lg-semibold">{title}</span>
-            {isOwner && <Image src={CrownIcon} className="w-[15px] tablet:w-[20px]" alt="왕관" />}
+            <span className="text-md-semibold tablet:text-lg-semibold">
+              {title}
+            </span>
+            {isOwner && (
+              <Image
+                src={CrownIcon}
+                className="w-[15px] tablet:w-[20px]"
+                alt="왕관"
+              />
+            )}
           </div>
 
           {/* 화살표 아이콘 (필요할 때만 표시) */}

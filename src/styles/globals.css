@@ -8,6 +8,7 @@ body {
   margin: 0px;
   padding: 0px;
   height: 100vh;
+  background-color: #fafafa;
   font-family:
     "Pretendard Variable",
     Pretendard,
@@ -65,14 +66,19 @@ button:hover {
   --color-violet-100: #f1effd;
   --color-red: #d6173a;
   --color-green: #7ac555;
+  --color-green-100: #e7f7db;
+  --color-green-200: #86d549;
   --color-purple: #760dde;
   --color-orange: #ffa500;
   --color-blue: #76a6ea;
-  --color-blue200: #dbe6f7;
+  --color-blue-200: #dbe6f7;
+  --color-blue-300: #4981d5;
   --color-pink: #e876ea;
   --color-pink200: #d25b68;
   --color-pink300: #f4d7da;
   --color-pink400: #f7dbf0;
+  --color-pink500: #d549b6;
+
   --color-brown: #f9eee3;
 
   /* 폰트가이드 */
