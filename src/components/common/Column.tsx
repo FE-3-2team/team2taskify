@@ -37,7 +37,7 @@ const Column: React.FC<ColumnProps> = ({ title, cards, onAddCard }) => {
   };
 
   return (
-    <div className="w-[308px] h-[100vh] bg-gray-FAFAFA rounded-lg px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center">
+    <div className="w-[308px] h-full bg-gray-100 px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center ">
       <div className="flex items-center justify-between mb-[24px] desktop:w-[314px] tablet:w-[544px] w-[284px] h-[22px]">
         <div className="flex items-center justify-between w-fit h-[20px]">
           <div className="w-[8px] h-[8px] rounded-full bg-violet-5534DA mr-[8px]" />
@@ -98,7 +98,7 @@ const Column: React.FC<ColumnProps> = ({ title, cards, onAddCard }) => {
         </button>
       )}
 
-      <div className="flex flex-col gap-[16px] overflow-y-auto max-h-[100vh]">
+      <div className="flex flex-col gap-[16px]">
         {cards.map((card, index) => (
           <div
             key={card.id}
