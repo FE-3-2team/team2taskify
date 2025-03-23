@@ -35,7 +35,7 @@ const TodoCard: React.FC<TodoCardProps> = ({ todoData }) => {
             >
               <Tags tags={todoData.tags} />
               <div className="flex flex-row gap-[4px]">
-                <div className="w-[18px] h-[18px] w-[14px] h-[14px] relative">
+                <div className="tablet:w-[18px] tablet:h-[18px] w-[14px] h-[14px] relative">
                   <Image
                     src={CalendarIcon}
                     alt="calendar"
