@@ -15,7 +15,7 @@ export default function InputModal({
   title,
   placeholder,
   changeValue,
-  dashboardId = "13661",
+  dashboardId,
   isColumn,
 }: InputProps) {
   const [currentValue, setCurrentValue] = useState("");
@@ -45,7 +45,7 @@ export default function InputModal({
   return (
     <div className="flex flex-col w-full gap-4 tablet:gap-6">
       <p className="text-xl-bold tablet:text-2xl-bold">{title}</p>
-      <form className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         <label>{label}</label>
         <div>
           <BaseInput
@@ -59,7 +59,7 @@ export default function InputModal({
             <p className="text-md-regular text-red">중복된 컬럼 이름입니다.</p>
           )}
         </div>
-      </form>
+      </div>
     </div>
   );
 }
