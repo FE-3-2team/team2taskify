@@ -3,22 +3,20 @@ import ColorChip from "../common/Chip/Color.chip";
 import { BaseInput } from "@/components/common/Input";
 
 interface Props {
-  onChange: (value: { title: string; color: string }) => {};
+  onChange: (titleValue: string, colorValue: string) => void;
 }
 export default function NewDashboard({ onChange }: Props) {
-  const [DashboardData, setDashboardData] = useState({
-    title: "",
-    color: "",
-  });
+  const [titleValue, setTitleValue] = useState("");
+  const [colorValue, setColorValue] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setDashboardData((prev) => ({ ...prev, title: e.target.value }));
-    onChange(DashboardData);
+    setTitleValue(e.currentTarget.value);
+    onChange(titleValue, colorValue);
   };
 
   const handleClick = (value: string) => {
-    setDashboardData((prev) => ({ ...prev, color: value }));
-    onChange(DashboardData);
+    setColorValue(value);
+    onChange(titleValue, colorValue);
   };
 
   return (
@@ -34,8 +32,8 @@ export default function NewDashboard({ onChange }: Props) {
               type="text"
               maxLength={12}
               placeholder="대시보드 이름을 입력하세요"
-              value={DashboardData.title}
-              onChange={() => handleChange}
+              value={titleValue}
+              onChange={handleChange}
               className="border-gray-300"
             />
           </div>
