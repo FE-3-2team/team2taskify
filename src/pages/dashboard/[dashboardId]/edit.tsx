@@ -15,7 +15,6 @@ export default function EditPage() {
   const router = useRouter();
   const { dashboardId } = router.query;
   const [members, setMembers] = useState([]);
-  const [invitations, setInvitations] = useState([]);
   const [dashboardInfo, setDashboardInfo] = useState({
     title: "",
     color: "",
@@ -39,7 +38,6 @@ export default function EditPage() {
       createdByme: dashboard.createdByMe,
     }));
     setMembers(members);
-    setInvitations(invitations);
   };
   const DashBoardDelete = async () => {
     await deleteDashboard(dashboardId as string);
