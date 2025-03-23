@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { getInvitations, respondToInvitation } from "@/api/invitations";
 import { InvitationType } from "@/api/invitations";
-import ListInvDash from "@/components/common/InvitedDashboards/List.InvDash";
-import SearchInvDash from "@/components/common/InvitedDashboards/Search.InvDash";
+import ListInvDash from "@/components/InvitedDashboards/List.InvDash";
+import SearchInvDash from "@/components/InvitedDashboards/Search.InvDash";
 import Image from "next/image";
 import NoInvitationIcon from "@/assets/icons/NoInvitation.icon.svg";
 
