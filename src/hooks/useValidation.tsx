@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDebounce } from "./useDebounce";
 
-// InputVariant에 confirmPassword 추가
 export type InputVariant =
   | "email"
   | "password"
@@ -10,13 +9,12 @@ export type InputVariant =
   | "comment"
   | "date";
 
-// compareWith 매개변수를 추가하여 confirmPassword 검증 로직 포함
+// 기본 유효성 검사 함수
 export const defaultValidate = (
   value: string,
   variant: InputVariant,
   compareWith?: string
 ): string => {
-  // 입력값이 비어있으면 오류 메시지를 반환하지 않음
   if (!value) return "";
 
   if (variant === "email") {
@@ -53,7 +51,6 @@ export const defaultValidate = (
 export const useValidation = (
   value: string,
   variant: InputVariant,
-  // confirmPassword 검증을 위한 추가 인자
   compareWith?: string,
   validate: (
     value: string,
