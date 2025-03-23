@@ -19,7 +19,7 @@ export async function createDashboard(title: string, color: string) {
   }
 }
 //대시보드 목록 조회
-export async function getDashboards(page: number, size = 6) {
+export async function getDashboards(page: number, size = 5) {
   try {
     const res = await instance.get(`/dashboards`, {
       params: { navigationMethod: "pagination", page: page, size: size },

@@ -9,6 +9,8 @@ import {
   PlusIconButton,
 } from "@/components/common/Button";
 import InvitedDashboards from "@/components/common/InvitedDashboards/InvitedDashboards";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export interface Data {
   title: string;
@@ -20,7 +22,7 @@ export default function MyDashboard() {
   const [boardList, setBoardList] = useState<Dashboards[]>([]);
   const [newColor, setNewColor] = useState("");
   const [newTitle, setNewTitle] = useState("");
-
+  const router = useRouter();
   useEffect(() => {
     handleLoad();
   }, [currentPage]);
@@ -31,7 +33,8 @@ export default function MyDashboard() {
     setTotalPage(Math.ceil(totalCount / 5));
   };
   const plusDashboard = async () => {
-    await createDashboard(newTitle, newColor);
+    const createdDashboard = await createDashboard(newTitle, newColor);
+    router.push(`/dashboard/${createdDashboard.id}`);
   };
   const handleChange = (title: string, color: string) => {
     setNewColor(color);
@@ -70,7 +73,13 @@ export default function MyDashboard() {
             </div>
             {boardList.map((board) => {
               return (
-                <DashButton hasArrow title={board.title} color={board.color} />
+                <Link href={`/dashboard/${board.id}`}>
+                  <DashButton
+                    hasArrow
+                    title={board.title}
+                    color={board.color}
+                  />
+                </Link>
               );
             })}
           </div>
