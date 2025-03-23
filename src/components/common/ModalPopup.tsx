@@ -7,7 +7,6 @@ import Image from "next/image";
 interface Props {
   children?: React.ReactNode;
   ModalOpenButton: React.ReactNode | string;
-  ModalCloseButton?: string;
   leftHandlerText?: string;
   rightHandlerText?: string;
   rightOnClick?: () => void;
@@ -20,7 +19,6 @@ interface Props {
 export function Modal({
   children,
   ModalOpenButton,
-  ModalCloseButton,
   rightHandlerText,
   leftHandlerText,
   rightOnClick,
@@ -72,7 +70,7 @@ export function Modal({
                     variant="primary"
                     onClick={() => {
                       setIsOpen(false);
-                      rightOnClick;
+                      rightOnClick();
                     }}
                   >
                     {rightHandlerText}
