@@ -1,16 +1,14 @@
 import { PlusIconButton, PaginationButton, Button, DashButton } from "@/components/common/Button";
-import ColorChip from "@/components/common/Button/ColorChipSmall";
-import React, { useState } from "react";
-import Image from "next/image";
-import CrownIcon from "@/assets/icons/Crown.icon.svg"; // 왕관 아이콘
-import PlusIcon from "@/assets/icons/Plus.icon.svg";
+import SideMenu from "@/components/common/SideMenu";
+import React, { useEffect, useState } from "react";
+
 
 export default function Home() {
-  const [page, setPage] = useState(1);
   
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-screen gap-4 mt-10 mb-10 text-center">
+      <SideMenu />
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4 pt-10 mb-10 text-center">
         <strong className="text-2xl-semibold">대시보드 버튼</strong>
         <div className="flex flex-col items-center justify-center w-full gap-2 mb-10 max-w-[600px]">
           <DashButton size="small" className="flex items-center gap-[12px]" onClick={() => console.log("Clicked!")}>새로운 대시보드 <PlusIconButton /></DashButton>
@@ -18,24 +16,12 @@ export default function Home() {
           <DashButton size="large" className="flex items-center gap-[12px]" onClick={() => console.log("Clicked!")}>새로운 컬럼 추가하기 <PlusIconButton /></DashButton>
           <DashButton size="small" className="flex items-center gap-[12px]" onClick={() => console.log("Clicked!")}>새로운 대시보드 <PlusIconButton /></DashButton>
           <DashButton className="!py-[6px] !tablet:py-[6px]" onClick={() => console.log("Clicked!")}><PlusIconButton /></DashButton>
-          <DashButton size="small" title="비브리지" color="#7AC555" isOwner={true} hasArrow={true} onClick={() => console.log("Clicked!")}/>
-          <DashButton size="small" title="코드잇" color="#760DDE" isOwner={false} hasArrow={true} onClick={() => console.log("Clicked!")}/>
-          <DashButton size="small" title="3분기 계획" color="#FFA500" isOwner={false} hasArrow={true} onClick={() => console.log("Clicked!")}/>
-          <DashButton size="small" title="회의록" color="#76A6EA" isOwner={true} hasArrow={true} onClick={() => console.log("Clicked!")}/>
-          <DashButton size="small" title="중요 문서함" color="#E876EA" isOwner={false} hasArrow={true} onClick={() => console.log("Clicked!")}/>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#7AC555" /> <span>비브리지</span><Image src={CrownIcon} className="w-[15px] tablet:w-[20px]" alt="왕관" /></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#760DDE" /> <span>코드잇</span></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#FFA500" /> <span>3분기 계획</span></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#76A6EA" /> <span>회의록</span></div>
-          <div className="flex items-center gap-[8px]"><ColorChip color="#E876EA" /> <span>중요 문서함</span></div>
         </div>
 
         <strong className="text-2xl-semibold">기본 버튼</strong>
         <div className="flex flex-col items-center justify-center w-full gap-2 mb-10 max-w-[500px]">
-          {/* 로그인 버튼 */}
           <Button size="xlarge" variant="primary">로그인</Button>
           <Button size="xlarge" variant="disabled">로그인</Button>
-          {/* 수락 & 거절 버튼 */}
           <div className="flex gap-[12px] w-full max-w-[160px]">
             <Button size="xsmall" variant="primary">수락</Button>
             <Button size="xsmall" variant="secondary">거절</Button>
@@ -44,7 +30,6 @@ export default function Home() {
             <Button size="xsmall" variant="primary">수락</Button>
           </div>
 
-          {/* 🔘 삭제 & 입력 버튼 (작은 크기) */}
           <div className="flex items-center justify-center gap-[12px] w-full max-w-[160px]">
             <div className="flex w-full max-w-[160px]">
               <Button size="xsmall" variant="secondary">삭제</Button>
@@ -54,18 +39,10 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 📌 모달 버튼 */}
           <Button size="small" variant="primary">small 확인</Button>
           <Button size="small" variant="outline">small 취소</Button>
           <Button size="medium" variant="primary">large 확인</Button>
           <Button size="medium" variant="outline">large 취소</Button>
-        </div>
-
-        <strong className="text-2xl-semibold">페이지네이션</strong>
-        <div className="flex flex-col gap-[10px] mb-10 w-full items-center justify-center">
-          <PaginationButton hasPrev={true} hasNext={true} size="small" onPrev={() => {}} onNext={() => {}} />
-          <PaginationButton hasPrev={false} hasNext={false} size="large" onPrev={() => {}} onNext={() => {}} />
-          <PaginationButton hasPrev={page > 1} hasNext={page < 5} size="large" onPrev={() => setPage((prev) => prev - 1)}onNext={() => setPage((prev) => prev + 1)}/>
         </div>
 
         <strong className="text-2xl-semibold">폰트사이즈</strong>

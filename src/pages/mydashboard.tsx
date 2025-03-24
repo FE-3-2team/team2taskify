@@ -8,7 +8,7 @@ import {
   PaginationButton,
   PlusIconButton,
 } from "@/components/common/Button";
-import InvitedDashboards from "@/components/common/InvitedDashboards/InvitedDashboards";
+import InvitedDashboards from "@/components/InvitedDashboards/InvitedDashboards";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
