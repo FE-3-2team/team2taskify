@@ -19,7 +19,7 @@ interface SignupFormProps {
 export default function SignupForm({
   logoSrc,
   logoAlt = "Logo",
-  logoText = "회원가입",
+  logoText = "첫 방문을 환영합니다!",
   onSignup,
   logoToFormSpacingClass,
   formToButtonSpacingClass,
