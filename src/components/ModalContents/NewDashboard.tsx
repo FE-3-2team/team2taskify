@@ -1,30 +1,22 @@
 import { ChangeEvent, useState } from "react";
 import ColorChip from "../common/Chip/Color.chip";
-import { useRouter } from "next/router";
-import { createDashboard } from "@/api/dashboard";
 import { BaseInput } from "@/components/common/Input";
 
-export default function NewDashboard() {
-  const router = useRouter();
-  const [DashboardData, setDashboardData] = useState({
-    title: "",
-    color: "",
-  });
+interface Props {
+  onChange: (titleValue: string, colorValue: string) => void;
+}
+export default function NewDashboard({ onChange }: Props) {
+  const [titleValue, setTitleValue] = useState("");
+  const [colorValue, setColorValue] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setDashboardData((prev) => ({ ...prev, title: e.target.value }));
+    setTitleValue(e.currentTarget.value);
+    onChange(titleValue, colorValue);
   };
 
   const handleClick = (value: string) => {
-    setDashboardData((prev) => ({ ...prev, color: value }));
-  };
-
-  const handleSubmit = async () => {
-    const { id, title, color, createdAt, updatedAt, userId, createdByMe } =
-      await createDashboard(DashboardData);
-    router.push(`/dashboard/${id}`);
-    // 대시보드 생성시 위의 {} 안의 데이터 리스폰스 옴
-    //대시보드 '생성' 버튼을 클릭하면 대시보드가 생성되고 /dashboard/{dashboardid}로 이동하게 하세요.
+    setColorValue(value);
+    onChange(titleValue, colorValue);
   };
 
   return (
@@ -40,8 +32,8 @@ export default function NewDashboard() {
               type="text"
               maxLength={12}
               placeholder="대시보드 이름을 입력하세요"
-              value={DashboardData.title}
-              onChange={() => handleChange}
+              value={titleValue}
+              onChange={handleChange}
               className="border-gray-300"
             />
           </div>

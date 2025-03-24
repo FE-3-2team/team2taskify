@@ -1,21 +1,29 @@
-import { useState } from "react";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import Profile from "./common/Profile";
-import { deleteMember } from "@/api/member";
+import { deleteMember, getMember } from "@/api/member";
 import { Button, PaginationButton } from "./common/Button";
 //
-interface Props {
-  members: Member[];
-}
-/**ToDo
- * 삭제 버튼 공통컴포넌트로 바꾸기
- * 멤버 삭제 버튼클릭시 함수
- */
 
-export default function EditMember({ members }: Props) {
-  const totalPage =
-    Math.ceil(members?.length / 4) < 1 ? 1 : Math.ceil(members?.length / 4);
+interface Props {
+  dashboardId: string;
+}
+export default function EditMember({ dashboardId }: Props) {
+  const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentMember, setCurrentMember] = useState<Member[]>([]);
+
+  useEffect(() => {
+    handleLoadMembers();
+  }, [currentPage, dashboardId]);
+  //
+
+  const handleLoadMembers = async () => {
+    if (!dashboardId) return;
+    const { members, totalCount } = await getMember(currentPage, dashboardId);
+    setTotalPage(Math.ceil(totalCount / 4));
+    setCurrentMember(members);
+  };
+
   const handleClickPrev = () => {
     if (currentPage === 1) return;
     setCurrentPage((prev) => prev - 1);
@@ -26,6 +34,11 @@ export default function EditMember({ members }: Props) {
   };
   const handleClick = async (id: number) => {
     await deleteMember(id);
+    if (currentMember.length === 1) {
+      if (currentPage === 1) return;
+      setCurrentPage((prev) => prev - 1);
+    }
+    setCurrentMember((prev) => prev.filter((member) => member.id !== id));
   };
   //
   return (
@@ -43,7 +56,7 @@ export default function EditMember({ members }: Props) {
                 onNext={handleClickNext}
                 onPrev={handleClickPrev}
                 hasNext={totalPage > currentPage}
-                hasPrev={totalPage < currentPage}
+                hasPrev={1 < currentPage}
               />
             </div>
           </div>
@@ -51,9 +64,9 @@ export default function EditMember({ members }: Props) {
         <p className="px-5 text-gray-400 tablet:px-7 md-regular">이름</p>
       </div>
       <div>
-        {members?.map((member, i) => {
+        {currentMember.map((member, i) => {
           return (
-            <div>
+            <div key={member.id}>
               <div className="flex items-center justify-between px-5 tablet:px-7 h-[34px] tablet:h-[38px]">
                 <Profile
                   nickname={member.nickname}
@@ -62,7 +75,7 @@ export default function EditMember({ members }: Props) {
                 />
                 <div className="w-[52px] h-[32px] tablet:w-[84px]">
                   <Button
-                    onClick={() => handleClick(member.userId || 0)}
+                    onClick={() => handleClick(member.id)}
                     size="xsmall"
                     variant="secondary"
                   >

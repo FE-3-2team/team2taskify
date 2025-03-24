@@ -118,14 +118,16 @@ export interface UnifiedInputProps {
   onSubmit?: () => Promise<void>;
   className?: string;
   debounceDelay?: number;
+  onBlur?: () => void;
 }
 
 const defaultMaxLengths: Record<InputVariant, number> = {
   email: 25,
   password: 15,
-  title: 12,
+  title: 11,
   comment: 300,
   date: 0,
+  confirmPassword: 0,
 };
 
 const UnifiedInput: FC<UnifiedInputProps> = ({
@@ -141,7 +143,14 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
   debounceDelay = 300,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const error = useValidation(value, variant, validate, debounceDelay);
+  const error = useValidation(
+    value,
+    variant,
+    undefined,
+    validate,
+    debounceDelay
+  );
+
   const inputId = `${variant}-input`;
   const errorId = `${inputId}-error`;
   const finalMaxLength = maxLength || defaultMaxLengths[variant];
@@ -230,7 +239,13 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
             value={value}
             onChange={handleInputChange}
             maxLength={finalMaxLength}
-            className={error ? "border-red" : "border-gray-300"}
+            className={`${
+              value && !error
+                ? "border-[#5534da]"
+                : error
+                  ? "border-red"
+                  : "border-gray-300"
+            }`}
             aria-describedby={error ? errorId : undefined}
           />
           {variant === "password" && (

@@ -7,20 +7,18 @@ import Image from "next/image";
 interface Props {
   children?: React.ReactNode;
   ModalOpenButton: React.ReactNode | string;
-  ModalCloseButton?: string;
   leftHandlerText?: string;
   rightHandlerText?: string;
   rightOnClick?: () => void;
   leftOnClick?: () => void;
   className?: string;
   size?: "xxsmall" | "xsmall" | "small" | "medium" | "large" | "xlarge"; // 크기별 스타일 적용
-  variant?: "primary" | "secondary" | "outline" | "disabled"; // 색상/디자인 적용
+  variant?: "primary" | "secondary" | "outline" | "disabled" | "create"; // 색상/디자인 적용
 }
 //
 export function Modal({
   children,
   ModalOpenButton,
-  ModalCloseButton,
   rightHandlerText,
   leftHandlerText,
   rightOnClick,
@@ -29,10 +27,6 @@ export function Modal({
   variant,
 }: Props) {
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
-
-  const handleButtonClick = () => {
-    setIsOpen(true);
-  };
 
   return (
     <>
@@ -66,7 +60,7 @@ export function Modal({
                   </Button>
                 ) : (
                   <Button variant="outline" onClick={() => setIsOpen(false)}>
-                    {ModalCloseButton}
+                    취소
                   </Button>
                 )}
               </div>
@@ -76,7 +70,7 @@ export function Modal({
                     variant="primary"
                     onClick={() => {
                       setIsOpen(false);
-                      rightOnClick;
+                      rightOnClick();
                     }}
                   >
                     {rightHandlerText}
@@ -88,7 +82,7 @@ export function Modal({
         </div>
       )}
 
-      <Button size={size} variant={variant} onClick={handleButtonClick}>
+      <Button size={size} variant={variant} onClick={() => setIsOpen(true)}>
         {ModalOpenButton}
       </Button>
     </>
