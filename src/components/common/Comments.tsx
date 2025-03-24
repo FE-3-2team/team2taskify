@@ -1,7 +1,7 @@
 import { useFormatTime } from "@/hooks/useFormatDate";
 import { Badge } from "./Badge";
 import { ChangeEvent, useEffect, useState } from "react";
-import { deleteComment } from "@/api/comment.api";
+import { deleteComment, putComment } from "@/api/comment.api";
 
 interface Props {
   comment: CardComment;
@@ -18,7 +18,10 @@ export default function Comments({ comment, onClickDelete }: Props) {
   useEffect(() => {}, []);
 
   const EditComment = async () => {};
-  const handleEdit = () => {
+  const handleEdit = async () => {
+    if (isEdit) {
+      await putComment(id, currentValue);
+    }
     setIsEdit(!isEdit);
   };
   const handleDelete = async () => {

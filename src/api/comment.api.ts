@@ -43,7 +43,17 @@ export async function getComments(
     throw new Error();
   }
 }
-
+//댓글 수정하기
+export async function putComment(commentId: number, content: string) {
+  try {
+    const res = await instance.put(`/comments/${commentId}`, {
+      content,
+    });
+    return res.data;
+  } catch {
+    throw new Error();
+  }
+}
 //댓글 삭제 하기
 export async function deleteComment(commentId: number) {
   try {
