@@ -29,6 +29,16 @@ export default function MyDashboard() {
   //
   const handleLoad = async () => {
     const { totalCount, dashboards } = await getDashboards(currentPage);
+
+    console.log(
+      "대시보드 매핑 정보 확인:",
+      dashboards.map((d) => ({
+        slugId: d.id,
+        dashboardId: d.dashboardId,
+        title: d.title,
+      }))
+    );
+
     setBoardList(dashboards);
     setTotalPage(Math.ceil(totalCount / 5));
   };
