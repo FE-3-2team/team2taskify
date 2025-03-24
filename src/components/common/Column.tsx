@@ -45,7 +45,7 @@ const Column: React.FC<ColumnProps> = ({ title, cards, onAddCard }) => {
             {title}
           </div>
           <div className="w-[20px] h-[20px] rounded-[4px] bg-gray-EEEEEE text-xs-medium text-center">
-            {cards.length}
+            {cards?.length ?? 0}
           </div>
         </div>
 
@@ -99,6 +99,7 @@ const Column: React.FC<ColumnProps> = ({ title, cards, onAddCard }) => {
       )}
 
       <div className="flex flex-col gap-[16px]">
+        {console.log("받은 cards:", cards)}
         {cards.map((card, index) => (
           <div
             key={card.id}
