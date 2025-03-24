@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import UnifiedInput from "../Input";
-import Button from "../Button/Button";
+import UnifiedInput from "../common/Input";
+import Button from "../common/Button/Button";
 import SignupFormLayout from "./AuthFormLayout";
 import { useValidation } from "@/hooks/useValidation";
 
@@ -19,7 +19,7 @@ interface SignupFormProps {
 export default function SignupForm({
   logoSrc,
   logoAlt = "Logo",
-  logoText = "회원가입",
+  logoText = "첫 방문을 환영합니다!",
   onSignup,
   logoToFormSpacingClass,
   formToButtonSpacingClass,
@@ -31,33 +31,9 @@ export default function SignupForm({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [terms, setTerms] = useState(false);
 
-  // useValidation 훅을 사용한 필드 검증
-  const nicknameError = useValidation(
-    nickname,
-    "title",
-    undefined,
-    (value, variant) =>
-      value && value.length > 10 ? "열 자 이하로 작성해주세요." : ""
-  );
-  const emailError = useValidation(
-    email,
-    "email",
-    undefined,
-    (value, variant) => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return value && !emailRegex.test(value)
-        ? "이메일 형식으로 작성해 주세요."
-        : "";
-    }
-  );
-  const passwordError = useValidation(
-    password,
-    "password",
-    undefined,
-    (value, variant) =>
-      value && value.length < 8 ? "8자 이상 입력해주세요." : ""
-  );
-  // confirmPassword 검증은 password 값을 비교 인자로 전달
+  const nicknameError = useValidation(nickname, "title");
+  const emailError = useValidation(email, "email");
+  const passwordError = useValidation(password, "password");
   const confirmPasswordError = useValidation(
     confirmPassword,
     "confirmPassword",
@@ -108,9 +84,6 @@ export default function SignupForm({
           value={nickname}
           onChange={setNickname}
         />
-        {nicknameError && (
-          <p className="mt-2 text-sm text-red">{nicknameError}</p>
-        )}
       </div>
 
       {/* 이메일 입력 */}
@@ -122,7 +95,6 @@ export default function SignupForm({
           value={email}
           onChange={setEmail}
         />
-        {emailError && <p className="mt-2 text-sm text-red">{emailError}</p>}
       </div>
 
       {/* 비밀번호 입력 */}
@@ -134,25 +106,18 @@ export default function SignupForm({
           value={password}
           onChange={setPassword}
         />
-        {passwordError && (
-          <p className="mt-2 text-sm text-red">{passwordError}</p>
-        )}
       </div>
 
-      {/* 비밀번호 확인 입력 */}
+      {/* 비밀번호 확인 입력 (compareWith 속성으로 password와 비교) */}
       <div className="mt-4">
         <UnifiedInput
-          variant="password"
+          variant="confirmPassword"
           label="비밀번호 확인"
           placeholder="비밀번호를 다시 입력해 주세요"
           value={confirmPassword}
           onChange={setConfirmPassword}
-          // confirmPasswordError가 있을 경우 클래스 적용
-          className={confirmPasswordError ? "border-red" : ""}
+          compareWith={password}
         />
-        {confirmPasswordError && (
-          <p className="mt-2 text-sm text-red">{confirmPasswordError}</p>
-        )}
       </div>
 
       {/* 이용약관 체크박스 */}
@@ -175,9 +140,7 @@ export default function SignupForm({
     <div className="w-full">
       <Button
         size="xlarge"
-        className={`text-white transition-colors ${
-          isFormValid ? "!bg-[#5534da]" : "!bg-[#9FA6B2]"
-        } hover:!bg-[#5534da]`}
+        className={`text-white transition-colors ${isFormValid ? "!bg-[#5534da]" : "!bg-[#9FA6B2]"} hover:!bg-[#5534da]`}
         onClick={handleSignup}
         disabled={!isFormValid}
       >

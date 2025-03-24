@@ -1,4 +1,10 @@
-import React, { useState, ChangeEvent, FC, forwardRef } from "react";
+import React, {
+  useState,
+  ChangeEvent,
+  FC,
+  forwardRef,
+  FocusEvent,
+} from "react";
 import DatePicker from "react-datepicker";
 import Image from "next/image";
 import Button from "./Button/Button";
@@ -114,11 +120,16 @@ export interface UnifiedInputProps {
   value: string;
   onChange: (value: string) => void;
   maxLength?: number;
-  validate?: (value: string, variant: InputVariant) => string;
+  validate?: (
+    value: string,
+    variant: InputVariant,
+    compareWith?: string
+  ) => string;
   onSubmit?: () => Promise<void>;
   className?: string;
   debounceDelay?: number;
   onBlur?: () => void;
+  compareWith?: string;
 }
 
 const defaultMaxLengths: Record<InputVariant, number> = {
@@ -127,7 +138,7 @@ const defaultMaxLengths: Record<InputVariant, number> = {
   title: 11,
   comment: 300,
   date: 0,
-  confirmPassword: 0,
+  confirmPassword: 15,
 };
 
 const UnifiedInput: FC<UnifiedInputProps> = ({
@@ -141,16 +152,20 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
   onSubmit,
   className = "",
   debounceDelay = 300,
+  onBlur,
+  compareWith,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const error = useValidation(
+  // 입력 필드가 포커스를 잃은 후에만 오류 메시지를 보여주기 위한 상태
+  const [isTouched, setIsTouched] = useState(false);
+  const validationError = useValidation(
     value,
     variant,
-    undefined,
+    variant === "confirmPassword" ? compareWith : undefined,
     validate,
     debounceDelay
   );
-
+  const error = isTouched ? validationError : "";
   const inputId = `${variant}-input`;
   const errorId = `${inputId}-error`;
   const finalMaxLength = maxLength || defaultMaxLengths[variant];
@@ -162,6 +177,11 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
   };
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
+
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+    setIsTouched(true);
+    if (onBlur) onBlur();
+  };
 
   if (variant === "date") {
     const selectedDate = value ? new Date(value) : null;
@@ -225,11 +245,17 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
           )}
         </div>
       ) : (
-        <div className={variant === "password" ? "relative" : ""}>
+        <div
+          className={
+            variant === "password" || variant === "confirmPassword"
+              ? "relative"
+              : ""
+          }
+        >
           <BaseInput
             id={inputId}
             type={
-              variant === "password"
+              variant === "password" || variant === "confirmPassword"
                 ? showPassword
                   ? "text"
                   : "password"
@@ -247,8 +273,9 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
                   : "border-gray-300"
             }`}
             aria-describedby={error ? errorId : undefined}
+            onBlur={handleBlur}
           />
-          {variant === "password" && (
+          {(variant === "password" || variant === "confirmPassword") && (
             <PasswordToggleButton
               showPassword={showPassword}
               toggleShowPassword={toggleShowPassword}

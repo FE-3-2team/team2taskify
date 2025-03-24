@@ -3,14 +3,18 @@ import useAuthStore from "@/utils/Zustand/zustand";
 import { removeItem } from "@/utils/localstorage";
 //
 
-export async function loginApi(email: string, password: string) {
+export async function loginApi(
+  teamId: string,
+  email: string,
+  password: string
+) {
   try {
-    const res = await instance.post("/auth/login", {
+    const res = await instance.post(`/${teamId}/auth/login`, {
       email,
       password,
     });
 
-    if (res.status == 201) {
+    if (res.status === 201) {
       useAuthStore.setState({
         isLoggedIn: true,
         userId: res.data.user.id,
@@ -21,24 +25,29 @@ export async function loginApi(email: string, password: string) {
       });
       return res.data;
     }
-  } catch (error) {
+    throw new Error("Unexpected status code: " + res.status);
+  } catch (error: any) {
+    if (error.response) {
+      throw error;
+    }
     throw new Error("로그인 실패");
   }
 }
 
 export async function signupApi(
+  teamId: string,
   email: string,
   nickname: string,
   password: string
 ) {
   try {
-    const res = await instance.post("/users", {
+    const res = await instance.post(`/${teamId}/users`, {
       email,
       nickname,
       password,
     });
 
-    if (res.status == 201) {
+    if (res.status === 200 || res.status === 201) {
       useAuthStore.setState({
         isLoggedIn: false,
         userId: null,
@@ -48,8 +57,13 @@ export async function signupApi(
         dashboardTitle: "",
       });
       removeItem("accessToken");
+      return res.data;
     }
-  } catch (error) {
-    throw new Error("로그인 실패");
+    throw new Error("Unexpected status code: " + res.status);
+  } catch (error: any) {
+    if (error.response) {
+      throw error;
+    }
+    throw new Error("회원가입 실패");
   }
 }
