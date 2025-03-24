@@ -1,13 +1,12 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { getInvitations, respondToInvitation } from "@/api/invitations";
-import { InvitationType } from "@/api/invitations";
 import ListInvDash from "@/components/InvitedDashboards/List.InvDash";
 import SearchInvDash from "@/components/InvitedDashboards/Search.InvDash";
 import Image from "next/image";
 import NoInvitationIcon from "@/assets/icons/NoInvitation.icon.svg";
 
 const InvitedDashboards: React.FC = () => {
-  const [invitations, setInvitations] = useState<InvitationType[]>([]);
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTitle, setSearchTitle] = useState("");

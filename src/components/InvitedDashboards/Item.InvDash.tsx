@@ -1,7 +1,5 @@
-import { InvitationType } from "@/api/invitations";
-
 interface ItemInvDashProps {
-  invitation: InvitationType;
+  invitation: Invitation;
   onRespond: (id: number, inviteAccepted: boolean) => void;
 }
 
