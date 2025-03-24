@@ -1,20 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import throttle from "lodash.throttle";
 //
+const getCssVariable = (variable: string) => {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(variable)
+    .trim();
+};
 export default function useWindowSize() {
-  const [deviceType, setDeviceType] = useState("desktop");
+  const [deviceType, setDeviceType] = useState<
+    "desktop" | "laptop" | "tablet" | "mobile"
+  >("desktop");
 
-  const handleResize = () => {
-    if (window.matchMedia("(max-width: 743px)").matches) {
-      setDeviceType("mobile");
-    } else if (window.matchMedia("(max-width: 1023px)").matches) {
+  const handleResize = useCallback(() => {
+    const tabletBreakpoint = getCssVariable("--breakpoint-tablet"); //744px
+    const laptopBreakpoint = getCssVariable("--breakpoint-laptop"); //1024px
+    const desktopBreakpoint = getCssVariable("--breakpoint-desktop"); //1921px
+
+    if (window.matchMedia(`(min-width: ${desktopBreakpoint})`).matches) {
+      setDeviceType("desktop");
+    } else if (window.matchMedia(`(min-width: ${laptopBreakpoint})`).matches) {
+      setDeviceType("laptop");
+    } else if (window.matchMedia(`(min-width: ${tabletBreakpoint})`).matches) {
       setDeviceType("tablet");
     } else {
-      setDeviceType("desktop");
+      setDeviceType("mobile");
     }
-  };
+  }, []);
 
-  const throttledResize = throttle(handleResize, 2000);
+  const throttledResize = useCallback(throttle(handleResize, 200), [
+    handleResize,
+  ]);
 
   useEffect(() => {
     handleResize();
@@ -22,6 +37,6 @@ export default function useWindowSize() {
     return () => {
       window.removeEventListener("resize", throttledResize);
     };
-  }, []);
+  }, [throttledResize]);
   return deviceType;
 }

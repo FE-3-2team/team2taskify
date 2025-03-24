@@ -5,10 +5,10 @@ interface Props {
 }
 
 const colorClasses = [
-  "bg-brown-F9EEE3 text-orange-FFA500",
-  "bg-green-E7F7DB text-green-7AC555",
-  "bg-pink-F7DBF0 text-pink-E876EA",
-  "bg-blue-DBE6F7 text-blue-76A6EA",
+  "bg-brown text-orange",
+  "bg-green-100 text-green-200",
+  "bg-pink400 text-pink500",
+  "bg-blue-200 text-blue-300",
 ];
 
 export function Tag({ value }: Props) {
@@ -32,7 +32,7 @@ interface TagsProps {
 }
 export function Tags({ tags }: TagsProps) {
   return (
-    <div className="flex justify-center w-fit h-[20px] gap-2 ">
+    <div className="flex justify-center w-fit h-[20px] gap-2">
       {tags.map((tag) => {
         return <Tag key={tag} value={tag} />;
       })}

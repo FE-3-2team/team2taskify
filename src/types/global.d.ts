@@ -25,27 +25,27 @@ declare global {
     id: number;
     title: string;
     description: string;
-    tags: [string];
-    dueDate: string;
+    tags: string[];
+    dueDate: string | null;
     assignee: {
-      profileImageUrl: string;
+      profileImageUrl: string | null;
       nickname: string;
       id: number;
     };
-    imageUrl: string;
+    imageUrl: string | null;
     teamId: string;
     columnId: number;
     createdAt: string;
     updatedAt: string;
   }
-  interface Comment {
+  interface CardComment {
     id: number;
     content: string;
     createdAt: string;
     updatedAt: string;
     cardId: number;
     author: {
-      profileImageUrl: string;
+      profileImageUrl: string | null;
       nickname: string;
       id: number;
     };
@@ -77,5 +77,13 @@ declare global {
       email: string;
       id: number;
     };
+  }
+  interface Column {
+    id: number;
+    title: string;
+    teamId: string;
+    dashboardId: number;
+    createdAt: string;
+    updatedAt: string;
   }
 }
