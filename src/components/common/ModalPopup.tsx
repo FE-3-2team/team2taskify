@@ -1,6 +1,6 @@
 import { useAutoClose } from "@/hooks/useAutoClose";
 import X from "@/assets/icons/X.icon.svg";
-import { Button } from "./Button";
+import Button from "@/components/common/Button/Button";
 import Image from "next/image";
 //
 
@@ -83,7 +83,12 @@ export function Modal({
         </div>
       )}
 
-      <Button size={size} variant={variant} onClick={() => setIsOpen(true)} className={className}>
+      <Button
+        size={size}
+        variant={variant}
+        onClick={() => setIsOpen(true)}
+        className={className}
+      >
         {ModalOpenButton}
       </Button>
     </>

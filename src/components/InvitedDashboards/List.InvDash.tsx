@@ -1,8 +1,7 @@
 import ItemInvDash from "@/components/InvitedDashboards/Item.InvDash";
-import { InvitationType } from "@/api/invitations";
 
 interface ListInvDashProps {
-  invitations: InvitationType[];
+  invitations: Invitation[];
   onRespond: (id: number, inviteAccepted: boolean) => void;
 }
 
