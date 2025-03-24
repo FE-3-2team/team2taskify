@@ -3,16 +3,12 @@ import Check from "@/assets/icons/ColorChip.icons.svg";
 import Image from "next/image";
 interface Props {
   onClick: (value: string) => void;
-  initialSelected?: string;
 }
 
 const COLOR_VALUES = ["#7AC555", "#760DDE", "#FFA500", "#76A6EA", "#E876EA"];
 const COLORS = ["bg-green", "bg-purple", "bg-orange", "bg-blue", "bg-pink"];
-export default function ColorChip({
-  onClick,
-  initialSelected = "#7AC555",
-}: Props) {
-  const [selected, setSelected] = useState<string>(initialSelected);
+export default function ColorChip({ onClick }: Props) {
+  const [selected, setSelected] = useState("#7AC555");
 
   const handleClick = (value: string, color: string) => {
     setSelected(color);

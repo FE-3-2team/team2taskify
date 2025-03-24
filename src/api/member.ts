@@ -1,11 +1,15 @@
 import { instance } from "./instance";
 // 대시 보드 멤버 조회
-export async function getMember(dashboardId: string) {
+export async function getMember(
+  page: number,
+  dashboardId: string,
+  size: number = 4
+) {
   try {
     const res = await instance.get(`/members`, {
-      params: { dashboardId: dashboardId },
+      params: { size: size, page: page, dashboardId: dashboardId },
     });
-    return res.data.members;
+    return res.data;
   } catch (error) {
     throw new Error("멤버 조회 실패");
   }

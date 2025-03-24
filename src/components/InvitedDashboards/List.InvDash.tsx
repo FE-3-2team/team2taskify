@@ -1,4 +1,4 @@
-import ItemInvDash from "@/components/common/InvitedDashboards/Item.InvDash";
+import ItemInvDash from "@/components/InvitedDashboards/Item.InvDash";
 import { InvitationType } from "@/api/invitations";
 
 interface ListInvDashProps {

@@ -13,7 +13,7 @@ interface Props {
   leftOnClick?: () => void;
   className?: string;
   size?: "xxsmall" | "xsmall" | "small" | "medium" | "large" | "xlarge"; // 크기별 스타일 적용
-  variant?: "primary" | "secondary" | "outline" | "disabled"; // 색상/디자인 적용
+  variant?: "primary" | "secondary" | "outline" | "disabled" | "create"; // 색상/디자인 적용
 }
 //
 export function Modal({

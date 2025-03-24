@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { getInvitations, respondToInvitation } from "@/api/invitations";
 import { InvitationType } from "@/api/invitations";
-import ListInvDash from "@/components/common/InvitedDashboards/List.InvDash";
-import SearchInvDash from "@/components/common/InvitedDashboards/Search.InvDash";
+import ListInvDash from "@/components/InvitedDashboards/List.InvDash";
+import SearchInvDash from "@/components/InvitedDashboards/Search.InvDash";
 import Image from "next/image";
 import NoInvitationIcon from "@/assets/icons/NoInvitation.icon.svg";
 
@@ -11,24 +11,77 @@ const InvitedDashboards: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTitle, setSearchTitle] = useState("");
+  const [cursorId, setCursorId] = useState<number | undefined>(undefined);
+  const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  const fetchInvitations = useCallback(
+    async (isReset = false) => {
+      if (!isReset && loading) return;
+
+      if (isReset) {
+        setCursorId(undefined);
+        setHasMore(true);
+      }
+
       setLoading(true);
       setError("");
 
       try {
-        const response = await getInvitations(10, undefined, searchTitle);
-        setInvitations(response.invitations);
+        const response = await getInvitations(
+          10,
+          isReset ? undefined : cursorId,
+          searchTitle
+        );
+        const newInvites = response.invitations;
+
+        if (isReset) {
+          setInvitations(newInvites);
+        } else {
+          setInvitations((prev) => [...prev, ...newInvites]);
+        }
+
+        if (newInvites.length < 10) {
+          setHasMore(false);
+        } else {
+          setCursorId(newInvites[newInvites.length - 1].id);
+        }
       } catch (err) {
+        console.error("불러오기 실패", err);
         setError("불러오기 실패");
       } finally {
         setLoading(false);
       }
-    };
+    },
 
-    fetchData();
+    [cursorId, searchTitle, loading]
+  );
+
+  useEffect(() => {
+    fetchInvitations(true);
   }, [searchTitle]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          fetchInvitations();
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [fetchInvitations, hasMore, loading]);
 
   const handleRespond = async (id: number, accepted: boolean) => {
     try {
@@ -40,11 +93,11 @@ const InvitedDashboards: React.FC = () => {
   };
 
   return (
-    <div className="desktop:w-[960px] desktop:min-h-[390px] tablet:w-[504px] tablet:min-h-[390px] w-[260px] min-h-[327px] h-fit desktop:px-[28px] rounded-[8px] bg-white px-[20px]  tablet:px-[40px] pt-[24px] flex flex-col items-center justify-center">
-      <div className="desktop:w-full tablet:w-[448px] w-[228px] h-fit">
+    <div className="w-full desktop:min-h-[390px] tablet:min-h-[390px] min-h-[327px] h-fit  rounded-[8px] bg-white  pt-[24px] flex flex-col justify-center">
+      <div className="desktop:w-full h-fit">
         <h2 className="tablet:text-2xl-bold text-md-bold">초대받은 대시보드</h2>
 
-        {loading ? (
+        {loading && invitations.length === 0 ? (
           <p className="tablet:mt-[64px] mt-[105px] text-gray-400 tablet:text-2lg-regular text-xs-regular text-center">
             불러오는 중...
           </p>
@@ -67,7 +120,7 @@ const InvitedDashboards: React.FC = () => {
             </p>
           </div>
         ) : (
-          <div className="pt-[16px] tablet:pt-[17px] tablet:pb-[18px] pb-[24px] desktop:py-[32px] tablet:pb-[18px] w-full">
+          <div className="pt-[16px] tablet:pt-[17px] tablet:pb-[18px] pb-[24px] desktop:py-[32px] w-full">
             <SearchInvDash value={searchTitle} onChange={setSearchTitle} />
             <div className="tablet:flex items-center justify-between w-full tablet:h-[26px] hidden text-lg-regular text-gray-400 tablet:mt-[24px] mt-[27px]">
               <h3 className="inline-flex desktop:w-[254px] tablet:w-[154px]">
@@ -80,7 +133,18 @@ const InvitedDashboards: React.FC = () => {
                 수락 여부
               </h3>
             </div>
-            <ListInvDash invitations={invitations} onRespond={handleRespond} />
+            <div className="overflow-x-hidden overflow-y-auto max-h-dvh h-fit">
+              <ListInvDash
+                invitations={invitations}
+                onRespond={handleRespond}
+              />
+              <div ref={observerRef} className="w-full h-[1px]" />
+            </div>
+            {loading && (
+              <p className="mt-[16px] text-xs-regular text-center text-gray-400">
+                불러오는 중...
+              </p>
+            )}
           </div>
         )}
       </div>
