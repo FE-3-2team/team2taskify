@@ -98,16 +98,18 @@ export default function SideMenu() {
       {/* 대시보드 리스트 */}
       <div className="flex flex-col flex-grow m-auto overflow-hidden mobile-hide-after-10 tablet:w-full">
         {dashboards.map((dashboard, index) => (
-          <DashButton
-            key={index}
-            size="small"
-            title={dashboard.title}
-            color={dashboard.color}
-            isOwner={dashboard.isOwner}
-            hasArrow={false}
-            hideTextOnMobile={true}
-            className="!border-none inline-block tablet:flex !w-fit !py-[10px] justify-start !px-[10px] hover:bg-violet-100 hover:rounded-[10px]"
-          />
+            <Link key={dashboard.id} href={`/dashboard/${dashboard.id}`}>
+                <DashButton
+                    key={index}
+                    size="small"
+                    title={dashboard.title}
+                    color={dashboard.color}
+                    isOwner={dashboard.isOwner}
+                    hasArrow={false}
+                    hideTextOnMobile={true}
+                    className="!border-none inline-block tablet:flex !w-fit !py-[10px] justify-start !px-[10px] hover:bg-violet-100 hover:rounded-[10px]"
+                />
+            </Link>
         ))}
       </div>
 
