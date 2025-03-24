@@ -196,3 +196,9 @@ button:hover {
   --breakpoint-laptop: 1024px;
   --breakpoint-desktop: 1921px;
 }
+
+@media (max-width: 768px) {
+  .mobile-hide-after-10 > :nth-child(n + 11) {
+    display: none;
+  }
+}
