@@ -3,27 +3,26 @@ import { Badge } from "./Badge";
 import { ChangeEvent, useEffect, useState } from "react";
 import { deleteComment } from "@/api/comment.api";
 
-/**ToDo
- * input 부분 나중에 바꾸기
- */
 interface Props {
   comment: CardComment;
+  onClickDelete: (id: number) => void;
 }
 
-export default function Comments({ comment }: Props) {
+export default function Comments({ comment, onClickDelete }: Props) {
   const [isEdit, setIsEdit] = useState(false);
   const { nickname, profileImageUrl } = comment.author;
   const [currentValue, setCurrentValue] = useState(comment.content);
   const { updatedAt, id } = comment;
   const formattedDate = useFormatTime(updatedAt);
 
-  useEffect(() => {}, [isEdit]);
+  useEffect(() => {}, []);
 
   const EditComment = async () => {};
   const handleEdit = () => {
     setIsEdit(!isEdit);
   };
   const handleDelete = async () => {
+    onClickDelete(id);
     await deleteComment(id);
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

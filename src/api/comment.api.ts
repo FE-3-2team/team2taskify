@@ -35,7 +35,7 @@ export async function getComments(
   cardId: number
 ) {
   try {
-    const res = await instance.get(`/comments/`, {
+    const res = await instance.get(`/comments`, {
       params: { size: size, cursorId: cursorId, cardId: cardId },
     });
     return res.data;

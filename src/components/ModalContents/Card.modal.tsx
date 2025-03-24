@@ -20,7 +20,7 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
   const { dashboardId } = router.query;
   const [card, setCard] = useState<Card>();
   const [currentComment, setCurrentComment] = useState<CardComment[]>([]);
-  const [cursor, setCursor] = useState(0);
+  const [cursor, setCursor] = useState(1);
 
   const [newComment, setNewComment] = useState({
     content: "",
@@ -55,7 +55,13 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
     setCurrentComment((prev) => [...prev, createdComment]);
     setNewComment((prev) => ({ ...prev, content: "" }));
   };
-  const handleDelete = () => {};
+  const handleCardDelete = () => {};
+  const handleCommentDelete = (id: number) => {
+    const filteredComments = currentComment.filter(
+      (comment) => comment.id !== id
+    );
+    setCurrentComment(filteredComments);
+  };
   const handleEdit = () => {};
   return (
     <>
@@ -67,7 +73,10 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
                 {card.title}
               </span>
               <div className="flex items-center gap-4 tablet:gap-6">
-                <DropdownEditDel onDelete={handleDelete} onEdit={handleEdit} />
+                <DropdownEditDel
+                  onDelete={handleCardDelete}
+                  onEdit={handleEdit}
+                />
                 <div className="w-8 h-8" />
               </div>
             </div>
@@ -110,7 +119,12 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
 
                 <div>
                   {currentComment?.map((comment) => {
-                    return <Comments comment={comment} />;
+                    return (
+                      <Comments
+                        onClickDelete={handleCommentDelete}
+                        comment={comment}
+                      />
+                    );
                   })}
                 </div>
               </div>
