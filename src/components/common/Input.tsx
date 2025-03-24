@@ -206,18 +206,18 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
         )}
       </label>
       {variant === "comment" ? (
-        <div className="w-full rounded-[8px] border border-gray-300 p-4 text-lg-regular">
+        <div className="w-full h-[72px] relative tablet:h-[110px] rounded-[8px] border border-gray-300 p-4 text-lg-regular">
           <textarea
             id={inputId}
             placeholder={placeholder}
             value={value}
             onChange={handleInputChange}
             maxLength={finalMaxLength}
-            className="w-full h-[100px] resize-none outline-none border-0 focus:outline-none"
+            className="w-full h-full border-0 outline-none resize-none focus:outline-none"
             aria-describedby={error ? errorId : undefined}
           />
           {onSubmit && (
-            <div className="flex justify-end mt-2">
+            <div className="absolute flex mt-2 w-21 h-7 right-5 bottom-3 tablet:right-4 tablet:bottom-4">
               <Button onClick={onSubmit} size="xxsmall" variant="secondary">
                 입력
               </Button>

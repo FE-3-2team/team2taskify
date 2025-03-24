@@ -1,5 +1,14 @@
 import { instance } from "./instance";
-
+//카드 상세 조회
+export async function getCardDetail(cardId: number) {
+  try {
+    const res = await instance.get(`/cards/${cardId}`);
+    return res.data;
+  } catch {
+    throw new Error();
+  }
+}
+//카드 목록 조회
 export async function getCards(columnId: number): Promise<Card[]> {
   try {
     const res = await instance.get(`/cards`, {

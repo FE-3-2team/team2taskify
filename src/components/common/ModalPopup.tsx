@@ -83,7 +83,12 @@ export function Modal({
         </div>
       )}
 
-      <Button size={size} variant={variant} onClick={() => setIsOpen(true)} className={className}>
+      <Button
+        size={size}
+        variant={variant}
+        onClick={() => setIsOpen(true)}
+        className={className}
+      >
         {ModalOpenButton}
       </Button>
     </>
