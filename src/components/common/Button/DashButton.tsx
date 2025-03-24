@@ -30,7 +30,7 @@ export default function DashButton({
   return (
     <button
       className={clsx(
-        "rounded-[8px] flex items-center justify-center px-[16px] py-[16px] tablet:py-[20px] border border-gray-300 bg-white text-black-200 w-full",
+        "rounded-[8px] flex items-center justify-center px-[16px] py-[16px] tablet:py-[20px] border border-gray-300 bg-white text-black-200 tablet: !w-full",
         {
           small: "text-md-semibold tablet:text-lg-semibold",
           medium: "text-lg-medium tablet:text-2lg-medium",

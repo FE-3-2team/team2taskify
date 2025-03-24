@@ -23,6 +23,7 @@ export function Modal({
   leftHandlerText,
   rightOnClick,
   leftOnClick,
+  className,
   size,
   variant,
 }: Props) {
@@ -82,7 +83,7 @@ export function Modal({
         </div>
       )}
 
-      <Button size={size} variant={variant} onClick={() => setIsOpen(true)}>
+      <Button size={size} variant={variant} onClick={() => setIsOpen(true)} className={className}>
         {ModalOpenButton}
       </Button>
     </>

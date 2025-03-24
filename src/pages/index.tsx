@@ -1,84 +1,13 @@
 import { PlusIconButton, PaginationButton, Button, DashButton } from "@/components/common/Button";
 import SideMenu from "@/components/common/SideMenu";
 import React, { useEffect, useState } from "react";
-// import axios from 'axios';
-import { instance } from "@/api/instance";
-import { getItem } from "@/utils/localstorage";
 
-interface Dashboard {
-  title: string;
-  color: string;
-  isOwner: boolean;
-}
 
 export default function Home() {
-  const [page, setPage] = useState(1);
-  const [dashboards, setDashboards] = useState<Dashboard[]>([]);
-
-  useEffect(() => {
-    const fetchDashboards = async () => {
-      try {
-        const accessToken = getItem<string>("accessToken");
-
-        const response = await instance.get(`/dashboards`, {
-          params: {
-            navigationMethod: "pagination",
-            page: 1,
-            size: 15,
-          },
-        });
-
-        const mapped = response.data.dashboards.map((item: any) => ({
-          title: item.title,
-          color: item.color,
-          isOwner: item.createdByMe,
-        }));
-
-        setDashboards(mapped);
-      } catch (error) {
-        console.error("대시보드 불러오기 실패:", error);
-      }
-    };
-
-    fetchDashboards();
-  }, []);
   
-  // useEffect(() => {
-  //   const fetchDashboards = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `https://sp-taskify-api.vercel.app/13-2/dashboards`, // ✅ URL 수정
-  //         {
-  //           params: {
-  //             navigationMethod: "pagination",
-  //             page: 1,
-  //             size: 15,
-  //           },
-  //           headers: {
-  //             Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`
-  //           }
-  //         }
-  //       );
-  
-  //       console.log("응답 데이터:", response.data); // ✅ 응답 확인용 로그
-  //       const mapped = response.data.dashboards.map((item: any) => ({
-  //         title: item.title,
-  //         color: item.color,
-  //         isOwner: item.createdByMe, // ✅ createdByMe 값 사용
-  //       }));
-  
-  //       setDashboards(mapped);
-  //     } catch (error) {
-  //       console.error("대시보드 불러오기 실패:", error);
-  //     }
-  //   };
-  
-  //   fetchDashboards();
-  // }, []);
-
   return (
     <>
-      <SideMenu dashboards={dashboards} />
+      <SideMenu />
       <div className="flex flex-col items-center justify-center min-h-screen gap-4 pt-10 mb-10 text-center">
         <strong className="text-2xl-semibold">대시보드 버튼</strong>
         <div className="flex flex-col items-center justify-center w-full gap-2 mb-10 max-w-[600px]">
@@ -114,13 +43,6 @@ export default function Home() {
           <Button size="small" variant="outline">small 취소</Button>
           <Button size="medium" variant="primary">large 확인</Button>
           <Button size="medium" variant="outline">large 취소</Button>
-        </div>
-
-        <strong className="text-2xl-semibold">페이지네이션</strong>
-        <div className="flex flex-col gap-[10px] mb-10 w-full items-center justify-center">
-          <PaginationButton hasPrev={true} hasNext={true} size="small" onPrev={() => {}} onNext={() => {}} />
-          <PaginationButton hasPrev={false} hasNext={false} size="large" onPrev={() => {}} onNext={() => {}} />
-          <PaginationButton hasPrev={page > 1} hasNext={page < 5} size="large" onPrev={() => setPage((prev) => prev - 1)} onNext={() => setPage((prev) => prev + 1)} />
         </div>
 
         <strong className="text-2xl-semibold">폰트사이즈</strong>
