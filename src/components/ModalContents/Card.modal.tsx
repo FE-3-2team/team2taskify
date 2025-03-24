@@ -1,10 +1,10 @@
-import Image from "next/image";
 import AssigneeCard from "../AssigneeCard";
 import Status from "../common/Chip/Status.chip";
-import X from "@/assets/icons/X.icon.svg";
 import { Tags } from "../common/Chip/Tag.chip";
 import Comments from "../common/Comments";
 import DropdownEditDel from "../common/Dropdown/DropdownEditDel";
+import UnifiedInput from "../common/Input";
+import { useState } from "react";
 //
 interface Props {
   card: Card;
@@ -13,7 +13,11 @@ interface Props {
 }
 //
 export default function CardModal({ card, columnTitle, comments }: Props) {
+  const [newComment, setNewComment] = useState("");
   const { dueDate, assignee } = card;
+  const createComment = (value: string) => {
+    setNewComment(value);
+  };
   const handleDelete = () => {};
   const handleEdit = () => {};
   return (
@@ -35,8 +39,8 @@ export default function CardModal({ card, columnTitle, comments }: Props) {
             profileImageUrl={assignee.profileImageUrl}
           />
         </div>
-        <div className="flex tablet:gap-[13px] justify-between">
-          <div className="flex flex-col items-center">
+        <div className="flex  tablet:gap-[13px] justify-between">
+          <div className="flex flex-col w-full">
             <div className="flex items-center gap-4 mb-4 tablet:gap-5">
               <Status value={columnTitle} />
               <div className="w-[1px] bg-gray-300 h-[20px]" />
@@ -55,8 +59,13 @@ export default function CardModal({ card, columnTitle, comments }: Props) {
             )}
 
             <div>
-              <p>댓글</p>
-              <input></input>
+              <UnifiedInput
+                label="댓글"
+                placeholder="댓글 작성하기"
+                variant="comment"
+                onChange={createComment}
+                value={newComment}
+              />
             </div>
 
             <div>
