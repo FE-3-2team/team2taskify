@@ -1,10 +1,9 @@
 import { PlusIconButton, PaginationButton, Button, DashButton } from "@/components/common/Button";
 import SideMenu from "@/components/common/SideMenu";
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
-// import { instance } from "@/api/instance";
-// import { getItem } from "@/utils/localstorage";
-// import useAuthStore from "@/utils/Zustand/zustand";
+// import axios from 'axios';
+import { instance } from "@/api/instance";
+import { getItem } from "@/utils/localstorage";
 
 interface Dashboard {
   title: string;
@@ -15,73 +14,67 @@ interface Dashboard {
 export default function Home() {
   const [page, setPage] = useState(1);
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
-  // const { userId } = useAuthStore(); // ✅ 로그인한 사용자의 ID 가져오기
-  // const accessToken = getItem("accessToken"); // ✅ 토큰 가져오기
 
   useEffect(() => {
     const fetchDashboards = async () => {
       try {
-        const response = await axios.get(
-          `https://sp-taskify-api.vercel.app/13-2/dashboards`, // ✅ URL 수정
-          {
-            params: {
-              navigationMethod: "pagination",
-              page: 1,
-              size: 15,
-            },
-            headers: {
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`
-            }
-          }
-        );
-  
-        console.log("응답 데이터:", response.data); // ✅ 응답 확인용 로그
+        const accessToken = getItem<string>("accessToken");
+
+        const response = await instance.get(`/dashboards`, {
+          params: {
+            navigationMethod: "pagination",
+            page: 1,
+            size: 15,
+          },
+        });
+
         const mapped = response.data.dashboards.map((item: any) => ({
           title: item.title,
           color: item.color,
-          isOwner: item.createdByMe, // ✅ createdByMe 값 사용
+          isOwner: item.createdByMe,
         }));
-  
+
         setDashboards(mapped);
       } catch (error) {
         console.error("대시보드 불러오기 실패:", error);
       }
     };
-  
+
     fetchDashboards();
   }, []);
+  
   // useEffect(() => {
-  //   if (!accessToken || !userId) return; // ✅ 토큰 & userId 없으면 API 요청 안 함
-
   //   const fetchDashboards = async () => {
   //     try {
-  //       const teamId = `13-2`; // ✅ 현재 하드코딩된 부분 -> 실제 팀 ID로 변경 필요
-  //       console.log(`Fetching dashboards for teamId: ${teamId}`);
-
-  //       const response = await instance.get(`/teams/${teamId}/dashboards`, {
-  //         params: {
-  //           navigationMethod: "pagination",
-  //           page: 1,
-  //           size: 15,
-  //         },
-  //       });
-
-  //       console.log("응답 데이터:", response.data); // ✅ 응답 확인
+  //       const response = await axios.get(
+  //         `https://sp-taskify-api.vercel.app/13-2/dashboards`, // ✅ URL 수정
+  //         {
+  //           params: {
+  //             navigationMethod: "pagination",
+  //             page: 1,
+  //             size: 15,
+  //           },
+  //           headers: {
+  //             Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`
+  //           }
+  //         }
+  //       );
+  
+  //       console.log("응답 데이터:", response.data); // ✅ 응답 확인용 로그
   //       const mapped = response.data.dashboards.map((item: any) => ({
   //         title: item.title,
   //         color: item.color,
-  //         isOwner: item.createdByMe,
+  //         isOwner: item.createdByMe, // ✅ createdByMe 값 사용
   //       }));
-
+  
   //       setDashboards(mapped);
   //     } catch (error) {
   //       console.error("대시보드 불러오기 실패:", error);
   //     }
   //   };
-
-  //   fetchDashboards();
-  // }, [userId]); // ✅ userId가 변경될 때마다 다시 요청
   
+  //   fetchDashboards();
+  // }, []);
 
   return (
     <>
