@@ -1,7 +1,7 @@
 import { useFormatTime } from "@/hooks/useFormatDate";
 import { Badge } from "./Badge";
-import { useState } from "react";
-import { deleteComment } from "@/api/comment";
+import { ChangeEvent, useEffect, useState } from "react";
+import { deleteComment } from "@/api/comment.api";
 
 /**ToDo
  * input 부분 나중에 바꾸기
@@ -13,17 +13,25 @@ interface Props {
 export default function Comments({ comment }: Props) {
   const [isEdit, setIsEdit] = useState(false);
   const { nickname, profileImageUrl } = comment.author;
+  const [currentValue, setCurrentValue] = useState(comment.content);
   const { updatedAt, id } = comment;
   const formattedDate = useFormatTime(updatedAt);
+
+  useEffect(() => {}, [isEdit]);
+
+  const EditComment = async () => {};
   const handleEdit = () => {
-    setIsEdit(true);
+    setIsEdit(!isEdit);
   };
   const handleDelete = async () => {
     await deleteComment(id);
   };
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentValue(e.target.value);
+  };
 
   return (
-    <div className="flex gap-[10px] px-2 ">
+    <div className="flex gap-[10px] px-2 py-2 max-h-">
       <div className="w-fit">
         <Badge nickname={nickname} img={profileImageUrl} type="comment" />
       </div>
@@ -33,10 +41,15 @@ export default function Comments({ comment }: Props) {
           <p className="text-gray-400 text-xs-regular">{formattedDate}</p>
         </div>
         {isEdit ? (
-          <input type="textarea" value={comment.content}></input>
+          <input
+            onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+            type="textarea"
+            value={currentValue}
+            className="text-md-regular text-black-200 h-[40px] max-h-[80px] overflow-scroll border border-gray-300"
+          />
         ) : (
-          <p className="text-md-regular text-black-200 max-h-[80px] overflow-scroll">
-            {comment.content}
+          <p className="text-md-regular text-black-200 h-[40px] max-h-[80px] overflow-scroll">
+            {currentValue}
           </p>
         )}
         <div className="flex gap-[14px]">
