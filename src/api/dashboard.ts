@@ -5,13 +5,9 @@ import { instance } from "./instance";
 type Props = {
   dashboardId?: string;
 };
-interface Data {
-  title: string;
-  color: string;
-}
+
 //대시보드 생성
-export async function createDashboard(data: Data) {
-  const { title, color } = data;
+export async function createDashboard(title: string, color: string) {
   try {
     const res = await instance.post("/dashboards", {
       title,
@@ -22,6 +18,18 @@ export async function createDashboard(data: Data) {
     throw new Error("대시보드 생성 실패");
   }
 }
+//대시보드 목록 조회
+export async function getDashboards(page: number, size = 5) {
+  try {
+    const res = await instance.get(`/dashboards`, {
+      params: { navigationMethod: "pagination", page: page, size: size },
+    });
+    return res.data;
+  } catch (error) {
+    throw new Error("대시보드 목록 조회 실패");
+  }
+}
+
 //대시보드 상세조회
 
 export async function getDashboardInfo(dashboardId: string) {
@@ -43,9 +51,7 @@ export async function getDashboardInfo(dashboardId: string) {
 //대시보드 삭제
 export async function deleteDashboard(dashboardId: string) {
   try {
-    const res = await instance.delete("/dashboards", {
-      params: { dashboardId },
-    });
+    const res = await instance.delete(`/dashboards/${dashboardId}`);
   } catch (error) {
     throw new Error("대시보드 삭제 실패");
   }
@@ -65,9 +71,26 @@ export async function editDashboard(dashboardData: editProps) {
       color,
     });
     const { title: newTitle, color: newColor } = res.data;
+    if (res.status == 200) {
+      useAuthStore.setState({
+        dashboardTitle: newTitle,
+      });
+    }
     return { newTitle, newColor };
   } catch (error) {
     throw new Error("대시보드 수정 실패");
+  }
+}
+//대쉬보드 초대하기
+
+export async function createInvite(email: string, dashboardId: string) {
+  try {
+    const res = await instance.post(`/dashboards/${dashboardId}/invitations`, {
+      email,
+    });
+    return res.data;
+  } catch (error) {
+    throw new Error("대시보드 초대 실패");
   }
 }
 

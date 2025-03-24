@@ -13,8 +13,8 @@ const SearchInvDash: React.FC<SearchInvDashProps> = ({ value, onChange }) => {
   };
 
   return (
-    <div className="w-full h-[36px] flex items-center justify-left bg-white border border-gray-300 rounded-[6px] px-[12px] py-[5px] tablet:px-[16px] tablet:py-[6px]">
-      <div className="bg-[w-[22px] h-[22px] tablet:w-[24px] tablet:h-[24px] hidden tablet:block relative mr-[10px]">
+    <div className="w-full h-[36px] flex items-center justify-left bg-white border border-gray-300 rounded-[6px]  py-[5px]  tablet:py-[6px]">
+      <div className="w-[22px] h-[22px] tablet:w-[24px] tablet:h-[24px] hidden tablet:block relative mr-[10px]">
         <Image
           src={MagnifierIcon}
           alt="Search"

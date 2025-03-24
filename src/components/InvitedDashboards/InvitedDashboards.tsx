@@ -93,8 +93,8 @@ const InvitedDashboards: React.FC = () => {
   };
 
   return (
-    <div className="desktop:w-[960px] desktop:min-h-[390px] tablet:w-[504px] tablet:min-h-[390px] w-[260px] min-h-[327px] h-fit desktop:px-[28px] rounded-[8px] bg-white px-[20px]  tablet:px-[40px] pt-[24px] flex flex-col items-center justify-center">
-      <div className="desktop:w-full tablet:w-[448px] w-[228px] h-fit">
+    <div className="w-full desktop:min-h-[390px] tablet:min-h-[390px] min-h-[327px] h-fit  rounded-[8px] bg-white  pt-[24px] flex flex-col justify-center">
+      <div className="desktop:w-full h-fit">
         <h2 className="tablet:text-2xl-bold text-md-bold">초대받은 대시보드</h2>
 
         {loading && invitations.length === 0 ? (
@@ -120,7 +120,7 @@ const InvitedDashboards: React.FC = () => {
             </p>
           </div>
         ) : (
-          <div className="pt-[16px] tablet:pt-[17px] tablet:pb-[18px] pb-[24px] desktop:py-[32px] tablet:pb-[18px] w-full">
+          <div className="pt-[16px] tablet:pt-[17px] tablet:pb-[18px] pb-[24px] desktop:py-[32px] w-full">
             <SearchInvDash value={searchTitle} onChange={setSearchTitle} />
             <div className="tablet:flex items-center justify-between w-full tablet:h-[26px] hidden text-lg-regular text-gray-400 tablet:mt-[24px] mt-[27px]">
               <h3 className="inline-flex desktop:w-[254px] tablet:w-[154px]">
