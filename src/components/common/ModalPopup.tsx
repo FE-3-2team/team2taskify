@@ -1,6 +1,6 @@
 import { useAutoClose } from "@/hooks/useAutoClose";
 import X from "@/assets/icons/X.icon.svg";
-import { Button } from "./Button";
+import Button from "@/components/common/Button/Button";
 import Image from "next/image";
 //
 

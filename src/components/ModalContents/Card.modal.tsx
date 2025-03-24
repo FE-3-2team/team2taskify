@@ -7,7 +7,7 @@ import DropdownEditDel from "../common/Dropdown/DropdownEditDel";
 import UnifiedInput from "../common/Input";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { getCards } from "@/api/card.api";
+import { getCardDetail } from "@/api/card.api";
 //
 interface Props {
   cardId: number;
@@ -37,7 +37,7 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
   //
   const handleLoad = async () => {
     if (!cardId) return;
-    const cardData = await getCards(cardId);
+    const cardData = await getCardDetail(cardId);
     setCard(cardData);
     const { cursorId, comments } = await getComments(5, cursor, cardId);
     setCursor(cursorId);
