@@ -31,19 +31,19 @@ export async function loginApi(email: string, password: string) {
 }
 
 export async function signupApi(
-  teamId: string,
   email: string,
   nickname: string,
   password: string
 ) {
   try {
+    console.log(email, nickname, password);
     const res = await instance.post(`/users`, {
       email,
       nickname,
       password,
     });
 
-    if (res.status === 200 || res.status === 201) {
+    if (res.status === 201) {
       useAuthStore.setState({
         isLoggedIn: false,
         userId: null,
@@ -52,7 +52,7 @@ export async function signupApi(
         dashboardId: null,
         dashboardTitle: "",
       });
-      removeItem("accessToken");
+
       return res.data;
     }
     throw new Error("Unexpected status code: " + res.status);

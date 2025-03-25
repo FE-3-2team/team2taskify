@@ -1,5 +1,8 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 html,
 body {
@@ -48,6 +51,8 @@ button {
 button:hover {
   opacity: 0.9;
 }
+
+
 
 @theme {
   /* 컬러가이드 */
@@ -195,6 +200,9 @@ button:hover {
   --breakpoint-tablet: 744px;
   --breakpoint-laptop: 1024px;
   --breakpoint-desktop: 1921px;
+
+  /* 폰트 추가 */
+  --font-montserrat: "Montserrat", "sans-serif";
 }
 
 @media (max-width: 768px) {
