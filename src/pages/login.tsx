@@ -10,10 +10,8 @@ export default function LoginPage() {
   const { login, loading, errorModal, errorMessage, closeErrorModal } =
     useLogin();
 
-  const teamId = "team123";
-
   const handleLogin = async (email: string, password: string) => {
-    return await login(teamId, email, password);
+    return await login(email, password);
   };
 
   return (
