@@ -28,6 +28,7 @@ export default function MyDashboard() {
   useEffect(() => {
     handleLoad();
   }, [currentPage]);
+
   //
   const handleLoad = async () => {
     const { totalCount, dashboards } = await getDashboards(currentPage, 5);
