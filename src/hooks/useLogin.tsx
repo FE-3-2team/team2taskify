@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { loginApi } from "../api/auth";
-
+import { setItem } from "@/utils/localstorage";
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [errorModal, setErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const login = async (teamId: string, email: string, password: string) => {
+  const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const data = await loginApi(teamId, email, password);
-      localStorage.setItem("accessToken", data.accessToken);
+      const data = await loginApi(email, password);
+      setItem("accessToken", data.accessToken);
       window.location.href = "/mydashboard";
       return data;
     } catch (error: any) {
