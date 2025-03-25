@@ -31,7 +31,6 @@ export async function loginApi(email: string, password: string) {
 }
 
 export async function signupApi(
-  teamId: string,
   email: string,
   nickname: string,
   password: string

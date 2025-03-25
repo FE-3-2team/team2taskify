@@ -5,15 +5,10 @@ const useSignup = () => {
   const [loading, setLoading] = useState(false);
   const [modalMessage, setModalMessage] = useState<string | null>(null);
 
-  const signup = async (
-    teamId: string,
-    email: string,
-    nickname: string,
-    password: string
-  ) => {
+  const signup = async (email: string, nickname: string, password: string) => {
     setLoading(true);
     try {
-      const data = await signupApi(teamId, email, nickname, password);
+      const data = await signupApi(email, nickname, password);
       // 회원가입 성공 시
       setModalMessage("가입을 축하합니다!");
       return data;
