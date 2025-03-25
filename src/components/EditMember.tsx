@@ -19,7 +19,10 @@ export default function EditMember({ dashboardId }: Props) {
 
   const handleLoadMembers = async () => {
     if (!dashboardId) return;
-    const { members, totalCount } = await getMember(currentPage, dashboardId);
+    const { members, totalCount } = await getMember(
+      currentPage,
+      Number(dashboardId)
+    );
     setTotalPage(Math.ceil(totalCount / 4));
     setCurrentMember(members);
   };
