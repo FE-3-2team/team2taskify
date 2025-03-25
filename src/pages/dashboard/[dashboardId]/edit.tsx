@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import EditDashboard from "@/components/EditDashboard";
 import Link from "next/link";
+import SideMenu from "@/components/common/SideMenu";
 //
 export default function EditPage() {
   const router = useRouter();
@@ -52,6 +53,7 @@ export default function EditPage() {
 
   return (
     <div className="ml-[67px] tablet:ml-[160px] laptop:ml-[300px]">
+      <SideMenu />
       <Header createdByMe={dashboardInfo.createdByMe} />
       <div className="px-3  min-w-[284px] tablet:max-w-[584px] laptop:w-[620px] py-4 tablet:px-5 tablet:py-5 ">
         <div className="flex flex-col gap-[10px] tablet:gap-[19px] laptop:gap-[34px]">

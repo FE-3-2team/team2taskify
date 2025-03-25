@@ -14,7 +14,7 @@ export default function Comment({ comment, onClickDelete }: Props) {
   const [currentValue, setCurrentValue] = useState(comment.content);
   const { updatedAt, id } = comment;
   const formattedDate = useFormatTime(updatedAt);
-  //이성준 바보
+
   const handleEdit = async () => {
     if (isEdit && comment.content !== currentValue) {
       await putComment(id, currentValue);
