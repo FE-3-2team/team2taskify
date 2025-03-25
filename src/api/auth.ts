@@ -36,6 +36,7 @@ export async function signupApi(
   password: string
 ) {
   try {
+    console.log(email, nickname, password);
     const res = await instance.post(`/users`, {
       email,
       nickname,
@@ -51,7 +52,7 @@ export async function signupApi(
         dashboardId: null,
         dashboardTitle: "",
       });
-      removeItem("accessToken");
+
       return res.data;
     }
     throw new Error("Unexpected status code: " + res.status);
