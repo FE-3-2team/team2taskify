@@ -1,13 +1,11 @@
-import { createComment, getComments } from "@/api/comment.api";
 import AssigneeCard from "../AssigneeCard";
 import Status from "../common/Chip/Status.chip";
 import { Tags } from "../common/Chip/Tag.chip";
-import Comments from "../common/Comments";
 import DropdownEditDel from "../common/Dropdown/DropdownEditDel";
-import UnifiedInput from "../common/Input";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { deleteCard, getCardDetail } from "@/api/card.api";
+import CommentsArea from "../Comments";
 //
 interface Props {
   cardId: number;
@@ -19,49 +17,17 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
   const router = useRouter();
   const { dashboardId } = router.query;
   const [card, setCard] = useState<Card>();
-  const [currentComment, setCurrentComment] = useState<CardComment[]>([]);
-  const [cursor, setCursor] = useState(0);
-
-  const [newComment, setNewComment] = useState({
-    content: "",
-    cardId: cardId,
-    columnId: columnId,
-    dashboardId: Number(dashboardId),
-  });
 
   useEffect(() => {
-    if (dashboardId) {
-      handleLoad();
-    }
-  }, [dashboardId]);
+    handleLoad();
+  }, []);
   //
   const handleLoad = async () => {
     if (!cardId) return;
     const cardData = await getCardDetail(cardId);
     setCard(cardData);
-    const { cursorId, comments } = await getComments(5, cardId, cursor);
-    setCursor(cursorId);
-    setCurrentComment(comments);
   };
   //
-  const handleChangeNewComment = (value: string) => {
-    setNewComment((prev) => ({
-      ...prev,
-      content: value,
-    }));
-  };
-  const handleCreateComment = async () => {
-    const createdComment = await createComment(newComment);
-    setCurrentComment((prev) => [...prev, createdComment]);
-    setNewComment((prev) => ({ ...prev, content: "" }));
-  };
-
-  const handleCommentDelete = (id: number) => {
-    const filteredComments = currentComment.filter(
-      (comment) => comment.id !== id
-    );
-    setCurrentComment(filteredComments);
-  };
 
   const handleCardDelete = async () => {
     await deleteCard(cardId);
@@ -111,27 +77,8 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
                       src={card.imageUrl}
                     />
                   )}
-
                   <div>
-                    <UnifiedInput
-                      label="댓글"
-                      placeholder="댓글 작성하기"
-                      variant="comment"
-                      onChange={handleChangeNewComment}
-                      value={newComment.content}
-                      onSubmit={handleCreateComment}
-                    />
-                  </div>
-
-                  <div>
-                    {currentComment?.map((comment) => {
-                      return (
-                        <Comments
-                          onClickDelete={handleCommentDelete}
-                          comment={comment}
-                        />
-                      );
-                    })}
+                    <CommentsArea columnId={columnId} cardId={cardId} />
                   </div>
                 </div>
                 <div className="hidden w-fit tablet:block">

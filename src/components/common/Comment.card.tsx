@@ -8,7 +8,7 @@ interface Props {
   onClickDelete: (id: number) => void;
 }
 
-export default function Comments({ comment, onClickDelete }: Props) {
+export default function Comment({ comment, onClickDelete }: Props) {
   const [isEdit, setIsEdit] = useState(false);
   const { nickname, profileImageUrl } = comment.author;
   const [currentValue, setCurrentValue] = useState(comment.content);
