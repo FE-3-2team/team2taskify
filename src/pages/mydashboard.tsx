@@ -24,6 +24,7 @@ export default function MyDashboard() {
   const [newColor, setNewColor] = useState("");
   const [newTitle, setNewTitle] = useState("");
   const router = useRouter();
+  //
   useEffect(() => {
     handleLoad();
   }, [currentPage]);
