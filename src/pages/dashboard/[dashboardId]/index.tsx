@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { getColumns } from "@/api/column.api";
 import { getCards } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
+import { DetailContent } from "@/components/common/ModalPopup";
+import CardModal from "@/components/ModalContents/Card.modal";
 
 interface ColumnData {
   id: number;
@@ -59,6 +61,9 @@ export default function Dashboard() {
     <div>
       <Header />
       <>
+        <DetailContent ModalOpenButton="테스트 ">
+          <CardModal cardId={11808} columnTitle="To do" columnId={46358} />
+        </DetailContent>
         {isLoading ? (
           <p>로딩 중...</p>
         ) : (

@@ -21,3 +21,12 @@ export async function getCards(columnId: number): Promise<Card[]> {
     throw new Error("카드 목록 조회 실패");
   }
 }
+
+//카드 삭제
+export async function deleteCard(cardId: number) {
+  try {
+    await instance.delete(`/cards/${cardId}`);
+  } catch {
+    throw new Error();
+  }
+}
