@@ -8,22 +8,41 @@ import { Badges } from "./Badge";
 import Link from "next/link";
 import useAuthStore from "@/utils/Zustand/zustand";
 import { useStore } from "@/utils/Zustand/useStore";
+import { useEffect, useState } from "react";
+import { getMember } from "@/api/member";
 
 /**ToDo
  * 초대하기 버튼 클릭시 모달 팝업 함수
  */
 interface Props {
-  members?: Member[];
   createdByMe?: boolean;
 }
 
-export default function Header({ members, createdByMe }: Props) {
+export default function Header({ createdByMe }: Props) {
   const store = useStore(useAuthStore, (state) => state);
+  const dashboardId = store?.dashboardId;
   const router = useRouter();
+  const [members, setMembers] = useState<Member[]>([]);
   const display = router.pathname === "/mydashbord" ? "none" : "block";
-  let dashboardTitle = store ? store.dashboardTitle : "내 대시보드";
-  dashboardTitle = router.pathname === "/mypage" ? "계정관리" : dashboardTitle;
+  const dashboardTitle =
+    router.pathname === "/mypage"
+      ? "계정관리"
+      : router.pathname === "/mydashboard"
+        ? `${store?.userNickname}님의 대시보드`
+        : store?.dashboardTitle;
 
+  useEffect(() => {
+    handleLoadDashboardInfo();
+  }, [dashboardId, router.pathname]);
+
+  const handleLoadDashboardInfo = async () => {
+    if (!dashboardId) return;
+    if (router.pathname !== "/mydashboard") {
+      const { members } = await getMember(1, Number(dashboardId), 4);
+      setMembers(members);
+    }
+  };
+  //
   return (
     <div className="flex bg-white flex-row justify-between w-full h-[70px] desktop:pr-20 py-[15px] px-[20px] laptop:pl-10 laptop:pr-[10px]  border-b-[1px]  items-center border-gray-300 ">
       <div className="flex flex-row items-center gap-2">

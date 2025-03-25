@@ -1,26 +1,45 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
 import { loginApi } from "../api/auth";
-
+import { setItem } from "@/utils/localstorage";
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
+  const [errorModal, setErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
       const data = await loginApi(email, password);
-      localStorage.setItem("accessToken", data.accessToken);
+      setItem("accessToken", data.accessToken);
       window.location.href = "/mydashboard";
       return data;
     } catch (error: any) {
-      toast.error(error.message);
+      if (error.response) {
+        const status = error.response.status;
+        const message = error.response.data?.message || "로그인에 실패했습니다";
+        if (status === 404) {
+          setErrorMessage("존재하지 않는 유저입니다.");
+        } else if (status === 400) {
+          setErrorMessage(message); // 예: "이메일 형식으로 작성해주세요."
+        } else {
+          setErrorMessage(message);
+        }
+      } else {
+        setErrorMessage("로그인 중 문제가 발생했습니다");
+      }
+      setErrorModal(true);
       return null;
     } finally {
       setLoading(false);
     }
   };
 
-  return { login, loading };
+  const closeErrorModal = () => {
+    setErrorModal(false);
+    setErrorMessage("");
+  };
+
+  return { login, loading, errorModal, errorMessage, closeErrorModal };
 };
 
 export default useLogin;

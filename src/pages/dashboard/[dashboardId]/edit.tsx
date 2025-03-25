@@ -14,7 +14,7 @@ import Link from "next/link";
 export default function EditPage() {
   const router = useRouter();
   const { dashboardId } = router.query;
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState<Member[]>([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [dashboardInfo, setDashboardInfo] = useState({
@@ -32,7 +32,7 @@ export default function EditPage() {
   //
 
   const handleLoadMembers = async () => {
-    const { members } = await getMember(currentPage, dashboardId as string);
+    const members = await getMember(currentPage, Number(dashboardId));
     setMembers(members);
   };
   const handleLoad = async () => {
@@ -52,7 +52,7 @@ export default function EditPage() {
 
   return (
     <div className="ml-[67px] tablet:ml-[160px] laptop:ml-[300px]">
-      <Header createdByMe={dashboardInfo.createdByMe} members={members} />
+      <Header createdByMe={dashboardInfo.createdByMe} />
       <div className="px-3  min-w-[284px] tablet:max-w-[584px] laptop:w-[620px] py-4 tablet:px-5 tablet:py-5 ">
         <div className="flex flex-col gap-[10px] tablet:gap-[19px] laptop:gap-[34px]">
           <Link href={`/dashboard/${dashboardId}`}>

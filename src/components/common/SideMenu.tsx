@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import addIcon from "@/assets/icons/Addbox.icon.svg";
-import LogoFull from "@/assets/icons/LogoFull.svg";
-import LogoImage from "@/assets/icons/LogoImage.svg";
+import LogoFull from "@/assets/LogoFull.svg";
+import LogoImage from "@/assets/LogoImage.svg";
 import DashButton from "./Button/DashButton";
 import PaginationButton from "./Button/PaginationButton";
 import { instance } from "@/api/instance";
@@ -71,20 +71,32 @@ export default function SideMenu() {
   };
 
   return (
-    <div className="fixed z-[10] w-[64px] tablet:w-[160px] laptop:w-[300px] h-screen bg-white flex flex-col pt-[20px] pl-[10px] pr-[10px]">
+    <div className="fixed left-0 top-0 z-[10] w-[64px] tablet:w-[160px] laptop:w-[300px] h-screen bg-white flex flex-col pt-[20px] pl-[10px] pr-[10px]">
       {/* 로고 */}
       <Link href="/mydashboard">
         <div className="mb-[30px] flex items-center justify-center tablet:mb-[60px] laptop:justify-start">
-          <Image src={LogoImage} alt="로고" className="block tablet:hidden w-[24px]" />
+          <Image
+            src={LogoImage}
+            alt="로고"
+            className="block tablet:hidden w-[24px]"
+          />
           <Image src={LogoFull} alt="로고" className="hidden tablet:block" />
         </div>
       </Link>
 
       {/* 대시보드 추가 버튼 + 모달 */}
       <div className="flex items-center justify-center w-full m-auto mb-4 transition-none tablet:justify-between">
-        <div className="hidden tablet:block mr-6 text-[12px] font-bold text-gray-500">Dash Board</div>
+        <div className="hidden tablet:block mr-6 text-[12px] font-bold text-gray-500">
+          Dash Board
+        </div>
         <Modal
-          ModalOpenButton={<Image src={addIcon} alt="대시보드 추가 버튼" className="cursor-pointer" />}
+          ModalOpenButton={
+            <Image
+              src={addIcon}
+              alt="대시보드 추가 버튼"
+              className="cursor-pointer"
+            />
+          }
           rightHandlerText="생성"
           rightOnClick={plusDashboard}
           variant="create"
@@ -92,24 +104,23 @@ export default function SideMenu() {
         >
           <NewDashboard onChange={onChange} />
         </Modal>
-        
       </div>
 
       {/* 대시보드 리스트 */}
       <div className="flex flex-col flex-grow m-auto overflow-hidden mobile-hide-after-10 tablet:w-full">
         {dashboards.map((dashboard, index) => (
-            <Link key={dashboard.id} href={`/dashboard/${dashboard.id}`}>
-                <DashButton
-                    key={index}
-                    size="small"
-                    title={dashboard.title}
-                    color={dashboard.color}
-                    isOwner={dashboard.isOwner}
-                    hasArrow={false}
-                    hideTextOnMobile={true}
-                    className="!border-none inline-block tablet:flex !w-fit !py-[10px] justify-start !px-[10px] hover:bg-violet-100 hover:rounded-[10px]"
-                />
-            </Link>
+          <Link key={dashboard.id} href={`/dashboard/${dashboard.id}`}>
+            <DashButton
+              key={index}
+              size="small"
+              title={dashboard.title}
+              color={dashboard.color}
+              isOwner={dashboard.isOwner}
+              hasArrow={false}
+              hideTextOnMobile={true}
+              className="!border-none inline-block tablet:flex !w-fit !py-[10px] justify-start !px-[10px] hover:bg-violet-100 hover:rounded-[10px]"
+            />
+          </Link>
         ))}
       </div>
 

@@ -8,8 +8,6 @@ import InputModal from "./ModalContents/InputModal";
 import useAuthStore from "@/utils/Zustand/zustand";
 import { useStore } from "zustand";
 
-//To do
-//에러 코드에 따라서 토스트 띄우기
 export default function InvitationHistory() {
   const store = useStore(useAuthStore, (state) => state);
   const dashboardId = store.dashboardId as string;

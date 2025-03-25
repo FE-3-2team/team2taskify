@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import UnifiedInput from "../Input";
-import Button from "../Button/Button";
+import UnifiedInput from "../common/Input";
+import Button from "../common/Button/Button";
 import LoginFormLayout from "./AuthFormLayout";
 import { useRouter } from "next/router";
 
@@ -35,8 +35,10 @@ export default function LoginForm({
 
   const handleLogin = async () => {
     if (!isFormValid) return;
-    await onLogin(email, password);
-    router.push("/mydashboard");
+    const result = await onLogin(email, password);
+    if (result) {
+      router.push("/mydashboard");
+    }
   };
 
   const logoSection = (
@@ -92,10 +94,12 @@ export default function LoginForm({
   );
 
   const footerSection = (
-    <p className="text-center text-gray-600">
+    <p className="text-center text-lg-regular">
       회원이 아니신가요?{" "}
       <Link href="/signup">
-        <span className="underline cursor-pointer">회원가입하기</span>
+        <span className="underline cursor-pointer text-lg-regular">
+          회원가입하기
+        </span>
       </Link>
     </p>
   );

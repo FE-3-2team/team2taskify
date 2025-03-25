@@ -2,7 +2,7 @@ import { instance } from "./instance";
 // 대시 보드 멤버 조회
 export async function getMember(
   page: number,
-  dashboardId: string,
+  dashboardId: number,
   size: number = 4
 ) {
   try {

@@ -5,12 +5,12 @@ import { removeItem } from "@/utils/localstorage";
 
 export async function loginApi(email: string, password: string) {
   try {
-    const res = await instance.post("/auth/login", {
+    const res = await instance.post(`/auth/login`, {
       email,
       password,
     });
 
-    if (res.status == 201) {
+    if (res.status === 201) {
       useAuthStore.setState({
         isLoggedIn: true,
         userId: res.data.user.id,
@@ -21,7 +21,10 @@ export async function loginApi(email: string, password: string) {
       });
       return res.data;
     }
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response) {
+      throw error;
+    }
     throw new Error("로그인 실패");
   }
 }
@@ -32,13 +35,13 @@ export async function signupApi(
   password: string
 ) {
   try {
-    const res = await instance.post("/users", {
+    const res = await instance.post(`/users`, {
       email,
       nickname,
       password,
     });
 
-    if (res.status == 201) {
+    if (res.status === 201) {
       useAuthStore.setState({
         isLoggedIn: false,
         userId: null,
@@ -47,9 +50,12 @@ export async function signupApi(
         dashboardId: null,
         dashboardTitle: "",
       });
-      removeItem("accessToken");
     }
-  } catch (error) {
-    throw new Error("로그인 실패");
+    return res.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw error;
+    }
+    throw new Error("회원가입 실패");
   }
 }
