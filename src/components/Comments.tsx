@@ -12,7 +12,7 @@ interface Props {
 export default function CommentsArea({ cardId, columnId }: Props) {
   const store = useStore(useAuthStore);
   const [cursor, setCursor] = useState(0);
-  const [isMore, setIsMore] = useState(false);
+  const [isIntersecting, setIsIntersecting] = useState(false);
   const [currentComment, setCurrentComment] = useState<CardComment[]>([]);
   const [newComment, setNewComment] = useState({
     content: "",
@@ -25,32 +25,32 @@ export default function CommentsArea({ cardId, columnId }: Props) {
   const handleLoad = async () => {
     const { cursorId, comments } = await getComments(5, cardId, cursor);
     setCursor(cursorId);
-    setCurrentComment(comments);
+    setCurrentComment((prev) => [...prev, ...comments]);
   };
   useEffect(() => {
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setIsMore(true);
-        } else {
-          setIsMore(false);
-        }
+        setIsIntersecting(entry.isIntersecting);
       });
     };
     const moreComment = new IntersectionObserver(observerCallback, {
       threshold: 0.5,
-      rootMargin: "100px",
+      rootMargin: "300px",
     });
 
     if (endRef.current) {
       moreComment.observe(endRef.current);
+    }
+    if (cursor === 0 || cursor) {
+      if (!isIntersecting) return;
+      handleLoad();
     }
     return () => {
       if (endRef.current) {
         moreComment.unobserve(endRef.current);
       }
     };
-  }, []);
+  }, [isIntersecting]);
 
   const handleChangeNewComment = (value: string) => {
     setNewComment((prev) => ({
