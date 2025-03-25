@@ -1,8 +1,10 @@
+import { useRouter } from "next/router";
 import Column from "@/components/common/Column";
 import Header from "@/components/common/Header";
-import { useRouter } from "next/router";
+import { Modal } from "@/components/common/ModalPopup";
+import { PlusIconButton, DashButton } from "@/components/common/Button";
 import { useEffect, useState } from "react";
-import { getColumns } from "@/api/column.api";
+import { getColumns, createColumn } from "@/api/column.api";
 import { getCards } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
 
@@ -22,6 +24,12 @@ export default function Dashboard() {
 
   const [columns, setColumns] = useState<ColumnData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalContentType, setModalContentType] = useState<
+    "addColumn" | "invite" | null
+  >(null);
+  const [newColumnTitle, setNewColumnTitle] = useState("");
+  const [isCreateCardModalOpen, setIsCreateCardModalOpen] = useState(false);
+  const [targetColumnId, setTargetColumnId] = useState<number | null>(null);
 
   const fetchColumns = async (pageId: string) => {
     try {
@@ -55,10 +63,38 @@ export default function Dashboard() {
     }
   }, [dashboardId]);
 
+  const handleCreateColumn = async () => {
+    if (!dashboardId || typeof dashboardId !== "string") return;
+    if (!newColumnTitle.trim()) return;
+
+    try {
+      const createdColumn = await createColumn({
+        title: newColumnTitle,
+        dashboardId: Number(dashboardId),
+      });
+      console.log("생성된 column:", createdColumn);
+
+      setColumns((prev) => [...prev, { ...createdColumn, cards: [] }]);
+      setNewColumnTitle("");
+    } catch (err) {
+      console.error("컬럼 생성 실패", err);
+    }
+  };
+
+  const openCreateCardModal = (columnId: number) => {
+    setTargetColumnId(columnId);
+    setIsCreateCardModalOpen(true);
+  };
+
+  const closeCreateCardModal = () => {
+    setIsCreateCardModalOpen(false);
+    setTargetColumnId(null);
+  };
+
   return (
-    <div>
+    <>
       <Header />
-      <>
+      <div className="flex desktop:flex-row flex-col desktop:items-start items-center tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)] w-full desktop:overflow-x-auto">
         {isLoading ? (
           <p>로딩 중...</p>
         ) : (
@@ -71,12 +107,131 @@ export default function Dashboard() {
                 key={column.id}
                 title={column.title}
                 cards={column.cards ?? []}
-                onAddCard={() => {}}
+                columnId={column.id}
+                onAddCardClick={(columnId) => {
+                  setTargetColumnId(columnId);
+                  setIsCreateCardModalOpen(true);
+                }}
               />
             );
           })
         )}
-      </>
-    </div>
+        <div className="w-[308px] h-full bg-gray-100 px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center">
+          <div className="desktop:w-[314px] tablet:w-[544px] w-[284px] tablet:h-[70px] h-[66px] mt-[46px]">
+            <Modal
+              ModalOpenButton={
+                <div
+                  className="flex items-center gap-[12px]"
+                  onClick={() => setModalContentType("addColumn")}
+                >
+                  새로운 컬럼 추가하기 <PlusIconButton />
+                </div>
+              }
+              rightHandlerText="생성"
+              rightOnClick={handleCreateColumn}
+              leftHandlerText="취소"
+              leftOnClick={() => {
+                setModalContentType(null);
+                setNewColumnTitle("");
+              }}
+            >
+              <div>
+                <h2 className="tablet:text-2xl-bold text-xl-bold tablet:mb-[24px] mb-[16px]">
+                  새 컬럼 생성
+                </h2>
+                <p className="tablet:text-2lg-medium text-lg-medium mb-[8px]">
+                  이름
+                </p>
+                <input
+                  type="text"
+                  placeholder="컬럼 이름을 입력해주세요"
+                  className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                  value={newColumnTitle}
+                  onChange={(e) => setNewColumnTitle(e.target.value)}
+                />
+              </div>
+            </Modal>
+          </div>
+        </div>
+        {isCreateCardModalOpen && targetColumnId && (
+          <Modal
+            isOpen={isCreateCardModalOpen}
+            setIsOpen={setIsCreateCardModalOpen}
+            ModalOpenButton={null}
+            rightHandlerText="생성"
+            leftHandlerText="취소"
+            rightOnClick={() => {
+              setIsCreateCardModalOpen(false);
+            }}
+            leftOnClick={() => setIsCreateCardModalOpen(false)}
+          >
+            <div>
+              <h2 className="tablet:text-2xl-bold text-xl-bold">할 일 생성</h2>
+              <div className="w-full h-fit py-[24px] gap-[24px] flex flex-col items-start">
+                <div className="w-full">
+                  <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
+                    담당자
+                  </p>
+                  <input
+                    type="text"
+                    placeholder="이름을 입력해주세요"
+                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                  />
+                </div>
+                <div className="w-full">
+                  <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
+                    제목
+                  </p>
+                  <input
+                    type="text"
+                    placeholder="제목을 입력해주세요"
+                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                  />
+                </div>
+                <div className="w-full">
+                  <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
+                    설명
+                  </p>
+                  <input
+                    type="text"
+                    placeholder="설명을 입력해주세요"
+                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                  />
+                </div>
+                <div className="w-full">
+                  <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
+                    마감일
+                  </p>
+                  <input
+                    type="text"
+                    placeholder="날짜를 입력해주세요"
+                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                  />
+                </div>
+                <div className="w-full">
+                  <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
+                    태그
+                  </p>
+                  <input
+                    type="text"
+                    placeholder="입력 후 Enter"
+                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                  />
+                </div>
+                <div className="w-full">
+                  <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
+                    이미지
+                  </p>
+                  <input
+                    type="text"
+                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                  />
+                </div>
+              </div>
+            </div>
+          </Modal>
+        )}
+      </div>
+    </>
   );
 }
