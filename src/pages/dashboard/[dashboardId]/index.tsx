@@ -2,11 +2,17 @@ import { useRouter } from "next/router";
 import Column from "@/components/common/Column";
 import Header from "@/components/common/Header";
 import { Modal } from "@/components/common/ModalPopup";
-import { PlusIconButton, DashButton } from "@/components/common/Button";
+import { PlusIconButton } from "@/components/common/Button";
+import DropdownAssigneeSearch from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import { useEffect, useState } from "react";
 import { getColumns, createColumn } from "@/api/column.api";
 import { getCards } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
+import { getMember } from "@/api/member";
+
+const handleSelectAssignee = (assignee: Assignee) => {
+  setSelectedAssignee(assignee);
+};
 
 interface ColumnData {
   id: number;
@@ -30,6 +36,11 @@ export default function Dashboard() {
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const [isCreateCardModalOpen, setIsCreateCardModalOpen] = useState(false);
   const [targetColumnId, setTargetColumnId] = useState<number | null>(null);
+  const [assigneeList, setAssigneeList] = useState<Assignee[]>([]);
+  const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
+    null
+  );
+  const [members, setMembers] = useState<Assignee[]>([]);
 
   const fetchColumns = async (pageId: string) => {
     try {
@@ -81,15 +92,23 @@ export default function Dashboard() {
     }
   };
 
-  const openCreateCardModal = (columnId: number) => {
-    setTargetColumnId(columnId);
-    setIsCreateCardModalOpen(true);
-  };
+  useEffect(() => {
+    const fetchMembers = async () => {
+      if (!dashboardId || typeof dashboardId !== "string") return;
+      try {
+        const { members } = await getMember(1, Number(dashboardId), 20); // page=1, size=20
+        const formatted = members.map((m: any) => ({
+          nickname: m.nickname,
+          profileImageUrl: m.profileImageUrl,
+        }));
+        setMembers(formatted);
+      } catch (err) {
+        console.error("멤버 조회 실패", err);
+      }
+    };
 
-  const closeCreateCardModal = () => {
-    setIsCreateCardModalOpen(false);
-    setTargetColumnId(null);
-  };
+    fetchMembers();
+  }, [dashboardId]);
 
   return (
     <>
@@ -169,13 +188,11 @@ export default function Dashboard() {
               <h2 className="tablet:text-2xl-bold text-xl-bold">할 일 생성</h2>
               <div className="w-full h-fit py-[24px] gap-[24px] flex flex-col items-start">
                 <div className="w-full">
-                  <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
-                    담당자
-                  </p>
-                  <input
-                    type="text"
-                    placeholder="이름을 입력해주세요"
-                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                  <DropdownAssigneeSearch
+                    assignees={members}
+                    onSelect={(assignee) => {
+                      console.log("selected assignee: ", assignee);
+                    }}
                   />
                 </div>
                 <div className="w-full">
