@@ -3,13 +3,9 @@ import useAuthStore from "@/utils/Zustand/zustand";
 import { removeItem } from "@/utils/localstorage";
 //
 
-export async function loginApi(
-  teamId: string,
-  email: string,
-  password: string
-) {
+export async function loginApi(email: string, password: string) {
   try {
-    const res = await instance.post(`/${teamId}/auth/login`, {
+    const res = await instance.post(`/auth/login`, {
       email,
       password,
     });
@@ -41,7 +37,7 @@ export async function signupApi(
   password: string
 ) {
   try {
-    const res = await instance.post(`/${teamId}/users`, {
+    const res = await instance.post(`/users`, {
       email,
       nickname,
       password,
