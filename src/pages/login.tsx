@@ -7,11 +7,10 @@ import useLogin from "@/hooks/useLogin";
 import { AlertModal } from "../components/ModalContents/AlertModal";
 
 export default function LoginPage() {
-  const { login, loading, errorModal, errorMessage, closeErrorModal } =
-    useLogin();
+  const { login, errorModal, errorMessage, closeErrorModal } = useLogin();
 
   const handleLogin = async (email: string, password: string) => {
-    return await login(email, password);
+    await login(email, password);
   };
 
   return (

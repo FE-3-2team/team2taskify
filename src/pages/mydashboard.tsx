@@ -11,6 +11,7 @@ import {
 import InvitedDashboards from "@/components/InvitedDashboards/InvitedDashboards";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import SideMenu from "@/components/common/SideMenu";
 
 export interface Data {
   title: string;
@@ -23,6 +24,7 @@ export default function MyDashboard() {
   const [newColor, setNewColor] = useState("");
   const [newTitle, setNewTitle] = useState("");
   const router = useRouter();
+  //
   useEffect(() => {
     handleLoad();
   }, [currentPage]);
@@ -50,6 +52,7 @@ export default function MyDashboard() {
 
   return (
     <div className="ml-[67px] tablet:ml-[160px] laptop:ml-[300px]">
+      <SideMenu />
       <Header />
       <div className="flex flex-col py-6 px-6 tablet:py-10 tablet:px-10 gap-6 tablet:gap-12 laptop:gap-10 max-w-[1022px]">
         <div>

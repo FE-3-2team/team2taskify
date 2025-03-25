@@ -4,9 +4,6 @@ interface BadgesProps {
   memberList: Member[];
 }
 
-/** TODo
- * 기존에 badge 색깔 한번 로그인할때, badge 컬러를 로컬스토리지에 저장, 이후에는 있으면 랜덤 컬러 아니게 해야함
- */
 const RANDOM_COLOR = [
   "bg-violet-200",
   "bg-violet-100",
@@ -36,7 +33,6 @@ export function Badges({ memberList }: BadgesProps) {
             <Badge
               img={member.profileImageUrl}
               nickname={member.nickname}
-              ArrayId={idx + 1}
               type="badges"
             />
           </div>
@@ -60,13 +56,10 @@ export function Badges({ memberList }: BadgesProps) {
 interface Props {
   nickname: string;
   img: string | null;
-  ArrayId?: number;
   type: "comment" | "assignee" | "badges" | "profile" | "column";
 }
-export function Badge({ nickname, img, type, ArrayId }: Props) {
-  const colorNum = ArrayId
-    ? ArrayId
-    : Math.floor(Math.random() * RANDOM_COLOR.length);
+export function Badge({ nickname, img, type }: Props) {
+  const colorNum = nickname.charCodeAt(0) % RANDOM_COLOR.length;
   const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(nickname);
   const hangulRomanization = require("hangul-romanization");
   if (isKorean) nickname = hangulRomanization.convert(nickname);

@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { signupApi } from "../api/auth";
+import { loginApi, signupApi } from "../api/auth";
+import { useRouter } from "next/router";
 
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
   const [modalMessage, setModalMessage] = useState<string | null>(null);
-
+  const router = useRouter();
   const signup = async (email: string, nickname: string, password: string) => {
     setLoading(true);
     try {
-      const data = await signupApi(email, nickname, password);
+      await signupApi(email, nickname, password);
       // 회원가입 성공 시
       setModalMessage("가입을 축하합니다!");
-      return data;
+      await loginApi(email, password);
+      router.push("/mydashboard");
     } catch (error: any) {
       if (error.response) {
         const status = error.response.status;

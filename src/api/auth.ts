@@ -21,7 +21,6 @@ export async function loginApi(email: string, password: string) {
       });
       return res.data;
     }
-    throw new Error("Unexpected status code: " + res.status);
   } catch (error: any) {
     if (error.response) {
       throw error;
@@ -36,7 +35,6 @@ export async function signupApi(
   password: string
 ) {
   try {
-    console.log(email, nickname, password);
     const res = await instance.post(`/users`, {
       email,
       nickname,
@@ -52,10 +50,8 @@ export async function signupApi(
         dashboardId: null,
         dashboardTitle: "",
       });
-
-      return res.data;
     }
-    throw new Error("Unexpected status code: " + res.status);
+    return res.data;
   } catch (error: any) {
     if (error.response) {
       throw error;
