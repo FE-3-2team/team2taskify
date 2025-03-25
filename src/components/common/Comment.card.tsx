@@ -15,11 +15,8 @@ export default function Comment({ comment, onClickDelete }: Props) {
   const { updatedAt, id } = comment;
   const formattedDate = useFormatTime(updatedAt);
 
-  useEffect(() => {}, []);
-
-  const EditComment = async () => {};
   const handleEdit = async () => {
-    if (isEdit) {
+    if (isEdit && comment.content !== currentValue) {
       await putComment(id, currentValue);
     }
     setIsEdit(!isEdit);
