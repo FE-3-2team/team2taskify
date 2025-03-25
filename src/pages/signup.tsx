@@ -8,14 +8,12 @@ import { AlertModal } from "../components/ModalContents/AlertModal";
 export default function SignupPage() {
   const { signup, loading, modalMessage, closeModal } = useSignup();
 
-  const teamId = "team123";
-
   const handleSignup = async (
     email: string,
     nickname: string,
     password: string
   ) => {
-    return await signup(teamId, email, nickname, password);
+    return await signup(email, nickname, password);
   };
 
   return (
