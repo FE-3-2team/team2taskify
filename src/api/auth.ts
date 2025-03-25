@@ -42,7 +42,7 @@ export async function signupApi(
       password,
     });
 
-    if (res.status === 200 || res.status === 201) {
+    if (res.status === 201) {
       useAuthStore.setState({
         isLoggedIn: false,
         userId: null,
