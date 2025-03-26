@@ -3,7 +3,7 @@ import clsx from "clsx";
 interface Props {
   nickname: string;
   profileImageUrl: string | null;
-  type: "profile" | "assignee";
+  type: "profile" | "assignee" | "edit";
 }
 export default function Profile({ nickname, profileImageUrl, type }: Props) {
   return (
@@ -15,6 +15,7 @@ export default function Profile({ nickname, profileImageUrl, type }: Props) {
           {
             profile: " hidden tablet:block ",
             assignee: "text-xs-regular tablet:text-md-regular ",
+            edit: "text-lg-regular",
           }[type]
         )}
       >

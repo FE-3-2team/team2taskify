@@ -17,7 +17,7 @@ export default function EditPage() {
   const [dashboardInfo, setDashboardInfo] = useState({
     title: "",
     color: "",
-    createdByMe: false,
+    createdByMe: true,
   });
   //
   useEffect(() => {
@@ -45,9 +45,9 @@ export default function EditPage() {
     <div className="ml-[67px] tablet:ml-[160px] laptop:ml-[300px]">
       <SideMenu />
       <Header createdByMe={dashboardInfo.createdByMe} />
-      <div className="px-3  min-w-[284px] tablet:max-w-[584px] laptop:w-[620px] py-4 tablet:px-5 tablet:py-5 ">
-        <div className="flex flex-col gap-[10px] tablet:gap-[19px] laptop:gap-[34px]">
-          <Link href={`/dashboard/${dashboardId}`}>
+      <div className="px-3 tablet:px-5">
+        <div className="flex max-w-[620px] flex-col gap-[10px] tablet:gap-[19px] laptop:gap-[34px]">
+          <Link className="mt-5 " href={`/dashboard/${dashboardId}`}>
             <button className="flex items-start">
               <Image src={arrow} width={20} height={20} alt="<" />
               돌아가기
@@ -62,7 +62,7 @@ export default function EditPage() {
               <EditMember dashboardId={dashboardId as string} />
               <InvitationHistory />
             </div>
-            <div className=" tablet:w-[320px] h-[52px] tablet:h-[62px] ">
+            <div className=" tablet:w-[320px] h-[52px] tablet:h-[62px] mb-[124px] tablet:mb-[72px] laptop:mb-[57px]">
               <DashButton onClick={DashBoardDelete} size="medium">
                 대시보드 삭제하기
               </DashButton>
