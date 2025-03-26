@@ -4,14 +4,75 @@ import Header from "@/components/common/Header";
 import { Modal } from "@/components/common/ModalPopup";
 import { PlusIconButton } from "@/components/common/Button";
 import DropdownAssigneeSearch from "@/components/common/Dropdown/DropdownAssigneeSearch";
+import { Tag } from "@/components/common/Chip/Tag.chip";
+import TagInputField from "@/components/common/TagInputField";
 import { useEffect, useState } from "react";
-import { getColumns, createColumn } from "@/api/column.api";
-import { getCards } from "@/api/card.api";
+import { getColumns, createColumn, uploadCardImage } from "@/api/column.api";
+import { getCards, createCard } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
 import { getMember } from "@/api/member";
 
 const handleSelectAssignee = (assignee: Assignee) => {
   setSelectedAssignee(assignee);
+};
+
+const handleUploadImage = async () => {
+  if (!dashboardId || !targetColumnId || !cardImageFile) return;
+
+  try {
+    const formData = new FormData();
+    formData.append("image", cardImageFile);
+
+    const res = await uploadCardImage(
+      String(dashboardId),
+      targetColumnId,
+      formData
+    );
+    setCardImageUrl(res.imageUrl);
+  } catch (err) {
+    console.error("이미지 업로드 실패:", err);
+  }
+};
+
+const handleCreateCard = async () => {
+  if (
+    !dashboardId ||
+    !targetColumnId ||
+    !selectedAssignee ||
+    !cardTitle.trim()
+  ) {
+    alert("필수 항목을 입력해주세요.");
+    return;
+  }
+
+  try {
+    if (cardImageFile) await handleUploadImage();
+
+    const newCard = await createCard(String(dashboardId), {
+      assigneeUserId: selectedAssignee.id,
+      dashboardId: Number(dashboardId),
+      columnId: targetColumnId,
+      title: cardTitle,
+      description: cardDescription,
+      dueDate: cardDueDate,
+      tags: cardTags,
+      imageUrl: cardImageUrl,
+    });
+
+    console.log("생성된 카드:", newCard);
+
+    setCardTitle("");
+    setCardDescription("");
+    setCardDueDate("");
+    setCardTags([]);
+    setTagInput("");
+    setCardImageFile(null);
+    setCardImageUrl("");
+    setSelectedAssignee(null);
+    setIsCreateCardModalOpen(false);
+  } catch (err) {
+    console.error("카드 생성 실패:", err);
+  }
 };
 
 interface ColumnData {
@@ -41,6 +102,13 @@ export default function Dashboard() {
     null
   );
   const [members, setMembers] = useState<Assignee[]>([]);
+  const [cardTitle, setCardTitle] = useState("");
+  const [cardDescription, setCardDescription] = useState("");
+  const [cardDueDate, setCardDueDate] = useState("");
+  const [cardTags, setCardTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
+  const [cardImageFile, setCardImageFile] = useState<File | null>(null);
+  const [cardImageUrl, setCardImageUrl] = useState<string>("");
 
   const fetchColumns = async (pageId: string) => {
     try {
@@ -110,12 +178,22 @@ export default function Dashboard() {
     fetchMembers();
   }, [dashboardId]);
 
+  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && tagInput.trim()) {
+      e.preventDefault();
+      if (!cardTags.includes(tagInput.trim())) {
+        setCardTags([...cardTags, tagInput.trim()]);
+      }
+      setTagInput("");
+    }
+  };
+
   return (
     <>
       <Header />
       <div className="flex desktop:flex-row flex-col desktop:items-start items-center tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)] w-full desktop:overflow-x-auto">
         {isLoading ? (
-          <p>로딩 중...</p>
+          <p>불러오는 중...</p>
         ) : (
           columns.map((column) => {
             console.log(
@@ -180,7 +258,7 @@ export default function Dashboard() {
             rightHandlerText="생성"
             leftHandlerText="취소"
             rightOnClick={() => {
-              setIsCreateCardModalOpen(false);
+              handleCreateCard;
             }}
             leftOnClick={() => setIsCreateCardModalOpen(false)}
           >
@@ -203,6 +281,8 @@ export default function Dashboard() {
                     type="text"
                     placeholder="제목을 입력해주세요"
                     className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                    value={cardTitle}
+                    onChange={(e) => setCardTitle(e.target.value)}
                   />
                 </div>
                 <div className="w-full">
@@ -213,6 +293,8 @@ export default function Dashboard() {
                     type="text"
                     placeholder="설명을 입력해주세요"
                     className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                    value={cardDescription}
+                    onChange={(e) => setCardDescription}
                   />
                 </div>
                 <div className="w-full">
@@ -223,25 +305,28 @@ export default function Dashboard() {
                     type="text"
                     placeholder="날짜를 입력해주세요"
                     className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                    value={cardDueDate}
                   />
                 </div>
                 <div className="w-full">
                   <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
                     태그
                   </p>
-                  <input
-                    type="text"
-                    placeholder="입력 후 Enter"
-                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
-                  />
+                  <TagInputField />
                 </div>
                 <div className="w-full">
                   <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
                     이미지
                   </p>
                   <input
-                    type="text"
+                    type="file"
                     className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) {
+                        setCardImageFile(e.target.files[0]);
+                      }
+                    }}
                   />
                 </div>
               </div>

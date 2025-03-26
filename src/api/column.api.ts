@@ -30,3 +30,32 @@ export async function createColumn({
     throw new Error("컬럼 생성 실패");
   }
 }
+
+export async function uploadCardImage({
+  teamId,
+  columnId,
+  imageFile,
+}: {
+  teamId: string;
+  columnId: number;
+  imageFile: File;
+}) {
+  try {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
+    const res = await instance.post(
+      `/${teamId}/columns/${columnId}/card-image`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return res.data.imageUrl;
+  } catch (err) {
+    throw new Error("카드 이미지 업로드 실패");
+  }
+}
