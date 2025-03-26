@@ -13,6 +13,7 @@ import { getMember } from "@/api/member";
 import { Modal } from "./ModalPopup";
 import InputModal from "../ModalContents/InputModal";
 import { createInvite } from "@/api/dashboard";
+import Logout from "./Dropdown/LogoutDropdown";
 
 interface Props {
   createdByMe?: boolean;
@@ -118,11 +119,13 @@ export default function Header({ createdByMe }: Props) {
           </div>
           <div className="h-[38px] w-[1px] bg-gray-300" />
           {store && (
-            <Profile
-              nickname={store.userNickname}
-              profileImageUrl={store.profileImageUrl}
-              type="profile"
-            />
+            <Logout>
+              <Profile
+                nickname={store.userNickname}
+                profileImageUrl={store.profileImageUrl}
+                type="profile"
+              />
+            </Logout>
           )}
         </div>
       </div>
