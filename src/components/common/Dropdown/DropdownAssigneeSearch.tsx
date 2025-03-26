@@ -46,7 +46,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
       <div className="font-bold text-lg-regular mb-[10px]">담당자</div>
       <div ref={dropdownRef} className="relative w-full h-fit">
         <div
-          className="w-full h-[48px] px-[16px] py-[11px] bg-white border border-gray-300 rounded-md flex items-center space-x-3 cursor-text"
+          className="w-full h-[48px] px-[16px] py-[11px] bg-white border border-gray-300 rounded-md flex items-center gap-[6px] cursor-text"
           onClick={() => setIsOpen(true)}
         >
           {selectedAssignee ? (
