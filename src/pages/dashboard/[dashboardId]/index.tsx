@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Column from "@/components/common/Column";
@@ -12,6 +13,8 @@ import { getColumns, createColumn, uploadCardImage } from "@/api/column.api";
 import { getCards, createCard } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
 import { getMember } from "@/api/member";
+import CalendarIcon from "@/assets/icons/Calendar.svg";
+import ImageUploadBox from "@/components/common/ImageUploadBox";
 
 const handleSelectAssignee = (assignee: Assignee) => {
   setSelectedAssignee(assignee);
@@ -159,6 +162,8 @@ export default function Dashboard() {
     return `${year}.${month}.${day} ${hours}:${minutes}`;
   };
 
+  const datePickerRef = useRef<any>(null);
+
   useEffect(() => {
     if (typeof dashboardId === "string") {
       fetchColumns(dashboardId);
@@ -291,7 +296,18 @@ export default function Dashboard() {
                   <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
                     마감일
                   </p>
-                  <div className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200">
+                  <div
+                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200 flex items-center gap-[8px]"
+                    onClick={() => datePickerRef.current?.setOpen(true)}
+                  >
+                    <div className="tablet:w-[18px] tablet:h-[18px] w-[14px] h-[14px] relative">
+                      <Image
+                        src={CalendarIcon}
+                        alt="calendar"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
                     <DatePicker
                       selected={cardDueDate}
                       onChange={(date) => {
@@ -300,6 +316,7 @@ export default function Dashboard() {
                       dateFormat="yyyy-MM-dd hh:mm"
                       placeholderText="날짜를 선택해주세요"
                       showTimeSelect
+                      ref={datePickerRef}
                     />
                   </div>
                 </div>
@@ -310,17 +327,12 @@ export default function Dashboard() {
                   <TagInputField />
                 </div>
                 <div className="w-full">
-                  <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
-                    이미지
-                  </p>
-                  <input
-                    type="file"
-                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
-                    accept="image/*"
-                    onChange={(e) => {
-                      if (e.target.files?.[0]) {
-                        setCardImageFile(e.target.files[0]);
-                      }
+                  <ImageUploadBox
+                    imageFile={cardImageFile}
+                    previewUrl={cardImageUrl}
+                    onChangeImage={(file, preview) => {
+                      setCardImageFile(file);
+                      setCardImageUrl(preview);
                     }}
                   />
                 </div>
