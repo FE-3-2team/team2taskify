@@ -12,6 +12,7 @@ interface Props {
 }
 export function AuthProvider({ children }: Props) {
   const [authError, setAuthError] = useState(false);
+
   return (
     <AuthContext.Provider value={{ authError, setAuthError }}>
       {children}

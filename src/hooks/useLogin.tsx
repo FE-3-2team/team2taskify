@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { loginApi } from "../api/auth";
-import { setItem } from "@/utils/localstorage";
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [errorModal, setErrorModal] = useState(false);
@@ -9,18 +8,14 @@ const useLogin = () => {
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const data = await loginApi(email, password);
-      setItem("accessToken", data.accessToken);
+      await loginApi(email, password);
       window.location.href = "/mydashboard";
-      return data;
     } catch (error: any) {
       if (error.response) {
         const status = error.response.status;
         const message = error.response.data?.message || "로그인에 실패했습니다";
         if (status === 404) {
           setErrorMessage("존재하지 않는 유저입니다.");
-        } else if (status === 400) {
-          setErrorMessage(message); // 예: "이메일 형식으로 작성해주세요."
         } else {
           setErrorMessage(message);
         }
