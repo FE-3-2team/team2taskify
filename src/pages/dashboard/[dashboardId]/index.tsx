@@ -123,6 +123,19 @@ export default function Dashboard() {
     }
   };
 
+  const resetNewCardForm = () => {
+    setCardTitle("");
+    setCardDescription("");
+    setCardDueDate(null);
+    setCardTags([]);
+    setCardImageFile(null);
+    setSelectedAssignee(null);
+  };
+
+  const resetNewColumnForm = () => {
+    setNewColumnTitle("");
+  };
+
   useEffect(() => {
     if (typeof dashboardId === "string") {
       fetchColumns(dashboardId);
@@ -182,12 +195,19 @@ export default function Dashboard() {
                   새로운 컬럼 추가하기 <PlusIconButton />
                 </div>
               }
+              isOpen={modalContentType === "addColumn"}
+              setIsOpen={(open) => {
+                if (!open) {
+                  setModalContentType(null);
+                  resetNewColumnForm();
+                }
+              }}
               rightHandlerText="생성"
               rightOnClick={handleCreateColumn}
               leftHandlerText="취소"
               leftOnClick={() => {
                 setModalContentType(null);
-                setNewColumnTitle("");
+                resetNewColumnForm();
               }}
             >
               <div>
@@ -211,7 +231,10 @@ export default function Dashboard() {
         {isCreateCardModalOpen && targetColumnId && (
           <Modal
             isOpen={isCreateCardModalOpen}
-            setIsOpen={setIsCreateCardModalOpen}
+            setIsOpen={(open) => {
+              setIsCreateCardModalOpen(open);
+              if (!open) resetNewCardForm();
+            }}
             ModalOpenButton={null}
             rightHandlerText="생성"
             leftHandlerText="취소"
@@ -228,13 +251,17 @@ export default function Dashboard() {
               })
                 .then(() => {
                   setIsCreateCardModalOpen(false);
+                  resetNewCardForm();
                   fetchColumns(String(dashboardId));
                 })
                 .catch(() => {
                   alert("카드 생성 실패");
                 })
             }
-            leftOnClick={() => setIsCreateCardModalOpen(false)}
+            leftOnClick={() => {
+              setIsCreateCardModalOpen(false);
+              resetNewCardForm();
+            }}
           >
             <div>
               <h2 className="tablet:text-2xl-bold text-xl-bold">할 일 생성</h2>
