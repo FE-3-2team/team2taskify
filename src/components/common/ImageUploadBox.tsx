@@ -40,23 +40,23 @@ export default function ImageUploadBox({
       />
 
       <div
-        className="w-[72px] h-[72px] bg-gray-100 rounded-[8px] flex items-center justify-center cursor-pointer overflow-hidden"
+        className="w-[76px] h-[76px] bg-gray-200 rounded-[8px] flex items-center justify-center cursor-pointer overflow-hidden"
         onClick={handleClick}
       >
         {previewUrl ? (
           <Image
             src={previewUrl}
             alt="미리보기 이미지"
-            width={72}
-            height={72}
-            className="object-cover rounded-[8px]"
+            width={76}
+            height={76}
+            className="object-cover rounded-[6px]"
           />
         ) : (
           <Image
             src={PlusIcon}
             alt="이미지 추가"
-            width={20}
-            height={20}
+            width={17}
+            height={17}
             className="object-contain"
           />
         )}
