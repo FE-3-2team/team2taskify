@@ -15,7 +15,6 @@ interface Props {
 //
 export default function CardModal({ cardId, columnTitle, columnId }: Props) {
   const router = useRouter();
-  const { dashboardId } = router.query;
   const [card, setCard] = useState<Card>();
 
   useEffect(() => {
