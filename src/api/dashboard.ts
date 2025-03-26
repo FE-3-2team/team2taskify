@@ -64,7 +64,7 @@ interface editProps extends Props {
 }
 export async function editDashboard(dashboardData: editProps) {
   const { dashboardId, title, color } = dashboardData;
-  console.log(dashboardId);
+
   try {
     const res = await instance.put(`/dashboards/${dashboardId}`, {
       title,
