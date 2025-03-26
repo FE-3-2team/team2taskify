@@ -12,10 +12,9 @@ import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSear
 import TagInputField from "@/components/common/TagInputField";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
 import { getColumns, createColumn, uploadCardImage } from "@/api/column.api";
-import { getCards, createCard } from "@/api/card.api";
+import { getCards } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
 import { getMember } from "@/api/member";
-import { formatDateTime } from "@/utils/date";
 import useCreateCard from "@/hooks/useCreateCard";
 import CalendarIcon from "@/assets/icons/Calendar.svg";
 
@@ -37,7 +36,6 @@ export default function Dashboard() {
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const [isCreateCardModalOpen, setIsCreateCardModalOpen] = useState(false);
   const [targetColumnId, setTargetColumnId] = useState<number | null>(null);
-  const [assigneeList, setAssigneeList] = useState<Assignee[]>([]);
   const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
     null
   );
@@ -90,38 +88,13 @@ export default function Dashboard() {
     }
   };
 
-  const { createCard: submitCard, isSubmitting } = useCreateCard();
+  const { createCard: submitCard } = useCreateCard();
 
   const handleSelectAssignee = (assignee: Assignee) => {
     setSelectedAssignee(assignee);
   };
 
   const datePickerRef = useRef<any>(null);
-
-  const handleUploadImage = async (): Promise<string | null> => {
-    const columnId = targetColumnId;
-
-    if (!dashboardId || !targetColumnId || !cardImageFile) {
-      console.warn("[이미지 업로드 중단] 필수값 없음", {
-        dashboardId,
-        targetColumnId,
-        cardImageFile,
-      });
-      return null;
-    }
-
-    try {
-      const imageUrl = await uploadCardImage({
-        columnId: targetColumnId,
-        imageFile: cardImageFile,
-      });
-
-      return imageUrl;
-    } catch (err) {
-      console.error("이미지 업로드 실패:", err);
-      return null;
-    }
-  };
 
   const resetNewCardForm = () => {
     setCardTitle("");
