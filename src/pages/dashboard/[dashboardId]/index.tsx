@@ -60,8 +60,6 @@ const handleCreateCard = async () => {
       imageUrl: cardImageUrl,
     });
 
-    console.log("생성된 카드:", newCard);
-
     setCardTitle("");
     setCardDescription("");
     setCardDueDate("");
@@ -121,12 +119,11 @@ export default function Dashboard() {
       const columnsWithCards: ColumnWithCards[] = await Promise.all(
         columnList.map(async (col): Promise<ColumnWithCards> => {
           const cards = await getCards(col.id);
-          console.log(`Column ${col.id} 카드 수:`, cards.length);
+
           return { ...col, cards };
         })
       );
 
-      console.log("최종 columns with cards:", columnsWithCards);
       setColumns(columnsWithCards);
     } catch (err) {
       console.error("컬럼 또는 카드 로딩 실패", err);
@@ -144,7 +141,6 @@ export default function Dashboard() {
         title: newColumnTitle,
         dashboardId: Number(dashboardId),
       });
-      console.log("생성된 column:", createdColumn);
 
       setColumns((prev) => [...prev, { ...createdColumn, cards: [] }]);
       setNewColumnTitle("");
@@ -195,9 +191,6 @@ export default function Dashboard() {
           <p>불러오는 중...</p>
         ) : (
           columns.map((column) => {
-            console.log(
-              `Rendering Column "${column.title}" with ${column.cards?.length ?? 0} cards`
-            );
             return (
               <Column
                 key={column.id}
@@ -267,9 +260,7 @@ export default function Dashboard() {
                 <div className="w-full">
                   <DropdownAssigneeSearch
                     assignees={members}
-                    onSelect={(assignee) => {
-                      console.log("selected assignee: ", assignee);
-                    }}
+                    onSelect={(assignee) => {}}
                   />
                 </div>
                 <div className="w-full">
