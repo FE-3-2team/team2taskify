@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Column from "@/components/common/Column";
@@ -7,80 +8,19 @@ import Header from "@/components/common/Header";
 import { Modal } from "@/components/common/ModalPopup";
 import { PlusIconButton } from "@/components/common/Button";
 import DropdownAssigneeSearch from "@/components/common/Dropdown/DropdownAssigneeSearch";
+import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import TagInputField from "@/components/common/TagInputField";
+import ImageUploadBox from "@/components/common/ImageUploadBox";
 import { getColumns, createColumn, uploadCardImage } from "@/api/column.api";
-import { getCards, createCard } from "@/api/card.api";
+import { getCards } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
 import { getMember } from "@/api/member";
-
-const handleSelectAssignee = (assignee: Assignee) => {
-  setSelectedAssignee(assignee);
-};
-
-const handleUploadImage = async () => {
-  if (!dashboardId || !targetColumnId || !cardImageFile) return;
-
-  try {
-    const formData = new FormData();
-    formData.append("image", cardImageFile);
-
-    const res = await uploadCardImage(
-      String(dashboardId),
-      targetColumnId,
-      formData
-    );
-    setCardImageUrl(res.imageUrl);
-  } catch (err) {
-    console.error("이미지 업로드 실패:", err);
-  }
-};
-
-const handleCreateCard = async () => {
-  if (
-    !dashboardId ||
-    !targetColumnId ||
-    !selectedAssignee ||
-    !cardTitle.trim()
-  ) {
-    alert("필수 항목을 입력해주세요.");
-    return;
-  }
-
-  try {
-    if (cardImageFile) await handleUploadImage();
-
-    const newCard = await createCard(String(dashboardId), {
-      assigneeUserId: selectedAssignee.id,
-      dashboardId: Number(dashboardId),
-      columnId: targetColumnId,
-      title: cardTitle,
-      description: cardDescription,
-      dueDate: cardDueDate ? formatDateTime(cardDueDate) : "",
-      tags: cardTags,
-      imageUrl: cardImageUrl,
-    });
-
-    setCardTitle("");
-    setCardDescription("");
-    setCardDueDate("");
-    setCardTags([]);
-    setTagInput("");
-    setCardImageFile(null);
-    setCardImageUrl("");
-    setSelectedAssignee(null);
-    setIsCreateCardModalOpen(false);
-  } catch (err) {
-    console.error("카드 생성 실패:", err);
-  }
-};
+import useCreateCard from "@/hooks/useCreateCard";
+import CalendarIcon from "@/assets/icons/Calendar.svg";
 
 interface ColumnData {
   id: number;
   title: string;
-  cards: Card[];
-}
-
-interface ColumnWithCards extends Column {
   cards: Card[];
 }
 
@@ -90,13 +30,12 @@ export default function Dashboard() {
 
   const [columns, setColumns] = useState<ColumnData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [modalContentType, setModalContentType] = useState<
-    "addColumn" | "invite" | null
-  >(null);
+  const [modalContentType, setModalContentType] = useState<"addColumn" | null>(
+    null
+  );
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const [isCreateCardModalOpen, setIsCreateCardModalOpen] = useState(false);
   const [targetColumnId, setTargetColumnId] = useState<number | null>(null);
-  const [assigneeList, setAssigneeList] = useState<Assignee[]>([]);
   const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
     null
   );
@@ -104,8 +43,8 @@ export default function Dashboard() {
   const [cardTitle, setCardTitle] = useState("");
   const [cardDescription, setCardDescription] = useState("");
   const [cardDueDate, setCardDueDate] = useState<Date | null>(null);
+  const [cardTags, setCardTags] = useState<string[]>([]);
   const [cardImageFile, setCardImageFile] = useState<File | null>(null);
-  const [cardImageUrl, setCardImageUrl] = useState<string>("");
 
   const fetchColumns = async (pageId: string) => {
     try {
@@ -116,8 +55,8 @@ export default function Dashboard() {
 
       const columnList = await getColumns(String(dashboardId));
 
-      const columnsWithCards: ColumnWithCards[] = await Promise.all(
-        columnList.map(async (col): Promise<ColumnWithCards> => {
+      const columnsWithCards: ColumnData[] = await Promise.all(
+        columnList.map(async (col): Promise<ColumnData> => {
           const cards = await getCards(col.id);
 
           return { ...col, cards };
@@ -149,14 +88,25 @@ export default function Dashboard() {
     }
   };
 
-  const formatDateTime = (date: Date) => {
-    const year = date.getFullYear();
-    const month = `${date.getMonth() + 1}`.padStart(2, "0");
-    const day = `${date.getDate()}`.padStart(2, "0");
-    const hours = `${date.getHours()}`.padStart(2, "0");
-    const minutes = `${date.getMinutes()}`.padStart(2, "0");
+  const { createCard: submitCard } = useCreateCard();
 
-    return `${year}.${month}.${day} ${hours}:${minutes}`;
+  const handleSelectAssignee = (assignee: Assignee) => {
+    setSelectedAssignee(assignee);
+  };
+
+  const datePickerRef = useRef<any>(null);
+
+  const resetNewCardForm = () => {
+    setCardTitle("");
+    setCardDescription("");
+    setCardDueDate(null);
+    setCardTags([]);
+    setCardImageFile(null);
+    setSelectedAssignee(null);
+  };
+
+  const resetNewColumnForm = () => {
+    setNewColumnTitle("");
   };
 
   useEffect(() => {
@@ -169,8 +119,10 @@ export default function Dashboard() {
     const fetchMembers = async () => {
       if (!dashboardId || typeof dashboardId !== "string") return;
       try {
-        const { members } = await getMember(1, Number(dashboardId), 20); // page=1, size=20
+        const { members } = await getMember(1, Number(dashboardId), 20);
         const formatted = members.map((m: any) => ({
+          id: m.id,
+          userId: m.userId,
           nickname: m.nickname,
           profileImageUrl: m.profileImageUrl,
         }));
@@ -216,12 +168,19 @@ export default function Dashboard() {
                   새로운 컬럼 추가하기 <PlusIconButton />
                 </div>
               }
+              isOpen={modalContentType === "addColumn"}
+              setIsOpen={(open) => {
+                if (!open) {
+                  setModalContentType(null);
+                  resetNewColumnForm();
+                }
+              }}
               rightHandlerText="생성"
               rightOnClick={handleCreateColumn}
               leftHandlerText="취소"
               leftOnClick={() => {
                 setModalContentType(null);
-                setNewColumnTitle("");
+                resetNewColumnForm();
               }}
             >
               <div>
@@ -245,14 +204,37 @@ export default function Dashboard() {
         {isCreateCardModalOpen && targetColumnId && (
           <Modal
             isOpen={isCreateCardModalOpen}
-            setIsOpen={setIsCreateCardModalOpen}
+            setIsOpen={(open) => {
+              setIsCreateCardModalOpen(open);
+              if (!open) resetNewCardForm();
+            }}
             ModalOpenButton={null}
             rightHandlerText="생성"
             leftHandlerText="취소"
-            rightOnClick={() => {
-              handleCreateCard;
+            rightOnClick={() =>
+              submitCard({
+                dashboardId: Number(dashboardId),
+                targetColumnId,
+                selectedAssignee: selectedAssignee!,
+                cardTitle,
+                cardDescription,
+                cardDueDate,
+                cardTags,
+                cardImageFile,
+              })
+                .then(() => {
+                  setIsCreateCardModalOpen(false);
+                  resetNewCardForm();
+                  fetchColumns(String(dashboardId));
+                })
+                .catch(() => {
+                  alert("카드 생성 실패");
+                })
+            }
+            leftOnClick={() => {
+              setIsCreateCardModalOpen(false);
+              resetNewCardForm();
             }}
-            leftOnClick={() => setIsCreateCardModalOpen(false)}
           >
             <div>
               <h2 className="tablet:text-2xl-bold text-xl-bold">할 일 생성</h2>
@@ -260,7 +242,7 @@ export default function Dashboard() {
                 <div className="w-full">
                   <DropdownAssigneeSearch
                     assignees={members}
-                    onSelect={(assignee) => {}}
+                    onSelect={handleSelectAssignee}
                   />
                 </div>
                 <div className="w-full">
@@ -284,14 +266,25 @@ export default function Dashboard() {
                     placeholder="설명을 입력해주세요"
                     className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
                     value={cardDescription}
-                    onChange={(e) => setCardDescription}
+                    onChange={(e) => setCardDescription(e.target.value)}
                   />
                 </div>
                 <div className="w-full">
                   <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
                     마감일
                   </p>
-                  <div className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200">
+                  <div
+                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200 flex items-center gap-[8px]"
+                    onClick={() => datePickerRef.current?.setOpen(true)}
+                  >
+                    <div className="tablet:w-[18px] tablet:h-[18px] w-[14px] h-[14px] relative">
+                      <Image
+                        src={CalendarIcon}
+                        alt="calendar"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
                     <DatePicker
                       selected={cardDueDate}
                       onChange={(date) => {
@@ -300,6 +293,7 @@ export default function Dashboard() {
                       dateFormat="yyyy-MM-dd hh:mm"
                       placeholderText="날짜를 선택해주세요"
                       showTimeSelect
+                      ref={datePickerRef}
                     />
                   </div>
                 </div>
@@ -307,20 +301,13 @@ export default function Dashboard() {
                   <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
                     태그
                   </p>
-                  <TagInputField />
+                  <TagInputField tags={cardTags} setTags={setCardTags} />
                 </div>
                 <div className="w-full">
-                  <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
-                    이미지
-                  </p>
-                  <input
-                    type="file"
-                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
-                    accept="image/*"
-                    onChange={(e) => {
-                      if (e.target.files?.[0]) {
-                        setCardImageFile(e.target.files[0]);
-                      }
+                  <ImageUploadBox
+                    imageFile={cardImageFile}
+                    onChangeImage={(file) => {
+                      setCardImageFile(file);
                     }}
                   />
                 </div>

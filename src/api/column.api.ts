@@ -32,20 +32,18 @@ export async function createColumn({
 }
 
 export async function uploadCardImage({
-  teamId,
   columnId,
   imageFile,
 }: {
-  teamId: string;
   columnId: number;
   imageFile: File;
-}) {
+}): Promise<string> {
   try {
     const formData = new FormData();
     formData.append("image", imageFile);
 
     const res = await instance.post(
-      `/${teamId}/columns/${columnId}/card-image`,
+      `/columns/${columnId}/card-image`,
       formData,
       {
         headers: {

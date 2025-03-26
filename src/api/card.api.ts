@@ -24,20 +24,18 @@ export async function getCards(columnId: number): Promise<Card[]> {
 }
 
 export async function createCard({
-  teamId,
   dashboardId,
   columnId,
-  assigneeUserId,
+  assigneeId,
   title,
   description,
   dueDate,
   tags,
   imageUrl,
 }: {
-  teamId: string;
   dashboardId: number;
   columnId: number;
-  assigneeUserId: number;
+  assigneeId: number;
   title: string;
   description: string;
   dueDate: string;
@@ -45,10 +43,10 @@ export async function createCard({
   imageUrl: string;
 }) {
   try {
-    const res = await instance.post(`/${teamId}/cards`, {
+    const res = await instance.post("/cards", {
       dashboardId,
       columnId,
-      assigneeUserId,
+      assigneeId,
       title,
       description,
       dueDate,
