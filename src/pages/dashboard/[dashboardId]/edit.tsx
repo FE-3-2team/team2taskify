@@ -1,7 +1,6 @@
 import Header from "@/components/common/Header";
 import EditMember from "@/components/EditMember";
 import InvitationHistory from "@/components/InvitationHistory";
-import { getMember } from "@/api/member";
 import { useEffect, useState } from "react";
 import { DashButton } from "@/components/common/Button";
 import { deleteDashboard, getDashboardInfo } from "@/api/dashboard";
@@ -15,9 +14,6 @@ import SideMenu from "@/components/common/SideMenu";
 export default function EditPage() {
   const router = useRouter();
   const { dashboardId } = router.query;
-  const [members, setMembers] = useState<Member[]>([]);
-
-  const [currentPage, setCurrentPage] = useState(1);
   const [dashboardInfo, setDashboardInfo] = useState({
     title: "",
     color: "",
@@ -27,15 +23,9 @@ export default function EditPage() {
   useEffect(() => {
     if (dashboardId) {
       handleLoad();
-      handleLoadMembers();
     }
-  }, [dashboardId, currentPage]);
+  }, [dashboardId]);
   //
-
-  const handleLoadMembers = async () => {
-    const members = await getMember(currentPage, Number(dashboardId));
-    setMembers(members);
-  };
   const handleLoad = async () => {
     const dashboard = await getDashboardInfo(dashboardId as string);
 
@@ -67,7 +57,6 @@ export default function EditPage() {
             <div className="flex flex-col gap-4">
               <EditDashboard
                 title={dashboardInfo.title}
-                color={dashboardInfo.color}
                 dashboardId={router.query.dashboardId as string}
               ></EditDashboard>
               <EditMember dashboardId={dashboardId as string} />

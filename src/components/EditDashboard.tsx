@@ -6,13 +6,15 @@ import { Button } from "./common/Button";
 
 interface Props {
   title: string;
-  color: string;
   dashboardId: string;
 }
-export default function EditDashboard({ title, color, dashboardId }: Props) {
+interface dashboardDataType extends Props {
+  color: string;
+}
+
+export default function EditDashboard({ title, dashboardId }: Props) {
   const [currentTitle, setCurrentTitle] = useState("");
   const [currentValue, setCurrentValue] = useState("");
-  const [currentColor, setCurrentColor] = useState(color);
   const [dashboardData, setDashboardData] = useState({
     dashboardId: "",
     title: "",
@@ -36,10 +38,9 @@ export default function EditDashboard({ title, color, dashboardId }: Props) {
     setDashboardData((prev) => ({ ...prev, color: value }));
   };
 
-  const handleSubmit = async (dashboardData: Props) => {
+  const handleSubmit = async (dashboardData: dashboardDataType) => {
     const { newTitle, newColor } = await editDashboard(dashboardData);
     setCurrentTitle(newTitle);
-    setCurrentColor(newColor);
   };
 
   return (
