@@ -57,6 +57,9 @@ instance.interceptors.request.use(onRequest, onErrorRequest);
 //리스폰스 인터셉터
 const onError = (status: number, message: string) => {
   const error = { status, message };
+  if (status === 401) {
+    alert(`로그인이 필요한 서비스 입니다.`);
+  }
   alert(`${message}`);
   throw error;
 };
