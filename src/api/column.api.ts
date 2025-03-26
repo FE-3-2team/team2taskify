@@ -52,7 +52,6 @@ export async function uploadCardImage({
       }
     );
 
-    console.log("[업로드 이미지 응답]", res.data);
     return res.data.imageUrl;
   } catch (err) {
     throw new Error("카드 이미지 업로드 실패");

@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 
-interface Assignee {
+export interface Assignee {
+  id: number;
+  userId: number;
   profileImageUrl: string | null;
   nickname: string;
 }

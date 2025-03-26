@@ -24,7 +24,6 @@ export async function getCards(columnId: number): Promise<Card[]> {
 }
 
 export async function createCard({
-  teamId,
   dashboardId,
   columnId,
   assigneeId,
@@ -34,7 +33,6 @@ export async function createCard({
   tags,
   imageUrl,
 }: {
-  teamId: string;
   dashboardId: number;
   columnId: number;
   assigneeId: number;

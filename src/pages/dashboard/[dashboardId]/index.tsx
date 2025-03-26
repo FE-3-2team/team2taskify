@@ -8,21 +8,20 @@ import Header from "@/components/common/Header";
 import { Modal } from "@/components/common/ModalPopup";
 import { PlusIconButton } from "@/components/common/Button";
 import DropdownAssigneeSearch from "@/components/common/Dropdown/DropdownAssigneeSearch";
+import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import TagInputField from "@/components/common/TagInputField";
+import ImageUploadBox from "@/components/common/ImageUploadBox";
 import { getColumns, createColumn, uploadCardImage } from "@/api/column.api";
 import { getCards, createCard } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
 import { getMember } from "@/api/member";
+import { formatDateTime } from "@/utils/date";
+import useCreateCard from "@/hooks/useCreateCard";
 import CalendarIcon from "@/assets/icons/Calendar.svg";
-import ImageUploadBox from "@/components/common/ImageUploadBox";
 
 interface ColumnData {
   id: number;
   title: string;
-  cards: Card[];
-}
-
-interface ColumnWithCards extends Column {
   cards: Card[];
 }
 
@@ -32,9 +31,9 @@ export default function Dashboard() {
 
   const [columns, setColumns] = useState<ColumnData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [modalContentType, setModalContentType] = useState<
-    "addColumn" | "invite" | null
-  >(null);
+  const [modalContentType, setModalContentType] = useState<"addColumn" | null>(
+    null
+  );
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const [isCreateCardModalOpen, setIsCreateCardModalOpen] = useState(false);
   const [targetColumnId, setTargetColumnId] = useState<number | null>(null);
@@ -48,7 +47,6 @@ export default function Dashboard() {
   const [cardDueDate, setCardDueDate] = useState<Date | null>(null);
   const [cardTags, setCardTags] = useState<string[]>([]);
   const [cardImageFile, setCardImageFile] = useState<File | null>(null);
-  const [cardImageUrl, setCardImageUrl] = useState<string>("");
 
   const fetchColumns = async (pageId: string) => {
     try {
@@ -59,8 +57,8 @@ export default function Dashboard() {
 
       const columnList = await getColumns(String(dashboardId));
 
-      const columnsWithCards: ColumnWithCards[] = await Promise.all(
-        columnList.map(async (col): Promise<ColumnWithCards> => {
+      const columnsWithCards: ColumnData[] = await Promise.all(
+        columnList.map(async (col): Promise<ColumnData> => {
           const cards = await getCards(col.id);
 
           return { ...col, cards };
@@ -92,31 +90,16 @@ export default function Dashboard() {
     }
   };
 
+  const { createCard: submitCard, isSubmitting } = useCreateCard();
+
   const handleSelectAssignee = (assignee: Assignee) => {
     setSelectedAssignee(assignee);
-    console.log("[선택된 담당자]", assignee);
-  };
-
-  const formatDateTime = (date: Date) => {
-    const year = date.getFullYear();
-    const month = `${date.getMonth() + 1}`.padStart(2, "0");
-    const day = `${date.getDate()}`.padStart(2, "0");
-    const hours = `${date.getHours()}`.padStart(2, "0");
-    const minutes = `${date.getMinutes()}`.padStart(2, "0");
-
-    return `${year}-${month}-${day} ${hours}:${minutes}`;
   };
 
   const datePickerRef = useRef<any>(null);
 
   const handleUploadImage = async (): Promise<string | null> => {
     const columnId = targetColumnId;
-
-    console.log("[이미지 업로드 시도]", {
-      dashboardId,
-      targetColumnId,
-      cardImageFile,
-    });
 
     if (!dashboardId || !targetColumnId || !cardImageFile) {
       console.warn("[이미지 업로드 중단] 필수값 없음", {
@@ -133,89 +116,11 @@ export default function Dashboard() {
         imageFile: cardImageFile,
       });
 
-      console.log("[이미지 업로드 성공]", imageUrl);
       return imageUrl;
     } catch (err) {
       console.error("이미지 업로드 실패:", err);
       return null;
     }
-  };
-
-  const handleCreateCard = async () => {
-    console.log("[카드 생성 시작]");
-
-    let uploadedImageUrl = "";
-
-    if (
-      !dashboardId ||
-      !targetColumnId ||
-      !selectedAssignee ||
-      !cardTitle.trim()
-    ) {
-      console.warn("[필수값 누락]", {
-        dashboardId,
-        targetColumnId,
-        selectedAssignee,
-        cardTitle,
-      });
-      alert("필수 항목을 입력해주세요.");
-      return;
-    }
-
-    try {
-      if (cardImageFile) {
-        uploadedImageUrl = await handleUploadImage();
-        console.log("[업로드된 이미지 URL]", uploadedImageUrl);
-      }
-
-      console.log("[카드 생성 요청 데이터]", {
-        assigneeId: selectedAssignee.userId,
-        dashboardId: Number(dashboardId),
-        columnId: targetColumnId,
-        title: cardTitle,
-        description: cardDescription,
-        dueDate: cardDueDate ? formatDateTime(cardDueDate) : "",
-        tags: cardTags,
-        imageUrl: uploadedImageUrl,
-      });
-
-      const newCard = await createCard({
-        dashboardId: Number(dashboardId),
-        columnId: targetColumnId,
-        assigneeId: selectedAssignee.id,
-        title: cardTitle,
-        description: cardDescription,
-        dueDate: cardDueDate ? formatDateTime(cardDueDate) : "",
-        tags: cardTags,
-        imageUrl: uploadedImageUrl,
-      });
-
-      console.log("[카드 생성 성공]", newCard);
-
-      setCardTitle("");
-      setCardDescription("");
-      setCardDueDate(null);
-      setCardTags([]);
-      setCardImageFile(null);
-      setCardImageUrl("");
-      setSelectedAssignee(null);
-      setIsCreateCardModalOpen(false);
-
-      await fetchColumns(String(dashboardId));
-    } catch (err) {
-      console.error("카드 생성 실패:", err);
-    }
-
-    console.log("카드 생성 요청:", {
-      assigneeId: selectedAssignee.userId,
-      dashboardId: Number(dashboardId),
-      columnId: targetColumnId,
-      title: cardTitle,
-      description: cardDescription,
-      dueDate: cardDueDate ? formatDateTime(cardDueDate) : "",
-      tags: cardTags,
-      imageUrl: uploadedImageUrl,
-    });
   };
 
   useEffect(() => {
@@ -236,7 +141,6 @@ export default function Dashboard() {
           profileImageUrl: m.profileImageUrl,
         }));
         setMembers(formatted);
-        console.log("[멤버 목록 로드됨]", formatted);
       } catch (err) {
         console.error("멤버 조회 실패", err);
       }
@@ -260,7 +164,6 @@ export default function Dashboard() {
                 cards={column.cards ?? []}
                 columnId={column.id}
                 onAddCardClick={(columnId) => {
-                  console.log("[카드 추가 버튼 클릭] columnId:", columnId);
                   setTargetColumnId(columnId);
                   setIsCreateCardModalOpen(true);
                 }}
@@ -312,9 +215,25 @@ export default function Dashboard() {
             ModalOpenButton={null}
             rightHandlerText="생성"
             leftHandlerText="취소"
-            rightOnClick={async () => {
-              await handleCreateCard();
-            }}
+            rightOnClick={() =>
+              submitCard({
+                dashboardId: Number(dashboardId),
+                targetColumnId,
+                selectedAssignee: selectedAssignee!,
+                cardTitle,
+                cardDescription,
+                cardDueDate,
+                cardTags,
+                cardImageFile,
+              })
+                .then(() => {
+                  setIsCreateCardModalOpen(false);
+                  fetchColumns(String(dashboardId));
+                })
+                .catch(() => {
+                  alert("카드 생성 실패");
+                })
+            }
             leftOnClick={() => setIsCreateCardModalOpen(false)}
           >
             <div>
@@ -387,10 +306,8 @@ export default function Dashboard() {
                 <div className="w-full">
                   <ImageUploadBox
                     imageFile={cardImageFile}
-                    previewUrl={cardImageUrl}
-                    onChangeImage={(file, preview) => {
+                    onChangeImage={(file) => {
                       setCardImageFile(file);
-                      setCardImageUrl(preview);
                     }}
                   />
                 </div>
