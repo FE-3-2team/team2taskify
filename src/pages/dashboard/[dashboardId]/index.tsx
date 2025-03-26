@@ -16,67 +16,6 @@ import { getMember } from "@/api/member";
 import CalendarIcon from "@/assets/icons/Calendar.svg";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
 
-const handleSelectAssignee = (assignee: Assignee) => {
-  setSelectedAssignee(assignee);
-};
-
-const handleUploadImage = async () => {
-  if (!dashboardId || !targetColumnId || !cardImageFile) return;
-
-  try {
-    const formData = new FormData();
-    formData.append("image", cardImageFile);
-
-    const res = await uploadCardImage(
-      String(dashboardId),
-      targetColumnId,
-      formData
-    );
-    setCardImageUrl(res.imageUrl);
-  } catch (err) {
-    console.error("이미지 업로드 실패:", err);
-  }
-};
-
-const handleCreateCard = async () => {
-  if (
-    !dashboardId ||
-    !targetColumnId ||
-    !selectedAssignee ||
-    !cardTitle.trim()
-  ) {
-    alert("필수 항목을 입력해주세요.");
-    return;
-  }
-
-  try {
-    if (cardImageFile) await handleUploadImage();
-
-    const newCard = await createCard(String(dashboardId), {
-      assigneeUserId: selectedAssignee.id,
-      dashboardId: Number(dashboardId),
-      columnId: targetColumnId,
-      title: cardTitle,
-      description: cardDescription,
-      dueDate: cardDueDate ? formatDateTime(cardDueDate) : "",
-      tags: cardTags,
-      imageUrl: cardImageUrl,
-    });
-
-    setCardTitle("");
-    setCardDescription("");
-    setCardDueDate("");
-    setCardTags([]);
-    setTagInput("");
-    setCardImageFile(null);
-    setCardImageUrl("");
-    setSelectedAssignee(null);
-    setIsCreateCardModalOpen(false);
-  } catch (err) {
-    console.error("카드 생성 실패:", err);
-  }
-};
-
 interface ColumnData {
   id: number;
   title: string;
@@ -107,6 +46,7 @@ export default function Dashboard() {
   const [cardTitle, setCardTitle] = useState("");
   const [cardDescription, setCardDescription] = useState("");
   const [cardDueDate, setCardDueDate] = useState<Date | null>(null);
+  const [cardTags, setCardTags] = useState<string[]>([]);
   const [cardImageFile, setCardImageFile] = useState<File | null>(null);
   const [cardImageUrl, setCardImageUrl] = useState<string>("");
 
@@ -152,6 +92,11 @@ export default function Dashboard() {
     }
   };
 
+  const handleSelectAssignee = (assignee: Assignee) => {
+    setSelectedAssignee(assignee);
+    console.log("[선택된 담당자]", assignee);
+  };
+
   const formatDateTime = (date: Date) => {
     const year = date.getFullYear();
     const month = `${date.getMonth() + 1}`.padStart(2, "0");
@@ -159,10 +104,119 @@ export default function Dashboard() {
     const hours = `${date.getHours()}`.padStart(2, "0");
     const minutes = `${date.getMinutes()}`.padStart(2, "0");
 
-    return `${year}.${month}.${day} ${hours}:${minutes}`;
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
   };
 
   const datePickerRef = useRef<any>(null);
+
+  const handleUploadImage = async (): Promise<string | null> => {
+    const columnId = targetColumnId;
+
+    console.log("[이미지 업로드 시도]", {
+      dashboardId,
+      targetColumnId,
+      cardImageFile,
+    });
+
+    if (!dashboardId || !targetColumnId || !cardImageFile) {
+      console.warn("[이미지 업로드 중단] 필수값 없음", {
+        dashboardId,
+        targetColumnId,
+        cardImageFile,
+      });
+      return null;
+    }
+
+    try {
+      const imageUrl = await uploadCardImage({
+        columnId: targetColumnId,
+        imageFile: cardImageFile,
+      });
+
+      console.log("[이미지 업로드 성공]", imageUrl);
+      return imageUrl;
+    } catch (err) {
+      console.error("이미지 업로드 실패:", err);
+      return null;
+    }
+  };
+
+  const handleCreateCard = async () => {
+    console.log("[카드 생성 시작]");
+
+    let uploadedImageUrl = "";
+
+    if (
+      !dashboardId ||
+      !targetColumnId ||
+      !selectedAssignee ||
+      !cardTitle.trim()
+    ) {
+      console.warn("[필수값 누락]", {
+        dashboardId,
+        targetColumnId,
+        selectedAssignee,
+        cardTitle,
+      });
+      alert("필수 항목을 입력해주세요.");
+      return;
+    }
+
+    try {
+      if (cardImageFile) {
+        uploadedImageUrl = await handleUploadImage();
+        console.log("[업로드된 이미지 URL]", uploadedImageUrl);
+      }
+
+      console.log("[카드 생성 요청 데이터]", {
+        assigneeId: selectedAssignee.userId,
+        dashboardId: Number(dashboardId),
+        columnId: targetColumnId,
+        title: cardTitle,
+        description: cardDescription,
+        dueDate: cardDueDate ? formatDateTime(cardDueDate) : "",
+        tags: cardTags,
+        imageUrl: uploadedImageUrl,
+      });
+
+      const newCard = await createCard({
+        dashboardId: Number(dashboardId),
+        columnId: targetColumnId,
+        assigneeId: selectedAssignee.id,
+        title: cardTitle,
+        description: cardDescription,
+        dueDate: cardDueDate ? formatDateTime(cardDueDate) : "",
+        tags: cardTags,
+        imageUrl: uploadedImageUrl,
+      });
+
+      console.log("[카드 생성 성공]", newCard);
+
+      setCardTitle("");
+      setCardDescription("");
+      setCardDueDate(null);
+      setCardTags([]);
+      setCardImageFile(null);
+      setCardImageUrl("");
+      setSelectedAssignee(null);
+      setIsCreateCardModalOpen(false);
+
+      await fetchColumns(String(dashboardId));
+    } catch (err) {
+      console.error("카드 생성 실패:", err);
+    }
+
+    console.log("카드 생성 요청:", {
+      assigneeId: selectedAssignee.userId,
+      dashboardId: Number(dashboardId),
+      columnId: targetColumnId,
+      title: cardTitle,
+      description: cardDescription,
+      dueDate: cardDueDate ? formatDateTime(cardDueDate) : "",
+      tags: cardTags,
+      imageUrl: uploadedImageUrl,
+    });
+  };
 
   useEffect(() => {
     if (typeof dashboardId === "string") {
@@ -174,12 +228,15 @@ export default function Dashboard() {
     const fetchMembers = async () => {
       if (!dashboardId || typeof dashboardId !== "string") return;
       try {
-        const { members } = await getMember(1, Number(dashboardId), 20); // page=1, size=20
+        const { members } = await getMember(1, Number(dashboardId), 20);
         const formatted = members.map((m: any) => ({
+          id: m.id,
+          userId: m.userId,
           nickname: m.nickname,
           profileImageUrl: m.profileImageUrl,
         }));
         setMembers(formatted);
+        console.log("[멤버 목록 로드됨]", formatted);
       } catch (err) {
         console.error("멤버 조회 실패", err);
       }
@@ -203,6 +260,7 @@ export default function Dashboard() {
                 cards={column.cards ?? []}
                 columnId={column.id}
                 onAddCardClick={(columnId) => {
+                  console.log("[카드 추가 버튼 클릭] columnId:", columnId);
                   setTargetColumnId(columnId);
                   setIsCreateCardModalOpen(true);
                 }}
@@ -254,8 +312,8 @@ export default function Dashboard() {
             ModalOpenButton={null}
             rightHandlerText="생성"
             leftHandlerText="취소"
-            rightOnClick={() => {
-              handleCreateCard;
+            rightOnClick={async () => {
+              await handleCreateCard();
             }}
             leftOnClick={() => setIsCreateCardModalOpen(false)}
           >
@@ -265,7 +323,7 @@ export default function Dashboard() {
                 <div className="w-full">
                   <DropdownAssigneeSearch
                     assignees={members}
-                    onSelect={(assignee) => {}}
+                    onSelect={handleSelectAssignee}
                   />
                 </div>
                 <div className="w-full">
@@ -289,7 +347,7 @@ export default function Dashboard() {
                     placeholder="설명을 입력해주세요"
                     className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
                     value={cardDescription}
-                    onChange={(e) => setCardDescription}
+                    onChange={(e) => setCardDescription(e.target.value)}
                   />
                 </div>
                 <div className="w-full">
@@ -324,7 +382,7 @@ export default function Dashboard() {
                   <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
                     태그
                   </p>
-                  <TagInputField />
+                  <TagInputField tags={cardTags} setTags={setCardTags} />
                 </div>
                 <div className="w-full">
                   <ImageUploadBox
