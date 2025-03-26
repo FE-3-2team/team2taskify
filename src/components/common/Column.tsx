@@ -99,7 +99,6 @@ const Column: React.FC<ColumnProps> = ({ title, cards, onAddCard }) => {
       )}
 
       <div className="flex flex-col gap-[16px]">
-        {console.log("받은 cards:", cards)}
         {cards.map((card, index) => (
           <div
             key={card.id}
