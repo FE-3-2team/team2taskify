@@ -1,12 +1,13 @@
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import Column from "@/components/common/Column";
 import Header from "@/components/common/Header";
 import { Modal } from "@/components/common/ModalPopup";
 import { PlusIconButton } from "@/components/common/Button";
 import DropdownAssigneeSearch from "@/components/common/Dropdown/DropdownAssigneeSearch";
-import { Tag } from "@/components/common/Chip/Tag.chip";
 import TagInputField from "@/components/common/TagInputField";
-import { useEffect, useState } from "react";
 import { getColumns, createColumn, uploadCardImage } from "@/api/column.api";
 import { getCards, createCard } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
@@ -54,7 +55,7 @@ const handleCreateCard = async () => {
       columnId: targetColumnId,
       title: cardTitle,
       description: cardDescription,
-      dueDate: cardDueDate,
+      dueDate: cardDueDate ? formatDateTime(cardDueDate) : "",
       tags: cardTags,
       imageUrl: cardImageUrl,
     });
@@ -104,9 +105,7 @@ export default function Dashboard() {
   const [members, setMembers] = useState<Assignee[]>([]);
   const [cardTitle, setCardTitle] = useState("");
   const [cardDescription, setCardDescription] = useState("");
-  const [cardDueDate, setCardDueDate] = useState("");
-  const [cardTags, setCardTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
+  const [cardDueDate, setCardDueDate] = useState<Date | null>(null);
   const [cardImageFile, setCardImageFile] = useState<File | null>(null);
   const [cardImageUrl, setCardImageUrl] = useState<string>("");
 
@@ -136,12 +135,6 @@ export default function Dashboard() {
     }
   };
 
-  useEffect(() => {
-    if (typeof dashboardId === "string") {
-      fetchColumns(dashboardId);
-    }
-  }, [dashboardId]);
-
   const handleCreateColumn = async () => {
     if (!dashboardId || typeof dashboardId !== "string") return;
     if (!newColumnTitle.trim()) return;
@@ -160,6 +153,22 @@ export default function Dashboard() {
     }
   };
 
+  const formatDateTime = (date: Date) => {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, "0");
+    const day = `${date.getDate()}`.padStart(2, "0");
+    const hours = `${date.getHours()}`.padStart(2, "0");
+    const minutes = `${date.getMinutes()}`.padStart(2, "0");
+
+    return `${year}.${month}.${day} ${hours}:${minutes}`;
+  };
+
+  useEffect(() => {
+    if (typeof dashboardId === "string") {
+      fetchColumns(dashboardId);
+    }
+  }, [dashboardId]);
+
   useEffect(() => {
     const fetchMembers = async () => {
       if (!dashboardId || typeof dashboardId !== "string") return;
@@ -177,16 +186,6 @@ export default function Dashboard() {
 
     fetchMembers();
   }, [dashboardId]);
-
-  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && tagInput.trim()) {
-      e.preventDefault();
-      if (!cardTags.includes(tagInput.trim())) {
-        setCardTags([...cardTags, tagInput.trim()]);
-      }
-      setTagInput("");
-    }
-  };
 
   return (
     <>
@@ -301,12 +300,17 @@ export default function Dashboard() {
                   <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
                     마감일
                   </p>
-                  <input
-                    type="text"
-                    placeholder="날짜를 입력해주세요"
-                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
-                    value={cardDueDate}
-                  />
+                  <div className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200">
+                    <DatePicker
+                      selected={cardDueDate}
+                      onChange={(date) => {
+                        if (date) setCardDueDate(date);
+                      }}
+                      dateFormat="yyyy-MM-dd hh:mm"
+                      placeholderText="날짜를 선택해주세요"
+                      showTimeSelect
+                    />
+                  </div>
                 </div>
                 <div className="w-full">
                   <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
