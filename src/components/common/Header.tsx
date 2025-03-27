@@ -79,21 +79,6 @@ export default function Header({ createdByMe }: Props) {
               </div>
             </button>
           </Link>
-<<<<<<< HEAD
-          <button
-            onClick={() => {}}
-            className="justify-center items-center h-[40px] flex flex-row  py-[7px] px-2 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300"
-          >
-            <Image
-              className="hidden tablet:block"
-              src={Invite}
-              width={18}
-              height={18}
-              alt="+"
-            />
-            <div className="text-gray-500 text-md-medium tablet:text-lg-medium">
-              초대하기
-=======
           {router.pathname !== "/mydashboard" && (
             <div className="w-[73px] h-[40px] tablet:w-[116px]">
               <Modal
@@ -122,13 +107,12 @@ export default function Header({ createdByMe }: Props) {
                   changeValue={(value) => setInviteValue(value)}
                 />
               </Modal>
->>>>>>> dev
             </div>
           )}
         </div>
         <div className="flex w-fit flex-row gap-[12px] tablet:gap-[36px] laptop:gap-[40px]">
           <div
-            className="w-[78px]"
+            className="w-[78px] laptop:w-[118px]"
             style={{ display: display }}
           >
             {members && <Badges memberList={members} />}
