@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useRef, useCallback } from "react";
 import TodoCard from "@/components/common/TodoCard";
 import GearIcon from "@/assets/icons/Edit.icon.svg";
 import PlusIcon from "@/assets/icons/Plus.icon.svg";

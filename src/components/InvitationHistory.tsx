@@ -65,7 +65,7 @@ export default function InvitationHistory() {
   };
   return (
     <div
-      className="flex flex-col gap-[26px] tablet:gap-[17px] bg-white rounded-lg w-full h-[406px]  tablet:h-[477px]   laptop:h-[477px] 
+      className="flex flex-col gap-[26px] tablet:gap-[17px] bg-white rounded-lg w-full h-fit
     pt-6 pb-3 tablet:pt-8 tablet:pb-0 "
     >
       <div className="flex flex-col gap-3 tablet:gap-8">

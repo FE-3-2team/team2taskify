@@ -74,7 +74,7 @@ export default function EditMember({ dashboardId }: Props) {
                 <Profile
                   nickname={member.nickname}
                   profileImageUrl={member.profileImageUrl}
-                  type="profile"
+                  type="edit"
                 />
                 <div className="w-[52px] h-[32px] tablet:w-[84px]">
                   <Button

@@ -56,7 +56,7 @@ export function Badges({ memberList }: BadgesProps) {
 interface Props {
   nickname: string;
   img: string | null;
-  type: "comment" | "assignee" | "badges" | "profile" | "column";
+  type: "comment" | "assignee" | "badges" | "profile" | "column" | "edit";
 }
 export function Badge({ nickname, img, type }: Props) {
   const colorNum = nickname.charCodeAt(0) % RANDOM_COLOR.length;
@@ -75,6 +75,7 @@ export function Badge({ nickname, img, type }: Props) {
           badges: "w-[38px] h-[38px]",
           profile: "w-[38px] h-[38px]",
           assignee: "w-[26px] h-[26px] tablet:w-[34px] tablet:h-[34px]",
+          edit: "w-[34px] h-[34px] tablet:w-[38px] tablet:h-[38px] ",
         }[type],
 
         RANDOM_COLOR[colorNum]

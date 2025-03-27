@@ -28,6 +28,7 @@ export default function MyDashboard() {
   useEffect(() => {
     handleLoad();
   }, [currentPage]);
+
   //
   const handleLoad = async () => {
     const { totalCount, dashboards } = await getDashboards(currentPage, 5);
@@ -55,7 +56,7 @@ export default function MyDashboard() {
       <SideMenu />
       <Header />
       <div className="flex flex-col py-6 px-6 tablet:py-10 tablet:px-10 gap-6 tablet:gap-12 laptop:gap-10 max-w-[1022px]">
-        <div>
+        <div className="flex flex-col gap-4 laptop:gap-3">
           <div className="w-full grid gap-[10px] grid-cols-1 tablet:grid-cols-2  laptop:grid-cols-3">
             <div className="w-full h-full">
               <Modal
@@ -98,7 +99,6 @@ export default function MyDashboard() {
             />
           </div>
         </div>
-
         <InvitedDashboards />
       </div>
     </div>

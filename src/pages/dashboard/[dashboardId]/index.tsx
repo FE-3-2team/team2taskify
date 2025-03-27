@@ -11,7 +11,7 @@ import DropdownAssigneeSearch from "@/components/common/Dropdown/DropdownAssigne
 import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import TagInputField from "@/components/common/TagInputField";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
-import { getColumns, createColumn, uploadCardImage } from "@/api/column.api";
+import { getColumns, createColumn } from "@/api/column.api";
 import { getCards } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
 import { getMember } from "@/api/member";
@@ -55,17 +55,20 @@ export default function Dashboard() {
 
       const columnList = await getColumns(String(dashboardId));
 
-      const columnsWithCards: ColumnData[] = await Promise.all(
-        columnList.map(async (col): Promise<ColumnData> => {
+      setColumns([]);
+
+      for (const col of columnList) {
+        try {
           const cards = await getCards(col.id);
 
-          return { ...col, cards };
-        })
-      );
-
-      setColumns(columnsWithCards);
+          setColumns((prev) => [...prev, { ...col, cards }]);
+        } catch (err) {
+          console.error(`컬럼 ${col.id}의 카드 로딩 실패`, err);
+          setColumns((prev) => [...prev, { ...col, cards: [] }]);
+        }
+      }
     } catch (err) {
-      console.error("컬럼 또는 카드 로딩 실패", err);
+      console.error("컬럼 목록 로딩 실패", err);
     } finally {
       setIsLoading(false);
     }
@@ -261,10 +264,9 @@ export default function Dashboard() {
                   <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
                     설명
                   </p>
-                  <input
-                    type="text"
+                  <textarea
                     placeholder="설명을 입력해주세요"
-                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[126px] tablet:text-lg-regular text-md-regular text-black-200"
                     value={cardDescription}
                     onChange={(e) => setCardDescription(e.target.value)}
                   />

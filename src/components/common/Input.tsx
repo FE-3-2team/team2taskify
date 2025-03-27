@@ -280,7 +280,6 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
             } ${disable ? "bg-gray-200 cursor-not-allowed" : ""}`}
             aria-describedby={error ? errorId : undefined}
             onBlur={handleBlur}
-            readOnly={readOnly}
           />
           {(variant === "password" || variant === "confirmPassword") && (
             <PasswordToggleButton
