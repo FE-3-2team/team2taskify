@@ -31,9 +31,10 @@ export async function createComment({
 
 export async function getComments(
   size: number = 5,
-  cursorId: number,
-  cardId: number
+  cardId: number,
+  cursorId?: number
 ) {
+  cursorId = cursorId === 0 ? undefined : cursorId;
   try {
     const res = await instance.get(`/comments`, {
       params: { size: size, cursorId: cursorId, cardId: cardId },

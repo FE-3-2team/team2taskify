@@ -14,9 +14,8 @@ export default function useWindowSize() {
   const handleResize = useCallback(() => {
     const tabletBreakpoint = getCssVariable("--breakpoint-tablet"); //744px
     const laptopBreakpoint = getCssVariable("--breakpoint-laptop"); //1024px
-    const desktopBreakpoint = getCssVariable("--breakpoint-desktop"); //1921px
 
-    if (window.matchMedia(`(min-width: ${desktopBreakpoint})`).matches) {
+    if (window.matchMedia(`(min-width: 1440px)`).matches) {
       setDeviceType("desktop");
     } else if (window.matchMedia(`(min-width: ${laptopBreakpoint})`).matches) {
       setDeviceType("laptop");

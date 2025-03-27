@@ -11,7 +11,7 @@ import DropdownAssigneeSearch from "@/components/common/Dropdown/DropdownAssigne
 import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import TagInputField from "@/components/common/TagInputField";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
-import { getColumns, createColumn, uploadCardImage } from "@/api/column.api";
+import { getColumns, createColumn } from "@/api/column.api";
 import { getCards } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
 import { getMember } from "@/api/member";

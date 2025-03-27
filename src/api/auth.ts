@@ -1,6 +1,5 @@
 import { instance } from "./instance";
 import useAuthStore from "@/utils/Zustand/zustand";
-import { removeItem } from "@/utils/localstorage";
 //
 
 export async function loginApi(email: string, password: string) {
@@ -40,17 +39,6 @@ export async function signupApi(
       nickname,
       password,
     });
-
-    if (res.status === 201) {
-      useAuthStore.setState({
-        isLoggedIn: false,
-        userId: null,
-        userNickname: "",
-        profileImageUrl: null,
-        dashboardId: null,
-        dashboardTitle: "",
-      });
-    }
     return res.data;
   } catch (error: any) {
     if (error.response) {
