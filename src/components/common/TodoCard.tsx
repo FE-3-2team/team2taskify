@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useState } from "react";
-import { Tags } from "./Chip/Tag.chip";
+import { Tags } from "@/components/common/Chip/Tag.chip";
+import useCardImageVisibility from "@/hooks/useCardImageVisibility";
 import CalendarIcon from "@/assets/icons/Calendar.svg";
 
 interface TodoCardProps {
@@ -9,14 +10,15 @@ interface TodoCardProps {
 
 const TodoCard: React.FC<TodoCardProps> = ({ todoData }) => {
   const [isImageError, setIsImageError] = useState(false);
+  const isCardImageVisible = useCardImageVisibility(todoData.imageUrl);
 
   return (
     <div className="desktop:w-[314px] tablet:w-[544px] w-[284px] tablet:px-[20px] desktop:py-[16px] tablet:py-[14px] px-[12px] py-[6px] border rounded-[6px] border-gray-300 bg-white flex items-center justify-center">
       <div className="tablet:w-[504px] w-[260px] desktop:h-fit tablet:h-[64px] flex flex-col desktop:flex-col desktop:w-full tablet:flex-row items-between justify-start gap-[4px] desktop:gap-[16px]">
-        {todoData.imageUrl && !isImageError && (
+        {isCardImageVisible && !isImageError && (
           <div className="tablet:mt-[0] mt-[6px] tablet:h-[64px] tablet:w-[92px] rounded-[6px] tablet:rounded-[4px] desktop:rounded-[6px] w-[260px] h-[152px] tablet:mr-[20px] desktop:w-[274px] desktop:h-[160px] overflow-hidden relative">
             <Image
-              src={todoData.imageUrl}
+              src={todoData.imageUrl ?? ""}
               alt="task"
               fill
               className="object-cover"
