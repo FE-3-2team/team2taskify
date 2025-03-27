@@ -5,6 +5,8 @@ import UnifiedInput from "../common/Input";
 import Button from "../common/Button/Button";
 import SignupFormLayout from "./AuthFormLayout";
 import { useValidation } from "@/hooks/useValidation";
+import CheckBox from "@/assets/icons/CheckBox.svg";
+import UncheckBox from "@/assets/icons/UnCheckBox.svg";
 
 interface SignupFormProps {
   logoSrc: string | StaticImageData;
@@ -121,18 +123,30 @@ export default function SignupForm({
       </div>
 
       {/* 이용약관 체크박스 */}
-      <div className="flex items-center">
+      <label htmlFor="terms" className="flex items-center cursor-pointer">
         <input
           type="checkbox"
           id="terms"
           checked={terms}
           onChange={(e) => setTerms(e.target.checked)}
-          className="mr-2"
+          className="hidden"
         />
+        <div className="w-5 h-5 mr-2">
+          {terms ? (
+            <Image src={CheckBox} alt="체크됨" width={20} height={20} />
+          ) : (
+            <Image
+              src={UncheckBox}
+              alt="체크되지 않음"
+              width={20}
+              height={20}
+            />
+          )}
+        </div>
         <label htmlFor="terms" className="text-sm text-gray-700">
           이용약관에 동의합니다.
         </label>
-      </div>
+      </label>
     </div>
   );
 
