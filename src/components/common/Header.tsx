@@ -52,7 +52,7 @@ export default function Header({ createdByMe }: Props) {
 
   //
   return (
-    <div className="flex bg-white flex-row justify-between w-full h-[70px] desktop:pr-20 py-[15px] px-[20px] laptop:pl-10 laptop:pr-[10px]  border-b-[1px]  items-center border-gray-300 ">
+    <div className="flex bg-white flex-row justify-between w-full h-[70px] py-[15px] px-[8px] tablet:pl-10 tablet:pl-[74px] tablet:pr-[32px] laptop:pr-[80px] border-b-[1px] items-center border-gray-300 ">
       <div className="flex flex-row items-center gap-2">
         <p className="hidden laptop:block text-black-200 text-xl-bold ">
           {dashboardTitle}
@@ -63,18 +63,18 @@ export default function Header({ createdByMe }: Props) {
           </div>
         )}
       </div>
-      <div className="flex flex-row gap-4 tablet:gap-8 laptop:gap-10">
-        <div className="flex flex-row gap-4 ">
+      <div className="flex flex-row gap-[16px] tablet:gap-[36px] laptop:gap-[40px]">
+        <div className="flex flex-row gap-2 tablet:gap-4">
           <Link href="/mypage">
-            <button className="w-[49px] tablet:w-[88px] justify-center h-[40px] flex flex-row items-center py-[7px] px-3 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300">
+            <button className="justify-center h-[40px] flex flex-row items-center py-[7px] px-2 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300">
               <Image
                 className="hidden tablet:block"
                 src={Edit}
-                width={15}
-                height={15}
+                width={18}
+                height={18}
                 alt="톱니바퀴"
               />
-              <div className="text-gray-500 text-xs-medium tablet-text-md-medium">
+              <div className="text-gray-500 text-md-medium tablet:text-lg-medium">
                 관리
               </div>
             </button>
@@ -110,13 +110,12 @@ export default function Header({ createdByMe }: Props) {
             </div>
           )}
         </div>
-        <div className="flex w-fit flex-row gap-4 tablet:gap-6 laptop:gap-[38px]">
-          <div
-            className=" w-[90px] laptop:w-[138px]"
-            style={{ display: display }}
-          >
-            {members && <Badges memberList={members} />}
-          </div>
+        <div className="flex w-fit flex-row gap-[12px] tablet:gap-[36px] laptop:gap-[40px]">
+        <div
+          style={{ display: members && members.length > 0 ? "block" : "none" }}
+        >
+          {members && <Badges memberList={members} />}
+        </div>
           <div className="h-[38px] w-[1px] bg-gray-300" />
           {store && (
             <Logout>
