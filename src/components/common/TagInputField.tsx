@@ -18,7 +18,7 @@ export default function TagInputField({ tags, setTags }: TagInputFieldProps) {
       setInputValue("");
       setSelectedIndex(null);
     } else if (e.key === "Backspace") {
-      if (inputValue) return; // 그냥 글자 지우기
+      if (inputValue) return;
 
       if (selectedIndex !== null) {
         const newTags = [...tags];
