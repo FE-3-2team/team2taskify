@@ -75,25 +75,25 @@ export default function SignupForm({
 
   const formSection = (
     <div className="flex flex-col w-full">
-      {/* 닉네임 입력 */}
-      <div>
-        <UnifiedInput
-          variant="title"
-          label="닉네임"
-          placeholder="닉네임을 입력해 주세요"
-          value={nickname}
-          onChange={setNickname}
-        />
-      </div>
-
       {/* 이메일 입력 */}
-      <div className="mt-4">
+      <div>
         <UnifiedInput
           variant="email"
           label="이메일"
           placeholder="이메일을 입력해 주세요"
           value={email}
           onChange={setEmail}
+        />
+      </div>
+
+      {/* 닉네임 입력 */}
+      <div className="mt-4">
+        <UnifiedInput
+          variant="title"
+          label="닉네임"
+          placeholder="닉네임을 입력해 주세요"
+          value={nickname}
+          onChange={setNickname}
         />
       </div>
 
@@ -121,7 +121,7 @@ export default function SignupForm({
       </div>
 
       {/* 이용약관 체크박스 */}
-      <div className="flex items-center mt-4">
+      <div className="flex items-center">
         <input
           type="checkbox"
           id="terms"
@@ -151,9 +151,11 @@ export default function SignupForm({
 
   const footerSection = (
     <p className="text-center text-gray-600">
-      이미 계정이 있으신가요?{" "}
+      이미 회원이신가요?{" "}
       <Link href="/login">
-        <span className="underline cursor-pointer">로그인하기</span>
+        <span className="underline cursor-pointer text-[#5534da]">
+          로그인하기
+        </span>
       </Link>
     </p>
   );
