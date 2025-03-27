@@ -42,7 +42,7 @@ export function Badges({ memberList }: BadgesProps) {
       {memberList.length > 3 && (
         <div
           className={`absolute border-2 border-white flex justify-center items-center 
-          rounded-full w-[38px] h-[38px] text-pink200 text-lg-semibold bg-pink300
+          rounded-full w-[38px] h-[38px] text-pink200 text-md-semibold tablet:text-lg-semibold bg-pink300
           z-10 
           `}
           style={{ left: `${memberArray.length * 20}px` }}
@@ -83,7 +83,7 @@ export function Badge({ nickname, img, type }: Props) {
       {img ? (
         <img src={img} alt="프로필 이미지" />
       ) : (
-        <div className="text-white text-lg-semibold ">{firstChar}</div>
+        <div className="text-white text-md-semibold tablet:text-lg-semibold">{firstChar}</div>
       )}
     </div>
   );

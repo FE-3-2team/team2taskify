@@ -2,6 +2,7 @@ import { useState } from "react";
 import { instance } from "@/api/instance";
 import { Button } from "@/components/common/Button";
 import UnifiedInput from "@/components/common/Input";
+import { Modal } from "@/components/common/ModalPopup";
 import { AlertModal } from "@/components/ModalContents/AlertModal";
 
 export default function ChangePasswordForm() {
@@ -55,9 +56,9 @@ export default function ChangePasswordForm() {
     } catch (error: any) {
       const message = error?.response?.data?.message || "";
       if (message.toLowerCase().includes("password")) {
-        setErrorMessage("현재 비밀번호가 틀립니다.");
+        setErrorMessage("현재 비밀번호가 일치하지 않습니다.");
       } else {
-        setErrorMessage("비밀번호 변경 실패: " + message);
+        setErrorMessage(message);
       }
       setErrorModalOpen(true);
     }
