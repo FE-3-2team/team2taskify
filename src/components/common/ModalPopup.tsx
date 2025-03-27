@@ -79,7 +79,7 @@ export function Modal({
                     variant="outline"
                     onClick={() => {
                       handleSetIsOpen(false);
-                      leftOnClick;
+                      leftOnClick();
                     }}
                   >
                     {leftHandlerText}
