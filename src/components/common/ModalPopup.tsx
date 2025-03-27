@@ -2,7 +2,7 @@ import { useAutoClose } from "@/hooks/useAutoClose";
 import X from "@/assets/icons/X.icon.svg";
 import Button from "@/components/common/Button/Button";
 import Image from "next/image";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import DropdownEditDel from "./Dropdown/DropdownEditDel";
 import { deleteCard } from "@/api/card.api";
 
@@ -140,6 +140,7 @@ export function DetailContent({
   cardId,
 }: DetailContentProps) {
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
+  const [isEdit, setIsEdit] = useState(false);
   const handleButtonClick = () => {
     setIsOpen(true);
   };
@@ -150,6 +151,8 @@ export function DetailContent({
   };
   const handleEdit = () => {
     setIsOpen(false);
+    setIsEdit(true);
+    //할일 수정 모달 띄워야함
   };
   return (
     <>
