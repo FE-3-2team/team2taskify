@@ -74,9 +74,7 @@ const ProfileContainer = () => {
         profileImageUrl: uploadedImageUrl || profileImage,
       };
 
-      const updateResponse = await instance.put("/users/me", updateBody, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const updateResponse = await instance.put("/users/me", updateBody, {});
       console.log("Profile updated:", updateResponse.data);
     } catch (error) {
       console.error("Profile update error:", error);
