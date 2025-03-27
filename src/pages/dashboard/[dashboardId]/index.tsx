@@ -55,17 +55,20 @@ export default function Dashboard() {
 
       const columnList = await getColumns(String(dashboardId));
 
-      const columnsWithCards: ColumnData[] = await Promise.all(
-        columnList.map(async (col): Promise<ColumnData> => {
+      setColumns([]);
+
+      for (const col of columnList) {
+        try {
           const cards = await getCards(col.id);
 
-          return { ...col, cards };
-        })
-      );
-
-      setColumns(columnsWithCards);
+          setColumns((prev) => [...prev, { ...col, cards }]);
+        } catch (err) {
+          console.error(`컬럼 ${col.id}의 카드 로딩 실패`, err);
+          setColumns((prev) => [...prev, { ...col, cards: [] }]);
+        }
+      }
     } catch (err) {
-      console.error("컬럼 또는 카드 로딩 실패", err);
+      console.error("컬럼 목록 로딩 실패", err);
     } finally {
       setIsLoading(false);
     }
