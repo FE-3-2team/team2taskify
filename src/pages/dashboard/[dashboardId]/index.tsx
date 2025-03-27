@@ -264,10 +264,9 @@ export default function Dashboard() {
                   <p className="tablet:text-2lg-medium text-lg-medium tablet:mb-[8px] mb-[10px]">
                     설명
                   </p>
-                  <input
-                    type="text"
+                  <textarea
                     placeholder="설명을 입력해주세요"
-                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                    className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[126px] tablet:text-lg-regular text-md-regular text-black-200"
                     value={cardDescription}
                     onChange={(e) => setCardDescription(e.target.value)}
                   />
