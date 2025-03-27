@@ -12,7 +12,12 @@ import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSear
 import TagInputField from "@/components/common/TagInputField";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
 import { SkeletonColumn } from "@/components/common/Skeleton";
-import { getColumns, createColumn } from "@/api/column.api";
+import {
+  getColumns,
+  createColumn,
+  updateColumn,
+  deleteColumn,
+} from "@/api/column.api";
 import { getCards } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
 import { getMember } from "@/api/member";
@@ -31,12 +36,14 @@ export default function Dashboard() {
 
   const [columns, setColumns] = useState<ColumnData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [modalContentType, setModalContentType] = useState<"addColumn" | null>(
-    null
-  );
+  const [modalContentType, setModalContentType] = useState<
+    "addColumn" | "editColumn" | null
+  >(null);
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const [isCreateCardModalOpen, setIsCreateCardModalOpen] = useState(false);
+  const [isManageColumnModalOpen, setIsManageColumnModalOpen] = useState(false);
   const [targetColumnId, setTargetColumnId] = useState<number | null>(null);
+  const [targetColumnTitle, setTargetColumnTitle] = useState<string>("");
   const [selectedAssignee, setSelectedAssignee] = useState<Assignee | null>(
     null
   );
@@ -161,6 +168,11 @@ export default function Dashboard() {
                   setTargetColumnId(columnId);
                   setIsCreateCardModalOpen(true);
                 }}
+                onManageColumnClick={(columnId, title) => {
+                  setTargetColumnId(columnId);
+                  setTargetColumnTitle(title);
+                  setIsManageColumnModalOpen(true);
+                }}
               />
             );
           })
@@ -168,9 +180,10 @@ export default function Dashboard() {
         <div className="w-[308px] h-full bg-gray-100 px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center">
           <div className="desktop:w-[314px] tablet:w-[544px] w-[284px] tablet:h-[70px] h-[66px] mt-[46px]">
             <Modal
+              className="bg-white border border-gray-300"
               ModalOpenButton={
                 <div
-                  className="flex items-center gap-[12px]"
+                  className="flex items-center gap-[12px] text-black-200 tablet:text-2lg-bold text-lg-bold"
                   onClick={() => setModalContentType("addColumn")}
                 >
                   새로운 컬럼 추가하기 <PlusIconButton />
@@ -319,6 +332,67 @@ export default function Dashboard() {
                   />
                 </div>
               </div>
+            </div>
+          </Modal>
+        )}
+        {isManageColumnModalOpen && targetColumnId && (
+          <Modal
+            isOpen={isManageColumnModalOpen}
+            setIsOpen={(open) => {
+              setIsManageColumnModalOpen(open);
+              if (!open) {
+                setTargetColumnId(null);
+                setTargetColumnTitle("");
+              }
+            }}
+            ModalOpenButton={null}
+            rightHandlerText="변경"
+            leftHandlerText="삭제"
+            rightOnClick={async () => {
+              if (!targetColumnId) return;
+              try {
+                await updateColumn({
+                  columnId: targetColumnId,
+                  title: targetColumnTitle,
+                });
+                setIsManageColumnModalOpen(false);
+                fetchColumns(String(dashboardId));
+                alert(
+                  `컬럼 (${targetColumnId}) 이름을 '${targetColumnTitle}'로 변경`
+                );
+              } catch (err) {
+                alert(`컬럼 (${targetColumnId}) 이름 변경 실패`);
+              }
+            }}
+            leftOnClick={async () => {
+              if (!targetColumnId) return;
+              const confirmDelete = confirm("정말 이 컬럼을 삭제하시겠습니까?");
+              if (!confirmDelete) return;
+              try {
+                await deleteColumn(targetColumnId);
+                setIsManageColumnModalOpen(false);
+                fetchColumns(String(dashboardId));
+                alert(`컬럼(${targetColumnId}) 삭제`);
+              } catch (err) {
+                console.error(err);
+                alert("컬럼 삭제 실패");
+              }
+            }}
+          >
+            <div>
+              <h2 className="tablet:text-2xl-bold text-xl-bold tablet:mb-[24px] mb-[16px]">
+                컬럼 관리
+              </h2>
+              <p className="tablet:text-2lg-medium text-lg-medium mb-[8px]">
+                이름
+              </p>
+              <input
+                type="text"
+                placeholder="컬럼 이름을 입력해주세요"
+                className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
+                value={targetColumnTitle}
+                onChange={(e) => setTargetColumnTitle(e.target.value)}
+              />
             </div>
           </Modal>
         )}

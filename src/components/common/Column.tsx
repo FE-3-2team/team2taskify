@@ -9,6 +9,7 @@ interface ColumnProps {
   cards: Card[];
   columnId: number;
   onAddCardClick: (columnId: number) => void;
+  onManageColumnClick: (columnId: number, title: string) => void;
 }
 
 const Column: React.FC<ColumnProps> = ({
@@ -16,6 +17,7 @@ const Column: React.FC<ColumnProps> = ({
   cards,
   columnId,
   onAddCardClick,
+  onManageColumnClick,
 }) => {
   const observer = useRef<IntersectionObserver | null>(null);
   const lastCardRef = useCallback(
@@ -43,7 +45,7 @@ const Column: React.FC<ColumnProps> = ({
 
         <button
           className="tablet:w-[24px] tablet:h-[24px] w-[22px] h-[22px] relative"
-          onClick={() => {}}
+          onClick={() => onManageColumnClick(columnId, title)}
         >
           <Image src={GearIcon} alt="Setting" fill className="object-contain" />
         </button>
