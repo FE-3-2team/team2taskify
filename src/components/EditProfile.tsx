@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import axios from "axios";
+import { instance } from "@/api/instance";
 import UnifiedInput from "@/components/common/Input";
 import Button from "@/components/common/Button/Button";
 import ProfileImg from "@/assets/icons/CardProfile.svg";
@@ -17,12 +17,10 @@ const ProfileContainer = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/users/me`
-        );
+        const response = await instance.get("/users/me");
         const userData = response.data;
-        setEmail(userData.email); // API로부터 받은 이메일 설정
-        setNickname(userData.nickname); // 닉네임도 초기화할 수 있음
+        setEmail(userData.email);
+        setNickname(userData.nickname);
         setProfileImage(userData.profileImageUrl || ProfileImg);
       } catch (error) {
         console.error("User data fetch error:", error);
@@ -65,11 +63,9 @@ const ProfileContainer = () => {
       if (newImageFile) {
         const formData = new FormData();
         formData.append("image", newImageFile);
-        const imageResponse = await axios.post(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/users/me/image`,
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
+        const imageResponse = await instance.post("/users/me/image", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         uploadedImageUrl = imageResponse.data.profileImageUrl;
       }
 
@@ -78,11 +74,9 @@ const ProfileContainer = () => {
         profileImageUrl: uploadedImageUrl || profileImage,
       };
 
-      const updateResponse = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/users/me`,
-        updateBody,
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const updateResponse = await instance.put("/users/me", updateBody, {
+        headers: { "Content-Type": "application/json" },
+      });
       console.log("Profile updated:", updateResponse.data);
     } catch (error) {
       console.error("Profile update error:", error);
