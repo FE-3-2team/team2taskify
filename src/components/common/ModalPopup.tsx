@@ -2,7 +2,7 @@ import { useAutoClose } from "@/hooks/useAutoClose";
 import X from "@/assets/icons/X.icon.svg";
 import Button from "@/components/common/Button/Button";
 import Image from "next/image";
-//
+import { useEffect } from "react";
 
 interface Props {
   children?: React.ReactNode;
@@ -14,8 +14,10 @@ interface Props {
   className?: string;
   size?: "xxsmall" | "xsmall" | "small" | "medium" | "large" | "xlarge"; // 크기별 스타일 적용
   variant?: "primary" | "secondary" | "outline" | "disabled" | "create"; // 색상/디자인 적용
+  isOpen?: boolean;
+  setIsOpen?: (v: boolean) => void;
 }
-//
+
 export function Modal({
   children,
   ModalOpenButton,
@@ -26,12 +28,35 @@ export function Modal({
   className,
   size,
   variant,
+  isOpen,
+  setIsOpen,
 }: Props) {
-  const { isOpen, ref, setIsOpen } = useAutoClose(false);
+  const {
+    isOpen: internalIsOpen,
+    ref,
+    setIsOpen: internalSetIsOpen,
+  } = useAutoClose(false);
+  const modalIsOpen = isOpen !== undefined ? isOpen : internalIsOpen;
+  const handleSetIsOpen = setIsOpen ?? internalSetIsOpen;
+
+  useEffect(() => {
+    if (!modalIsOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        handleSetIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [modalIsOpen, handleSetIsOpen, ref]);
 
   return (
     <>
-      {isOpen && (
+      {modalIsOpen && (
         <div className="fixed inset-0 z-10 flex items-center justify-center bg-black-400/70 ">
           <div
             className="px-4 py-6 relative flex flex-col tablet:px-6  w-[327px] tablet:w-[568px] h-auto bg-white rounded-[8px] z-20 "
@@ -41,7 +66,7 @@ export function Modal({
             {leftOnClick && (
               <button
                 className="absolute top-6 right-4 tablet:top-6 tablet:right-6"
-                onClick={() => setIsOpen(false)}
+                onClick={() => handleSetIsOpen(false)}
               >
                 <Image src={X} width={32} height={32} alt="X" />
               </button>
@@ -53,14 +78,17 @@ export function Modal({
                   <Button
                     variant="outline"
                     onClick={() => {
-                      setIsOpen(false);
+                      handleSetIsOpen(false);
                       leftOnClick;
                     }}
                   >
                     {leftHandlerText}
                   </Button>
                 ) : (
-                  <Button variant="outline" onClick={() => setIsOpen(false)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleSetIsOpen(false)}
+                  >
                     취소
                   </Button>
                 )}
@@ -70,7 +98,7 @@ export function Modal({
                   <Button
                     variant="primary"
                     onClick={() => {
-                      setIsOpen(false);
+                      handleSetIsOpen(false);
                       rightOnClick();
                     }}
                   >
@@ -83,20 +111,21 @@ export function Modal({
         </div>
       )}
 
-      <Button
-        size={size}
-        variant={variant}
-        onClick={() => setIsOpen(true)}
-        className={className}
-      >
-        {ModalOpenButton}
-      </Button>
+      {ModalOpenButton && (
+        <Button
+          size={size}
+          variant={variant}
+          onClick={() => handleSetIsOpen(true)}
+          className={className}
+        >
+          {ModalOpenButton}
+        </Button>
+      )}
     </>
   );
 }
-//
+
 export function DetailContent({ children, ModalOpenButton }: Props) {
-  //
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
 
   const handleButtonClick = () => {

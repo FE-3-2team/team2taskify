@@ -30,3 +30,39 @@ export async function deleteCard(cardId: number) {
     throw new Error();
   }
 }
+
+export async function createCard({
+  dashboardId,
+  columnId,
+  assigneeId,
+  title,
+  description,
+  dueDate,
+  tags,
+  imageUrl,
+}: {
+  dashboardId: number;
+  columnId: number;
+  assigneeId: number;
+  title: string;
+  description: string;
+  dueDate: string;
+  tags: string[];
+  imageUrl: string;
+}) {
+  try {
+    const res = await instance.post("/cards", {
+      dashboardId,
+      columnId,
+      assigneeId,
+      title,
+      description,
+      dueDate,
+      tags,
+      imageUrl,
+    });
+    return res.data;
+  } catch (err) {
+    throw new Error("카드 생성 실패");
+  }
+}
