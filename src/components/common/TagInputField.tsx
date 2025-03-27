@@ -1,9 +1,13 @@
 import { useState, useRef } from "react";
 import { Tag } from "@/components/common/Chip/Tag.chip";
 
-export default function TagInputField() {
+interface TagInputFieldProps {
+  tags: string[];
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export default function TagInputField({ tags, setTags }: TagInputFieldProps) {
   const [inputValue, setInputValue] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 

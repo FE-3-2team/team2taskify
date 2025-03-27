@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import TodoCard from "@/components/common/TodoCard";
 import GearIcon from "@/assets/icons/Edit.icon.svg";
-import AddIcon from "@/assets/icons/Plus.icon.svg";
+import PlusIcon from "@/assets/icons/Plus.icon.svg";
 import Image from "next/image";
 
 interface ColumnProps {
@@ -55,7 +55,7 @@ const Column: React.FC<ColumnProps> = ({
       >
         <div className="relative w-[22px] h-[22px] rounded-[4px] object-contain bg-violet-100">
           <Image
-            src={AddIcon}
+            src={PlusIcon}
             alt="Add new todo"
             fill
             className="object-contain"

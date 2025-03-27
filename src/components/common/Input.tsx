@@ -130,6 +130,8 @@ export interface UnifiedInputProps {
   debounceDelay?: number;
   onBlur?: () => void;
   compareWith?: string;
+  readOnly?: boolean;
+  disable: boolean;
 }
 
 const defaultMaxLengths: Record<InputVariant, number> = {
@@ -154,6 +156,8 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
   debounceDelay = 300,
   onBlur,
   compareWith,
+  readOnly,
+  disable,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   // 입력 필드가 포커스를 잃은 후에만 오류 메시지를 보여주기 위한 상태
@@ -265,15 +269,18 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
             value={value}
             onChange={handleInputChange}
             maxLength={finalMaxLength}
+            // disabled 속성을 disable 값에 따라 전달하며, disabled일 경우에만 input에 추가 스타일 적용
+            disabled={disable}
             className={`${
               value && !error
                 ? "border-[#5534da]"
                 : error
                   ? "border-red"
                   : "border-gray-300"
-            }`}
+            } ${disable ? "bg-gray-200 cursor-not-allowed" : ""}`}
             aria-describedby={error ? errorId : undefined}
             onBlur={handleBlur}
+            readOnly={readOnly}
           />
           {(variant === "password" || variant === "confirmPassword") && (
             <PasswordToggleButton
