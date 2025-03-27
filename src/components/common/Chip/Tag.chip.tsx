@@ -9,18 +9,18 @@ const colorClasses = [
   "bg-green-100 text-green-200",
   "bg-pink400 text-pink500",
   "bg-blue-200 text-blue-300",
+  "bg-violet-200 text-white",
+  "bg-blue-300 text-white",
 ];
 
 export function Tag({ value }: Props) {
-  const [randomClass, setRandomClass] = useState("");
+  const randomNum = value
+    ? value.charAt(0).charCodeAt(0) % colorClasses.length
+    : Math.floor(Math.random() * colorClasses.length);
 
-  useEffect(() => {
-    const randomNum = Math.floor(Math.random() * colorClasses.length);
-    setRandomClass(colorClasses[randomNum]);
-  }, []);
   return (
     <div
-      className={`flex justify-center items-center py-[2px] px-[6px] w-fit rounded-sm text-xs-regular ${randomClass}`}
+      className={`flex justify-center items-center py-[2px] px-[6px] w-fit rounded-sm text-xs-regular ${colorClasses[randomNum]}`}
     >
       {value}
     </div>

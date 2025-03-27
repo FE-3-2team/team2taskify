@@ -10,10 +10,11 @@ import useAuthStore from "@/utils/Zustand/zustand";
 import { useStore } from "@/utils/Zustand/useStore";
 import { useEffect, useState } from "react";
 import { getMember } from "@/api/member";
+import { Modal } from "./ModalPopup";
+import InputModal from "../ModalContents/InputModal";
+import { createInvite } from "@/api/dashboard";
+import Logout from "./Dropdown/LogoutDropdown";
 
-/**ToDo
- * 초대하기 버튼 클릭시 모달 팝업 함수
- */
 interface Props {
   createdByMe?: boolean;
 }
@@ -23,6 +24,7 @@ export default function Header({ createdByMe }: Props) {
   const dashboardId = store?.dashboardId;
   const router = useRouter();
   const [members, setMembers] = useState<Member[]>([]);
+  const [inviteValue, setInviteValue] = useState("");
   const display = router.pathname === "/mydashbord" ? "none" : "block";
   const dashboardTitle =
     router.pathname === "/mypage"
@@ -42,9 +44,15 @@ export default function Header({ createdByMe }: Props) {
       setMembers(members);
     }
   };
+
+  const inviteMember = async () => {
+    if (!dashboardId) return;
+    await createInvite(inviteValue, dashboardId as string);
+  };
+
   //
   return (
-    <div className="flex bg-white flex-row justify-between w-full h-[70px] desktop:pr-20 py-[15px] px-[20px] laptop:pl-10 laptop:pr-[10px]  border-b-[1px]  items-center border-gray-300 ">
+    <div className="flex bg-white flex-row justify-between w-full h-[70px] py-[15px] px-[8px] tablet:pl-10 tablet:pl-[74px] tablet:pr-[32px] laptop:pr-[80px] border-b-[1px] items-center border-gray-300 ">
       <div className="flex flex-row items-center gap-2">
         <p className="hidden laptop:block text-black-200 text-xl-bold ">
           {dashboardTitle}
@@ -55,52 +63,68 @@ export default function Header({ createdByMe }: Props) {
           </div>
         )}
       </div>
-      <div className="flex flex-row gap-4 tablet:gap-8 laptop:gap-10">
-        <div className="flex flex-row gap-4 ">
+      <div className="flex flex-row gap-[16px] tablet:gap-[36px] laptop:gap-[40px]">
+        <div className="flex flex-row gap-2 tablet:gap-4">
           <Link href="/mypage">
-            <button className="w-[49px] tablet:w-[88px] justify-center h-[40px] flex flex-row items-center py-[7px] px-3 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300">
+            <button className="justify-center h-[40px] flex flex-row items-center py-[7px] px-2 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300">
               <Image
                 className="hidden tablet:block"
                 src={Edit}
-                width={15}
-                height={15}
+                width={18}
+                height={18}
                 alt="톱니바퀴"
               />
-              <div className="text-gray-500 text-xs-medium tablet-text-md-medium">
+              <div className="text-gray-500 text-md-medium tablet:text-lg-medium">
                 관리
               </div>
             </button>
           </Link>
-          <button
-            onClick={() => {}}
-            className="w-[73px] tablet:w-[116px] justify-center items-center h-[40px] flex flex-row  py-[7px] px-3 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300"
-          >
-            <Image
-              className="hidden tablet:block"
-              src={Invite}
-              width={15}
-              height={15}
-              alt="+"
-            />
-            <div className="text-gray-500 text-xs-medium tablet:text-md-medium">
-              초대하기
+          {router.pathname !== "/mydashboard" && (
+            <div className="w-[73px] h-[40px] tablet:w-[116px]">
+              <Modal
+                ModalOpenButton={
+                  <div className=" justify-center items-center  flex flex-row  py-[7px] px-3 tablet:px-4 gap-2 ">
+                    <Image
+                      className="hidden tablet:block"
+                      src={Invite}
+                      width={15}
+                      height={15}
+                      alt="+"
+                    />
+                    <div className="text-gray-500 text-xs-medium tablet:text-md-medium">
+                      초대하기
+                    </div>
+                  </div>
+                }
+                variant="outline"
+                rightHandlerText="초대"
+                rightOnClick={inviteMember}
+              >
+                <InputModal
+                  label="이메일"
+                  title="초대하기"
+                  placeholder="이메일을 입력해주세요."
+                  changeValue={(value) => setInviteValue(value)}
+                />
+              </Modal>
             </div>
-          </button>
+          )}
         </div>
-        <div className="flex w-fit flex-row gap-4 tablet:gap-6 laptop:gap-[38px]">
-          <div
-            className=" w-[90px] laptop:w-[138px]"
-            style={{ display: display }}
-          >
-            {members && <Badges memberList={members} />}
-          </div>
+        <div className="flex w-fit flex-row gap-[12px] tablet:gap-[36px] laptop:gap-[40px]">
+        <div
+          style={{ display: members && members.length > 0 ? "block" : "none" }}
+        >
+          {members && <Badges memberList={members} />}
+        </div>
           <div className="h-[38px] w-[1px] bg-gray-300" />
           {store && (
-            <Profile
-              nickname={store.userNickname}
-              profileImageUrl={store.profileImageUrl}
-              type="profile"
-            />
+            <Logout>
+              <Profile
+                nickname={store.userNickname}
+                profileImageUrl={store.profileImageUrl}
+                type="profile"
+              />
+            </Logout>
           )}
         </div>
       </div>

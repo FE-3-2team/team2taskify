@@ -17,20 +17,22 @@ export default function SignupPage() {
   };
 
   return (
-    <AuthContainer>
-      {modalMessage && (
-        <AlertModal
-          isOpen={!!modalMessage}
-          message={modalMessage}
-          onConfirm={closeModal}
+    <div className="min-h-screen bg-[#FAFAFA]">
+      <AuthContainer>
+        {modalMessage && (
+          <AlertModal
+            isOpen={!!modalMessage}
+            message={modalMessage}
+            onConfirm={closeModal}
+          />
+        )}
+        <SignupForm
+          logoSrc={MainLogo}
+          onSignup={handleSignup}
+          logoToFormSpacingClass="mt-[36px] md:mt-[30px]"
+          formToButtonSpacingClass="mt-[10px] md:mt-[24px]"
         />
-      )}
-      <SignupForm
-        logoSrc={MainLogo}
-        onSignup={handleSignup}
-        logoToFormSpacingClass="mt-[36px] md:mt-[30px]"
-        formToButtonSpacingClass="mt-[10px] md:mt-[24px]"
-      />
-    </AuthContainer>
+      </AuthContainer>
+    </div>
   );
 }

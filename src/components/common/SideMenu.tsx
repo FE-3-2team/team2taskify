@@ -95,6 +95,8 @@ export default function SideMenu() {
               src={addIcon}
               alt="대시보드 추가 버튼"
               className="cursor-pointer"
+              width={20}
+              height={21}
             />
           }
           rightHandlerText="생성"

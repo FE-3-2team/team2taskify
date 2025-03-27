@@ -8,18 +8,15 @@ interface Props {
   onClickDelete: (id: number) => void;
 }
 
-export default function Comments({ comment, onClickDelete }: Props) {
+export default function Comment({ comment, onClickDelete }: Props) {
   const [isEdit, setIsEdit] = useState(false);
   const { nickname, profileImageUrl } = comment.author;
   const [currentValue, setCurrentValue] = useState(comment.content);
   const { updatedAt, id } = comment;
   const formattedDate = useFormatTime(updatedAt);
 
-  useEffect(() => {}, []);
-
-  const EditComment = async () => {};
   const handleEdit = async () => {
-    if (isEdit) {
+    if (isEdit && comment.content !== currentValue) {
       await putComment(id, currentValue);
     }
     setIsEdit(!isEdit);

@@ -99,38 +99,46 @@ const InvitedDashboards: React.FC = () => {
   };
 
   return (
-    <div className="desktop:w-[960px] tablet:w-[504px] w-[260px] desktop:min-h-[390px] tablet:min-h-[390px] min-h-[327px] h-fit tablet:rounded-[16px]  rounded-[8px] bg-white  pt-[24px] flex flex-col justify-center tablet:px-[40px] px-[20px]">
-      <div className="desktop:w-full h-fit">
-        <h2 className="tablet:text-2xl-bold text-md-bold">초대받은 대시보드</h2>
+    <div className=" min-h-[327px] tablet:h-[592px] laptop:h-[650px] relative tablet:rounded-[16px]  rounded-[8px] bg-white  pt-[24px] flex flex-col">
+      <h2 className="absolute top-0 h-10 mt-6 bg-white tablet:left-10 left-5 tablet:text-2xl-bold text-md-bold">
+        초대받은 대시보드
+      </h2>
 
-        {loading && invitations.length === 0 ? (
-          <p className="tablet:mt-[64px] mt-[105px] text-gray-400 tablet:text-2lg-regular text-xs-regular text-center">
+      {loading && invitations.length === 0 ? (
+        <div className="flex items-center justify-center w-full h-full">
+          <p className="text-center text-gray-400 tablet:text-2lg-regular text-xs-regular">
             불러오는 중...
           </p>
-        ) : error ? (
-          <p className="tablet:mt-[64px] mt-[105px] text-red tablet:text-2lg-regular text-xs-regular text-center">
+        </div>
+      ) : error ? (
+        <div className="flex items-center justify-center w-full h-full">
+          <p className="text-center text-red tablet:text-2lg-regular text-xs-regular">
             {error}
           </p>
-        ) : invitations.length === 0 && !hasInitialInvites ? (
-          <div className="tablet:mt-[64px] mt-[105px] flex flex-col items-center justify-center gap-[16px]">
-            <div className="relative tablet:w-[100px] tablet:h-[100px] w-[60px] h-[60px]">
-              <Image
-                src={NoInvitationIcon}
-                alt="no-invitation"
-                fill
-                className="object-contain"
-              />
-            </div>
-            <p className="text-gray-400 tablet:text-2lg-regular text-xs-regular">
-              아직 초대받은 대시보드가 없어요
-            </p>
+        </div>
+      ) : invitations.length === 0 && !hasInitialInvites ? (
+        <div className="flex flex-col items-center justify-center gap-[16px]">
+          <div className="relative tablet:w-[100px] tablet:h-[100px] w-[60px] h-[60px]">
+            <Image
+              src={NoInvitationIcon}
+              alt="no-invitation"
+              fill
+              className="object-contain"
+            />
           </div>
-        ) : (
-          <div className="pt-[16px] tablet:pt-[17px] tablet:pb-[18px] pb-[24px] desktop:py-[32px] w-full">
+          <p className="text-gray-400 tablet:text-2lg-regular text-xs-regular">
+            아직 초대받은 대시보드가 없어요
+          </p>
+        </div>
+      ) : (
+        <div className="flex flex-col w-full gap-3 py-10 tablet:gap-6">
+          <div className="w-full px-5 tablet:mt-8 tablet:px-10">
             {hasInitialInvites && (
               <SearchInvDash value={searchTitle} onChange={setSearchTitle} />
             )}
-            <div className="tablet:flex items-center justify-between w-full tablet:h-[26px] hidden text-lg-regular text-gray-400 tablet:mt-[24px] mt-[27px]">
+          </div>
+          <div className="flex flex-col gap-[17px] laptop:gap-5">
+            <div className=" px-7 laptop:px-[76px] tablet:flex items-center justify-between w-full tablet:h-[26px] hidden text-lg-regular text-gray-400 ">
               <h3 className="inline-flex desktop:w-[254px] tablet:w-[154px]">
                 이름
               </h3>
@@ -141,27 +149,28 @@ const InvitedDashboards: React.FC = () => {
                 수락 여부
               </h3>
             </div>
+
             {invitations.length === 0 && hasInitialInvites ? (
               <p className="text-gray-400 tablet:text-2lg-regular text-xs-regular mt-[64px] text-center">
                 "{searchTitle}"에 대한 검색 결과가 없어요
               </p>
             ) : (
-              <div className="overflow-x-hidden overflow-y-auto tablet:max-h-[calc(100dvh_-_580px)] h-fit">
+              <div className="h-full overflow-y-auto">
                 <ListInvDash
                   invitations={invitations}
                   onRespond={handleRespond}
                 />
-                <div ref={observerRef} className="w-full h-[1px]" />
+                <div ref={observerRef} className="w-full h-[50px]" />
               </div>
             )}
-            {loading && (
-              <p className="mt-[64px] tablet:text-2lg-regular text-xs-regular text-center text-gray-400">
-                불러오는 중...
-              </p>
-            )}
           </div>
-        )}
-      </div>
+          {loading && (
+            <p className="mt-[64px] tablet:text-2lg-regular text-xs-regular text-center text-gray-400">
+              불러오는 중...
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 };

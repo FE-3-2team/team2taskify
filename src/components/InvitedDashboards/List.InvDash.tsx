@@ -10,7 +10,7 @@ const ListInvDash: React.FC<ListInvDashProps> = ({
   onRespond,
 }) => {
   return (
-    <div>
+    <div className="flex flex-col tablet:gap-5">
       {invitations.map((inv) => (
         <ItemInvDash key={inv.id} invitation={inv} onRespond={onRespond} />
       ))}

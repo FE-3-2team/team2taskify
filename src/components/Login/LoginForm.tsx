@@ -67,7 +67,7 @@ export default function LoginForm({
           onChange={setEmail}
         />
       </div>
-      <div className="mt-[16px]">
+      <div className="mt-[6px]">
         <UnifiedInput
           variant="password"
           label="비밀번호"
@@ -94,10 +94,10 @@ export default function LoginForm({
   );
 
   const footerSection = (
-    <p className="text-center text-lg-regular">
+    <p className="text-center text-[#333236] text-lg-regular">
       회원이 아니신가요?{" "}
       <Link href="/signup">
-        <span className="underline cursor-pointer text-lg-regular">
+        <span className="underline cursor-pointer text-[#5534da] text-lg-regular">
           회원가입하기
         </span>
       </Link>

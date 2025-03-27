@@ -27,8 +27,7 @@ export function Badges({ memberList }: BadgesProps) {
         return (
           <div
             key={member.id}
-            className="absolute"
-            style={{ left: `${idx * 20}px`, zIndex: 0 + idx }}
+            className={idx !== 0 ? "ml-[-10px]" : ""}
           >
             <Badge
               img={member.profileImageUrl}
@@ -41,9 +40,9 @@ export function Badges({ memberList }: BadgesProps) {
 
       {memberList.length > 3 && (
         <div
-          className={`absolute border-2 border-white flex justify-center items-center 
-          rounded-full w-[38px] h-[38px] text-pink200 text-lg-semibold bg-pink300
-          z-10 
+          className={`border-[2px] border-white flex justify-center items-center 
+          rounded-full !w-[38px] h-[38px] text-pink200 text-md-semibold tablet:text-lg-semibold bg-pink300
+          z-10 ml-[-10px]
           `}
           style={{ left: `${memberArray.length * 20}px` }}
         >
@@ -56,7 +55,7 @@ export function Badges({ memberList }: BadgesProps) {
 interface Props {
   nickname: string;
   img: string | null;
-  type: "comment" | "assignee" | "badges" | "profile" | "column";
+  type: "comment" | "assignee" | "badges" | "profile" | "column" | "edit";
 }
 export function Badge({ nickname, img, type }: Props) {
   const colorNum = nickname.charCodeAt(0) % RANDOM_COLOR.length;
@@ -75,6 +74,7 @@ export function Badge({ nickname, img, type }: Props) {
           badges: "w-[38px] h-[38px]",
           profile: "w-[38px] h-[38px]",
           assignee: "w-[26px] h-[26px] tablet:w-[34px] tablet:h-[34px]",
+          edit: "w-[34px] h-[34px] tablet:w-[38px] tablet:h-[38px] ",
         }[type],
 
         RANDOM_COLOR[colorNum]
@@ -83,7 +83,7 @@ export function Badge({ nickname, img, type }: Props) {
       {img ? (
         <img src={img} alt="프로필 이미지" />
       ) : (
-        <div className="text-white text-lg-semibold ">{firstChar}</div>
+        <div className="text-white text-md-semibold tablet:text-lg-semibold">{firstChar}</div>
       )}
     </div>
   );
