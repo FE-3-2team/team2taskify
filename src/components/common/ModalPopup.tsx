@@ -156,24 +156,26 @@ export function DetailContent({
       {isOpen && (
         <div className="fixed inset-0 z-10 flex items-center justify-center px-6 py-20 w-dvw tablet:px-8 bg-black-400/70">
           <div
-            className="max-w-[730px] h-[710px] tablet:h-[763px]  w-full px-4 py-4 tablet:px-[23px] tablet:py-8 bg-white  rounded-[8px] z-20 "
+            className=" max-w-[730px] h-[710px] tablet:h-[763px]  w-full px-4 py-4 tablet:px-[23px] tablet:py-8 bg-white  rounded-[8px] z-20 "
             ref={ref}
           >
-            <div className="fixed z-10 flex justify-between h-10 bg-white w-fit">
-              <span className="text-xl-bold tablet:text-2xl-bold ">
-                {cardTitle}
-              </span>
-              <div className="flex items-center ">
-                <DropdownEditDel
-                  onDelete={handleCardDelete}
-                  onEdit={handleEdit}
-                />
-                <button onClick={() => setIsOpen(false)}>
-                  <Image src={X} width={32} height={32} alt="X" />
-                </button>
+            <div className="relative w-full h-full">
+              <div className="absolute top-[-1px] z-10 flex justify-between w-full h-10 bg-white">
+                <span className="text-xl-bold tablet:text-2xl-bold ">
+                  {cardTitle}
+                </span>
+                <div className="flex items-center ">
+                  <DropdownEditDel
+                    onDelete={handleCardDelete}
+                    onEdit={handleEdit}
+                  />
+                  <button onClick={() => setIsOpen(false)}>
+                    <Image src={X} width={32} height={32} alt="X" />
+                  </button>
+                </div>
               </div>
+              {children}
             </div>
-            {children}
           </div>
         </div>
       )}

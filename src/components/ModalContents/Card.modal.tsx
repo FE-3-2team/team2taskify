@@ -27,7 +27,7 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
   return (
     <>
       {card ? (
-        <div className="flex flex-col w-full h-[calc(100%-35px)] mt-10 overflow-scroll">
+        <div className="flex flex-col w-full h-[calc(100%-35px)] pt-10 overflow-scroll">
           <div className="mb-4 tablet:hidden">
             <AssigneeCard
               assigneeName={card.assignee.nickname}
@@ -46,16 +46,17 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
               <p className="px-2 py-2 mb-2 text-xs-regular tablet:text-md-regular">
                 {card.description}
               </p>
-
-              {card.imageUrl && (
-                <img
-                  className="max-w-[445px] h-full max-h-[300px] w-full  object-contain mb-6 laptop:mb-4  rounded-[6px]"
-                  src={card.imageUrl}
-                />
-              )}
+              <div className="flex items-center justify-center mb-6 laptop:mb-4">
+                {card.imageUrl && (
+                  <img
+                    className="max-w-[445px] h-full max-h-[300px] w-full  object-contain   rounded-[6px]"
+                    src={card.imageUrl}
+                  />
+                )}
+              </div>
               <CommentsArea columnId={columnId} cardId={cardId} />
             </div>
-            <div className="hidden w-full tablet:block">
+            <div className="hidden w-full max-w-[200px] tablet:block">
               <AssigneeCard
                 assigneeName={card.assignee.nickname}
                 dueDate={card.dueDate}
