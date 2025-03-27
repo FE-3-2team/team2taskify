@@ -81,12 +81,14 @@ export default function CommentsArea({ cardId, columnId }: Props) {
           onSubmit={handleCreateComment}
         />
       </div>
-      {currentComment?.map((comment) => {
-        return (
-          <Comment onClickDelete={handleCommentDelete} comment={comment} />
-        );
-      })}
-      <div className="h-[100px]" ref={endRef}></div>
+      <div className="h-full">
+        {currentComment?.map((comment) => {
+          return (
+            <Comment onClickDelete={handleCommentDelete} comment={comment} />
+          );
+        })}
+        <div className="h-[100px]" ref={endRef}></div>
+      </div>
     </>
   );
 }
