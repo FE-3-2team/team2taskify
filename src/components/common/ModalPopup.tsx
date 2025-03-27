@@ -2,7 +2,9 @@ import { useAutoClose } from "@/hooks/useAutoClose";
 import X from "@/assets/icons/X.icon.svg";
 import Button from "@/components/common/Button/Button";
 import Image from "next/image";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
+import DropdownEditDel from "./Dropdown/DropdownEditDel";
+import { deleteCard } from "@/api/card.api";
 
 interface Props {
   children?: React.ReactNode;
@@ -125,27 +127,52 @@ export function Modal({
   );
 }
 
-export function DetailContent({ children, ModalOpenButton }: Props) {
+interface DetailContentProps {
+  cardTitle: string;
+  children: ReactNode;
+  ModalOpenButton: ReactNode;
+  cardId: number;
+}
+export function DetailContent({
+  cardTitle,
+  children,
+  ModalOpenButton,
+  cardId,
+}: DetailContentProps) {
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
-
   const handleButtonClick = () => {
     setIsOpen(true);
   };
 
+  const handleCardDelete = async () => {
+    await deleteCard(cardId);
+    setIsOpen(false);
+  };
+  const handleEdit = () => {
+    setIsOpen(false);
+  };
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 z-10 flex items-center justify-center bg-black-400/70">
+        <div className="fixed inset-0 z-10 flex items-center justify-center px-6 py-20 w-dvw tablet:px-8 bg-black-400/70">
           <div
-            className="px-4 py-4 tablet:px-[23px] tablet:py-8 relative w-auto h-auto bg-white  rounded-[8px] z-20 "
+            className="max-w-[730px] h-[710px] tablet:h-[763px]  w-full px-4 py-4 tablet:px-[23px] tablet:py-8 bg-white  rounded-[8px] z-20 "
             ref={ref}
           >
-            <button
-              className="absolute top-4 right-4 tablet:top-8 tablet:right-8"
-              onClick={() => setIsOpen(false)}
-            >
-              <Image src={X} width={32} height={32} alt="X" />
-            </button>
+            <div className="fixed z-10 flex justify-between h-10 bg-white w-fit">
+              <span className="text-xl-bold tablet:text-2xl-bold ">
+                {cardTitle}
+              </span>
+              <div className="flex items-center ">
+                <DropdownEditDel
+                  onDelete={handleCardDelete}
+                  onEdit={handleEdit}
+                />
+                <button onClick={() => setIsOpen(false)}>
+                  <Image src={X} width={32} height={32} alt="X" />
+                </button>
+              </div>
+            </div>
             {children}
           </div>
         </div>
