@@ -11,6 +11,7 @@ import DropdownAssigneeSearch from "@/components/common/Dropdown/DropdownAssigne
 import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import TagInputField from "@/components/common/TagInputField";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
+import { SkeletonColumn } from "@/components/common/Skeleton";
 import { getColumns, createColumn } from "@/api/column.api";
 import { getCards } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
@@ -143,7 +144,11 @@ export default function Dashboard() {
       <Header />
       <div className="flex desktop:flex-row flex-col desktop:items-start items-center tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)] w-full desktop:overflow-x-auto">
         {isLoading ? (
-          <p>불러오는 중...</p>
+          <>
+            <SkeletonColumn />
+            <SkeletonColumn />
+            <SkeletonColumn />
+          </>
         ) : (
           columns.map((column) => {
             return (
