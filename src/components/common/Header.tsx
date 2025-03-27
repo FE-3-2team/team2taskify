@@ -111,12 +111,11 @@ export default function Header({ createdByMe }: Props) {
           )}
         </div>
         <div className="flex w-fit flex-row gap-[12px] tablet:gap-[36px] laptop:gap-[40px]">
-          <div
-            className="w-[78px] laptop:w-[118px]"
-            style={{ display: display }}
-          >
-            {members && <Badges memberList={members} />}
-          </div>
+        <div
+          style={{ display: members && members.length > 0 ? "block" : "none" }}
+        >
+          {members && <Badges memberList={members} />}
+        </div>
           <div className="h-[38px] w-[1px] bg-gray-300" />
           {store && (
             <Logout>

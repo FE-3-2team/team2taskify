@@ -27,8 +27,7 @@ export function Badges({ memberList }: BadgesProps) {
         return (
           <div
             key={member.id}
-            className="absolute"
-            style={{ left: `${idx * 20}px`, zIndex: 0 + idx }}
+            className={idx !== 0 ? "ml-[-10px]" : ""}
           >
             <Badge
               img={member.profileImageUrl}
@@ -41,9 +40,9 @@ export function Badges({ memberList }: BadgesProps) {
 
       {memberList.length > 3 && (
         <div
-          className={`absolute border-2 border-white flex justify-center items-center 
-          rounded-full w-[38px] h-[38px] text-pink200 text-md-semibold tablet:text-lg-semibold bg-pink300
-          z-10 
+          className={`border-[2px] border-white flex justify-center items-center 
+          rounded-full !w-[38px] h-[38px] text-pink200 text-md-semibold tablet:text-lg-semibold bg-pink300
+          z-10 ml-[-10px]
           `}
           style={{ left: `${memberArray.length * 20}px` }}
         >
