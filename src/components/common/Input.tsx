@@ -131,7 +131,7 @@ export interface UnifiedInputProps {
   onBlur?: () => void;
   compareWith?: string;
   readOnly?: boolean;
-  disable: boolean;
+  disable?: boolean;
 }
 
 const defaultMaxLengths: Record<InputVariant, number> = {

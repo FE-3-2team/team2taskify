@@ -5,6 +5,8 @@ import UnifiedInput from "../common/Input";
 import Button from "../common/Button/Button";
 import SignupFormLayout from "./AuthFormLayout";
 import { useValidation } from "@/hooks/useValidation";
+import CheckBox from "@/assets/icons/CheckBox.svg";
+import UncheckBox from "@/assets/icons/UnCheckBox.svg";
 
 interface SignupFormProps {
   logoSrc: string | StaticImageData;
@@ -75,25 +77,25 @@ export default function SignupForm({
 
   const formSection = (
     <div className="flex flex-col w-full">
-      {/* 닉네임 입력 */}
-      <div>
-        <UnifiedInput
-          variant="title"
-          label="닉네임"
-          placeholder="닉네임을 입력해 주세요"
-          value={nickname}
-          onChange={setNickname}
-        />
-      </div>
-
       {/* 이메일 입력 */}
-      <div className="mt-4">
+      <div>
         <UnifiedInput
           variant="email"
           label="이메일"
           placeholder="이메일을 입력해 주세요"
           value={email}
           onChange={setEmail}
+        />
+      </div>
+
+      {/* 닉네임 입력 */}
+      <div className="mt-4">
+        <UnifiedInput
+          variant="title"
+          label="닉네임"
+          placeholder="닉네임을 입력해 주세요"
+          value={nickname}
+          onChange={setNickname}
         />
       </div>
 
@@ -121,18 +123,30 @@ export default function SignupForm({
       </div>
 
       {/* 이용약관 체크박스 */}
-      <div className="flex items-center mt-4">
+      <label htmlFor="terms" className="flex items-center cursor-pointer">
         <input
           type="checkbox"
           id="terms"
           checked={terms}
           onChange={(e) => setTerms(e.target.checked)}
-          className="mr-2"
+          className="hidden"
         />
+        <div className="w-5 h-5 mr-2">
+          {terms ? (
+            <Image src={CheckBox} alt="체크됨" width={20} height={20} />
+          ) : (
+            <Image
+              src={UncheckBox}
+              alt="체크되지 않음"
+              width={20}
+              height={20}
+            />
+          )}
+        </div>
         <label htmlFor="terms" className="text-sm text-gray-700">
           이용약관에 동의합니다.
         </label>
-      </div>
+      </label>
     </div>
   );
 
@@ -151,9 +165,11 @@ export default function SignupForm({
 
   const footerSection = (
     <p className="text-center text-gray-600">
-      이미 계정이 있으신가요?{" "}
+      이미 회원이신가요?{" "}
       <Link href="/login">
-        <span className="underline cursor-pointer">로그인하기</span>
+        <span className="underline cursor-pointer text-[#5534da]">
+          로그인하기
+        </span>
       </Link>
     </p>
   );

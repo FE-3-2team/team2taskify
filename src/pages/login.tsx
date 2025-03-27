@@ -1,4 +1,3 @@
-// pages/LoginPage.tsx
 import React from "react";
 import AuthContainer from "../components/Login/AuthContainer";
 import LoginForm from "../components/Login/LoginForm";
@@ -14,20 +13,22 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthContainer>
-      {errorModal && (
-        <AlertModal
-          isOpen={errorModal}
-          message={errorMessage}
-          onConfirm={closeErrorModal}
+    <div className="min-h-screen bg-[#FAFAFA]">
+      <AuthContainer>
+        {errorModal && (
+          <AlertModal
+            isOpen={errorModal}
+            message={errorMessage}
+            onConfirm={closeErrorModal}
+          />
+        )}
+        <LoginForm
+          logoSrc={MainLogo}
+          onLogin={handleLogin}
+          logoToFormSpacingClass="mt-[36px] md:mt-[30px]"
+          formToButtonSpacingClass="mt-[10px] md:mt-[24px]"
         />
-      )}
-      <LoginForm
-        logoSrc={MainLogo}
-        onLogin={handleLogin}
-        logoToFormSpacingClass="mt-[36px] md:mt-[30px]"
-        formToButtonSpacingClass="mt-[10px] md:mt-[24px]"
-      />
-    </AuthContainer>
+      </AuthContainer>
+    </div>
   );
 }
