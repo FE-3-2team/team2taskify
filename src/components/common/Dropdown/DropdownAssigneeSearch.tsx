@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import CheckIcon from "@/assets/icons/Check.icon.svg";
 
 export interface Assignee {
   id: number;
@@ -9,11 +10,13 @@ export interface Assignee {
 }
 
 interface DropdownAssigneeSearchProps {
+  assignee: Assignee | null;
   assignees: Assignee[];
   onSelect: (assignee: Assignee) => void;
 }
 
 const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
+  assignee,
   assignees,
   onSelect,
 }) => {
@@ -51,19 +54,19 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
           className="w-full h-[48px] px-[16px] py-[11px] bg-white border border-gray-300 rounded-md flex items-center gap-[6px] cursor-text"
           onClick={() => setIsOpen(true)}
         >
-          {selectedAssignee ? (
+          {assignee ? (
             <div className="flex items-center flex-shrink-0 w-[22px] h-[22px] overflow-hidden rounded-full">
-              {selectedAssignee.profileImageUrl ? (
+              {assignee.profileImageUrl ? (
                 <Image
-                  src={selectedAssignee.profileImageUrl}
-                  alt={selectedAssignee.nickname}
+                  src={assignee.profileImageUrl}
+                  alt={assignee.nickname}
                   width={22}
                   height={22}
                   className="object-cover rounded-full"
                 />
               ) : (
                 <div className="flex items-center justify-center w-[22px] h-[22px] text-sm font-bold text-white bg-green-500 rounded-full">
-                  {selectedAssignee.nickname.charAt(0).toUpperCase()}
+                  {assignee.nickname.charAt(0).toUpperCase()}
                 </div>
               )}
             </div>
@@ -72,7 +75,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
           <input
             type="text"
             placeholder="이름을 입력해 주세요"
-            value={searchTerm}
+            value={searchTerm || assignee?.nickname || ""}
             onChange={(e) => {
               setSearchTerm(e.target.value);
               setIsOpen(e.target.value.length > 0);
@@ -84,40 +87,54 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
 
         {isOpen && filteredAssignees.length > 0 && searchTerm.length > 0 && (
           <div className="absolute left-0 w-full  mt-[2px] bg-white border border-gray-300 rounded-md shadow-md top-full z-50">
-            {filteredAssignees.map((assignee) => (
-              <button
-                key={assignee.nickname}
-                className="flex items-center px-[16px] py-[14px] w-full h-[48px] text-left hover:bg-gray-100"
-                onClick={() => {
-                  setSearchTerm(assignee.nickname);
-                  setSelectedAssignee(assignee);
-                  setIsOpen(false);
-                  onSelect(assignee);
-                }}
-              >
-                <div
-                  className={`w-[22px] h-[22px] flex items-center justify-center rounded-full text-sm font-bold text-white ${
-                    assignee.profileImageUrl ? "" : "bg-green-500"
-                  }`}
-                  style={
-                    assignee.profileImageUrl
-                      ? {
-                          backgroundImage: `url(${assignee.profileImageUrl})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }
-                      : {}
-                  }
-                >
-                  {!assignee.profileImageUrl &&
-                    assignee.nickname.charAt(0).toUpperCase()}
-                </div>
+            {filteredAssignees.map((item) => {
+              const isSelected = assignee?.userId === item.userId;
 
-                <span className="ml-3 text-gray-800 text-lg-regular">
-                  {assignee.nickname}
-                </span>
-              </button>
-            ))}
+              return (
+                <button
+                  key={item.nickname}
+                  className="flex items-center px-[16px] py-[14px] w-full h-[48px] text-left hover:bg-gray-100"
+                  onClick={() => {
+                    setSearchTerm(item.nickname);
+                    setSelectedAssignee(item);
+                    setIsOpen(false);
+                    onSelect(item);
+                  }}
+                >
+                  {isSelected ? (
+                    <Image
+                      src={CheckIcon}
+                      alt="selected"
+                      width={16}
+                      height={16}
+                    />
+                  ) : (
+                    <div className="w-[16px] h-[16px]" />
+                  )}
+                  <div
+                    className={`w-[22px] h-[22px] flex items-center justify-center rounded-full text-sm font-bold text-white ${
+                      item.profileImageUrl ? "" : "bg-green-500"
+                    }`}
+                    style={
+                      item.profileImageUrl
+                        ? {
+                            backgroundImage: `url(${item.profileImageUrl})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }
+                        : {}
+                    }
+                  >
+                    {!item.profileImageUrl &&
+                      item.nickname.charAt(0).toUpperCase()}
+                  </div>
+
+                  <span className="ml-3 text-gray-800 text-lg-regular">
+                    {item.nickname}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         )}
       </div>

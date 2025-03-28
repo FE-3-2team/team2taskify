@@ -37,6 +37,7 @@ const CardForm = ({
   setCardTags,
   cardImageFile,
   setCardImageFile,
+  selectedAssignee,
   setSelectedAssignee,
   setCardImageUrl,
   members,
@@ -50,6 +51,7 @@ const CardForm = ({
       <div className="w-full h-fit py-[24px] gap-[24px] flex flex-col items-start">
         <div className="w-full">
           <DropdownAssigneeSearch
+            assignee={selectedAssignee}
             assignees={members}
             onSelect={setSelectedAssignee}
           />
