@@ -172,7 +172,9 @@ const EditProfile = () => {
   return (
     <>
       <div className="w-full max-w-[284px] tablet:max-w-[672px] p-[16px] tablet:p-[24px] bg-white rounded-[8px] tablet:rounded-[16px]">
-        <h2 className="mb-[40px] tablet:mb-[24px] text-2lg-bold tablet:text-2xl-bold">프로필</h2>
+        <h2 className="mb-[40px] tablet:mb-[24px] text-2lg-bold tablet:text-2xl-bold">
+          프로필
+        </h2>
         <div className="flex flex-col gap-6 tablet:flex-row">
           <div className="relative flex-shrink-0">
             <div
@@ -222,6 +224,7 @@ const EditProfile = () => {
               value={nickname}
               onChange={(val) => setNickname(val)}
               disable={false}
+              hideAsterisk={true} // 별표 숨기기
             />
             <div className="flex justify-end mt-6">
               <Button onClick={handleSave} variant="primary">
