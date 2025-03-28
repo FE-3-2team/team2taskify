@@ -272,12 +272,14 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
             // disabled 속성을 disable 값에 따라 전달하며, disabled일 경우에만 input에 추가 스타일 적용
             disabled={disable}
             className={`${
-              value && !error
-                ? "border-[#5534da]"
-                : error
-                  ? "border-red"
-                  : "border-gray-300"
-            } ${disable ? "bg-gray-200 cursor-not-allowed" : ""}`}
+              disable
+                ? "border-gray-300 bg-white text-gray-400 cursor-not-allowed"
+                : value && !error
+                  ? "border-[#5534da]"
+                  : error
+                    ? "border-red"
+                    : "border-gray-300"
+            }`}
             aria-describedby={error ? errorId : undefined}
             onBlur={handleBlur}
           />

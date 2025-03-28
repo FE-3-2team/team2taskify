@@ -80,18 +80,18 @@ export default function Header({ createdByMe }: Props) {
             </button>
           </Link>
           {router.pathname !== "/mydashboard" && (
-            <div className="w-[73px] h-[40px] tablet:w-[116px]">
+            <div className="h-[40px]">
               <Modal
                 ModalOpenButton={
-                  <div className=" justify-center items-center  flex flex-row  py-[7px] px-3 tablet:px-4 gap-2 ">
+                  <div className="justify-center items-center  flex flex-row  py-[7px] px-2 tablet:px-4 gap-2 ">
                     <Image
                       className="hidden tablet:block"
                       src={Invite}
-                      width={15}
-                      height={15}
+                      width={18}
+                      height={18}
                       alt="+"
                     />
-                    <div className="text-gray-500 text-xs-medium tablet:text-md-medium">
+                    <div className="text-gray-500 text-md-medium tablet:text-lg-medium">
                       초대하기
                     </div>
                   </div>
@@ -110,7 +110,7 @@ export default function Header({ createdByMe }: Props) {
             </div>
           )}
         </div>
-        <div className="flex w-fit flex-row gap-[12px] tablet:gap-[36px] laptop:gap-[40px]">
+        <div className="flex w-fit flex-row gap-[4px] tablet:gap-[36px] laptop:gap-[40px]">
         <div
           style={{ display: members && members.length > 0 ? "block" : "none" }}
         >
