@@ -233,13 +233,18 @@ const EditProfile = () => {
         </div>
         {cropping && upImg && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-            <div className="p-4 bg-white rounded">
+            <div className="p-4 bg-white rounded max-h-[90vh] overflow-y-auto">
               <ReactCrop
                 crop={crop}
                 onChange={onCropChange}
                 onComplete={onCropComplete}
               >
-                <img src={upImg} alt="Crop me" onLoad={onImageLoaded} />
+                <img
+                  src={upImg}
+                  alt="Crop me"
+                  onLoad={onImageLoaded}
+                  style={{ maxHeight: "70vh", width: "auto" }}
+                />
               </ReactCrop>
               <div className="flex justify-end mt-4">
                 <Button onClick={makeClientCrop} variant="primary">
