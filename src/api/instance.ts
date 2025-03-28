@@ -2,8 +2,6 @@ import axios, {
   InternalAxiosRequestConfig,
   AxiosResponse,
   AxiosError,
-  AxiosRequestConfig,
-  AxiosRequestHeaders,
 } from "axios";
 //
 import { getItem, setItem } from "@/utils/localstorage";
@@ -21,9 +19,12 @@ export const instance = axios.create({
 const onRequest = (
   config: InternalAxiosRequestConfig
 ): InternalAxiosRequestConfig => {
-  if (typeof window === "undefined") return config;
   const accessToken = getItem("accessToken");
-  config.headers.Authorization = `Bearer ${accessToken}`;
+
+  if (typeof window !== "undefined" && accessToken) {
+    config.headers.set("Authorization", `Bearer ${accessToken}`);
+  }
+
   return config;
 };
 
@@ -37,9 +38,8 @@ instance.interceptors.request.use(onRequest, onErrorRequest);
 //리스폰스 인터셉터
 
 const onResponse = (response: AxiosResponse) => {
-  if (typeof window === "undefined") return response;
   const accessToken = response.data.accessToken;
-  if (accessToken) {
+  if (typeof window !== "undefined" && accessToken) {
     setItem("accessToken", accessToken);
   }
   return response;
@@ -47,14 +47,11 @@ const onResponse = (response: AxiosResponse) => {
 
 const onErrorResponse = (error: AxiosError) => {
   if (!axios.isAxiosError(error)) return;
-  if (error.code === "ERR_AUTH") {
-    return Promise.reject(new AxiosError("로그인 필요", "ERR_AUTH")); //커스텀 에러 코드를 catch 로 던져줌
-  } else {
-    const { status } = error.response as AxiosResponse;
-    if (status) {
-      return Promise.reject();
-    }
+  const { status } = error.response as AxiosResponse;
+  if (status) {
+    return Promise.reject("instance에러");
   }
+  // }
 };
 
 instance.interceptors.response.use(onResponse, onErrorResponse);
