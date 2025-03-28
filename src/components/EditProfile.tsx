@@ -144,6 +144,13 @@ const EditProfile = () => {
     fileInputRef.current?.click();
   };
 
+  const handleCancelCrop = () => {
+    // 크롭 모드를 종료하고, 임시 저장된 이미지 및 파일 초기화
+    setCropping(false);
+    setUpImg(null);
+    setNewImageFile(null);
+  };
+
   const handleSave = async () => {
     try {
       let uploadedImageUrl: string | null = null;
@@ -224,7 +231,7 @@ const EditProfile = () => {
               value={nickname}
               onChange={(val) => setNickname(val)}
               disable={false}
-              hideAsterisk={true} // 별표 숨기기
+              hideAsterisk={true}
             />
             <div className="flex justify-end mt-6">
               <Button onClick={handleSave} variant="primary">
@@ -245,10 +252,13 @@ const EditProfile = () => {
                   src={upImg}
                   alt="Crop me"
                   onLoad={onImageLoaded}
-                  style={{ maxHeight: "70vh", width: "auto" }}
+                  style={{ maxHeight: "35vh", width: "auto" }}
                 />
               </ReactCrop>
-              <div className="flex justify-end mt-4">
+              <div className="flex flex-col items-end gap-2 mt-4">
+                <Button onClick={handleCancelCrop} variant="secondary">
+                  취소
+                </Button>
                 <Button onClick={makeClientCrop} variant="primary">
                   완료
                 </Button>
