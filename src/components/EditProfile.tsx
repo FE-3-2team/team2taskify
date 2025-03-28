@@ -7,6 +7,7 @@ import { instance } from "@/api/instance";
 import UnifiedInput from "@/components/common/Input";
 import Button from "@/components/common/Button/Button";
 import ProfileImg from "@/assets/icons/CardProfile.svg";
+import { AlertModal } from "@/components/ModalContents/AlertModal";
 
 const EditProfile = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ const EditProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [cropping, setCropping] = useState(false);
   const [upImg, setUpImg] = useState<string | null>(null);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
 
   const [crop, setCrop] = useState<Crop>({
     unit: "%",
@@ -170,6 +172,8 @@ const EditProfile = () => {
 
       const updateResponse = await instance.put("/users/me", updateBody, {});
       console.log("Profile updated:", updateResponse.data);
+      // 업데이트 성공 후 모달 열기
+      setAlertModalOpen(true);
     } catch (error) {
       console.error("Profile update error:", error);
       setErrorMsg("프로필 업데이트에 실패했습니다.");
@@ -267,6 +271,12 @@ const EditProfile = () => {
           </div>
         )}
       </div>
+
+      <AlertModal
+        isOpen={alertModalOpen}
+        message="프로필 사진이 변경되었습니다"
+        onConfirm={() => setAlertModalOpen(false)}
+      />
     </>
   );
 };
