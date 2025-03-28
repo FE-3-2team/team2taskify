@@ -132,6 +132,7 @@ export interface UnifiedInputProps {
   compareWith?: string;
   readOnly?: boolean;
   disable?: boolean;
+  hideAsterisk?: boolean;
 }
 
 const defaultMaxLengths: Record<InputVariant, number> = {
@@ -158,6 +159,7 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
   compareWith,
   readOnly,
   disable,
+  hideAsterisk,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   // 입력 필드가 포커스를 잃은 후에만 오류 메시지를 보여주기 위한 상태
@@ -218,15 +220,12 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
         className="block mb-2 text-sm text-gray-700 text-lg-regular"
       >
         {label}
-        {variant === "title" && (
-          <>
-            {" "}
-            {value && !error ? (
-              <span className="text-violet-700">*</span>
-            ) : (
-              <span className="text-gray-700">*</span>
-            )}
-          </>
+        {variant === "title" && !hideAsterisk && (
+          <span
+            className={value && !error ? "text-violet-700" : "text-gray-700"}
+          >
+            *
+          </span>
         )}
       </label>
       {variant === "comment" ? (
@@ -269,14 +268,15 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
             value={value}
             onChange={handleInputChange}
             maxLength={finalMaxLength}
-            // disabled 속성을 disable 값에 따라 전달하며, disabled일 경우에만 input에 추가 스타일 적용
             disabled={disable}
             className={`${
-              value && !error
-                ? "border-[#5534da]"
-                : error
-                  ? "border-red"
-                  : "border-gray-300"
+              disable || readOnly
+                ? "border-gray-300"
+                : value && !error
+                  ? "border-[#5534da]"
+                  : error
+                    ? "border-red"
+                    : "border-gray-300"
             } ${disable ? "bg-gray-200 cursor-not-allowed" : ""}`}
             aria-describedby={error ? errorId : undefined}
             onBlur={handleBlur}
