@@ -32,7 +32,7 @@ export default function SideMenu() {
 
   const handleLoad = async () => {
     try {
-      const accessToken = getItem<string>("accessToken");
+      const accessToken = getItem("accessToken");
 
       const response = await instance.get(`/dashboards`, {
         params: {
