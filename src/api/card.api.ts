@@ -34,7 +34,7 @@ export async function deleteCard(cardId: number) {
 export async function createCard({
   dashboardId,
   columnId,
-  assigneeId,
+  assigneeUserId,
   title,
   description,
   dueDate,
@@ -43,7 +43,7 @@ export async function createCard({
 }: {
   dashboardId: number;
   columnId: number;
-  assigneeId: number;
+  assigneeUserId: number;
   title: string;
   description: string;
   dueDate: string;
@@ -54,7 +54,7 @@ export async function createCard({
     const res = await instance.post("/cards", {
       dashboardId,
       columnId,
-      assigneeId,
+      assigneeUserId,
       title,
       description,
       dueDate,
@@ -64,5 +64,28 @@ export async function createCard({
     return res.data;
   } catch (err) {
     throw new Error("카드 생성 실패");
+  }
+}
+
+export async function updateCard({
+  cardId,
+  data,
+}: {
+  cardId: number;
+  data: {
+    columnId: number;
+    assigneeUserId: number;
+    title: string;
+    description: string;
+    dueDate: string;
+    tags: string[];
+    imageUrl: string;
+  };
+}) {
+  try {
+    const res = await instance.put(`/cards/${cardId}`, data);
+    return res.data;
+  } catch (err) {
+    throw new Error("카드 수정 실패");
   }
 }

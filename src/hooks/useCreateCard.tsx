@@ -58,7 +58,7 @@ export default function useCreateCard() {
       const newCard = await createCard({
         dashboardId,
         columnId: targetColumnId,
-        assigneeId: selectedAssignee.id,
+        assigneeUserId: selectedAssignee.userId,
         title: cardTitle,
         description: cardDescription,
         dueDate: cardDueDate ? formatDateTime(cardDueDate) : "",

@@ -9,6 +9,7 @@ interface ColumnProps {
   cards: Card[];
   columnId: number;
   onAddCardClick: (columnId: number) => void;
+  onEditCardClick?: (card: Card) => void;
   onManageColumnClick: (columnId: number, title: string) => void;
 }
 
@@ -17,6 +18,7 @@ const Column: React.FC<ColumnProps> = ({
   cards,
   columnId,
   onAddCardClick,
+  onEditCardClick,
   onManageColumnClick,
 }) => {
   const observer = useRef<IntersectionObserver | null>(null);
@@ -71,7 +73,7 @@ const Column: React.FC<ColumnProps> = ({
             key={card.id}
             ref={index === cards.length - 1 ? lastCardRef : null}
           >
-            <TodoCard todoData={card} />
+            <TodoCard todoData={card} onClick={() => onEditCardClick?.(card)} />
           </div>
         ))}
       </div>
