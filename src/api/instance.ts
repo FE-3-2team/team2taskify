@@ -19,23 +19,50 @@ export const instance = axios.create({
 
 // 리퀘스트 인터셉터
 const onRequest = (
-  config: InternalAxiosRequestConfig
-): InternalAxiosRequestConfig => {
-  if (typeof window === "undefined") return config;
+  config: AxiosRequestConfig
+): Promise<InternalAxiosRequestConfig> => {
+  if (typeof window === "undefined")
+    return Promise.resolve(config as InternalAxiosRequestConfig);
   const accessToken = getItem("accessToken");
-  config.headers.Authorization = `Bearer ${accessToken}`;
-  return config;
+
+  if (!config.headers) {
+    config.headers = {} as AxiosRequestHeaders;
+  } else if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  if (config.url === "/login") {
+    delete config.headers?.Authorization;
+  } else if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  return Promise.resolve(config as InternalAxiosRequestConfig);
 };
 
 const onErrorRequest = (error: AxiosError) => {
-  alert("서버 요청이 실패했어요 나중에 다시 시도해 주세요");
+  switch (true) {
+    case Boolean(error.config):
+      alert("서버 요청이 실패했어요 다음에 다시 오셔야 할 것 같아요");
+      break;
+    case Boolean(error.request):
+      alert("서버 요청이 실패했어요 다음에 다시 오셔야 할 것 같아요");
+      break;
+    default:
+      alert("숨돌리고 다시 시도해 주세요");
+      break;
+  }
   return Promise.reject(error);
 };
-
 instance.interceptors.request.use(onRequest, onErrorRequest);
 
 //리스폰스 인터셉터
-
+const onError = (status: number, message: string) => {
+  const error = { status, message };
+  if (status === 401) {
+    alert(`로그인이 필요한 서비스 입니다.`);
+  }
+  alert(`${message}`);
+  throw error;
+};
 const onResponse = (response: AxiosResponse) => {
   if (typeof window === "undefined") return response;
   const accessToken = response.data.accessToken;
@@ -46,13 +73,10 @@ const onResponse = (response: AxiosResponse) => {
 };
 
 const onErrorResponse = (error: AxiosError) => {
-  if (!axios.isAxiosError(error)) return;
-  if (error.code === "ERR_AUTH") {
-    return Promise.reject(new AxiosError("로그인 필요", "ERR_AUTH")); //커스텀 에러 코드를 catch 로 던져줌
-  } else {
-    const { status } = error.response as AxiosResponse;
+  if (axios.isAxiosError(error)) {
+    const { status, data } = error.response as AxiosResponse;
     if (status) {
-      return Promise.reject();
+      onError(status, data.message);
     }
   }
 };
