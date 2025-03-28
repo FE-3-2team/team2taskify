@@ -22,6 +22,7 @@ import AddColumnModal from "@/pages/dashboard/modals/AddColumnModal";
 import useCardForm from "@/hooks/useCardForm";
 import useColumnForm from "@/hooks/useColumnForm";
 import EditCardModal from "@/pages/dashboard/modals/EditCardModal";
+import { formatDateTime } from "@/utils/date";
 
 type ColumnData = Column & { cards: Card[] };
 
@@ -122,6 +123,7 @@ export default function Dashboard() {
     }
 
     setEditingCardId(card.id);
+    setEditCardId(card.id);
     setEditCardColumnId(card.columnId);
     setEditSelectedAssignee({
       id: card.assignee.id,
@@ -153,7 +155,20 @@ export default function Dashboard() {
   };
 
   const handleEditCardSubmit = async () => {
-    if (!editCardId || !editCardColumnId || !editSelectedAssignee) return;
+    console.log("수정 시도");
+
+    if (!editCardId) {
+      console.error("editCardId is null");
+      return;
+    }
+    if (!editCardColumnId) {
+      console.error("editCardColumnId is null");
+      return;
+    }
+    if (!editSelectedAssignee) {
+      console.error("editSelectedAssignee is null");
+      return;
+    }
 
     let imageUrlToSubmit = editCardImageUrl;
 
@@ -182,7 +197,7 @@ export default function Dashboard() {
           assigneeUserId: editSelectedAssignee.userId,
           title: editCardTitle,
           description: editCardDescription,
-          dueDate: editCardDueDate?.toISOString() ?? "",
+          dueDate: editCardDueDate ? formatDateTime(editCardDueDate) : "",
           tags: editCardTags,
           imageUrl: imageUrlToSubmit ?? "",
         },

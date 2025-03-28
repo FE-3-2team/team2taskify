@@ -39,6 +39,7 @@ const EditCardModal = ({
   setIsOpen,
   onSubmit,
   onCancel,
+  cardId,
   selectedColumnId,
   setSelectedColumnId,
   selectedAssignee,
