@@ -3,8 +3,7 @@ import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSear
 import { uploadCardImage } from "@/api/column.api";
 import { createCard } from "@/api/card.api";
 import { formatDateTime } from "@/utils/date";
-import defaultCardImage from "@/assets/defaultCardImage.jpg";
-import imageToFile from "@/utils/imageToFile";
+import createInvisibleImageFile from "@/utils/createInvisibleImageFile";
 
 interface Params {
   dashboardId: number;
@@ -49,20 +48,12 @@ export default function useCreateCard() {
     try {
       let uploadedImageUrl = "";
 
-      let imageToUpload = cardImageFile;
-      if (!imageToUpload) {
-        imageToUpload = await imageToFile(
-          defaultCardImage,
-          "defaultCardImage.jpg"
-        );
-      }
+      const imageToUpload = cardImageFile ?? createInvisibleImageFile();
 
-      if (imageToUpload) {
-        uploadedImageUrl = await uploadCardImage({
-          columnId: targetColumnId,
-          imageFile: imageToUpload,
-        });
-      }
+      uploadedImageUrl = await uploadCardImage({
+        columnId: targetColumnId,
+        imageFile: imageToUpload,
+      });
 
       const newCard = await createCard({
         dashboardId,
