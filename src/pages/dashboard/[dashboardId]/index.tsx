@@ -23,6 +23,7 @@ import useCardForm from "@/hooks/useCardForm";
 import useColumnForm from "@/hooks/useColumnForm";
 import EditCardModal from "@/pages/dashboard/modals/EditCardModal";
 import { formatDateTime } from "@/utils/date";
+import { useFetchColumns } from "@/hooks/useFetchColumns";
 
 type ColumnData = Column & { cards: Card[] };
 
@@ -71,33 +72,7 @@ export default function Dashboard() {
   const { newColumnTitle, setNewColumnTitle, resetNewColumnForm } =
     useColumnForm();
 
-  const fetchColumns = async (pageId: string) => {
-    try {
-      setIsLoading(true);
-
-      const dashboardInfo = await getDashboardInfo(pageId);
-      const dashboardId = dashboardInfo.id;
-
-      const columnList = await getColumns(String(dashboardId));
-
-      setColumns([]);
-
-      for (const col of columnList) {
-        try {
-          const cards = await getCards(col.id);
-
-          setColumns((prev) => [...prev, { ...col, cards }]);
-        } catch (err) {
-          console.error(`컬럼 ${col.id}의 카드 로딩 실패`, err);
-          setColumns((prev) => [...prev, { ...col, cards: [] }]);
-        }
-      }
-    } catch (err) {
-      console.error("컬럼 목록 로딩 실패", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { fetchColumns } = useFetchColumns(setColumns, setIsLoading);
 
   const handleCreateColumn = async () => {
     if (!dashboardId || typeof dashboardId !== "string") return;
