@@ -3,14 +3,16 @@ import Header from "@/components/common/Header";
 import { DetailContent, Modal } from "@/components/common/ModalPopup";
 import NewDashboard from "@/components/ModalContents/NewDashboard";
 import { useEffect, useState } from "react";
-import * as B from "@/components/common/Button";
+import {
+  DashButton,
+  PaginationButton,
+  PlusIconButton,
+} from "@/components/common/Button";
 import InvitedDashboards from "@/components/InvitedDashboards/InvitedDashboards";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import SideMenu from "@/components/common/SideMenu";
 import CardModal from "@/components/ModalContents/Card.modal";
-import { useStore } from "zustand";
-import useAuthStore from "@/utils/Zustand/zustand";
 
 export interface Data {
   title: string;
@@ -71,7 +73,7 @@ export default function MyDashboard() {
                     <p className="text-lg-semibold tablet:text-lg-semibold">
                       새로운 대시보드 만들기
                     </p>
-                    <B.PlusIconButton />
+                    <PlusIconButton />
                   </div>
                 }
                 rightHandlerText="생성"
@@ -84,7 +86,7 @@ export default function MyDashboard() {
             {boardList.map((board) => {
               return (
                 <Link href={`/dashboard/${board.id}`}>
-                  <B.DashButton
+                  <DashButton
                     hasArrow
                     title={board.title}
                     color={board.color}
@@ -97,7 +99,7 @@ export default function MyDashboard() {
             <p>
               {totalPage} 중 {currentPage}
             </p>
-            <B.PaginationButton
+            <PaginationButton
               hasPrev={currentPage > 1}
               hasNext={totalPage > currentPage}
               onPrev={PrevPage}
