@@ -1,4 +1,4 @@
-export function SkeletonChangePasswordForm() {
+export default function SkeletonChangePasswordForm() {
     return (
       <div className="w-full max-w-[284px] tablet:max-w-[672px] p-[16px] tablet:p-[24px] bg-white rounded-[8px] tablet:rounded-[16px]">
       {/* 제목 */}

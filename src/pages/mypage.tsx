@@ -7,9 +7,10 @@ import SideMenu from "@/components/common/SideMenu";
 import ChangePasswordForm from "@/components/ChangePasswordForm";
 import EditProfile from "@/components/EditProfile";
 import LeftArrowIcon from "@/assets/icons/LeftArrow.icon.svg";
-import { SkeletonColumn } from "@/components/common/Skeleton/Skeleton";
+
 import WithSkeleton from "@/components/common/Skeleton/WithSkeleton";
-import { SkeletonChangePasswordForm } from "@/components/common/Skeleton/SkeletonChangePasswordForm";
+import SkeletonChangePasswordForm from "@/components/common/Skeleton/SkeletonChangePasswordForm";
+import SkeletonEditProfile from "@/components/common/Skeleton/SkeletonEditProfile";
 import SkeletonSideMenu from "@/components/common/Skeleton/SkeletonSideMenu";
 // import Loader from "@/components/common/Loding"; //로딩스피너
 
@@ -38,6 +39,9 @@ export default function MyPage() {
           <Image src={LeftArrowIcon} width={18} height={18} alt="화살표" className="mr-1" />
           돌아가기
         </div>
+        <WithSkeleton isLoading={isLoading} skeleton={<SkeletonEditProfile />}>
+          <EditProfile />
+        </WithSkeleton>
         <WithSkeleton isLoading={isLoading} skeleton={<SkeletonChangePasswordForm />}>
           <ChangePasswordForm />
         </WithSkeleton>
