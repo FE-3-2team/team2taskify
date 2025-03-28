@@ -1,8 +1,8 @@
 // utils/localstorage.ts
 
-export const getItem = <T>(key: string): T | null => {
+export const getItem = (key: string): string | null => {
   const item = localStorage.getItem(key);
-  return item ? (JSON.parse(item) as T) : null;
+  return item;
 };
 
 export const setItem = (key: string, value: unknown) => {
