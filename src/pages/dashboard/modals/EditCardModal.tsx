@@ -1,35 +1,29 @@
-import { Dispatch, SetStateAction } from "react";
-import "react-datepicker/dist/react-datepicker.css";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import { Modal } from "@/components/common/ModalPopup";
 import CardForm from "@/components/forms/CardForm";
-import { ColumnData } from "@/types/column";
 import DropdownProgress from "@/components/common/Dropdown/DropdownProgress";
+import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
+import type { ColumnData } from "@/types/column";
+import { SetStateAction } from "react";
+
+interface CardData {
+  cardId: number;
+  columnId: number;
+  title: string;
+  description: string;
+  dueDate: Date | null;
+  tags: string[];
+  imageFile: File | null;
+  imageUrl: string | null;
+  assignee: Assignee | null;
+}
 
 interface Props {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   onSubmit: () => void;
   onCancel: () => void;
-  cardId: number;
-  dashboardId: number;
-  columnId: number;
-  selectedColumnId: number;
-  setSelectedColumnId: (id: number) => void;
-  selectedAssignee: Assignee | null;
-  setSelectedAssignee: (a: Assignee | null) => void;
-  cardTitle: string;
-  setCardTitle: (v: string) => void;
-  cardDescription: string;
-  setCardDescription: (v: string) => void;
-  cardDueDate: Date | null;
-  setCardDueDate: (v: Date | null) => void;
-  cardTags: string[];
-  setCardTags: Dispatch<SetStateAction<string[]>>;
-  cardImageFile: File | null;
-  setCardImageFile: (file: File | null) => void;
-  cardImageUrl: string | null;
-  setCardImageUrl: (url: string | null) => void;
+  initialCardData: CardData;
+  setEditedData: (data: Partial<CardData>) => void;
   members: Assignee[];
   columns: ColumnData[];
 }
@@ -39,26 +33,22 @@ const EditCardModal = ({
   setIsOpen,
   onSubmit,
   onCancel,
-  cardId,
-  selectedColumnId,
-  setSelectedColumnId,
-  selectedAssignee,
-  setSelectedAssignee,
-  cardTitle,
-  setCardTitle,
-  cardDescription,
-  setCardDescription,
-  cardDueDate,
-  setCardDueDate,
-  cardTags,
-  setCardTags,
-  cardImageFile,
-  setCardImageFile,
-  cardImageUrl,
-  setCardImageUrl,
+  initialCardData,
+  setEditedData,
   members,
   columns,
 }: Props) => {
+  const {
+    columnId,
+    title,
+    description,
+    dueDate,
+    tags,
+    imageFile,
+    imageUrl,
+    assignee,
+  } = initialCardData;
+
   return (
     <Modal
       isOpen={isOpen}
@@ -73,20 +63,20 @@ const EditCardModal = ({
       leftOnClick={onCancel}
     >
       <div className="w-full">
-        <h2 className="tablet:text-2xl-bold text-xl-bold mb-[20px]">
+        <h2 className="tablet:text-2xl-bold text-xl-bold mb-[32px]">
           할 일 수정
         </h2>
 
         <div className="w-full mb-[16px]">
           <DropdownProgress
             selectedTitle={
-              columns.find((col) => col.id === selectedColumnId)?.title ?? ""
+              columns.find((col) => col.id === columnId)?.title ?? ""
             }
             options={columns.map((col) => col.title)}
             onChange={(title) => {
               const selected = columns.find((col) => col.title === title);
               if (selected) {
-                setSelectedColumnId(selected.id);
+                setEditedData({ columnId: selected.id });
               }
             }}
           />
@@ -94,20 +84,23 @@ const EditCardModal = ({
 
         <CardForm
           members={members}
-          selectedAssignee={selectedAssignee}
-          setSelectedAssignee={setSelectedAssignee}
-          cardTitle={cardTitle}
-          setCardTitle={setCardTitle}
-          cardDescription={cardDescription}
-          setCardDescription={setCardDescription}
-          cardDueDate={cardDueDate}
-          setCardDueDate={setCardDueDate}
-          cardTags={cardTags}
-          setCardTags={setCardTags}
-          cardImageFile={cardImageFile}
-          setCardImageFile={setCardImageFile}
-          cardImageUrl={cardImageUrl}
-          setCardImageUrl={setCardImageUrl}
+          selectedAssignee={assignee}
+          setSelectedAssignee={(a) => setEditedData({ assignee: a })}
+          cardTitle={title}
+          setCardTitle={(v) => setEditedData({ title: v })}
+          cardDescription={description}
+          setCardDescription={(v) => setEditedData({ description: v })}
+          cardDueDate={dueDate}
+          setCardDueDate={(v) => setEditedData({ dueDate: v })}
+          cardTags={tags}
+          setCardTags={(v) => {
+            const nextTags = typeof v === "function" ? v(tags) : v;
+            setEditedData({ tags: nextTags });
+          }}
+          cardImageFile={imageFile}
+          setCardImageFile={(f) => setEditedData({ imageFile: f })}
+          cardImageUrl={imageUrl}
+          setCardImageUrl={(url) => setEditedData({ imageUrl: url })}
         />
       </div>
     </Modal>

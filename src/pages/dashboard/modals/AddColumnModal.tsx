@@ -1,6 +1,7 @@
 import { Modal } from "@/components/common/ModalPopup";
 
 type Props = {
+  ModalOpenButton: React.ReactNode;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   newColumnTitle: string;
@@ -10,6 +11,7 @@ type Props = {
 };
 
 const AddColumnModal = ({
+  ModalOpenButton,
   isOpen,
   setIsOpen,
   newColumnTitle,
@@ -20,7 +22,7 @@ const AddColumnModal = ({
   return (
     <Modal
       className="bg-white border border-gray-300"
-      ModalOpenButton={null}
+      ModalOpenButton={ModalOpenButton}
       isOpen={isOpen}
       setIsOpen={(open) => {
         setIsOpen(open);

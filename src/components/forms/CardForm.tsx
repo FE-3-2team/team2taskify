@@ -47,7 +47,6 @@ const CardForm = ({
 
   return (
     <div>
-      <h2 className="tablet:text-2xl-bold text-xl-bold">할 일 생성</h2>
       <div className="w-full h-fit py-[24px] gap-[24px] flex flex-col items-start">
         <div className="w-full">
           <DropdownAssigneeSearch

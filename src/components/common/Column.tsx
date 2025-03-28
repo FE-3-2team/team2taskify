@@ -73,7 +73,11 @@ const Column: React.FC<ColumnProps> = ({
             key={card.id}
             ref={index === cards.length - 1 ? lastCardRef : null}
           >
-            <TodoCard todoData={card} onClick={() => onEditCardClick?.(card)} />
+            <TodoCard
+              key={`${card.id}-${card.updatedAt}`}
+              todoData={card}
+              onClick={() => onEditCardClick?.(card)}
+            />
           </div>
         ))}
       </div>

@@ -3,20 +3,22 @@ import { Modal } from "@/components/common/ModalPopup";
 type Props = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  targetColumnId: number;
-  targetColumnTitle: string;
-  setTargetColumnTitle: (v: string) => void;
-  onUpdateColumn: () => void;
-  onDeleteColumn: () => void;
+  columnData: {
+    id: number;
+    title: string;
+  };
+  setTitle: (v: string) => void;
+  onUpdate: () => void;
+  onDelete: () => void;
 };
 
 const ManageColumnModal = ({
   isOpen,
   setIsOpen,
-  targetColumnTitle,
-  setTargetColumnTitle,
-  onUpdateColumn,
-  onDeleteColumn,
+  columnData,
+  setTitle,
+  onUpdate,
+  onDelete,
 }: Props) => {
   return (
     <Modal
@@ -24,14 +26,14 @@ const ManageColumnModal = ({
       setIsOpen={(open) => {
         setIsOpen(open);
         if (!open) {
-          setTargetColumnTitle("");
+          setTitle("");
         }
       }}
       ModalOpenButton={null}
       rightHandlerText="변경"
       leftHandlerText="삭제"
-      rightOnClick={onUpdateColumn}
-      leftOnClick={onDeleteColumn}
+      rightOnClick={onUpdate}
+      leftOnClick={onDelete}
     >
       <div>
         <h2 className="tablet:text-2xl-bold text-xl-bold tablet:mb-[24px] mb-[16px]">
@@ -42,8 +44,8 @@ const ManageColumnModal = ({
           type="text"
           placeholder="컬럼 이름을 입력해주세요"
           className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
-          value={targetColumnTitle}
-          onChange={(e) => setTargetColumnTitle(e.target.value)}
+          value={columnData.title}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </div>
     </Modal>

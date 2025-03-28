@@ -1,64 +1,92 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/router";
 import "react-datepicker/dist/react-datepicker.css";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import { Modal } from "@/components/common/ModalPopup";
 import CardForm from "@/components/forms/CardForm";
+import useCardForm from "@/hooks/useCardForm";
+import useCreateCard from "@/hooks/useCreateCard";
+import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 
 type Props = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  onSubmit: () => void;
-  onCancel: () => void;
-  cardTitle: string;
-  setCardTitle: (v: string) => void;
-  cardDescription: string;
-  setCardDescription: (v: string) => void;
-  cardDueDate: Date | null;
-  setCardDueDate: (v: Date | null) => void;
-  cardTags: string[];
-  setCardTags: Dispatch<SetStateAction<string[]>>;
-  cardImageFile: File | null;
-  setCardImageFile: (file: File | null) => void;
-  selectedAssignee: Assignee | null;
-  setSelectedAssignee: (a: Assignee | null) => void;
   members: Assignee[];
+  targetColumnId: number;
+  resetNewCardForm: () => void;
+  fetchColumns: (dashboardId: string) => void;
 };
 
 const CreateCardModal = ({
   isOpen,
   setIsOpen,
-  onSubmit,
-  onCancel,
-  cardTitle,
-  setCardTitle,
-  cardDescription,
-  setCardDescription,
-  cardDueDate,
-  setCardDueDate,
-  cardTags,
-  setCardTags,
-  cardImageFile,
-  setCardImageFile,
-  selectedAssignee,
-  setSelectedAssignee,
   members,
+  targetColumnId,
+  resetNewCardForm,
+  fetchColumns,
 }: Props) => {
+  const router = useRouter();
+  const dashboardId = router.query.dashboardId as string;
+
+  const {
+    cardTitle,
+    setCardTitle,
+    cardDescription,
+    setCardDescription,
+    cardDueDate,
+    setCardDueDate,
+    cardTags,
+    setCardTags,
+    cardImageFile,
+    setCardImageFile,
+    selectedAssignee,
+    setSelectedAssignee,
+  } = useCardForm();
+
   const [cardImageUrl, setCardImageUrl] = useState<string | null>(null);
+  const { createCard } = useCreateCard();
+
+  const handleClose = () => {
+    setIsOpen(false);
+    resetNewCardForm();
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await createCard({
+        dashboardId: Number(dashboardId),
+        targetColumnId,
+        selectedAssignee: selectedAssignee!,
+        cardTitle,
+        cardDescription,
+        cardDueDate,
+        cardTags,
+        cardImageFile,
+      });
+
+      handleClose();
+      fetchColumns(dashboardId);
+    } catch (err) {
+      alert("카드 생성 실패");
+    }
+  };
 
   return (
     <Modal
       isOpen={isOpen}
       setIsOpen={(open) => {
         setIsOpen(open);
-        if (!open) onCancel();
+        if (!open) handleClose();
       }}
       ModalOpenButton={null}
       rightHandlerText="생성"
       leftHandlerText="취소"
-      rightOnClick={onSubmit}
-      leftOnClick={onCancel}
+      rightOnClick={handleSubmit}
+      leftOnClick={handleClose}
     >
       <div>
+        <h2 className="tablet:text-2xl-bold text-xl-bold mb-[20px]">
+          할 일 생성
+        </h2>
         <CardForm
           members={members}
           selectedAssignee={selectedAssignee}
