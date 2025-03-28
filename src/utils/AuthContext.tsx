@@ -43,25 +43,21 @@ export function AuthProvider({ children }: Props) {
   }, []);
   useEffect(() => {
     if (isPublicPath) return;
-    if (!window.localStorage.getItem("accessToken")) {
+    if (!getItem("accessToken")) {
       alert("로그인이 필요한 페이지 입니다.");
       router.push("/login");
       return;
     }
 
     instance
-      .get("/users/me", {
-        headers: {
-          Authorization: `Bearer ${getItem("accessToken")}`,
-        },
-      })
+      .get("/users/me")
       .then((response) => {
         setIsValidUser(true);
         setMyProfile(response.data);
       })
       .catch(() => {
+        alert("토큰이 만료되었습니다..");
         router.push("/login");
-
         return;
       });
   }, [pathname]);
