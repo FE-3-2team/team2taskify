@@ -41,14 +41,11 @@ export default function Dashboard() {
   );
 
   const handleCreateColumn = async () => {
-    console.log("🧪 handleCreateColumn called");
-
     if (!dashboardId || typeof dashboardId !== "string") {
-      console.warn("❌ Invalid dashboardId:", dashboardId);
       return;
     }
+
     if (!newColumnTitle.trim()) {
-      console.warn("❌ Column title is empty");
       return;
     }
 
@@ -57,8 +54,6 @@ export default function Dashboard() {
         title: newColumnTitle,
         dashboardId: Number(dashboardId),
       });
-
-      console.log("✅ Column created", createdColumn);
 
       states.setColumns((prev: any) => [
         ...prev,
