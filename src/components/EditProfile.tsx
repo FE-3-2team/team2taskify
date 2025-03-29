@@ -7,6 +7,7 @@ import { instance } from "@/api/instance";
 import UnifiedInput from "@/components/common/Input";
 import Button from "@/components/common/Button/Button";
 import ProfileImg from "@/assets/icons/CardProfile.svg";
+import { AlertModal } from "@/components/ModalContents/AlertModal";
 
 const EditProfile = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ const EditProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [cropping, setCropping] = useState(false);
   const [upImg, setUpImg] = useState<string | null>(null);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
 
   const [crop, setCrop] = useState<Crop>({
     unit: "%",
@@ -144,6 +146,13 @@ const EditProfile = () => {
     fileInputRef.current?.click();
   };
 
+  const handleCancelCrop = () => {
+    // 크롭 모드를 종료하고, 임시 저장된 이미지 및 파일 초기화
+    setCropping(false);
+    setUpImg(null);
+    setNewImageFile(null);
+  };
+
   const handleSave = async () => {
     try {
       let uploadedImageUrl: string | null = null;
@@ -163,6 +172,8 @@ const EditProfile = () => {
 
       const updateResponse = await instance.put("/users/me", updateBody, {});
       console.log("Profile updated:", updateResponse.data);
+      // 업데이트 성공 후 모달 열기
+      setAlertModalOpen(true);
     } catch (error) {
       console.error("Profile update error:", error);
       setErrorMsg("프로필 업데이트에 실패했습니다.");
@@ -224,7 +235,7 @@ const EditProfile = () => {
               value={nickname}
               onChange={(val) => setNickname(val)}
               disable={false}
-              hideAsterisk={true} // 별표 숨기기
+              hideAsterisk={true}
             />
             <div className="flex justify-end mt-6">
               <Button onClick={handleSave} variant="primary">
@@ -245,10 +256,13 @@ const EditProfile = () => {
                   src={upImg}
                   alt="Crop me"
                   onLoad={onImageLoaded}
-                  style={{ maxHeight: "70vh", width: "auto" }}
+                  style={{ maxHeight: "35vh", width: "auto" }}
                 />
               </ReactCrop>
-              <div className="flex justify-end mt-4">
+              <div className="flex flex-col items-end gap-2 mt-4">
+                <Button onClick={handleCancelCrop} variant="secondary">
+                  취소
+                </Button>
                 <Button onClick={makeClientCrop} variant="primary">
                   완료
                 </Button>
@@ -257,6 +271,12 @@ const EditProfile = () => {
           </div>
         )}
       </div>
+
+      <AlertModal
+        isOpen={alertModalOpen}
+        message="프로필 사진이 변경되었습니다"
+        onConfirm={() => setAlertModalOpen(false)}
+      />
     </>
   );
 };
