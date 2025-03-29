@@ -31,7 +31,7 @@ const AddColumnModal = ({
         }
       }}
       rightHandlerText="생성"
-      rightOnClick={onCreateColumn}
+      rightOnClick={() => onCreateColumn()}
       leftHandlerText="취소"
       leftOnClick={onCancel}
     >
@@ -45,7 +45,10 @@ const AddColumnModal = ({
           placeholder="컬럼 이름을 입력해주세요"
           className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
           value={newColumnTitle}
-          onChange={(e) => setNewColumnTitle(e.target.value)}
+          onChange={(e) => {
+            setNewColumnTitle(e.target.value);
+            console.log("Current Column Title:", e.target.value);
+          }}
         />
       </div>
     </Modal>

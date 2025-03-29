@@ -41,14 +41,24 @@ export default function Dashboard() {
   );
 
   const handleCreateColumn = async () => {
-    if (!dashboardId || typeof dashboardId !== "string") return;
-    if (!newColumnTitle.trim()) return;
+    console.log("🧪 handleCreateColumn called");
+
+    if (!dashboardId || typeof dashboardId !== "string") {
+      console.warn("❌ Invalid dashboardId:", dashboardId);
+      return;
+    }
+    if (!newColumnTitle.trim()) {
+      console.warn("❌ Column title is empty");
+      return;
+    }
 
     try {
       const createdColumn = await createColumn({
         title: newColumnTitle,
         dashboardId: Number(dashboardId),
       });
+
+      console.log("✅ Column created", createdColumn);
 
       states.setColumns((prev: any) => [
         ...prev,
@@ -114,8 +124,8 @@ export default function Dashboard() {
                 states.setModalContentType(open ? "addColumn" : null);
                 if (!open) resetNewColumnForm();
               }}
-              newColumnTitle={states.newColumnTitle}
-              setNewColumnTitle={states.setNewColumnTitle}
+              newColumnTitle={newColumnTitle}
+              setNewColumnTitle={setNewColumnTitle}
               onCreateColumn={handleCreateColumn}
               onCancel={() => {
                 states.setModalContentType(null);

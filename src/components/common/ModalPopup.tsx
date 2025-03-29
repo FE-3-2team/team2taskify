@@ -100,8 +100,8 @@ export function Modal({
                   <Button
                     variant="primary"
                     onClick={() => {
-                      handleSetIsOpen(false);
                       rightOnClick();
+                      handleSetIsOpen(false);
                     }}
                   >
                     {rightHandlerText}

@@ -26,7 +26,7 @@ export const useHandleEditCardClick = ({
   setEditedData,
 }: UseHandleEditCardClickParams) => {
   const handleEditCardClick = (card: Card) => {
-    if (!card.assignee?.profileImageUrl) {
+    if (!card.assignee) {
       alert("카드의 담당자가 없습니다.");
       return;
     }
