@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import Kebab from "@/assets/icons/Kebabmenu.icon.svg";
+import Kebab from "@/assets/icons/kebabmenu.icon.svg";
 interface DropdownEditDelProps {
   onEdit: () => void;
   onDelete: () => void;
