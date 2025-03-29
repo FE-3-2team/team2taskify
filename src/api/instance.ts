@@ -47,7 +47,7 @@ const onErrorResponse = (error: AxiosError) => {
   if (!axios.isAxiosError(error)) return;
   const { status } = error.response as AxiosResponse;
   if (status) {
-    return Promise.reject();
+    return Promise.reject(error); // error : 에러객체 함께 전달
   }
   // }
 };
