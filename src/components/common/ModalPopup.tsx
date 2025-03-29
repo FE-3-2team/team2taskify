@@ -81,7 +81,7 @@ export function Modal({
                     variant="outline"
                     onClick={() => {
                       handleSetIsOpen(false);
-                      leftOnClick;
+                      leftOnClick();
                     }}
                   >
                     {leftHandlerText}
@@ -100,8 +100,8 @@ export function Modal({
                   <Button
                     variant="primary"
                     onClick={() => {
-                      handleSetIsOpen(false);
                       rightOnClick();
+                      handleSetIsOpen(false);
                     }}
                   >
                     {rightHandlerText}
