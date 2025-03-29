@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import "react-datepicker/dist/react-datepicker.css";
 import Column from "@/components/common/Column";
 import Header from "@/components/common/Header";
-import { SkeletonColumn } from "@/components/common/Skeleton";
+import { SkeletonColumn } from "@/components/common/Skeleton/Skeleton";
 import { createColumn, updateColumn, deleteColumn } from "@/api/column.api";
 import CreateCardModal from "@/components/ModalContents/CreateCardModal";
 import ManageColumnModal from "@/components/ModalContents/ManageColumnModal";
