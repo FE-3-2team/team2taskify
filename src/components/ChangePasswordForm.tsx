@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { instance } from "@/api/instance";
 import { Button } from "@/components/common/Button";
 import UnifiedInput from "@/components/common/Input";
-import { Modal } from "@/components/common/ModalPopup";
 import { AlertModal } from "@/components/ModalContents/AlertModal";
+import { changePasswordApi } from "@/api/auth";
 
 export default function ChangePasswordForm() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -35,34 +34,27 @@ export default function ChangePasswordForm() {
     }
 
     try {
-      await instance.put(
-        `/auth/password`,
-        {
-          password: currentPassword,
-          newPassword: newPassword,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+        await changePasswordApi(currentPassword, newPassword);
+    
+        setErrorMessage("비밀번호가 성공적으로 변경되었습니다.");
+        setErrorModalOpen(true);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
 
-      setErrorMessage("비밀번호가 성공적으로 변경되었습니다.");
-      setErrorModalOpen(true);
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
-    } catch (error: any) {
-      const message = error?.response?.data?.message || "";
-      if (message.toLowerCase().includes("password")) {
-        setErrorMessage("현재 비밀번호가 일치하지 않습니다.");
-      } else {
-        setErrorMessage(message);
+      } catch (err: any) {
+        console.log("error.response:", err?.response);
+        console.log("error.data:", err?.response?.data);
+        console.log("error.message:", err?.message);
+
+        if (err.message.toLowerCase().includes("password")) {
+          setErrorMessage("현재 비밀번호가 일치하지 않습니다.");
+        } else {
+          setErrorMessage(err.message);
+        }
+        setErrorModalOpen(true);
       }
-      setErrorModalOpen(true);
-    }
-  };
+    };
 
   return (
     <div className="w-full max-w-[284px] tablet:max-w-[672px] p-[16px] tablet:p-[24px] bg-white rounded-[8px] tablet:rounded-[16px]">
