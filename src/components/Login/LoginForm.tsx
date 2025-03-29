@@ -85,7 +85,7 @@ export default function LoginForm({
         size="xlarge"
         className={`text-white transition-colors ${
           isFormValid ? "!bg-[#5534da]" : "!bg-[#9FA6B2]"
-        } hover:!bg-[#5534da]`}
+        }`}
         onClick={handleLogin}
       >
         로그인

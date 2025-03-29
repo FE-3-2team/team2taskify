@@ -154,7 +154,7 @@ export default function SignupForm({
     <div className="w-full">
       <Button
         size="xlarge"
-        className={`text-white transition-colors ${isFormValid ? "!bg-[#5534da]" : "!bg-[#9FA6B2]"} hover:!bg-[#5534da]`}
+        className={`text-white transition-colors ${isFormValid ? "!bg-[#5534da]" : "!bg-[#9FA6B2]"} `}
         onClick={handleSignup}
         disabled={!isFormValid}
       >
