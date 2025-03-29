@@ -64,7 +64,6 @@ const EditProfile = () => {
       setErrorMsg("");
       setIsLoading(true);
       const imageUrl = URL.createObjectURL(file);
-      // 크롭 모드 활성화 및 원본 이미지 URL 저장
       setUpImg(imageUrl);
       setCropping(true);
       setNewImageFile(file);
@@ -133,7 +132,6 @@ const EditProfile = () => {
           reject(new Error("Canvas is empty"));
           return;
         }
-        // Blob을 File로 변환하여 name 속성이 포함된 File 객체 생성
         const file = new File([blob], fileName, { type: blob.type });
         window.URL.revokeObjectURL(profileImage);
         const newCroppedImageUrl = window.URL.createObjectURL(file);
@@ -147,13 +145,16 @@ const EditProfile = () => {
   };
 
   const handleCancelCrop = () => {
-    // 크롭 모드를 종료하고, 임시 저장된 이미지 및 파일 초기화
     setCropping(false);
     setUpImg(null);
     setNewImageFile(null);
   };
 
   const handleSave = async () => {
+    if (nickname.trim() === "") {
+      setErrorMsg("닉네임을 입력해주세요.");
+      return;
+    }
     try {
       let uploadedImageUrl: string | null = null;
       if (newImageFile) {
@@ -170,9 +171,8 @@ const EditProfile = () => {
         profileImageUrl: uploadedImageUrl || profileImage,
       };
 
-      const updateResponse = await instance.put("/users/me", updateBody, {});
+      const updateResponse = await instance.put("/users/me", updateBody);
       console.log("Profile updated:", updateResponse.data);
-      // 업데이트 성공 후 모달 열기
       setAlertModalOpen(true);
     } catch (error) {
       console.error("Profile update error:", error);
@@ -214,9 +214,6 @@ const EditProfile = () => {
               onChange={handleImageChange}
               style={{ display: "none" }}
             />
-            {errorMsg && (
-              <p className="mt-2 text-sm text-red-500">{errorMsg}</p>
-            )}
           </div>
           <div className="flex-1 space-y-4">
             <UnifiedInput
@@ -233,10 +230,16 @@ const EditProfile = () => {
               label="닉네임"
               placeholder=""
               value={nickname}
-              onChange={(val) => setNickname(val)}
+              onChange={(val) => {
+                setNickname(val);
+                if (val.trim() !== "") setErrorMsg("");
+              }}
               disable={false}
               hideAsterisk={true}
             />
+            {errorMsg && (
+              <p className="mt-2 text-sm text-[#d6173a]">{errorMsg}</p>
+            )}
             <div className="flex justify-end mt-6">
               <Button onClick={handleSave} variant="primary">
                 저장
