@@ -150,6 +150,13 @@ const EditProfile = () => {
     setNewImageFile(null);
   };
 
+  // 프로필 사진 제거 함수
+  const handleRemoveProfileImage = () => {
+    // 제거 시 기본값(ProfileImg)으로 되돌림
+    setProfileImage(ProfileImg);
+    setNewImageFile(null);
+  };
+
   const handleSave = async () => {
     if (nickname.trim() === "") {
       setErrorMsg("닉네임을 입력해주세요.");
@@ -165,10 +172,11 @@ const EditProfile = () => {
         });
         uploadedImageUrl = imageResponse.data.profileImageUrl;
       }
-
+      const currentProfileImage = profileImage ? profileImage : null;
       const updateBody = {
         nickname,
-        profileImageUrl: uploadedImageUrl || profileImage,
+        profileImageUrl:
+          uploadedImageUrl !== null ? uploadedImageUrl : currentProfileImage,
       };
 
       const updateResponse = await instance.put("/users/me", updateBody);
@@ -198,13 +206,27 @@ const EditProfile = () => {
                 </div>
               )}
               {!cropping && (
-                <Image
-                  src={profileImage}
-                  alt="Profile"
-                  fill
-                  onLoadingComplete={() => setIsLoading(false)}
-                  style={{ objectFit: "cover" }}
-                />
+                <>
+                  <Image
+                    src={profileImage}
+                    alt="Profile"
+                    fill
+                    onLoadingComplete={() => setIsLoading(false)}
+                    style={{ objectFit: "cover" }}
+                  />
+                  {/* 기본 이미지가 아닐 때만 X 버튼 표시 */}
+                  {profileImage !== ProfileImg && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveProfileImage();
+                      }}
+                      className="absolute flex items-center justify-center w-6 h-6 text-sm text-gray-700 bg-white rounded-full shadow cursor-pointer top-1 right-1"
+                    >
+                      ×
+                    </button>
+                  )}
+                </>
               )}
             </div>
             <input
