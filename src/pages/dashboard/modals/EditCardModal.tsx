@@ -3,7 +3,7 @@ import CardForm from "@/components/forms/CardForm";
 import DropdownProgress from "@/components/common/Dropdown/DropdownProgress";
 import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import type { ColumnData } from "@/types/column";
-import { SetStateAction } from "react";
+import type { EditCardData } from "@/hooks/useEditCard";
 
 interface CardData {
   cardId: number;
@@ -22,7 +22,7 @@ interface Props {
   setIsOpen: (open: boolean) => void;
   onSubmit: () => void;
   onCancel: () => void;
-  initialCardData: CardData;
+  cardData: EditCardData;
   setEditedData: (data: Partial<CardData>) => void;
   members: Assignee[];
   columns: ColumnData[];
@@ -33,7 +33,7 @@ const EditCardModal = ({
   setIsOpen,
   onSubmit,
   onCancel,
-  initialCardData,
+  cardData,
   setEditedData,
   members,
   columns,
@@ -47,7 +47,7 @@ const EditCardModal = ({
     imageFile,
     imageUrl,
     assignee,
-  } = initialCardData;
+  } = cardData;
 
   return (
     <Modal

@@ -1,49 +1,52 @@
 import { useState } from "react";
 import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 
+export interface EditCardData {
+  cardId: number | null;
+  columnId: number | null;
+  assignee: Assignee | null;
+  title: string;
+  description: string;
+  dueDate: Date | null;
+  tags: string[];
+  imageFile: File | null;
+  imageUrl: string | null;
+}
+
 export default function useEditCardForm() {
-  const [editCardId, setEditCardId] = useState<number | null>(null);
-  const [editCardColumnId, setEditCardColumnId] = useState<number | null>(null);
-  const [editSelectedAssignee, setEditSelectedAssignee] =
-    useState<Assignee | null>(null);
-  const [editCardTitle, setEditCardTitle] = useState("");
-  const [editCardDescription, setEditCardDescription] = useState("");
-  const [editCardDueDate, setEditCardDueDate] = useState<Date | null>(null);
-  const [editCardTags, setEditCardTags] = useState<string[]>([]);
-  const [editCardImageFile, setEditCardImageFile] = useState<File | null>(null);
-  const [editCardImageUrl, setEditCardImageUrl] = useState<string | null>(null);
+  const [cardData, setCardData] = useState<EditCardData>({
+    cardId: null,
+    columnId: null,
+    assignee: null,
+    title: "",
+    description: "",
+    dueDate: null,
+    tags: [],
+    imageFile: null,
+    imageUrl: null,
+  });
 
   const resetEditCardForm = () => {
-    setEditCardId(null);
-    setEditCardColumnId(null);
-    setEditSelectedAssignee(null);
-    setEditCardTitle("");
-    setEditCardDescription("");
-    setEditCardDueDate(null);
-    setEditCardTags([]);
-    setEditCardImageFile(null);
-    setEditCardImageUrl(null);
+    setCardData({
+      cardId: null,
+      columnId: null,
+      assignee: null,
+      title: "",
+      description: "",
+      dueDate: null,
+      tags: [],
+      imageFile: null,
+      imageUrl: null,
+    });
+  };
+
+  const setEditedData = (partial: Partial<EditCardData>) => {
+    setCardData((prev) => ({ ...prev, ...partial }));
   };
 
   return {
-    editCardId,
-    setEditCardId,
-    editCardColumnId,
-    setEditCardColumnId,
-    editSelectedAssignee,
-    setEditSelectedAssignee,
-    editCardTitle,
-    setEditCardTitle,
-    editCardDescription,
-    setEditCardDescription,
-    editCardDueDate,
-    setEditCardDueDate,
-    editCardTags,
-    setEditCardTags,
-    editCardImageFile,
-    setEditCardImageFile,
-    editCardImageUrl,
-    setEditCardImageUrl,
+    cardData,
+    setEditedData,
     resetEditCardForm,
   };
 }

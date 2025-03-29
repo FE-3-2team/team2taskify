@@ -1,4 +1,5 @@
 import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
+import type { EditCardData } from "@/hooks/useEditCard";
 
 interface Card {
   id: number;
@@ -17,28 +18,12 @@ interface Card {
 
 interface UseHandleEditCardClickParams {
   setIsEditCardModalOpen: (open: boolean) => void;
-  setEditCardId: (id: number) => void;
-  setEditCardColumnId: (id: number) => void;
-  setEditSelectedAssignee: (assignee: Assignee) => void;
-  setEditCardTitle: (title: string) => void;
-  setEditCardDescription: (desc: string) => void;
-  setEditCardDueDate: (date: Date | null) => void;
-  setEditCardTags: (tags: string[]) => void;
-  setEditCardImageUrl: (url: string | null) => void;
-  setEditCardImageFile: (file: File | null) => void;
+  setEditedData: (partial: Partial<EditCardData>) => void;
 }
 
 export const useHandleEditCardClick = ({
   setIsEditCardModalOpen,
-  setEditCardId,
-  setEditCardColumnId,
-  setEditSelectedAssignee,
-  setEditCardTitle,
-  setEditCardDescription,
-  setEditCardDueDate,
-  setEditCardTags,
-  setEditCardImageUrl,
-  setEditCardImageFile,
+  setEditedData,
 }: UseHandleEditCardClickParams) => {
   const handleEditCardClick = (card: Card) => {
     if (!card.assignee?.profileImageUrl) {
@@ -46,20 +31,23 @@ export const useHandleEditCardClick = ({
       return;
     }
 
-    setEditCardId(card.id);
-    setEditCardColumnId(card.columnId);
-    setEditSelectedAssignee({
-      id: card.assignee.id,
-      userId: card.assignee.id,
-      nickname: card.assignee.nickname,
-      profileImageUrl: card.assignee.profileImageUrl ?? "",
+    setEditedData({
+      cardId: card.id,
+      columnId: card.columnId,
+      title: card.title,
+      description: card.description,
+      dueDate: card.dueDate ? new Date(card.dueDate) : null,
+      tags: card.tags ?? [],
+      imageUrl: card.imageUrl ?? null,
+      imageFile: null,
+      assignee: {
+        id: card.assignee.id,
+        userId: card.assignee.id,
+        nickname: card.assignee.nickname,
+        profileImageUrl: card.assignee.profileImageUrl ?? "",
+      },
     });
-    setEditCardTitle(card.title);
-    setEditCardDescription(card.description);
-    setEditCardDueDate(card.dueDate ? new Date(card.dueDate) : null);
-    setEditCardTags(card.tags || []);
-    setEditCardImageUrl(card.imageUrl ?? null);
-    setEditCardImageFile(null);
+
     setIsEditCardModalOpen(true);
   };
 

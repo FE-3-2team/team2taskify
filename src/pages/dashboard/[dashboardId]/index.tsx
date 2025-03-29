@@ -25,65 +25,12 @@ export default function Dashboard() {
 
   const { resetNewCardForm } = useCardForm();
 
-  const {
-    editCardId,
-    editCardColumnId,
-    editSelectedAssignee,
-    editCardTitle,
-    editCardDescription,
-    editCardDueDate,
-    editCardTags,
-    editCardImageFile,
-    editCardImageUrl,
-    setEditCardId,
-    setEditCardColumnId,
-    setEditSelectedAssignee,
-    setEditCardTitle,
-    setEditCardDescription,
-    setEditCardDueDate,
-    setEditCardTags,
-    setEditCardImageFile,
-    setEditCardImageUrl,
-    resetEditCardForm,
-  } = useEditCardForm();
-
-  const initialCardData = {
-    cardId: editCardId!,
-    columnId: editCardColumnId!,
-    assignee: editSelectedAssignee,
-    title: editCardTitle,
-    description: editCardDescription,
-    dueDate: editCardDueDate,
-    tags: editCardTags,
-    imageFile: editCardImageFile,
-    imageUrl: editCardImageUrl,
-  };
+  const { cardData, setEditedData, resetEditCardForm } = useEditCardForm();
 
   const { handleEditCardClick } = useHandleEditCardClick({
     setIsEditCardModalOpen: states.setIsEditCardModalOpen,
-    setEditCardId,
-    setEditCardColumnId,
-    setEditSelectedAssignee,
-    setEditCardTitle,
-    setEditCardDescription,
-    setEditCardDueDate,
-    setEditCardTags,
-    setEditCardImageUrl,
-    setEditCardImageFile,
+    setEditedData,
   });
-
-  const setEditedData = (data: Partial<typeof initialCardData>) => {
-    if (data.cardId !== undefined) setEditCardId(data.cardId);
-    if (data.columnId !== undefined) setEditCardColumnId(data.columnId);
-    if (data.assignee !== undefined) setEditSelectedAssignee(data.assignee);
-    if (data.title !== undefined) setEditCardTitle(data.title);
-    if (data.description !== undefined)
-      setEditCardDescription(data.description);
-    if (data.dueDate !== undefined) setEditCardDueDate(data.dueDate);
-    if (data.tags !== undefined) setEditCardTags(data.tags);
-    if (data.imageFile !== undefined) setEditCardImageFile(data.imageFile);
-    if (data.imageUrl !== undefined) setEditCardImageUrl(data.imageUrl);
-  };
 
   const { newColumnTitle, setNewColumnTitle, resetNewColumnForm } =
     useColumnForm();
@@ -194,15 +141,15 @@ export default function Dashboard() {
           }}
           onSubmit={() =>
             handleEditCardSubmit({
-              editCardId: editCardId!,
-              editCardColumnId: editCardColumnId!,
-              editSelectedAssignee: editSelectedAssignee!,
-              editCardTitle,
-              editCardDescription,
-              editCardDueDate,
-              editCardTags,
-              editCardImageFile,
-              editCardImageUrl,
+              editCardId: cardData.cardId!,
+              editCardColumnId: cardData.columnId!,
+              editSelectedAssignee: cardData.assignee!,
+              editCardTitle: cardData.title,
+              editCardDescription: cardData.description,
+              editCardDueDate: cardData.dueDate,
+              editCardTags: cardData.tags,
+              editCardImageFile: cardData.imageFile,
+              editCardImageUrl: cardData.imageUrl,
               fetchColumns,
               resetEditCardForm,
               dashboardId: String(dashboardId),
@@ -213,7 +160,7 @@ export default function Dashboard() {
             states.setIsEditCardModalOpen(false);
             resetEditCardForm();
           }}
-          initialCardData={initialCardData}
+          cardData={cardData}
           setEditedData={setEditedData}
           members={states.members}
           columns={states.columns}
