@@ -4,9 +4,11 @@ import PlusIcon from "@/assets/icons/Plus.icon.svg";
 
 export default function ImageUploadBox({
   imageFile,
+  imageUrl,
   onChangeImage,
 }: {
   imageFile: File | null;
+  imageUrl: string | null;
   onChangeImage: (file: File) => void;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -17,8 +19,10 @@ export default function ImageUploadBox({
       const objectUrl = URL.createObjectURL(imageFile);
       setPreviewUrl(objectUrl);
       return () => URL.revokeObjectURL(objectUrl);
+    } else if (imageUrl) {
+      setPreviewUrl(imageUrl);
     }
-  }, [imageFile]);
+  }, [imageFile, imageUrl]);
 
   const handleClick = () => {
     fileInputRef.current?.click();
@@ -51,11 +55,10 @@ export default function ImageUploadBox({
       >
         {previewUrl ? (
           <div className="w-[76px] h-[76px] relative overflow-hidden">
-            <Image
+            <img
               src={previewUrl}
               alt="미리보기 이미지"
-              fill
-              className="object-cover rounded-[6px]"
+              className="object-cover w-full h-full rounded-[6px]"
             />
           </div>
         ) : (
