@@ -64,22 +64,18 @@ interface editProps extends Props {
 }
 export async function editDashboard(dashboardData: editProps) {
   const { dashboardId, title, color } = dashboardData;
-  // console.log(dashboardId);
-  try {
-    const res = await instance.put(`/dashboards/${dashboardId}`, {
-      title,
-      color,
+
+  const res = await instance.put(`/dashboards/${dashboardId}`, {
+    title,
+    color,
+  });
+  const { title: newTitle, color: newColor } = res.data;
+  if (res.status == 200) {
+    useAuthStore.setState({
+      dashboardTitle: newTitle,
     });
-    const { title: newTitle, color: newColor } = res.data;
-    if (res.status == 200) {
-      useAuthStore.setState({
-        dashboardTitle: newTitle,
-      });
-    }
-    return { newTitle, newColor };
-  } catch (error) {
-    throw new Error("대시보드 수정 실패");
   }
+  return { newTitle, newColor };
 }
 //대쉬보드 초대하기
 

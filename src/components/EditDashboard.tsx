@@ -3,6 +3,7 @@ import ColorChip from "./common/Chip/Color.chip";
 import { editDashboard } from "@/api/dashboard";
 import { BaseInput } from "@/components/common/Input";
 import { Button } from "./common/Button";
+import { AlertModal } from "./ModalContents/AlertModal";
 
 interface Props {
   title: string;
@@ -15,6 +16,8 @@ interface dashboardDataType extends Props {
 export default function EditDashboard({ title, dashboardId }: Props) {
   const [currentTitle, setCurrentTitle] = useState("");
   const [currentValue, setCurrentValue] = useState("");
+  const [Message, setMessage] = useState("");
+  const [isAlert, setIsAlert] = useState(false);
   const [dashboardData, setDashboardData] = useState({
     dashboardId: "",
     title: "",
@@ -39,8 +42,20 @@ export default function EditDashboard({ title, dashboardId }: Props) {
   };
 
   const handleSubmit = async (dashboardData: dashboardDataType) => {
-    const { newTitle, newColor } = await editDashboard(dashboardData);
-    setCurrentTitle(newTitle);
+    if (dashboardData.title === "") {
+      setMessage("대시보드 이름을 입력해 주세요");
+      setIsAlert(true);
+      return;
+    }
+    try {
+      const { newTitle, newColor } = await editDashboard(dashboardData);
+      setCurrentTitle(newTitle);
+      setMessage("변경에 성공했습니다");
+      setIsAlert(true);
+    } catch (error: any) {
+      setMessage(error.response.data.message);
+      setIsAlert(true);
+    }
   };
 
   return (
@@ -64,6 +79,11 @@ export default function EditDashboard({ title, dashboardId }: Props) {
           <ColorChip onClick={handleClick} />
         </div>
         <Button onClick={() => handleSubmit(dashboardData)}>변경</Button>
+        <AlertModal
+          isOpen={isAlert}
+          message={Message}
+          onConfirm={() => setIsAlert(false)}
+        ></AlertModal>
       </div>
     </div>
   );
