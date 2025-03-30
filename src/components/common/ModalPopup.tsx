@@ -2,7 +2,13 @@ import { useAutoClose } from "@/hooks/useAutoClose";
 import X from "@/assets/icons/X.icon.svg";
 import Button from "@/components/common/Button/Button";
 import Image from "next/image";
-import { ReactNode, useEffect, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import DropdownEditDel from "./Dropdown/DropdownEditDel";
 import { deleteCard } from "@/api/card.api";
 
@@ -17,7 +23,7 @@ interface Props {
   size?: "xxsmall" | "xsmall" | "small" | "medium" | "large" | "xlarge"; // 크기별 스타일 적용
   variant?: "primary" | "secondary" | "outline" | "disabled" | "create"; // 색상/디자인 적용
   isOpen?: boolean;
-  setIsOpen?: (v: boolean) => void;
+  setIsOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 export function Modal({
@@ -39,14 +45,13 @@ export function Modal({
     setIsOpen: internalSetIsOpen,
   } = useAutoClose(false);
   const modalIsOpen = isOpen !== undefined ? isOpen : internalIsOpen;
-  const handleSetIsOpen = setIsOpen ?? internalSetIsOpen;
-
+  const modalSetIsOpen = setIsOpen ?? internalSetIsOpen;
   useEffect(() => {
     if (!modalIsOpen) return;
 
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
-        handleSetIsOpen(false);
+        modalSetIsOpen(false);
       }
     };
 
@@ -54,7 +59,7 @@ export function Modal({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [modalIsOpen, handleSetIsOpen, ref]);
+  }, [modalIsOpen, setIsOpen, ref]);
 
   return (
     <>
@@ -68,7 +73,7 @@ export function Modal({
             {leftOnClick && (
               <button
                 className="absolute top-6 right-4 tablet:top-6 tablet:right-6"
-                onClick={() => handleSetIsOpen(false)}
+                onClick={() => modalSetIsOpen(false)}
               >
                 <Image src={X} width={32} height={32} alt="X" />
               </button>
@@ -80,7 +85,7 @@ export function Modal({
                   <Button
                     variant="outline"
                     onClick={() => {
-                      handleSetIsOpen(false);
+                      modalSetIsOpen(false);
                       leftOnClick();
                     }}
                   >
@@ -89,7 +94,9 @@ export function Modal({
                 ) : (
                   <Button
                     variant="outline"
-                    onClick={() => handleSetIsOpen(false)}
+                    onClick={() => {
+                      modalSetIsOpen(false);
+                    }}
                   >
                     취소
                   </Button>
@@ -101,7 +108,7 @@ export function Modal({
                     variant="primary"
                     onClick={() => {
                       rightOnClick();
-                      handleSetIsOpen(false);
+                      modalSetIsOpen(false);
                     }}
                   >
                     {rightHandlerText}
@@ -117,7 +124,7 @@ export function Modal({
         <Button
           size={size}
           variant={variant}
-          onClick={() => handleSetIsOpen(true)}
+          onClick={() => modalSetIsOpen(true)}
           className={className}
         >
           {ModalOpenButton}
@@ -132,15 +139,16 @@ interface DetailContentProps {
   children: ReactNode;
   ModalOpenButton: ReactNode;
   cardId: number;
+  setIsCardEdit: Dispatch<SetStateAction<boolean>>;
 }
 export function DetailContent({
   cardTitle,
   children,
   ModalOpenButton,
   cardId,
+  setIsCardEdit,
 }: DetailContentProps) {
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
-  const [isEdit, setIsEdit] = useState(false);
   const handleButtonClick = () => {
     setIsOpen(true);
   };
@@ -151,8 +159,6 @@ export function DetailContent({
   };
   const handleEdit = () => {
     setIsOpen(false);
-    setIsEdit(true);
-    //할일 수정 모달 띄워야함
   };
   return (
     <>
@@ -170,7 +176,10 @@ export function DetailContent({
                 <div className="flex items-center ">
                   <DropdownEditDel
                     onDelete={handleCardDelete}
-                    onEdit={handleEdit}
+                    onEdit={() => {
+                      handleEdit();
+                      setIsCardEdit(true);
+                    }}
                   />
                   <button onClick={() => setIsOpen(false)}>
                     <Image src={X} width={32} height={32} alt="X" />

@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import SideMenu from "@/components/common/SideMenu";
 import CardModal from "@/components/ModalContents/Card.modal";
+import EditCardModal from "@/components/ModalContents/EditCardModal";
 
 export interface Data {
   title: string;
@@ -24,6 +25,7 @@ export default function MyDashboard() {
   const [boardList, setBoardList] = useState<Dashboards[]>([]);
   const [newColor, setNewColor] = useState("");
   const [newTitle, setNewTitle] = useState("");
+  const [isCardEdit, setIsCardEdit] = useState(false);
   const router = useRouter();
   //
   useEffect(() => {
@@ -57,10 +59,12 @@ export default function MyDashboard() {
       <SideMenu />
       <Header />
       <div className="flex flex-col py-6 px-6 tablet:py-10 tablet:px-10 gap-6 tablet:gap-12 laptop:gap-10 max-w-[1022px]">
+        <EditCardModal setIsCardEdit={setIsCardEdit} isCardEdit={isCardEdit} />
         <DetailContent
           cardId={10808}
           cardTitle="부산으로 야반도주"
           ModalOpenButton="테스트"
+          setIsCardEdit={setIsCardEdit}
         >
           <CardModal cardId={11808} columnId={46358} columnTitle="To Do" />
         </DetailContent>
