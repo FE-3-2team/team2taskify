@@ -8,26 +8,18 @@ type Props = {
 
 //대시보드 생성
 export async function createDashboard(title: string, color: string) {
-  try {
-    const res = await instance.post("/dashboards", {
-      title,
-      color,
-    });
-    return res.data;
-  } catch (error) {
-    throw new Error("대시보드 생성 실패");
-  }
+  const res = await instance.post("/dashboards", {
+    title,
+    color,
+  });
+  return res.data;
 }
 //대시보드 목록 조회
 export async function getDashboards(page: number, size = 5) {
-  try {
-    const res = await instance.get(`/dashboards`, {
-      params: { navigationMethod: "pagination", page: page, size: size },
-    });
-    return res.data;
-  } catch (error) {
-    throw new Error("대시보드 목록 조회 실패");
-  }
+  const res = await instance.get(`/dashboards`, {
+    params: { navigationMethod: "pagination", page: page, size: size },
+  });
+  return res.data;
 }
 
 //대시보드 상세조회
