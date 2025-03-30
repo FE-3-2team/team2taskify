@@ -12,7 +12,14 @@ export async function createDashboard(title: string, color: string) {
     title,
     color,
   });
-  return res.data;
+  if (res.status == 201) {
+    useAuthStore.setState({
+      dashboardId: res.data.id,
+      dashboardTitle: res.data.title,
+      isOwner: true,
+    });
+    return res.data;
+  }
 }
 //대시보드 목록 조회
 export async function getDashboards(page: number, size = 5) {
@@ -31,6 +38,7 @@ export async function getDashboardInfo(dashboardId: number) {
       useAuthStore.setState({
         dashboardId: res.data.id,
         dashboardTitle: res.data.title,
+        isOwner: res.data.createdByMe,
       });
     }
 
