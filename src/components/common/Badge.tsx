@@ -25,10 +25,7 @@ export function Badges({ memberList }: BadgesProps) {
     <div className="relative flex flex-row w-auto h-[38px]">
       {memberArray.map((member, idx) => {
         return (
-          <div
-            key={member.id}
-            className={idx !== 0 ? "ml-[-10px]" : ""}
-          >
+          <div key={member.id} className={idx !== 0 ? "ml-[-10px]" : ""}>
             <Badge
               img={member.profileImageUrl}
               nickname={member.nickname}
@@ -67,7 +64,7 @@ export function Badge({ nickname, img, type }: Props) {
   return (
     <div
       className={clsx(
-        "border-2 border-white flex justify-center items-center rounded-full ",
+        "border-2 border-white flex justify-center items-center overflow-hidden rounded-full ",
         {
           comment: "w-[34px] h-[34px]",
           column: "w-[22px] h-[22px] tablet:w-[24px] tablet:h-[24px]",
@@ -81,9 +78,15 @@ export function Badge({ nickname, img, type }: Props) {
       )}
     >
       {img ? (
-        <img src={img} alt="프로필 이미지" />
+        <img
+          className="object-cover w-full h-full "
+          src={img}
+          alt="프로필 이미지"
+        />
       ) : (
-        <div className="text-white text-md-semibold tablet:text-lg-semibold">{firstChar}</div>
+        <div className="text-white text-md-semibold tablet:text-lg-semibold">
+          {firstChar}
+        </div>
       )}
     </div>
   );
