@@ -38,6 +38,7 @@ export default function Header({ createdByMe }: Props) {
 
   const handleLoadDashboardInfo = async () => {
     if (!dashboardId) return;
+
     if (router.pathname !== "/mydashboard") {
       const { members } = await getMember(1, Number(dashboardId), 4);
       setMembers(members);

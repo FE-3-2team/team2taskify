@@ -91,6 +91,7 @@ export default function MyDashboard() {
               return (
                 <Link href={`/dashboard/${board.id}`}>
                   <DashButton
+                    isOwner={board.createdByMe}
                     hasArrow
                     title={board.title}
                     color={board.color}
