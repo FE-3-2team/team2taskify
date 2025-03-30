@@ -17,6 +17,19 @@ import { useHandleEditCardClick } from "@/hooks/useHandleEditCardClick";
 import useDashboardStates from "@/hooks/useDashboardStates";
 import { useInitializeDashboard } from "@/hooks/useInitializeDashboard";
 import { PlusIconButton } from "@/components/common/Button";
+import {
+  DndContext,
+  closestCenter,
+  useSensor,
+  useSensors,
+  PointerSensor,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  useSortable,
+  arrayMove,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -77,34 +90,45 @@ export default function Dashboard() {
     <>
       <Header />
       <div className="flex desktop:flex-row flex-col desktop:items-start items-center tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)] w-full desktop:overflow-x-auto">
-        {states.isLoading ? (
-          <>
-            <SkeletonColumn />
-            <SkeletonColumn />
-            <SkeletonColumn />
-          </>
-        ) : (
-          states.columns.map((column: any) => {
-            return (
-              <Column
-                key={column.id}
-                title={column.title}
-                cards={column.cards ?? []}
-                columnId={column.id}
-                onAddCardClick={(columnId) => {
-                  states.setTargetColumnId(columnId);
-                  states.setIsCreateCardModalOpen(true);
-                }}
-                onManageColumnClick={(columnId, title) => {
-                  states.setTargetColumnId(columnId);
-                  states.setTargetColumnTitle(title);
-                  states.setIsManageColumnModalOpen(true);
-                }}
-                onEditCardClick={handleEditCardClick}
-              />
-            );
-          })
-        )}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={columnIds}
+            strategy={horizontalListSortingStrategy}
+          >
+            {states.isLoading ? (
+              <>
+                <SkeletonColumn />
+                <SkeletonColumn />
+                <SkeletonColumn />
+              </>
+            ) : (
+              states.columns.map((column: any) => {
+                return (
+                  <Column
+                    key={column.id}
+                    title={column.title}
+                    cards={column.cards ?? []}
+                    columnId={column.id}
+                    onAddCardClick={(columnId) => {
+                      states.setTargetColumnId(columnId);
+                      states.setIsCreateCardModalOpen(true);
+                    }}
+                    onManageColumnClick={(columnId, title) => {
+                      states.setTargetColumnId(columnId);
+                      states.setTargetColumnTitle(title);
+                      states.setIsManageColumnModalOpen(true);
+                    }}
+                    onEditCardClick={handleEditCardClick}
+                  />
+                );
+              })
+            )}
+          </SortableContext>
+        </DndContext>
         <div className="w-[308px] h-full bg-gray-100 px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center">
           <div className="desktop:w-[314px] tablet:w-[544px] w-[284px] tablet:h-[70px] h-[66px] mt-[46px]">
             <AddColumnModal
