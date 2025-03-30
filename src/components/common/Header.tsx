@@ -103,6 +103,7 @@ export default function Header({ createdByMe }: Props) {
                 rightOnClick={inviteMember}
               >
                 <InputModal
+                  variant="email"
                   label="이메일"
                   title="초대하기"
                   placeholder="이메일을 입력해주세요."
