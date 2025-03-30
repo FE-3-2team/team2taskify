@@ -62,7 +62,7 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
     setMembers(members);
   };
   const columnsLoad = async () => {
-    const columnsData = await getColumns(dashboardId as string);
+    const columnsData = await getColumns(Number(dashboardId));
     setColumns(columnsData);
   };
 

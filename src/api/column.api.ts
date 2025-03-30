@@ -1,6 +1,6 @@
 import { instance } from "./instance";
 
-export async function getColumns(dashboardId: string): Promise<Column[]> {
+export async function getColumns(dashboardId: number): Promise<Column[]> {
   try {
     const res = await instance.get(`/columns`, {
       params: { dashboardId },
