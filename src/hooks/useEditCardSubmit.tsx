@@ -34,8 +34,6 @@ export const useEditCardSubmit = () => {
     dashboardId,
     closeModal,
   }: Params) => {
-    console.log("수정 시도");
-
     if (!editCardId) {
       console.error("editCardId is null");
       return;

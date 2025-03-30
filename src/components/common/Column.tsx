@@ -75,9 +75,6 @@ const Column: React.FC<ColumnProps> = ({
           strategy={verticalListSortingStrategy}
         >
           {cards.map((card, index) => {
-            console.log("카드 객체:", card);
-            console.log("카드의 cardId:", card.cardId);
-
             return (
               <SortableCard
                 key={`card-${card.cardId ?? index}`}

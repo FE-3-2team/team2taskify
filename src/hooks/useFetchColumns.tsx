@@ -16,15 +16,6 @@ export function useFetchColumns(setColumns: any, setIsLoading: any) {
         columnList.map(async (col) => {
           try {
             const cards = await getCards(col.id);
-            //아래 진단
-            const invalidCards = cards.filter((c: any) => !c.id);
-            if (invalidCards.length > 0) {
-              console.warn(
-                `❗️컬럼 ${col.title}에 ID가 없는 카드 존재`,
-                invalidCards
-              );
-            }
-            //위 진단
 
             return {
               ...col,
