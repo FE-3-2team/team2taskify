@@ -5,14 +5,10 @@ export async function getMember(
   dashboardId: number,
   size: number = 4
 ) {
-  try {
-    const res = await instance.get(`/members`, {
-      params: { size: size, page: page, dashboardId: dashboardId },
-    });
-    return res.data;
-  } catch (error) {
-    throw new Error("멤버 조회 실패");
-  }
+  const res = await instance.get(`/members`, {
+    params: { size: size, page: page, dashboardId: dashboardId },
+  });
+  return res.data;
 }
 // 대시보드 멤버 삭제
 export async function deleteMember(memberId: number) {

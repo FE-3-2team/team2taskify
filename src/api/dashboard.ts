@@ -80,14 +80,10 @@ export async function editDashboard(dashboardData: editProps) {
 //대쉬보드 초대하기
 
 export async function createInvite(email: string, dashboardId: number) {
-  try {
-    const res = await instance.post(`/dashboards/${dashboardId}/invitations`, {
-      email,
-    });
-    return res.data;
-  } catch (error) {
-    throw new Error("대시보드 초대 실패");
-  }
+  const res = await instance.post(`/dashboards/${dashboardId}/invitations`, {
+    email,
+  });
+  return res.data;
 }
 
 //대쉬보드 초대 불러오기
