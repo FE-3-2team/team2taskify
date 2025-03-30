@@ -29,11 +29,13 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
       {card ? (
         <div className="flex flex-col w-full h-[calc(100%-35px)] pt-10 overflow-scroll">
           <div className="mb-4 tablet:hidden">
-            <AssigneeCard
-              assigneeName={card.assignee.nickname}
-              dueDate={card.dueDate}
-              profileImageUrl={card.assignee.profileImageUrl}
-            />
+            {card.assignee && (
+              <AssigneeCard
+                assigneeName={card.assignee.nickname}
+                dueDate={card.dueDate}
+                profileImageUrl={card.assignee.profileImageUrl}
+              />
+            )}
           </div>
           <div className="flex tablet:gap-[13px] justify-between">
             <div className="flex flex-col justify-center w-full ">
@@ -57,11 +59,13 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
               <CommentsArea columnId={columnId} cardId={cardId} />
             </div>
             <div className="hidden w-full max-w-[200px] tablet:block">
-              <AssigneeCard
-                assigneeName={card.assignee.nickname}
-                dueDate={card.dueDate}
-                profileImageUrl={card.assignee.profileImageUrl}
-              />
+              {card.assignee && (
+                <AssigneeCard
+                  assigneeName={card.assignee.nickname}
+                  dueDate={card.dueDate}
+                  profileImageUrl={card.assignee.profileImageUrl}
+                />
+              )}
             </div>
           </div>
         </div>

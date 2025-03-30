@@ -2,13 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import CheckIcon from "@/assets/icons/Check.icon.svg";
 
-export interface Assignee {
-  id: number;
-  userId: number;
-  profileImageUrl: string | null;
-  nickname: string;
-}
-
 interface DropdownAssigneeSearchProps {
   assignee: Assignee | null;
   assignees: Assignee[];
@@ -27,6 +20,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
   );
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  console.log(assignees);
   const filteredAssignees = assignees.filter((assignee) =>
     assignee.nickname.toLowerCase().includes(searchTerm.toLowerCase())
   );

@@ -73,13 +73,13 @@ const Column: React.FC<ColumnProps> = ({
 
       <div className="flex flex-col gap-[16px]">
         <SortableContext
-          items={cards.map((card) => card.id)}
+          items={cards.map((card) => card.cardId)}
           strategy={verticalListSortingStrategy}
         >
           {cards.map((card, index) => (
             <SortableCard
-              key={`${card.id}-${card.updatedAt}`}
-              id={String(card.id)}
+              key={`${card.cardId}-${card.updatedAt}`}
+              id={String(card.cardId)}
               todoData={card}
               onClick={() => onEditCardClick?.(card)}
               lastCardRef={index === cards.length - 1 ? lastCardRef : null}

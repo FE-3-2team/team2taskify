@@ -1,22 +1,9 @@
 import { useState } from "react";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
-
-export interface EditCardData {
-  cardId: number | null;
-  columnId: number | null;
-  assignee: Assignee | null;
-  title: string;
-  description: string;
-  dueDate: Date | null;
-  tags: string[];
-  imageFile: File | null;
-  imageUrl: string | null;
-}
 
 export default function useEditCardForm() {
-  const [cardData, setCardData] = useState<EditCardData>({
-    cardId: null,
-    columnId: null,
+  const [cardData, setCardData] = useState<Card>({
+    cardId: 0,
+    columnId: 0,
     assignee: null,
     title: "",
     description: "",
@@ -28,8 +15,8 @@ export default function useEditCardForm() {
 
   const resetEditCardForm = () => {
     setCardData({
-      cardId: null,
-      columnId: null,
+      cardId: 0,
+      columnId: 0,
       assignee: null,
       title: "",
       description: "",
@@ -40,7 +27,7 @@ export default function useEditCardForm() {
     });
   };
 
-  const setEditedData = (partial: Partial<EditCardData>) => {
+  const setEditedData = (partial: Partial<Card>) => {
     setCardData((prev) => ({ ...prev, ...partial }));
   };
 

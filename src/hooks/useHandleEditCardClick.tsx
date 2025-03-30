@@ -1,24 +1,6 @@
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
-import type { EditCardData } from "@/hooks/useEditCard";
-
-interface Card {
-  id: number;
-  columnId: number;
-  title: string;
-  description: string;
-  dueDate: string | null;
-  tags: string[];
-  imageUrl?: string | null;
-  assignee: {
-    id: number;
-    nickname: string;
-    profileImageUrl: string | null;
-  } | null;
-}
-
 interface UseHandleEditCardClickParams {
   setIsEditCardModalOpen: (open: boolean) => void;
-  setEditedData: (partial: Partial<EditCardData>) => void;
+  setEditedData: (partial: Partial<Card>) => void;
 }
 
 export const useHandleEditCardClick = ({
@@ -32,7 +14,7 @@ export const useHandleEditCardClick = ({
     }
 
     setEditedData({
-      cardId: card.id,
+      cardId: card.cardId,
       columnId: card.columnId,
       title: card.title,
       description: card.description,

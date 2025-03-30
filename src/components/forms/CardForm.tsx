@@ -3,7 +3,6 @@ import Image from "next/image";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DropdownAssigneeSearch from "@/components/common/Dropdown/DropdownAssigneeSearch";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
 import TagInputField from "@/components/common/TagInputField";
 import CalendarIcon from "@/assets/icons/Calendar.svg";

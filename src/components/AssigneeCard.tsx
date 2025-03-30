@@ -3,7 +3,7 @@ import Profile from "./common/Profile";
 
 interface AssigneeCardProps {
   assigneeName: string;
-  dueDate: string | null;
+  dueDate: Date | null;
   profileImageUrl: string | null;
 }
 
