@@ -7,12 +7,12 @@ export function useInitializeDashboard({
   setMembers,
 }: {
   dashboardId: number | number[] | undefined;
-  fetchColumns: (id: string) => void;
+  fetchColumns: (id: number) => void;
   setMembers: (members: Assignee[]) => void;
 }) {
   useEffect(() => {
     if (typeof dashboardId === "number") {
-      fetchColumns(dashboardId);
+      fetchColumns(Number(dashboardId));
     }
   }, [dashboardId]);
 

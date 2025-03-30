@@ -80,7 +80,8 @@ export default function Dashboard() {
   const { handleEditCardSubmit } = useEditCardSubmit();
 
   useInitializeDashboard({
-    dashboardId,
+    dashboardId:
+      typeof dashboardId === "string" ? Number(dashboardId) : undefined,
     fetchColumns,
     setMembers: states.setMembers,
   });

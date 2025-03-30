@@ -30,7 +30,7 @@ export default function InputModal({
 
   const columnsDuplicated = async () => {
     if (!isColumn && !dashboardId) return;
-    const columns = await getColumns(dashboardId as string);
+    const columns = await getColumns(Number(dashboardId));
     setColumnsData(columns);
   };
 
