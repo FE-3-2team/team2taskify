@@ -32,7 +32,7 @@ export async function getDashboards(page: number, size = 5) {
 
 //대시보드 상세조회
 
-export async function getDashboardInfo(dashboardId: string) {
+export async function getDashboardInfo(dashboardId: number) {
   try {
     const res = await instance.get(`/dashboards/${dashboardId}`);
     if (res.status == 200) {
@@ -83,7 +83,7 @@ export async function editDashboard(dashboardData: editProps) {
 }
 //대쉬보드 초대하기
 
-export async function createInvite(email: string, dashboardId: string) {
+export async function createInvite(email: string, dashboardId: number) {
   try {
     const res = await instance.post(`/dashboards/${dashboardId}/invitations`, {
       email,
