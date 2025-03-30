@@ -4,6 +4,7 @@ import { Tags } from "../common/Chip/Tag.chip";
 import { useEffect, useState } from "react";
 import { getCardDetail } from "@/api/card.api";
 import CommentsArea from "../Comments";
+import { AlertModal } from "./AlertModal";
 //
 interface Props {
   cardId: number;
@@ -13,6 +14,8 @@ interface Props {
 //
 export default function CardModal({ cardId, columnTitle, columnId }: Props) {
   const [card, setCard] = useState<Card>();
+  const [message, setMessage] = useState("");
+  const [isAlert, setIsAlert] = useState(false);
 
   useEffect(() => {
     handleLoad();
@@ -20,8 +23,13 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
   //
   const handleLoad = async () => {
     if (!cardId) return;
-    const cardData = await getCardDetail(cardId);
-    setCard(cardData);
+    try {
+      const cardData = await getCardDetail(cardId);
+      setCard(cardData);
+    } catch (err: any) {
+      setMessage(err.response.data.message);
+      setIsAlert(true);
+    }
   };
   //
   return (
@@ -37,6 +45,13 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
               />
             )}
           </div>
+          <AlertModal
+            onConfirm={() => {
+              setIsAlert(false);
+            }}
+            message={message}
+            isOpen={isAlert}
+          />
           <div className="flex tablet:gap-[13px] justify-between">
             <div className="flex flex-col justify-center w-full ">
               <div className="flex items-center gap-4 mb-4 tablet:gap-5">

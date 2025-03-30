@@ -138,7 +138,7 @@ export default function Dashboard() {
           fetchColumns={fetchColumns}
         />
 
-        <EditCardModal
+        {/* <EditCardModal
           isOpen={states.isEditCardModalOpen}
           setIsOpen={(open) => {
             states.setIsEditCardModalOpen(open);
@@ -169,7 +169,7 @@ export default function Dashboard() {
           setEditedData={setEditedData}
           members={states.members}
           columns={states.columns}
-        />
+        /> */}
 
         <ManageColumnModal
           isOpen={states.isManageColumnModalOpen}

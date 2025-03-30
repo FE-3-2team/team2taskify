@@ -10,6 +10,7 @@ import { useFetchColumns } from "@/hooks/useFetchColumns";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getMember } from "@/api/member";
 import { getColumns } from "@/api/column.api";
+import { AlertModal } from "./AlertModal";
 
 interface Props {
   isCardEdit: boolean;
@@ -34,6 +35,8 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
   const { dashboardId } = store;
   const [members, setMembers] = useState<Assignee[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
+  const [isAlert, setIsAlert] = useState(false);
+  const [message, setMessage] = useState("");
 
   const onSubmit = () => {
     handleEditCardSubmit({
@@ -57,19 +60,22 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
     states.setColumns,
     states.setIsLoading
   );
-  const memberLoad = async () => {
-    const { members } = await getMember(1, Number(dashboardId));
-    setMembers(members);
-  };
-  const columnsLoad = async () => {
-    const columnsData = await getColumns(Number(dashboardId));
-    setColumns(columnsData);
+  const handleLoad = async () => {
+    try {
+      const { members } = await getMember(1, Number(dashboardId));
+      setMembers(members);
+      const columnsData = await getColumns(Number(dashboardId));
+      setColumns(columnsData);
+    } catch (err) {
+      setMessage("카드 상세보기에 실패했습니다");
+      setIsAlert(true);
+    }
   };
 
   useEffect(() => {
-    memberLoad();
-    columnsLoad();
+    handleLoad();
   }, []);
+  //
   return (
     <Modal
       ModalOpenButton={null}
@@ -117,6 +123,13 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
           setCardImageFile={(f) => setEditedData({ imageFile: f })}
           cardImageUrl={imageUrl}
           setCardImageUrl={(url) => setEditedData({ imageUrl: url })}
+        />
+        <AlertModal
+          isOpen={isAlert}
+          onConfirm={() => {
+            setIsAlert(false);
+          }}
+          message={message}
         />
       </div>
     </Modal>

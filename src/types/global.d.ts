@@ -21,6 +21,11 @@ declare global {
     userId: number;
     isOwner: boolean;
   }
+
+  interface MemberData {
+    totalCount: number;
+    members: Member[];
+  }
   interface Assignee {
     id: number;
     userId: number;

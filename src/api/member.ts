@@ -13,9 +13,5 @@ export async function getMember(
 // 대시보드 멤버 삭제
 export async function deleteMember(memberId: number) {
   if (memberId === 0) return;
-  try {
-    await instance.delete(`/members/${memberId}`);
-  } catch (error) {
-    throw new Error("멤버 삭제 실패");
-  }
+  await instance.delete(`/members/${memberId}`);
 }
