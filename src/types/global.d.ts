@@ -6,8 +6,8 @@ declare global {
     email: string;
     nickname: string;
     profileImageUrl: string | null;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     userId?: number;
     isOwner?: boolean;
   }
@@ -16,8 +16,8 @@ declare global {
     email: string;
     nickname: string;
     profileImageUrl: string | null;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     userId: number;
     isOwner: boolean;
   }
@@ -37,14 +37,14 @@ declare global {
     imageFile: File | null;
     imageUrl: string | null;
     columnId: number;
-    createdAt?: string;
-    updatedAt?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
   }
   interface CardComment {
     id: number;
     content: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     cardId: number;
     author: {
       profileImageUrl: string | null;
@@ -57,8 +57,8 @@ declare global {
     id: number;
     title: string;
     color: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     createdByMe: boolean;
     userId: number;
   }
@@ -85,7 +85,7 @@ declare global {
     title: string;
     teamId: string;
     dashboardId: number;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
   }
 }
