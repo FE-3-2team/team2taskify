@@ -21,7 +21,7 @@ interface Props {
 
 export default function Header({ createdByMe }: Props) {
   const store = useStore(useAuthStore, (state) => state);
-  const dashboardId = store?.dashboardId;
+  const dashboardId = Number(store?.dashboardId);
   const router = useRouter();
   const [members, setMembers] = useState<Member[]>([]);
   const [inviteValue, setInviteValue] = useState("");
@@ -38,15 +38,18 @@ export default function Header({ createdByMe }: Props) {
 
   const handleLoadDashboardInfo = async () => {
     if (!dashboardId) return;
+
     if (router.pathname !== "/mydashboard") {
-      const { members } = await getMember(1, Number(dashboardId), 4);
+      const { members } = await getMember(1, dashboardId, 4);
       setMembers(members);
     }
   };
 
   const inviteMember = async () => {
     if (!dashboardId) return;
-    await createInvite(inviteValue, dashboardId as string);
+    try {
+      await createInvite(inviteValue, dashboardId);
+    } catch {}
   };
 
   //
@@ -63,54 +66,57 @@ export default function Header({ createdByMe }: Props) {
         )}
       </div>
       <div className="flex flex-row gap-[16px] tablet:gap-[36px] laptop:gap-[40px]">
-        <div className="flex flex-row gap-2 tablet:gap-4">
-          {router.pathname !== "/mydashboard" && (
-            <Link href={`${dashboardId}/edit`}>
-              <button className="justify-center h-[40px] flex flex-row items-center py-[7px] px-2 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300">
-                <Image
-                  className="hidden tablet:block"
-                  src={Edit}
-                  width={18}
-                  height={18}
-                  alt="톱니바퀴"
-                />
-                <div className="text-gray-500 text-md-medium tablet:text-lg-medium">
-                  관리
-                </div>
-              </button>
-            </Link>
-          )}
-          {router.pathname !== "/mydashboard" && (
-            <div className="h-[40px]">
-              <Modal
-                ModalOpenButton={
-                  <div className="justify-center items-center  flex flex-row  py-[7px] px-2 tablet:px-4 gap-2 ">
-                    <Image
-                      className="hidden tablet:block"
-                      src={Invite}
-                      width={18}
-                      height={18}
-                      alt="+"
-                    />
-                    <div className="text-gray-500 text-md-medium tablet:text-lg-medium">
-                      초대하기
-                    </div>
+        {createdByMe && (
+          <div className="flex flex-row gap-2 tablet:gap-4">
+            {router.pathname !== "/mydashboard" && (
+              <Link href={`${dashboardId}/edit`}>
+                <button className="justify-center h-[40px] flex flex-row items-center py-[7px] px-2 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300">
+                  <Image
+                    className="hidden tablet:block"
+                    src={Edit}
+                    width={18}
+                    height={18}
+                    alt="톱니바퀴"
+                  />
+                  <div className="text-gray-500 text-md-medium tablet:text-lg-medium">
+                    관리
                   </div>
-                }
-                variant="outline"
-                rightHandlerText="초대"
-                rightOnClick={inviteMember}
-              >
-                <InputModal
-                  label="이메일"
-                  title="초대하기"
-                  placeholder="이메일을 입력해주세요."
-                  changeValue={(value) => setInviteValue(value)}
-                />
-              </Modal>
-            </div>
-          )}
-        </div>
+                </button>
+              </Link>
+            )}
+            {router.pathname !== "/mydashboard" && (
+              <div className="h-[40px]">
+                <Modal
+                  ModalOpenButton={
+                    <div className="justify-center items-center  flex flex-row  py-[7px] px-2 tablet:px-4 gap-2 ">
+                      <Image
+                        className="hidden tablet:block"
+                        src={Invite}
+                        width={18}
+                        height={18}
+                        alt="+"
+                      />
+                      <div className="text-gray-500 text-md-medium tablet:text-lg-medium">
+                        초대하기
+                      </div>
+                    </div>
+                  }
+                  variant="outline"
+                  rightHandlerText="초대"
+                  rightOnClick={inviteMember}
+                >
+                  <InputModal
+                    variant="email"
+                    label="이메일"
+                    title="초대하기"
+                    placeholder="이메일을 입력해주세요."
+                    changeValue={(value) => setInviteValue(value)}
+                  />
+                </Modal>
+              </div>
+            )}
+          </div>
+        )}
         <div className="flex w-fit flex-row gap-[4px] tablet:gap-[36px] laptop:gap-[40px]">
           <div
             style={{

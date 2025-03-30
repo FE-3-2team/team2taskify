@@ -3,14 +3,14 @@ import { getCards } from "@/api/card.api";
 import { getDashboardInfo } from "@/api/dashboard";
 
 export function useFetchColumns(setColumns: any, setIsLoading: any) {
-  const fetchColumns = async (pageId: string) => {
+  const fetchColumns = async (pageId: number) => {
     try {
       setIsLoading(true);
 
       const dashboardInfo = await getDashboardInfo(pageId);
       const dashboardId = dashboardInfo.id;
 
-      const columnList = await getColumns(String(dashboardId));
+      const columnList = await getColumns(dashboardId);
 
       setColumns([]);
 

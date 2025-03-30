@@ -24,10 +24,10 @@ export default function EditPage() {
     if (dashboardId) {
       handleLoad();
     }
-  }, [dashboardId]);
+  }, []);
   //
   const handleLoad = async () => {
-    const dashboard = await getDashboardInfo(dashboardId as string);
+    const dashboard = await getDashboardInfo(Number(dashboardId));
 
     setDashboardInfo((prev) => ({
       ...prev,

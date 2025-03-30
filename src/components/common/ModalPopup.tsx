@@ -23,7 +23,7 @@ interface Props {
   size?: "xxsmall" | "xsmall" | "small" | "medium" | "large" | "xlarge"; // 크기별 스타일 적용
   variant?: "primary" | "secondary" | "outline" | "disabled" | "create"; // 색상/디자인 적용
   isOpen?: boolean;
-  setIsOpen?: Dispatch<SetStateAction<boolean>>;
+  setIsOpen?: (e: any) => void;
 }
 
 export function Modal({
