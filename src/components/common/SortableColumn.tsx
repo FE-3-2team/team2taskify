@@ -2,13 +2,12 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Column from "./Column";
 import type { ColumnData } from "@/types/column";
-import type { CardData } from "@/types/card";
 
 interface Props {
   column: ColumnData;
   onAddCardClick: (columnId: number) => void;
   onManageColumnClick: (columnId: number, title: string) => void;
-  onEditCardClick: (card: CardData) => void;
+  onEditCardClick: (card: Card) => void;
 }
 
 const SortableColumn = ({
@@ -30,9 +29,7 @@ const SortableColumn = ({
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <Column
-        columnId={column.id}
-        title={column.title}
-        cards={column.cards}
+        column={column}
         onAddCardClick={onAddCardClick}
         onManageColumnClick={onManageColumnClick}
         onEditCardClick={onEditCardClick}

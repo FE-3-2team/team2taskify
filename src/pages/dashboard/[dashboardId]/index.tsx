@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import "react-datepicker/dist/react-datepicker.css";
-import Column from "@/components/common/Column";
 import Header from "@/components/common/Header";
 import { SkeletonColumn } from "@/components/common/Skeleton/Skeleton";
 import { createColumn, updateColumn, deleteColumn } from "@/api/column.api";
@@ -23,12 +22,14 @@ import {
   useSensor,
   useSensors,
   PointerSensor,
+  DragEndEvent,
 } from "@dnd-kit/core";
 import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import SortableColumn from "@/components/common/SortableColumn";
+import { Dispatch, SetStateAction } from "react";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -108,9 +109,7 @@ export default function Dashboard() {
                 return (
                   <SortableColumn
                     key={column.id}
-                    columnId={column.id}
-                    title={column.title}
-                    cards={column.cards ?? []}
+                    column={column}
                     onAddCardClick={(columnId) => {
                       states.setTargetColumnId(columnId);
                       states.setIsCreateCardModalOpen(true);
@@ -161,36 +160,17 @@ export default function Dashboard() {
         />
 
         <EditCardModal
-          isOpen={states.isEditCardModalOpen}
-          setIsOpen={(open) => {
-            states.setIsEditCardModalOpen(open);
-            if (!open) resetEditCardForm();
-          }}
-          onSubmit={() =>
-            handleEditCardSubmit({
-              editCardId: cardData.cardId!,
-              editCardColumnId: cardData.columnId!,
-              editSelectedAssignee: cardData.assignee!,
-              editCardTitle: cardData.title,
-              editCardDescription: cardData.description,
-              editCardDueDate: cardData.dueDate,
-              editCardTags: cardData.tags,
-              editCardImageFile: cardData.imageFile,
-              editCardImageUrl: cardData.imageUrl,
-              fetchColumns,
-              resetEditCardForm,
-              dashboardId: String(dashboardId),
-              closeModal: () => states.setIsEditCardModalOpen(false),
-            })
+          isCardEdit={states.isEditCardModalOpen}
+          setIsCardEdit={
+            ((open: boolean | ((prev: boolean) => boolean)) => {
+              const value =
+                typeof open === "function"
+                  ? open(states.isEditCardModalOpen)
+                  : open;
+              states.setIsEditCardModalOpen(value);
+              if (!value) resetEditCardForm();
+            }) as Dispatch<SetStateAction<boolean>>
           }
-          onCancel={() => {
-            states.setIsEditCardModalOpen(false);
-            resetEditCardForm();
-          }}
-          cardData={cardData}
-          setEditedData={setEditedData}
-          members={states.members}
-          columns={states.columns}
         />
 
         <ManageColumnModal

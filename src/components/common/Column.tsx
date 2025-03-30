@@ -7,24 +7,22 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { ColumnData } from "@/types/column";
 
 interface ColumnProps {
-  title: string;
-  cards: Card[];
-  columnId: number;
+  column: ColumnData;
   onAddCardClick: (columnId: number) => void;
-  onEditCardClick?: (card: Card) => void;
   onManageColumnClick: (columnId: number, title: string) => void;
+  onEditCardClick?: (card: Card) => void;
 }
 
 const Column: React.FC<ColumnProps> = ({
-  title,
-  cards,
-  columnId,
+  column,
   onAddCardClick,
   onEditCardClick,
   onManageColumnClick,
 }) => {
+  const { id: columnId, title, cards } = column;
   const observer = useRef<IntersectionObserver | null>(null);
   const lastCardRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -79,10 +77,11 @@ const Column: React.FC<ColumnProps> = ({
           {cards.map((card, index) => (
             <SortableCard
               key={`${card.cardId}-${card.updatedAt}`}
-              id={String(card.cardId)}
-              todoData={card}
+              card={card}
+              columnId={columnId}
+              index={index}
               onClick={() => onEditCardClick?.(card)}
-              lastCardRef={index === cards.length - 1 ? lastCardRef : null}
+              lastCardRef={index === cards.length - 1 ? lastCardRef : undefined}
             />
           ))}
         </SortableContext>
