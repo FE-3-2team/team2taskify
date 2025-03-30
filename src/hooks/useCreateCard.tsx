@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import { uploadCardImage } from "@/api/column.api";
 import { createCard } from "@/api/card.api";
 import { formatDateTime } from "@/utils/date";

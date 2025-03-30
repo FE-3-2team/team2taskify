@@ -21,22 +21,24 @@ declare global {
     userId: number;
     isOwner: boolean;
   }
-  interface Card {
+  interface Assignee {
     id: number;
+    userId: number;
+    profileImageUrl: string | null;
+    nickname: string;
+  }
+  interface Card {
+    cardId: number;
     title: string;
     description: string;
     tags: string[];
-    dueDate: string | null;
-    assignee: {
-      profileImageUrl: string | null;
-      nickname: string;
-      id: number;
-    };
+    dueDate: Date | null;
+    assignee: Assignee | null;
+    imageFile: File | null;
     imageUrl: string | null;
-    teamId: string;
     columnId: number;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
   }
   interface CardComment {
     id: number;

@@ -1,29 +1,15 @@
 import { Modal } from "@/components/common/ModalPopup";
 import CardForm from "@/components/forms/CardForm";
 import DropdownProgress from "@/components/common/Dropdown/DropdownProgress";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import type { ColumnData } from "@/types/column";
-import type { EditCardData } from "@/hooks/useEditCard";
-
-interface CardData {
-  cardId: number;
-  columnId: number;
-  title: string;
-  description: string;
-  dueDate: Date | null;
-  tags: string[];
-  imageFile: File | null;
-  imageUrl: string | null;
-  assignee: Assignee | null;
-}
 
 interface Props {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   onSubmit: () => void;
   onCancel: () => void;
-  cardData: EditCardData;
-  setEditedData: (data: Partial<CardData>) => void;
+  cardData: Card;
+  setEditedData: (data: Partial<Card>) => void;
   members: Assignee[];
   columns: ColumnData[];
 }

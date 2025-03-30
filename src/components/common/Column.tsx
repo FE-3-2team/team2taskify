@@ -70,11 +70,11 @@ const Column: React.FC<ColumnProps> = ({
       <div className="flex flex-col gap-[16px]">
         {cards.map((card, index) => (
           <div
-            key={card.id}
+            key={card.cardId}
             ref={index === cards.length - 1 ? lastCardRef : null}
           >
             <TodoCard
-              key={`${card.id}-${card.updatedAt}`}
+              key={`${card.cardId}-${card.updatedAt}`}
               todoData={card}
               onClick={() => onEditCardClick?.(card)}
             />
