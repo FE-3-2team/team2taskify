@@ -1,8 +1,12 @@
 import { useRef, useCallback } from "react";
-import TodoCard from "@/components/common/TodoCard";
 import GearIcon from "@/assets/icons/Edit.icon.svg";
 import PlusIcon from "@/assets/icons/Plus.icon.svg";
 import Image from "next/image";
+import SortableCard from "@/components/common/SortableCard";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 interface ColumnProps {
   title: string;
@@ -68,18 +72,20 @@ const Column: React.FC<ColumnProps> = ({
       </button>
 
       <div className="flex flex-col gap-[16px]">
-        {cards.map((card, index) => (
-          <div
-            key={card.id}
-            ref={index === cards.length - 1 ? lastCardRef : null}
-          >
-            <TodoCard
+        <SortableContext
+          items={cards.map((card) => card.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {cards.map((card, index) => (
+            <SortableCard
               key={`${card.id}-${card.updatedAt}`}
+              id={String(card.id)}
               todoData={card}
               onClick={() => onEditCardClick?.(card)}
+              lastCardRef={index === cards.length - 1 ? lastCardRef : null}
             />
-          </div>
-        ))}
+          ))}
+        </SortableContext>
       </div>
     </div>
   );
