@@ -1,31 +1,31 @@
-import { create, createStore } from "zustand";
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type initialType = {
   isLoggedIn: boolean;
   userNickname: string;
-  userId: number | null;
   profileImageUrl: string | null;
   dashboardId: string | null;
   dashboardTitle: string | null;
+  isOwner: boolean;
 };
 
 const initialValue = {
   isLoggedIn: false,
   userNickname: "",
-  userId: null,
   profileImageUrl: null,
   dashboardId: null,
   dashboardTitle: null,
+  isOwner: true,
 };
 interface AuthStore extends initialType {
   login: () => void;
   logout: () => void;
-  setUserId: (userId: number) => void;
   setProfileImageUrl: (profileImageUrl: string | null) => void;
   setUserNickname: (userNickname: string) => void;
   setDashboardId: (dashboardId: string) => void;
   setDashboardTitle: (dashboardTitles: string) => void;
+  setIsOwner: (isOwner: boolean) => void;
 }
 
 const useAuthStore = create(
@@ -37,7 +37,6 @@ const useAuthStore = create(
       logout: () => {
         set(initialValue);
       },
-      setUserId: (userId: number) => set({ userId: userId }),
       setUserNickname: (userNickname: string) =>
         set({ userNickname: userNickname }),
       setProfileImageUrl: (profileImageUrl: string | null) =>
@@ -47,6 +46,7 @@ const useAuthStore = create(
         set({ dashboardId: dashboardId }),
       setDashboardTitle: (dashboardTitle: string) =>
         set({ dashboardTitle: dashboardTitle }),
+      setIsOwner: (isOwner: boolean) => set({ isOwner: isOwner }),
     }),
 
     { name: "userStorage" }
