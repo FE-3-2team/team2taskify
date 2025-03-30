@@ -58,7 +58,7 @@ export default function Dashboard() {
   );
 
   const handleCreateColumn = async () => {
-    if (!dashboardId || typeof dashboardId !== "string") return;
+    if (!dashboardId || typeof dashboardId !== "number") return;
     if (!newColumnTitle.trim()) return;
 
     try {
@@ -191,7 +191,7 @@ export default function Dashboard() {
                 title: states.targetColumnTitle,
               });
               states.setIsManageColumnModalOpen(false);
-              fetchColumns(String(dashboardId));
+              fetchColumns(Number(dashboardId));
               alert(
                 `컬럼 (${states.targetColumnId}) 이름을 '${states.targetColumnTitle}'로 변경`
               );
@@ -205,7 +205,7 @@ export default function Dashboard() {
             try {
               await deleteColumn(states.targetColumnId!);
               states.setIsManageColumnModalOpen(false);
-              fetchColumns(String(dashboardId));
+              fetchColumns(Number(dashboardId));
               alert(`컬럼(${states.targetColumnId}) 삭제`);
             } catch (err) {
               console.error(err);

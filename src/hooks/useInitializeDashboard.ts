@@ -6,19 +6,19 @@ export function useInitializeDashboard({
   fetchColumns,
   setMembers,
 }: {
-  dashboardId: string | string[] | undefined;
+  dashboardId: number | number[] | undefined;
   fetchColumns: (id: string) => void;
   setMembers: (members: Assignee[]) => void;
 }) {
   useEffect(() => {
-    if (typeof dashboardId === "string") {
+    if (typeof dashboardId === "number") {
       fetchColumns(dashboardId);
     }
   }, [dashboardId]);
 
   useEffect(() => {
     const fetchMembers = async () => {
-      if (!dashboardId || typeof dashboardId !== "string") return;
+      if (!dashboardId || typeof dashboardId !== "number") return;
       try {
         const { members } = await getMember(1, Number(dashboardId), 20);
         const formatted = members.map((m: any) => ({

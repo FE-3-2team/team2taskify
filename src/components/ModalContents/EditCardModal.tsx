@@ -48,7 +48,7 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
       editCardImageUrl: cardData.imageUrl,
       fetchColumns,
       resetEditCardForm,
-      dashboardId: String(dashboardId),
+      dashboardId: Number(dashboardId),
       closeModal: () => states.setIsEditCardModalOpen(false),
     });
   };
@@ -62,14 +62,16 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
     setMembers(members);
   };
   const columnsLoad = async () => {
-    const columnsData = await getColumns(dashboardId as string);
+    if (!dashboardId) return;
+    const columnsData = await getColumns(Number(dashboardId));
     setColumns(columnsData);
   };
 
   useEffect(() => {
+    if (!dashboardId) return;
     memberLoad();
     columnsLoad();
-  }, []);
+  }, [dashboardId]);
   return (
     <Modal
       ModalOpenButton={null}

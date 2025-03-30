@@ -14,7 +14,7 @@ interface Params {
   editCardImageUrl: string | null;
   fetchColumns: (pageId: string) => void;
   resetEditCardForm: () => void;
-  dashboardId: string;
+  dashboardId: number;
   closeModal: () => void;
 }
 
@@ -85,7 +85,7 @@ export const useEditCardSubmit = () => {
       alert("카드가 수정되었습니다.");
       closeModal();
       resetEditCardForm();
-      fetchColumns(String(dashboardId));
+      fetchColumns(Number(dashboardId));
     } catch (err) {
       console.error(err);
       alert("카드 수정 실패");

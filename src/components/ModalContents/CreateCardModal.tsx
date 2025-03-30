@@ -5,7 +5,6 @@ import { Modal } from "@/components/common/ModalPopup";
 import CardForm from "@/components/forms/CardForm";
 import useCardForm from "@/hooks/useCardForm";
 import useCreateCard from "@/hooks/useCreateCard";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 
 type Props = {
   isOpen: boolean;
@@ -13,7 +12,7 @@ type Props = {
   members: Assignee[];
   targetColumnId: number;
   resetNewCardForm: () => void;
-  fetchColumns: (dashboardId: string) => void;
+  fetchColumns: (dashboardId: number) => void;
 };
 
 const CreateCardModal = ({
@@ -25,7 +24,7 @@ const CreateCardModal = ({
   fetchColumns,
 }: Props) => {
   const router = useRouter();
-  const dashboardId = router.query.dashboardId as string;
+  const dashboardId = Number(router.query.dashboardId);
 
   const {
     cardTitle,

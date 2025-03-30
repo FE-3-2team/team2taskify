@@ -74,16 +74,23 @@ const Column: React.FC<ColumnProps> = ({
           items={cards.map((card) => card.cardId)}
           strategy={verticalListSortingStrategy}
         >
-          {cards.map((card, index) => (
-            <SortableCard
-              key={`${card.cardId}-${card.updatedAt}`}
-              card={card}
-              columnId={columnId}
-              index={index}
-              onClick={() => onEditCardClick?.(card)}
-              lastCardRef={index === cards.length - 1 ? lastCardRef : undefined}
-            />
-          ))}
+          {cards.map((card, index) => {
+            console.log("카드 객체:", card);
+            console.log("카드의 cardId:", card.cardId);
+
+            return (
+              <SortableCard
+                key={`card-${card.cardId ?? index}`}
+                card={card}
+                columnId={columnId}
+                index={index}
+                onClick={() => onEditCardClick?.(card)}
+                lastCardRef={
+                  index === cards.length - 1 ? lastCardRef : undefined
+                }
+              />
+            );
+          })}
         </SortableContext>
       </div>
     </div>

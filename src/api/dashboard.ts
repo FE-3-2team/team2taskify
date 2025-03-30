@@ -3,7 +3,7 @@ import { instance } from "./instance";
 //
 
 type Props = {
-  dashboardId?: string;
+  dashboardId?: number;
 };
 
 //대시보드 생성
@@ -32,7 +32,7 @@ export async function getDashboards(page: number, size = 5) {
 
 //대시보드 상세조회
 
-export async function getDashboardInfo(dashboardId: string) {
+export async function getDashboardInfo(dashboardId: number) {
   try {
     const res = await instance.get(`/dashboards/${dashboardId}`);
     if (res.status == 200) {
@@ -49,7 +49,7 @@ export async function getDashboardInfo(dashboardId: string) {
 }
 
 //대시보드 삭제
-export async function deleteDashboard(dashboardId: string) {
+export async function deleteDashboard(dashboardId: number) {
   try {
     const res = await instance.delete(`/dashboards/${dashboardId}`);
   } catch (error) {
@@ -83,7 +83,7 @@ export async function editDashboard(dashboardData: editProps) {
 }
 //대쉬보드 초대하기
 
-export async function createInvite(email: string, dashboardId: string) {
+export async function createInvite(email: string, dashboardId: number) {
   try {
     const res = await instance.post(`/dashboards/${dashboardId}/invitations`, {
       email,
@@ -98,7 +98,7 @@ export async function createInvite(email: string, dashboardId: string) {
 
 export async function getDashboardInvitations(
   page: number,
-  dashboardId: string
+  dashboardId: number
 ) {
   try {
     const res = await instance.get(`/dashboards/${dashboardId}/invitations`, {
@@ -111,7 +111,7 @@ export async function getDashboardInvitations(
 }
 
 //대시보드 초대 취소
-export async function cancelInvite(dashboardId: string, invitationId: number) {
+export async function cancelInvite(dashboardId: number, invitationId: number) {
   try {
     const res = await instance.delete(
       `/dashboards/${dashboardId}/invitations/${invitationId}`
