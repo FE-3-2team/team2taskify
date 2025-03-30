@@ -26,15 +26,18 @@ import {
 } from "@dnd-kit/core";
 import {
   SortableContext,
-  useSortable,
-  arrayMove,
-  verticalListSortingStrategy,
+  horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import SortableColumn from "@/components/common/SortableColumn";
 
 export default function Dashboard() {
   const router = useRouter();
   const { dashboardId } = router.query;
   const states = useDashboardStates();
+
+  const sensors = useSensors(useSensor(PointerSensor));
+  const columnIds = states.columns.map((col) => col.id);
+  const handleDragEnd = (event: DragEndEvent) => {};
 
   const { resetNewCardForm } = useCardForm();
 
@@ -54,13 +57,8 @@ export default function Dashboard() {
   );
 
   const handleCreateColumn = async () => {
-    if (!dashboardId || typeof dashboardId !== "string") {
-      return;
-    }
-
-    if (!newColumnTitle.trim()) {
-      return;
-    }
+    if (!dashboardId || typeof dashboardId !== "string") return;
+    if (!newColumnTitle.trim()) return;
 
     try {
       const createdColumn = await createColumn({
@@ -108,11 +106,11 @@ export default function Dashboard() {
             ) : (
               states.columns.map((column: any) => {
                 return (
-                  <Column
+                  <SortableColumn
                     key={column.id}
+                    columnId={column.id}
                     title={column.title}
                     cards={column.cards ?? []}
-                    columnId={column.id}
                     onAddCardClick={(columnId) => {
                       states.setTargetColumnId(columnId);
                       states.setIsCreateCardModalOpen(true);
