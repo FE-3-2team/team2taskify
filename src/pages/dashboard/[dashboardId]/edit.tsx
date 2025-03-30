@@ -17,23 +17,21 @@ export default function EditPage() {
   const [dashboardInfo, setDashboardInfo] = useState({
     title: "",
     color: "",
-    createdByMe: true,
   });
   //
   useEffect(() => {
     if (dashboardId) {
       handleLoad();
     }
-  }, [dashboardId]);
+  }, []);
   //
   const handleLoad = async () => {
-    const dashboard = await getDashboardInfo(dashboardId as string);
+    const dashboard = await getDashboardInfo(Number(dashboardId));
 
     setDashboardInfo((prev) => ({
       ...prev,
       title: dashboard.title,
       color: dashboard.color,
-      createdByMe: dashboard.createdByMe,
     }));
   };
   const DashBoardDelete = async () => {
@@ -44,7 +42,7 @@ export default function EditPage() {
   return (
     <div className="ml-[67px] tablet:ml-[160px] laptop:ml-[300px]">
       <SideMenu />
-      <Header createdByMe={dashboardInfo.createdByMe} />
+      <Header />
       <div className="px-3 tablet:px-5">
         <div className="flex max-w-[620px] flex-col gap-[10px] tablet:gap-[19px] laptop:gap-[34px]">
           <Link className="mt-5 " href={`/dashboard/${dashboardId}`}>

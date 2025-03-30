@@ -8,6 +8,7 @@ import UnifiedInput from "@/components/common/Input";
 import Button from "@/components/common/Button/Button";
 import ProfileImg from "@/assets/icons/CardProfile.svg";
 import { AlertModal } from "@/components/ModalContents/AlertModal";
+import useAuthStore from "@/utils/Zustand/zustand";
 
 const EditProfile = () => {
   const [email, setEmail] = useState("");
@@ -180,7 +181,10 @@ const EditProfile = () => {
       };
 
       const updateResponse = await instance.put("/users/me", updateBody);
-      console.log("Profile updated:", updateResponse.data);
+      useAuthStore.setState({
+        userNickname: updateResponse.data.nickname,
+        profileImageUrl: updateResponse.data.profileImageUrl,
+      });
       setAlertModalOpen(true);
     } catch (error) {
       console.error("Profile update error:", error);

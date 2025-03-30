@@ -1,4 +1,4 @@
-export function useFormatDate(data: string) {
+export function useFormatDate(data: Date) {
   const date = new Date(data);
   const formattedDate = `${date.getFullYear()}.${String(
     date.getMonth() + 1

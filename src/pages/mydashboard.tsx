@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import SideMenu from "@/components/common/SideMenu";
 import CardModal from "@/components/ModalContents/Card.modal";
 import EditCardModal from "@/components/ModalContents/EditCardModal";
+import { AlertModal } from "@/components/ModalContents/AlertModal";
 
 export interface Data {
   title: string;
@@ -25,6 +26,8 @@ export default function MyDashboard() {
   const [boardList, setBoardList] = useState<Dashboards[]>([]);
   const [newColor, setNewColor] = useState("");
   const [newTitle, setNewTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [isAlert, setIsAlert] = useState(false);
   const [isCardEdit, setIsCardEdit] = useState(false); //수정하기 모달 로직 setIsCardEdit은 모달 상세보기 로도 연결
   const router = useRouter();
   //
@@ -34,13 +37,23 @@ export default function MyDashboard() {
 
   //
   const handleLoad = async () => {
-    const { totalCount, dashboards } = await getDashboards(currentPage, 5);
-    setBoardList(dashboards);
-    setTotalPage(Math.ceil(totalCount / 5));
+    try {
+      const { totalCount, dashboards } = await getDashboards(currentPage, 5);
+      setBoardList(dashboards);
+      setTotalPage(Math.ceil(totalCount / 5));
+    } catch (error: any) {
+      setMessage(error.response.data.message);
+      setIsAlert(true);
+    }
   };
   const plusDashboard = async () => {
-    const createdDashboard = await createDashboard(newTitle, newColor);
-    router.push(`/dashboard/${createdDashboard.id}`);
+    try {
+      const createdDashboard = await createDashboard(newTitle, newColor);
+      router.push(`/dashboard/${createdDashboard.id}`);
+    } catch (error: any) {
+      setMessage("대시보드 생성에 실패 했습니다. 다시 시도해 주세요");
+      setIsAlert(true);
+    }
   };
   const handleChange = (title: string, color: string) => {
     setNewColor(color);
@@ -58,6 +71,11 @@ export default function MyDashboard() {
     <div className="ml-[67px] tablet:ml-[160px] laptop:ml-[300px]">
       <SideMenu />
       <Header />
+      <AlertModal
+        isOpen={isAlert}
+        onConfirm={() => setIsAlert(false)}
+        message={message}
+      />
       <div className="flex flex-col py-6 px-6 tablet:py-10 tablet:px-10 gap-6 tablet:gap-12 laptop:gap-10 max-w-[1022px]">
         {/* <EditCardModal setIsCardEdit={setIsCardEdit} isCardEdit={isCardEdit} />
         <DetailContent
@@ -91,6 +109,7 @@ export default function MyDashboard() {
               return (
                 <Link href={`/dashboard/${board.id}`}>
                   <DashButton
+                    isOwner={board.createdByMe}
                     hasArrow
                     title={board.title}
                     color={board.color}

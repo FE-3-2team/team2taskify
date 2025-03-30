@@ -159,7 +159,7 @@ export default function Dashboard() {
           fetchColumns={fetchColumns}
         />
 
-        <EditCardModal
+        {/*<EditCardModal
           isCardEdit={states.isEditCardModalOpen}
           setIsCardEdit={
             ((open: boolean | ((prev: boolean) => boolean)) => {
@@ -171,7 +171,7 @@ export default function Dashboard() {
               if (!value) resetEditCardForm();
             }) as Dispatch<SetStateAction<boolean>>
           }
-        />
+        />*/}
 
         <ManageColumnModal
           isOpen={states.isManageColumnModalOpen}

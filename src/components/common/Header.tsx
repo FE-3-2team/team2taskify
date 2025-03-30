@@ -15,15 +15,19 @@ import InputModal from "../ModalContents/InputModal";
 import { createInvite } from "@/api/dashboard";
 import ProfileSelect from "./Dropdown/Profile.D.D";
 
-interface Props {
-  createdByMe?: boolean;
-}
-
-export default function Header({ createdByMe }: Props) {
+//
+const DATA_PATH = [
+  "/mypage",
+  "/dashboard/[dashboardId]",
+  "/dashboard/[dashboardId]/edit",
+];
+//
+export default function Header() {
   const store = useStore(useAuthStore, (state) => state);
-  const dashboardId = store?.dashboardId;
+  const dashboardId = Number(store?.dashboardId);
   const router = useRouter();
-  const [members, setMembers] = useState<Member[]>([]);
+  const pathname = router.pathname;
+  const [members, setMembers] = useState<MemberData>();
   const [inviteValue, setInviteValue] = useState("");
   const dashboardTitle =
     router.pathname === "/mypage"
@@ -31,22 +35,29 @@ export default function Header({ createdByMe }: Props) {
       : router.pathname === "/mydashboard"
         ? `${store?.userNickname}님의 대시보드`
         : store?.dashboardTitle;
+  const isDataPath = DATA_PATH.includes(pathname);
 
   useEffect(() => {
     handleLoadDashboardInfo();
-  }, [dashboardId, router.pathname]);
+  }, [dashboardId]);
 
   const handleLoadDashboardInfo = async () => {
     if (!dashboardId) return;
     if (router.pathname !== "/mydashboard") {
-      const { members } = await getMember(1, Number(dashboardId), 4);
-      setMembers(members);
+      try {
+        const members = await getMember(1, dashboardId, 4);
+        setMembers(members);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
   const inviteMember = async () => {
     if (!dashboardId) return;
-    await createInvite(inviteValue, dashboardId as string);
+    try {
+      await createInvite(inviteValue, dashboardId);
+    } catch (error) {}
   };
 
   //
@@ -56,15 +67,15 @@ export default function Header({ createdByMe }: Props) {
         <p className="hidden laptop:block text-black-200 text-xl-bold ">
           {dashboardTitle}
         </p>
-        {createdByMe && (
+        {store?.isOwner && isDataPath && (
           <div className="hidden laptop:block">
             <Image src={Crown} width={20} height={24} alt="mine" />
           </div>
         )}
       </div>
       <div className="flex flex-row gap-[16px] tablet:gap-[36px] laptop:gap-[40px]">
-        <div className="flex flex-row gap-2 tablet:gap-4">
-          {router.pathname !== "/mydashboard" && (
+        {store?.isOwner && isDataPath && (
+          <div className="flex flex-row gap-2 tablet:gap-4">
             <Link href={`${dashboardId}/edit`}>
               <button className="justify-center h-[40px] flex flex-row items-center py-[7px] px-2 tablet:px-4 gap-2 rounded-lg border-[1px] border-gray-300">
                 <Image
@@ -79,8 +90,7 @@ export default function Header({ createdByMe }: Props) {
                 </div>
               </button>
             </Link>
-          )}
-          {router.pathname !== "/mydashboard" && (
+
             <div className="h-[40px]">
               <Modal
                 ModalOpenButton={
@@ -102,6 +112,7 @@ export default function Header({ createdByMe }: Props) {
                 rightOnClick={inviteMember}
               >
                 <InputModal
+                  variant="email"
                   label="이메일"
                   title="초대하기"
                   placeholder="이메일을 입력해주세요."
@@ -109,15 +120,15 @@ export default function Header({ createdByMe }: Props) {
                 />
               </Modal>
             </div>
-          )}
-        </div>
+          </div>
+        )}
         <div className="flex w-fit flex-row gap-[4px] tablet:gap-[36px] laptop:gap-[40px]">
           <div
             style={{
-              display: members && members.length > 0 ? "block" : "none",
+              display: members && members.totalCount > 0 ? "block" : "none",
             }}
           >
-            {members && <Badges memberList={members} />}
+            {members && <Badges member={members} />}
           </div>
           <div className="h-[38px] w-[1px] bg-gray-300" />
           {store && (

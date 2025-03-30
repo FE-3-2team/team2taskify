@@ -7,14 +7,17 @@ import { Modal } from "./common/ModalPopup";
 import InputModal from "./ModalContents/InputModal";
 import useAuthStore from "@/utils/Zustand/zustand";
 import { useStore } from "zustand";
+import { AlertModal } from "./ModalContents/AlertModal";
 
 export default function InvitationHistory() {
   const store = useStore(useAuthStore, (state) => state);
-  const dashboardId = store.dashboardId as string;
+  const dashboardId = Number(store.dashboardId);
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentList, setCurrentList] = useState<Invitation[]>([]);
   const [emailValue, setEmailValue] = useState("");
+  const [message, setMessage] = useState("");
+  const [isAlert, setIsAlert] = useState(false);
   //
   useEffect(() => {
     handleLoad();
@@ -22,12 +25,17 @@ export default function InvitationHistory() {
 
   const handleLoad = async () => {
     if (!dashboardId) return;
-    const { invitations, totalCount } = await A.getDashboardInvitations(
-      currentPage,
-      dashboardId
-    );
-    setTotalPage(Math.ceil(totalCount / 5));
-    setCurrentList(invitations);
+    try {
+      const { invitations, totalCount } = await A.getDashboardInvitations(
+        currentPage,
+        dashboardId
+      );
+      setTotalPage(Math.ceil(totalCount / 5));
+      setCurrentList(invitations);
+    } catch (error: any) {
+      setMessage(error.response.data.message);
+      setIsAlert(true);
+    }
   };
 
   const PrevPage = () => {
@@ -44,18 +52,23 @@ export default function InvitationHistory() {
       (item) => item.invitee.email === emailValue
     );
     if (isDuplicate) return;
-    const newInvite = await A.createInvite(emailValue, dashboardId);
-    if (currentList.length > 4) {
-      if (currentPage === 1) {
-        setCurrentPage((prev) => prev + 1);
-        return;
+    try {
+      const newInvite = await A.createInvite(emailValue, dashboardId);
+      if (currentList.length > 4) {
+        if (currentPage === 1) {
+          setCurrentPage((prev) => prev + 1);
+          return;
+        }
+        setCurrentPage(1);
       }
-      setCurrentPage(1);
+      setCurrentList((prev) => [...prev, newInvite]);
+    } catch (error: any) {
+      setMessage(error.response.data.message);
+      setIsAlert(true);
     }
-    setCurrentList((prev) => [...prev, newInvite]);
   };
 
-  const CancelInvite = async (dashboardId: string, invitationId: number) => {
+  const CancelInvite = async (dashboardId: number, invitationId: number) => {
     await A.cancelInvite(dashboardId, invitationId);
     setCurrentList((prev) => prev.filter((item) => item.id !== invitationId));
     if (currentList.length === 1) {
@@ -68,6 +81,11 @@ export default function InvitationHistory() {
       className="flex flex-col gap-[26px] tablet:gap-[17px] bg-white rounded-lg w-full h-fit
     pt-6 pb-3 tablet:pt-8 tablet:pb-0 "
     >
+      <AlertModal
+        message={message}
+        isOpen={isAlert}
+        onConfirm={() => setIsAlert(false)}
+      />
       <div className="flex flex-col gap-3 tablet:gap-8">
         <div className="flex items-center justify-between px-5 tablet:px-7">
           <p className=" text-2lg-bold tablet-text-2xl-bold"> 초대 내역</p>
@@ -96,6 +114,7 @@ export default function InvitationHistory() {
                 rightOnClick={AddInvite}
               >
                 <InputModal
+                  variant="email"
                   title="초대하기"
                   label="이메일"
                   placeholder="이메일을 입력해주세요"
@@ -120,6 +139,7 @@ export default function InvitationHistory() {
               rightOnClick={AddInvite}
             >
               <InputModal
+                variant="email"
                 title="초대하기"
                 label="이메일"
                 placeholder="이메일을 입력해주세요"

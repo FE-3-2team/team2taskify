@@ -1,7 +1,7 @@
 import useWindowSize from "@/hooks/useWindow";
 import clsx from "clsx";
 interface BadgesProps {
-  memberList: Member[];
+  member: MemberData;
 }
 
 const RANDOM_COLOR = [
@@ -15,11 +15,12 @@ const RANDOM_COLOR = [
   "bg-pink",
 ];
 
-export function Badges({ memberList }: BadgesProps) {
+export function Badges({ member }: BadgesProps) {
+  const { members, totalCount } = member;
   const device = useWindowSize();
-  if (memberList.length < 0) return;
+  if (totalCount < 0) return;
   const memberArray =
-    device === "desktop" ? memberList.slice(0, 4) : memberList.slice(0, 2);
+    device === "desktop" ? members.slice(0, 4) : members.slice(0, 2);
   const count = memberArray.length === 2 ? 2 : 4;
   return (
     <div className="relative flex flex-row w-auto h-[38px]">
@@ -35,7 +36,7 @@ export function Badges({ memberList }: BadgesProps) {
         );
       })}
 
-      {memberList.length > 3 && (
+      {members.length > 3 && (
         <div
           className={`border-[2px] border-white flex justify-center items-center 
           rounded-full !w-[38px] h-[38px] text-pink200 text-md-semibold tablet:text-lg-semibold bg-pink300
@@ -43,7 +44,7 @@ export function Badges({ memberList }: BadgesProps) {
           `}
           style={{ left: `${memberArray.length * 20}px` }}
         >
-          +{memberList.length - count}
+          +{totalCount - count}
         </div>
       )}
     </div>

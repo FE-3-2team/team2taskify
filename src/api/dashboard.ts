@@ -8,26 +8,25 @@ type Props = {
 
 //대시보드 생성
 export async function createDashboard(title: string, color: string) {
-  try {
-    const res = await instance.post("/dashboards", {
-      title,
-      color,
+  const res = await instance.post("/dashboards", {
+    title,
+    color,
+  });
+  if (res.status == 201) {
+    useAuthStore.setState({
+      dashboardId: res.data.id,
+      dashboardTitle: res.data.title,
+      isOwner: true,
     });
     return res.data;
-  } catch (error) {
-    throw new Error("대시보드 생성 실패");
   }
 }
 //대시보드 목록 조회
 export async function getDashboards(page: number, size = 5) {
-  try {
-    const res = await instance.get(`/dashboards`, {
-      params: { navigationMethod: "pagination", page: page, size: size },
-    });
-    return res.data;
-  } catch (error) {
-    throw new Error("대시보드 목록 조회 실패");
-  }
+  const res = await instance.get(`/dashboards`, {
+    params: { navigationMethod: "pagination", page: page, size: size },
+  });
+  return res.data;
 }
 
 //대시보드 상세조회
@@ -39,6 +38,7 @@ export async function getDashboardInfo(dashboardId: number) {
       useAuthStore.setState({
         dashboardId: res.data.id,
         dashboardTitle: res.data.title,
+        isOwner: res.data.createdByMe,
       });
     }
 
@@ -64,22 +64,18 @@ interface editProps extends Props {
 }
 export async function editDashboard(dashboardData: editProps) {
   const { dashboardId, title, color } = dashboardData;
-  // console.log(dashboardId);
-  try {
-    const res = await instance.put(`/dashboards/${dashboardId}`, {
-      title,
-      color,
+
+  const res = await instance.put(`/dashboards/${dashboardId}`, {
+    title,
+    color,
+  });
+  const { title: newTitle, color: newColor } = res.data;
+  if (res.status == 200) {
+    useAuthStore.setState({
+      dashboardTitle: newTitle,
     });
-    const { title: newTitle, color: newColor } = res.data;
-    if (res.status == 200) {
-      useAuthStore.setState({
-        dashboardTitle: newTitle,
-      });
-    }
-    return { newTitle, newColor };
-  } catch (error) {
-    throw new Error("대시보드 수정 실패");
   }
+  return { newTitle, newColor };
 }
 //대쉬보드 초대하기
 

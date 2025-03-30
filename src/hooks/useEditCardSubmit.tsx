@@ -12,7 +12,7 @@ interface Params {
   editCardTags: string[];
   editCardImageFile: File | null;
   editCardImageUrl: string | null;
-  fetchColumns: (pageId: string) => void;
+  fetchColumns: (pageId: number) => void;
   resetEditCardForm: () => void;
   dashboardId: number;
   closeModal: () => void;
