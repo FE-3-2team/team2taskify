@@ -10,7 +10,7 @@ import { useStore } from "zustand";
 
 export default function InvitationHistory() {
   const store = useStore(useAuthStore, (state) => state);
-  const dashboardId = store.dashboardId as string;
+  const dashboardId = Number(store.dashboardId);
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentList, setCurrentList] = useState<Invitation[]>([]);
@@ -55,7 +55,7 @@ export default function InvitationHistory() {
     setCurrentList((prev) => [...prev, newInvite]);
   };
 
-  const CancelInvite = async (dashboardId: string, invitationId: number) => {
+  const CancelInvite = async (dashboardId: number, invitationId: number) => {
     await A.cancelInvite(dashboardId, invitationId);
     setCurrentList((prev) => prev.filter((item) => item.id !== invitationId));
     if (currentList.length === 1) {
@@ -96,6 +96,7 @@ export default function InvitationHistory() {
                 rightOnClick={AddInvite}
               >
                 <InputModal
+                  variant="email"
                   title="초대하기"
                   label="이메일"
                   placeholder="이메일을 입력해주세요"
@@ -120,6 +121,7 @@ export default function InvitationHistory() {
               rightOnClick={AddInvite}
             >
               <InputModal
+                variant="email"
                 title="초대하기"
                 label="이메일"
                 placeholder="이메일을 입력해주세요"

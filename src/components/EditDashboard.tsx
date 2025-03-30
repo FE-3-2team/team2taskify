@@ -16,7 +16,7 @@ interface dashboardDataType extends Props {
 export default function EditDashboard({ title, dashboardId }: Props) {
   const [currentTitle, setCurrentTitle] = useState("");
   const [currentValue, setCurrentValue] = useState("");
-  const [Message, setMessage] = useState("");
+  const [message, setMessage] = useState("");
   const [isAlert, setIsAlert] = useState(false);
   const [dashboardData, setDashboardData] = useState({
     dashboardId: "",
@@ -81,7 +81,7 @@ export default function EditDashboard({ title, dashboardId }: Props) {
         <Button onClick={() => handleSubmit(dashboardData)}>변경</Button>
         <AlertModal
           isOpen={isAlert}
-          message={Message}
+          message={message}
           onConfirm={() => setIsAlert(false)}
         ></AlertModal>
       </div>

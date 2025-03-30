@@ -24,7 +24,7 @@ export default function EditPage() {
     if (dashboardId) {
       handleLoad();
     }
-  }, [dashboardId]);
+  }, []);
   //
   const handleLoad = async () => {
     const dashboard = await getDashboardInfo(Number(dashboardId));

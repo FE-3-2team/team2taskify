@@ -94,7 +94,7 @@ export async function createInvite(email: string, dashboardId: number) {
 
 export async function getDashboardInvitations(
   page: number,
-  dashboardId: string
+  dashboardId: number
 ) {
   try {
     const res = await instance.get(`/dashboards/${dashboardId}/invitations`, {
@@ -107,7 +107,7 @@ export async function getDashboardInvitations(
 }
 
 //대시보드 초대 취소
-export async function cancelInvite(dashboardId: string, invitationId: number) {
+export async function cancelInvite(dashboardId: number, invitationId: number) {
   try {
     const res = await instance.delete(
       `/dashboards/${dashboardId}/invitations/${invitationId}`
