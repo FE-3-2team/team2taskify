@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { getMember } from "@/api/member";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 
 export function useInitializeDashboard({
   dashboardId,

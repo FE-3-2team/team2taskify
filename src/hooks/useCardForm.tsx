@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 
 const useCardFrom = () => {
   const [cardTitle, setCardTitle] = useState("");

@@ -1,43 +1,25 @@
 import { Modal } from "@/components/common/ModalPopup";
 import CardForm from "@/components/forms/CardForm";
 import DropdownProgress from "@/components/common/Dropdown/DropdownProgress";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
-import type { ColumnData } from "@/types/column";
-import type { EditCardData } from "@/hooks/useEditCard";
-
-interface CardData {
-  cardId: number;
-  columnId: number;
-  title: string;
-  description: string;
-  dueDate: Date | null;
-  tags: string[];
-  imageFile: File | null;
-  imageUrl: string | null;
-  assignee: Assignee | null;
-}
+import useDashboardStates from "@/hooks/useDashboardStates";
+import { useEditCardSubmit } from "@/hooks/useEditCardSubmit";
+import useEditCardForm from "@/hooks/useEditCard";
+import { useStore } from "zustand";
+import useAuthStore from "@/utils/Zustand/zustand";
+import { useFetchColumns } from "@/hooks/useFetchColumns";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { getMember } from "@/api/member";
+import { getColumns } from "@/api/column.api";
 
 interface Props {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  onSubmit: () => void;
-  onCancel: () => void;
-  cardData: EditCardData;
-  setEditedData: (data: Partial<CardData>) => void;
-  members: Assignee[];
-  columns: ColumnData[];
+  isCardEdit: boolean;
+  setIsCardEdit: Dispatch<SetStateAction<boolean>>;
 }
+const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
+  const states = useDashboardStates();
+  const { handleEditCardSubmit } = useEditCardSubmit();
+  const { cardData, setEditedData, resetEditCardForm } = useEditCardForm();
 
-const EditCardModal = ({
-  isOpen,
-  setIsOpen,
-  onSubmit,
-  onCancel,
-  cardData,
-  setEditedData,
-  members,
-  columns,
-}: Props) => {
   const {
     columnId,
     title,
@@ -48,19 +30,53 @@ const EditCardModal = ({
     imageUrl,
     assignee,
   } = cardData;
+  const store = useStore(useAuthStore);
+  const { dashboardId } = store;
+  const [members, setMembers] = useState<Assignee[]>([]);
+  const [columns, setColumns] = useState<Column[]>([]);
 
+  const onSubmit = () => {
+    handleEditCardSubmit({
+      editCardId: cardData.cardId!,
+      editCardColumnId: cardData.columnId!,
+      editSelectedAssignee: cardData.assignee!,
+      editCardTitle: cardData.title,
+      editCardDescription: cardData.description,
+      editCardDueDate: cardData.dueDate,
+      editCardTags: cardData.tags,
+      editCardImageFile: cardData.imageFile,
+      editCardImageUrl: cardData.imageUrl,
+      fetchColumns,
+      resetEditCardForm,
+      dashboardId: String(dashboardId),
+      closeModal: () => states.setIsEditCardModalOpen(false),
+    });
+  };
+
+  const { fetchColumns } = useFetchColumns(
+    states.setColumns,
+    states.setIsLoading
+  );
+  const memberLoad = async () => {
+    const { members } = await getMember(1, Number(dashboardId));
+    setMembers(members);
+  };
+  const columnsLoad = async () => {
+    const columnsData = await getColumns(dashboardId as string);
+    setColumns(columnsData);
+  };
+
+  useEffect(() => {
+    memberLoad();
+    columnsLoad();
+  }, []);
   return (
     <Modal
-      isOpen={isOpen}
-      setIsOpen={(open) => {
-        setIsOpen(open);
-        if (!open) onCancel();
-      }}
       ModalOpenButton={null}
       rightHandlerText="수정"
-      leftHandlerText="취소"
       rightOnClick={onSubmit}
-      leftOnClick={onCancel}
+      isOpen={isCardEdit}
+      setIsOpen={setIsCardEdit}
     >
       <div className="w-full">
         <h2 className="tablet:text-2xl-bold text-xl-bold mb-[32px]">

@@ -1,7 +1,6 @@
 import { uploadCardImage } from "@/api/column.api";
 import { updateCard } from "@/api/card.api";
 import { formatDateTime } from "@/utils/date";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 
 interface Params {
   editCardId: number;

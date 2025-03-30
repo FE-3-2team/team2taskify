@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { Assignee } from "@/components/common/Dropdown/DropdownAssigneeSearch";
 import type { ColumnData } from "@/types/column";
 
 export default function useDashboardStates() {
