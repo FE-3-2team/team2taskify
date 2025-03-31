@@ -30,8 +30,7 @@ export default function ImageUploadBox({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
-      const file = e.target.files[0];
-      onChangeImage(file);
+      onChangeImage(e.target.files[0]);
     }
   };
 

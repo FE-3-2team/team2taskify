@@ -39,12 +39,10 @@ declare global {
     tags: string[];
     dueDate: Date | null;
     assignee: Assignee | null;
-    imageFile: File | null;
     imageUrl: string | null;
     columnId: number;
-    createdAt?: Date;
-    updatedAt?: Date;
   }
+
   interface CardComment {
     id: number;
     content: string;
