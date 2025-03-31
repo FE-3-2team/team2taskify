@@ -55,7 +55,7 @@ export default function CardValueForm({
           onChange={(e) =>
             handleChangeEdit("description", e.target.value.trim())
           }
-          className="h-[126px] w-full"
+          className="h-[126px] w-full border-[1px] border-gray-300 rounded-[8px]"
         />
       </div>
       <UnifiedInput

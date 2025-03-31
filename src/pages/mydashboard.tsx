@@ -11,6 +11,7 @@ import SideMenu from "@/components/common/SideMenu";
 import CardModal from "@/components/ModalContents/Card.modal";
 import { AlertModal } from "@/components/ModalContents/AlertModal";
 import EditCard from "@/components/ModalContents/EditCard.modal";
+import CreateCard from "@/components/ModalContents/NewCard.modal";
 
 export interface Data {
   title: string;
@@ -91,6 +92,7 @@ export default function MyDashboard() {
         >
           <CardModal cardId={11808} columnId={46358} columnTitle="To Do" />
         </DetailContent>
+        <CreateCard columnId={46360}></CreateCard>
         <div className="flex flex-col gap-4 laptop:gap-3">
           <div className="w-full grid gap-[10px] grid-cols-1 tablet:grid-cols-2  laptop:grid-cols-3">
             <div className="w-full h-full">

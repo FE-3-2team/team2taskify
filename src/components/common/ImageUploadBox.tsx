@@ -16,6 +16,7 @@ export default function ImageUploadBox({
     if (imageFile) {
       const objectUrl = URL.createObjectURL(imageFile);
       setPreviewUrl(objectUrl);
+      onChangeImage(imageFile);
       return () => URL.revokeObjectURL(objectUrl);
     } else if (imageUrl) {
       setPreviewUrl(imageUrl);
@@ -28,8 +29,7 @@ export default function ImageUploadBox({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
-      setImageFile(e.target.files?.[0]);
-      onChangeImage(e.target.files[0]);
+      setImageFile(e.target.files[0]);
     }
   };
 

@@ -29,40 +29,31 @@ export async function deleteCard(cardId: number) {
   }
 }
 
+//카드 생성
+interface CreateCardProps {
+  dashboardId: number;
+  columnId: number;
+  cardData: CardData;
+}
 export async function createCard({
   dashboardId,
   columnId,
-  assigneeUserId,
-  title,
-  description,
-  dueDate,
-  tags,
-  imageUrl,
-}: {
-  dashboardId: number;
-  columnId: number;
-  assigneeUserId: number;
-  title: string;
-  description: string;
-  dueDate: string;
-  tags: string[];
-  imageUrl: string;
-}) {
-  try {
-    const res = await instance.post("/cards", {
-      dashboardId,
-      columnId,
-      assigneeUserId,
-      title,
-      description,
-      dueDate,
-      tags,
-      imageUrl,
-    });
-    return res.data;
-  } catch (err) {
-    throw new Error("카드 생성 실패");
-  }
+  cardData,
+}: CreateCardProps) {
+  const { assignee, title, description, dueDate, tags, imageUrl } = cardData;
+  const formattedDate = useFormatTime(dueDate);
+
+  const res = await instance.post("/cards", {
+    dashboardId,
+    columnId,
+    assigneeUserId: assignee.id,
+    title,
+    description,
+    dueDate: formattedDate,
+    tags,
+    imageUrl,
+  });
+  return res.data;
 }
 
 interface Props {
