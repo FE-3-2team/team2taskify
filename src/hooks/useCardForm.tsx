@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const useCardFrom = () => {
+const useCardForm = () => {
   const [cardTitle, setCardTitle] = useState("");
   const [cardDescription, setCardDescription] = useState("");
   const [cardDueDate, setCardDueDate] = useState<Date | null>(null);
@@ -36,4 +36,4 @@ const useCardFrom = () => {
   };
 };
 
-export default useCardFrom;
+export default useCardForm;

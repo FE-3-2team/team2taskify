@@ -1,7 +1,3 @@
-import { useAutoClose } from "@/hooks/useAutoClose";
-import X from "@/assets/icons/X.icon.svg";
-import Button from "@/components/common/Button/Button";
-import Image from "next/image";
 import {
   Dispatch,
   ReactNode,
@@ -9,8 +5,13 @@ import {
   useEffect,
   useState,
 } from "react";
+import Image from "next/image";
+import Button from "@/components/common/Button/Button";
 import DropdownEditDel from "./Dropdown/DropdownEditDel";
+import { useAutoClose } from "@/hooks/useAutoClose";
+import useDashboardStates from "@/hooks/useDashboardStates";
 import { deleteCard } from "@/api/card.api";
+import X from "@/assets/icons/X.icon.svg";
 
 interface Props {
   children?: React.ReactNode;
@@ -46,6 +47,7 @@ export function Modal({
   } = useAutoClose(false);
   const modalIsOpen = isOpen !== undefined ? isOpen : internalIsOpen;
   const modalSetIsOpen = setIsOpen ?? internalSetIsOpen;
+
   useEffect(() => {
     if (!modalIsOpen) return;
 
@@ -139,6 +141,7 @@ interface DetailContentProps {
   children: ReactNode;
   ModalOpenButton: ReactNode;
   cardId: number;
+  columnId: number;
   setIsCardEdit: Dispatch<SetStateAction<boolean>>;
   isOpen?: boolean;
   setIsOpen?: (value: boolean) => void;
@@ -148,6 +151,7 @@ export function DetailContent({
   children,
   ModalOpenButton,
   cardId,
+  columnId,
   setIsCardEdit,
   isOpen,
   setIsOpen,
@@ -160,17 +164,36 @@ export function DetailContent({
 
   const modalIsOpen = isOpen !== undefined ? isOpen : internalIsOpen;
   const modalSetIsOpen = setIsOpen ?? internalSetIsOpen;
+  const states = useDashboardStates();
 
   const handleButtonClick = () => {
     modalSetIsOpen(true);
   };
 
-  const handleCardDelete = async () => {
-    await deleteCard(cardId);
-    modalSetIsOpen(false);
-  };
   const handleEdit = () => {
     modalSetIsOpen(false);
+  };
+
+  const handleCardDelete = async () => {
+    await deleteCard(cardId);
+
+    states.setColumns((prevColumns) => {
+      const updated = prevColumns.map((col) => {
+        if (col.id === columnId) {
+          const filteredCards = col.cards.filter(
+            (card) => card.cardId !== cardId
+          );
+
+          return { ...col, cards: filteredCards };
+        }
+        return col;
+      });
+      return updated;
+    });
+
+    modalSetIsOpen(false);
+
+    window.location.reload();
   };
 
   return (

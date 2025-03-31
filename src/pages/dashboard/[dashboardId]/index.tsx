@@ -186,6 +186,11 @@ export default function Dashboard() {
   });
 
   useEffect(() => {}, [states.isCardDetailModalOpen, states.selectedCard]);
+  useEffect(() => {
+    if (!states.isCreateCardModalOpen) {
+      resetNewCardForm();
+    }
+  }, [states.isCreateCardModalOpen]);
 
   return (
     <>
@@ -279,6 +284,7 @@ export default function Dashboard() {
         {states.isCardDetailModalOpen && states.selectedCard && (
           <DetailContent
             cardId={states.selectedCard.cardId}
+            columnId={states.selectedCard.columnId}
             cardTitle={states.selectedCard.title}
             ModalOpenButton={null}
             setIsCardEdit={states.setIsEditCardModalOpen}
@@ -293,8 +299,12 @@ export default function Dashboard() {
           </DetailContent>
         )}
         <CreateCardModal
+          key={states.isCreateCardModalOpen ? "open" : "closed"}
           isOpen={states.isCreateCardModalOpen}
-          setIsOpen={states.setIsCreateCardModalOpen}
+          setIsOpen={(open) => {
+            states.setIsCreateCardModalOpen(open);
+            if (!open) resetNewCardForm();
+          }}
           members={states.members}
           targetColumnId={states.targetColumnId!}
           resetNewCardForm={resetNewCardForm}
