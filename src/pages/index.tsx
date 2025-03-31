@@ -10,11 +10,14 @@ import landing4 from '@/assets/landing4.png';
 import landing5 from '@/assets/landing5.png';
 import { Button } from "@/components/common/Button";
 import FadeInWhenVisible from "@/components/FadeInWhenVisible";
+import { motion } from 'framer-motion';
+import TrailParticles from '@/components/TrailParticles';
 
 export default function Home() {
   
   return (
     <>
+    <TrailParticles />
       <header className="dark">
         <MainHeader />
       </header>
@@ -26,7 +29,15 @@ export default function Home() {
             <Image src={mainimage01} alt='taskify 메인이미지' className='w-full max-w-[288px] tablet:max-w-[540px] laptop:max-w-[720px] mb-[28px] tablet:mb-[48px]'/>
             <h1 className='text-white text-3xl-bold text-[40px] tablet:text-[56px] laptop:text-[76px] leading-[1.4] mb-[100px] tablet:mb-[108px]'>
               새로운 일정 관리 
-              <span className='block tablet:inline-block font-bold font-montserrat text-3xl-bold text-violet-200 text-[42px] tablet:text-[70px] laptop:text-[90px] tablet:pl-4 relative top-[5px]'>Taskify</span>
+              {/* <span className='block tablet:inline-block font-bold font-montserrat text-3xl-bold text-violet-200 text-[42px] tablet:text-[70px] laptop:text-[90px] tablet:pl-4 relative top-[5px]'>Taskify</span> */}
+              <motion.span
+                initial={{ y: 20, opacity: 0, scale: 0.95 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                transition={{ delay: 0.4, duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }}
+                className="block tablet:inline-block font-bold font-montserrat text-3xl-bold text-violet-200 text-[42px] tablet:text-[70px] laptop:text-[90px] tablet:pl-4 relative top-[5px]"
+              >
+                Taskify
+              </motion.span>
             </h1>
             <Link href='/login' className="flex flex-col items-center justify-center w-full gap-2 mb-10 max-w-[235px] tablet:max-w-[280px]">
               <Button size="xlarge" variant="primary">로그인하기</Button>
