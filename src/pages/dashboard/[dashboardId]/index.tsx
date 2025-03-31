@@ -219,6 +219,7 @@ export default function Dashboard() {
                       states.setIsManageColumnModalOpen(true);
                     }}
                     onEditCardClick={handleEditCardClick}
+                    activeCard={activeCard}
                   />
                 );
               })

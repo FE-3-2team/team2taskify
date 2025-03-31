@@ -1,26 +1,30 @@
 import { useRef, useCallback } from "react";
-import GearIcon from "@/assets/icons/Edit.icon.svg";
-import PlusIcon from "@/assets/icons/Plus.icon.svg";
 import Image from "next/image";
 import SortableCard from "@/components/common/SortableCard";
+import DropIndicator from "@/components/common/DropIndicator";
+import useDashboardStates from "@/hooks/useDashboardStates";
+import { ColumnData } from "@/types/column";
 import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { ColumnData } from "@/types/column";
+import GearIcon from "@/assets/icons/Edit.icon.svg";
+import PlusIcon from "@/assets/icons/Plus.icon.svg";
 
 interface ColumnProps {
   column: ColumnData;
   onAddCardClick: (columnId: number) => void;
   onManageColumnClick: (columnId: number, title: string) => void;
   onEditCardClick?: (card: Card) => void;
+  activeCard?: Card | null;
 }
 
 const Column: React.FC<ColumnProps> = ({
   column,
   onAddCardClick,
-  onEditCardClick,
   onManageColumnClick,
+  onEditCardClick,
+  activeCard,
 }) => {
   const { id: columnId, title, cards } = column;
   const observer = useRef<IntersectionObserver | null>(null);
@@ -35,6 +39,7 @@ const Column: React.FC<ColumnProps> = ({
     },
     [cards.length]
   );
+  const states = useDashboardStates();
 
   return (
     <div className="w-[308px] h-full bg-gray-100 px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center border-r border-gray-200">
@@ -74,20 +79,16 @@ const Column: React.FC<ColumnProps> = ({
           items={cards.map((card) => card.cardId)}
           strategy={verticalListSortingStrategy}
         >
-          {cards.map((card, index) => {
-            return (
-              <SortableCard
-                key={`card-${card.cardId ?? index}`}
-                card={card}
-                columnId={columnId}
-                index={index}
-                onClick={() => onEditCardClick?.(card)}
-                lastCardRef={
-                  index === cards.length - 1 ? lastCardRef : undefined
-                }
-              />
-            );
-          })}
+          {cards.map((card, index) => (
+            <SortableCard
+              key={`card-${card.cardId ?? index}`}
+              card={card}
+              columnId={columnId}
+              index={index}
+              onClick={() => onEditCardClick?.(card)}
+              lastCardRef={index === cards.length - 1 ? lastCardRef : undefined}
+            />
+          ))}
         </SortableContext>
       </div>
     </div>
