@@ -58,8 +58,13 @@ export default function Dashboard() {
   );
 
   const handleCreateColumn = async () => {
-    if (!dashboardId || typeof dashboardId !== "number") return;
-    if (!newColumnTitle.trim()) return;
+    if (!dashboardId || isNaN(Number(dashboardId))) {
+      return;
+    }
+
+    if (!newColumnTitle.trim()) {
+      return;
+    }
 
     try {
       const createdColumn = await createColumn({
@@ -143,7 +148,9 @@ export default function Dashboard() {
               }}
               newColumnTitle={newColumnTitle}
               setNewColumnTitle={setNewColumnTitle}
-              onCreateColumn={handleCreateColumn}
+              onCreateColumn={() => {
+                handleCreateColumn();
+              }}
               onCancel={() => {
                 states.setModalContentType(null);
                 resetNewColumnForm();
