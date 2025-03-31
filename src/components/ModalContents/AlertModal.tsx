@@ -1,6 +1,4 @@
-import React from "react";
-import Image from "next/image";
-import X from "@/assets/icons/X.icon.svg";
+import React, { useEffect } from "react";
 import { Button } from "../common/Button";
 
 interface AlertModalProps {
@@ -10,6 +8,18 @@ interface AlertModalProps {
 }
 
 export function AlertModal({ isOpen, message, onConfirm }: AlertModalProps) {
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isOpen) {
+      timer = setTimeout(() => {
+        onConfirm();
+      }, 2000);
+    }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isOpen, onConfirm]);
+
   if (!isOpen) return null;
 
   return (

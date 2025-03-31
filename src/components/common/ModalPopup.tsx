@@ -105,10 +105,12 @@ export function Modal({
               {rightOnClick && (
                 <div className="tablet:w-[256px] h-[54px] w-[144px] z-20">
                   <Button
-                    variant="primary"
+                    variant={variant}
                     onClick={() => {
-                      rightOnClick();
-                      modalSetIsOpen(false);
+                      if (variant !== "disabled") {
+                        rightOnClick();
+                        modalSetIsOpen(false);
+                      }
                     }}
                   >
                     {rightHandlerText}
