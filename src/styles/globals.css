@@ -268,3 +268,9 @@ button:hover {
   z-index: 9999;
 }
 
+@media (max-width: 768px) {
+  .mobile-hide-after-10 > :nth-child(n + 11) {
+    display: none;
+  }
+}
+
