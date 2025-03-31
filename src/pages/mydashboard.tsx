@@ -3,19 +3,14 @@ import Header from "@/components/common/Header";
 import { DetailContent, Modal } from "@/components/common/ModalPopup";
 import NewDashboard from "@/components/ModalContents/NewDashboard";
 import { useEffect, useState } from "react";
-import {
-  DashButton,
-  PaginationButton,
-  PlusIconButton,
-} from "@/components/common/Button";
+import * as B from "@/components/common/Button";
 import InvitedDashboards from "@/components/InvitedDashboards/InvitedDashboards";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import SideMenu from "@/components/common/SideMenu";
 import CardModal from "@/components/ModalContents/Card.modal";
-import EditCardModal from "@/components/ModalContents/EditCardModal";
 import { AlertModal } from "@/components/ModalContents/AlertModal";
-import Test from "@/components/ModalContents/Test";
+import EditCard from "@/components/ModalContents/EditCard.modal";
 
 export interface Data {
   title: string;
@@ -83,7 +78,7 @@ export default function MyDashboard() {
         message={message}
       />
       <div className="flex flex-col py-6 px-6 tablet:py-10 tablet:px-10 gap-6 tablet:gap-12 laptop:gap-10 max-w-[1022px]">
-        <Test
+        <EditCard
           setIsCardEdit={setIsCardEdit}
           isCardEdit={isCardEdit}
           cardId={11808}
@@ -105,7 +100,7 @@ export default function MyDashboard() {
                     <p className="text-lg-semibold tablet:text-lg-semibold">
                       새로운 대시보드 만들기
                     </p>
-                    <PlusIconButton />
+                    <B.PlusIconButton />
                   </div>
                 }
                 rightHandlerText="생성"
@@ -118,7 +113,7 @@ export default function MyDashboard() {
             {boardList.map((board) => {
               return (
                 <Link href={`/dashboard/${board.id}`}>
-                  <DashButton
+                  <B.DashButton
                     isOwner={board.createdByMe}
                     hasArrow
                     title={board.title}
@@ -132,7 +127,7 @@ export default function MyDashboard() {
             <p>
               {totalPage} 중 {currentPage}
             </p>
-            <PaginationButton
+            <B.PaginationButton
               hasPrev={currentPage > 1}
               hasNext={totalPage > currentPage}
               onPrev={PrevPage}

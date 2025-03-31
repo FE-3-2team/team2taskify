@@ -17,7 +17,7 @@ interface Props {
   isCardEdit: boolean;
   cardId: number;
 }
-export default function Test({ setIsCardEdit, isCardEdit, cardId }: Props) {
+export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
   const states = useDashboardStates();
   const store = useStore(useAuthStore);
   const dashboardId = store.dashboardId;

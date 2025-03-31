@@ -4,6 +4,7 @@ import ImageUploadBox from "@/components/common/ImageUploadBox";
 import UnifiedInput from "@/components/common/Input/Input";
 import { CardData, INITIAL_CARD } from "./CardValues";
 import { uploadCardImage } from "@/api/column.api";
+import TagInput from "../Input/tagInput";
 //
 
 interface Props {
@@ -54,6 +55,10 @@ export default function CardValueForm({ editCardData, columnId }: Props) {
         variant="date"
         value={cardData.dueDate}
         onChange={(value) => handleChangeEdit("dueDate", value)}
+      />
+      <TagInput
+        onChange={(value) => handleChangeEdit("tags", value)}
+        tags={cardData.tags}
       />
       <ImageUploadBox
         imageUrl={cardData.imageUrl}

@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import DatePicker from "react-datepicker";
 import Image from "next/image";
-import Button from "./Button/Button";
+import Button from "@/components/common/Button/Button";
 import EyeCloseIcon from "@/assets/icons/EyeVisibility_off.svg";
 import EyeOpenIcon from "@/assets/icons/EyeVisibility_on.svg";
 import CalendarIcon from "@/assets/icons/Calendar.svg";
