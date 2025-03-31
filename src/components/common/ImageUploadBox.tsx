@@ -3,17 +3,15 @@ import Image from "next/image";
 import PlusIcon from "@/assets/icons/Plus.icon.svg";
 
 export default function ImageUploadBox({
-  imageFile,
   imageUrl,
   onChangeImage,
 }: {
-  imageFile: File | null;
   imageUrl: string | null;
   onChangeImage: (file: File) => void;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState("");
-
+  const [imageFile, setImageFile] = useState<File | null>(null);
   useEffect(() => {
     if (imageFile) {
       const objectUrl = URL.createObjectURL(imageFile);
@@ -30,6 +28,7 @@ export default function ImageUploadBox({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
+      setImageFile(e.target.files?.[0]);
       onChangeImage(e.target.files[0]);
     }
   };
