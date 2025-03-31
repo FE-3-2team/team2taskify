@@ -38,29 +38,13 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
   const [isAlert, setIsAlert] = useState(false);
   const [message, setMessage] = useState("");
 
-  const onSubmit = () => {
-    handleEditCardSubmit({
-      editCardId: cardData.cardId!,
-      editCardColumnId: cardData.columnId!,
-      editSelectedAssignee: cardData.assignee!,
-      editCardTitle: cardData.title,
-      editCardDescription: cardData.description,
-      editCardDueDate: cardData.dueDate,
-      editCardTags: cardData.tags,
-      editCardImageFile: cardData.imageFile,
-      editCardImageUrl: cardData.imageUrl,
-      fetchColumns,
-      resetEditCardForm,
-      dashboardId: String(dashboardId),
-      closeModal: () => states.setIsEditCardModalOpen(false),
-    });
-  };
-
   const { fetchColumns } = useFetchColumns(
     states.setColumns,
     states.setIsLoading
   );
   const handleLoad = async () => {
+    if (!dashboardId) return;
+
     try {
       const { members } = await getMember(1, Number(dashboardId));
       setMembers(members);
@@ -75,7 +59,25 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
   useEffect(() => {
     handleLoad();
   }, []);
-  //
+
+  const onSubmit = () => {
+    handleEditCardSubmit({
+      editCardId: cardData.cardId!,
+      editCardColumnId: cardData.columnId!,
+      editSelectedAssignee: cardData.assignee!,
+      editCardTitle: cardData.title,
+      editCardDescription: cardData.description,
+      editCardDueDate: cardData.dueDate,
+      editCardTags: cardData.tags,
+      editCardImageFile: cardData.imageFile,
+      editCardImageUrl: cardData.imageUrl,
+      fetchColumns,
+      resetEditCardForm,
+      dashboardId: Number(dashboardId),
+      closeModal: () => states.setIsEditCardModalOpen(false),
+    });
+  };
+
   return (
     <Modal
       ModalOpenButton={null}

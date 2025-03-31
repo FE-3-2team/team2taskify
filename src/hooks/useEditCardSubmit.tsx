@@ -14,7 +14,7 @@ interface Params {
   editCardImageUrl: string | null;
   fetchColumns: (pageId: number) => void;
   resetEditCardForm: () => void;
-  dashboardId: string;
+  dashboardId: number;
   closeModal: () => void;
 }
 
@@ -34,8 +34,6 @@ export const useEditCardSubmit = () => {
     dashboardId,
     closeModal,
   }: Params) => {
-    console.log("수정 시도");
-
     if (!editCardId) {
       console.error("editCardId is null");
       return;
