@@ -50,6 +50,12 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
       setMembers(members);
       const columnsData = await getColumns(Number(dashboardId));
       setColumns(columnsData);
+
+      // Assignee 지정
+      if (!cardData.assignee && members.length > 0) {
+        setEditedData({ assignee: members[0] });
+      }
+      
     } catch (err) {
       setMessage("카드 상세보기에 실패했습니다");
       setIsAlert(true);
@@ -77,6 +83,9 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
       closeModal: () => states.setIsEditCardModalOpen(false),
     });
   };
+
+  console.log("assignee in EditCardModal", assignee);
+
 
   return (
     <Modal

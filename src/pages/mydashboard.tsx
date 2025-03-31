@@ -82,6 +82,8 @@ export default function MyDashboard() {
         message={message}
       />
       <div className="flex flex-col py-6 px-6 tablet:py-10 tablet:px-10 gap-6 tablet:gap-12 laptop:gap-10 max-w-[1022px]">
+        
+        {/* 테스트 */}
         {/* <EditCardModal setIsCardEdit={setIsCardEdit} isCardEdit={isCardEdit} />
         <DetailContent
           cardId={10808}
@@ -89,8 +91,9 @@ export default function MyDashboard() {
           ModalOpenButton="테스트"
           setIsCardEdit={setIsCardEdit}
         >
-          <CardModal cardId={11808} columnId={46358} columnTitle="To Do" />
-        </DetailContent> */}
+        <CardModal cardId={11808} columnId={46358} columnTitle="To Do" />
+      </DetailContent>  */}
+       
         <div className="flex flex-col gap-4 laptop:gap-3">
           <div className="w-full grid gap-[10px] grid-cols-1 tablet:grid-cols-2  laptop:grid-cols-3">
             <div className="w-full h-full">
