@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import ColorChip from "../common/Chip/Color.chip";
-import { BaseInput } from "@/components/common/Input";
+import { BaseInput } from "@/components/common/Input/Input";
 
 interface Props {
   onChange: (titleValue: string, colorValue: string) => void;

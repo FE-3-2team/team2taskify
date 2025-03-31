@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
-import UnifiedInput from "../Input";
+import UnifiedInput from "@/components/common/Input/Input";
 import { CardData, INITIAL_CARD } from "./CardValues";
 import { uploadCardImage } from "@/api/column.api";
 //
