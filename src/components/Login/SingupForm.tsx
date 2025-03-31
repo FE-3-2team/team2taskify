@@ -8,7 +8,7 @@ import { useValidation } from "@/hooks/useValidation";
 import CheckBox from "@/assets/icons/CheckBox.svg";
 import UncheckBox from "@/assets/icons/UnCheckBox.svg";
 import { AlertModal } from "../ModalContents/AlertModal";
-import { signupApi } from "@/./api/auth";
+import { signupApi, loginApi } from "@/api/auth";
 import { useRouter } from "next/router";
 
 interface SignupFormProps {
@@ -56,19 +56,19 @@ export default function SignupForm({
     !confirmPasswordError &&
     terms;
 
-  // 회원가입 버튼 클릭 시 API 호출 후 모달 표시
   const handleSignup = async () => {
     if (!isFormValid) return;
     try {
       await signupApi(email, nickname, password);
+
+      const loginData = await loginApi(email, password);
+
       setIsModalOpen(true);
     } catch (error) {
-      console.error("회원가입 실패", error);
-      // 에러 처리는 필요에 따라 추가
+      console.error("회원가입 또는 로그인 실패", error);
     }
   };
 
-  // 모달의 onConfirm 함수: 모달 닫기 후 대쉬보드로 이동
   const handleModalConfirm = () => {
     setIsModalOpen(false);
     router.push("/mydashboard");
@@ -93,7 +93,6 @@ export default function SignupForm({
 
   const formSection = (
     <div className="flex flex-col w-full">
-      {/* 이메일 입력 */}
       <div>
         <UnifiedInput
           variant="email"
@@ -103,8 +102,6 @@ export default function SignupForm({
           onChange={setEmail}
         />
       </div>
-
-      {/* 닉네임 입력 */}
       <div className="mt-4">
         <UnifiedInput
           variant="title"
@@ -114,8 +111,6 @@ export default function SignupForm({
           onChange={setNickname}
         />
       </div>
-
-      {/* 비밀번호 입력 */}
       <div className="mt-4">
         <UnifiedInput
           variant="password"
@@ -125,8 +120,6 @@ export default function SignupForm({
           onChange={setPassword}
         />
       </div>
-
-      {/* 비밀번호 확인 입력 */}
       <div className="mt-4">
         <UnifiedInput
           variant="confirmPassword"
@@ -137,8 +130,6 @@ export default function SignupForm({
           compareWith={password}
         />
       </div>
-
-      {/* 이용약관 체크박스 */}
       <label htmlFor="terms" className="flex items-center cursor-pointer">
         <input
           type="checkbox"
