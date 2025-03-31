@@ -14,11 +14,11 @@ export default function CardValueForm({ editCardData, columnId }: Props) {
   const [cardData, setCardData] = useState<CardData>(
     editCardData ? editCardData : INITIAL_CARD
   );
-  const [initialCard, setInitialCard] = useState<CardData>(INITIAL_CARD);
   // const datePickerRef = useRef<any>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   //
 
+  console.log(cardData);
   const handleChangeImageFile = async (value: File) => {
     setImageFile(value);
   };

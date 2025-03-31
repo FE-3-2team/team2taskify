@@ -86,10 +86,10 @@ export default function MyDashboard() {
         <Test
           setIsCardEdit={setIsCardEdit}
           isCardEdit={isCardEdit}
-          cardId={10808}
+          cardId={11808}
         />
         <DetailContent
-          cardId={10808}
+          cardId={11808}
           cardTitle="부산으로 야반도주"
           ModalOpenButton="테스트"
           setIsCardEdit={setIsCardEdit}
