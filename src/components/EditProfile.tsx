@@ -303,7 +303,7 @@ const EditProfile = () => {
 
       <AlertModal
         isOpen={alertModalOpen}
-        message="프로필 사진이 변경되었습니다"
+        message="프로필이 변경되었습니다"
         onConfirm={() => setAlertModalOpen(false)}
       />
     </>
