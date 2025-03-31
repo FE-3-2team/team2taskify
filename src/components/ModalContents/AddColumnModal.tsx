@@ -47,7 +47,6 @@ const AddColumnModal = ({
           value={newColumnTitle}
           onChange={(e) => {
             setNewColumnTitle(e.target.value);
-            console.log("Current Column Title:", e.target.value);
           }}
         />
       </div>

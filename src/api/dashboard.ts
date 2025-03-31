@@ -3,7 +3,7 @@ import { instance } from "./instance";
 //
 
 type Props = {
-  dashboardId?: string;
+  dashboardId?: number;
 };
 
 //대시보드 생성
@@ -49,7 +49,7 @@ export async function getDashboardInfo(dashboardId: number) {
 }
 
 //대시보드 삭제
-export async function deleteDashboard(dashboardId: string) {
+export async function deleteDashboard(dashboardId: number) {
   try {
     const res = await instance.delete(`/dashboards/${dashboardId}`);
   } catch (error) {
