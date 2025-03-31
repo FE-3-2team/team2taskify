@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import "react-datepicker/dist/react-datepicker.css";
 import Header from "@/components/common/Header";
@@ -12,6 +12,7 @@ import EditCardModal from "@/components/ModalContents/EditCardModal";
 import { PlusIconButton } from "@/components/common/Button";
 import SortableColumn from "@/components/common/SortableColumn";
 import TodoCard from "@/components/common/TodoCard";
+import CardModal from "@/components/ModalContents/Card.modal";
 import useCardForm from "@/hooks/useCardForm";
 import useColumnForm from "@/hooks/useColumnForm";
 import { useFetchColumns } from "@/hooks/useFetchColumns";
@@ -35,6 +36,7 @@ import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { DetailContent } from "@/components/common/ModalPopup";
 
 export default function Dashboard() {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
@@ -183,6 +185,8 @@ export default function Dashboard() {
     setMembers: states.setMembers,
   });
 
+  useEffect(() => {}, [states.isCardDetailModalOpen, states.selectedCard]);
+
   return (
     <>
       <Header />
@@ -218,7 +222,13 @@ export default function Dashboard() {
                       states.setTargetColumnTitle(title);
                       states.setIsManageColumnModalOpen(true);
                     }}
-                    onEditCardClick={handleEditCardClick}
+                    onCardClick={(card) => {
+                      states.setSelectedCard(card);
+                      states.setTargetCardId(card.cardId);
+                      states.setTargetCardColumnId(column.id);
+                      states.setTargetCardColumnTitle(column.title);
+                      states.setIsCardDetailModalOpen(true);
+                    }}
                     activeCard={activeCard}
                   />
                 );
@@ -265,6 +275,23 @@ export default function Dashboard() {
             />
           </div>
         </div>
+
+        {states.isCardDetailModalOpen && states.selectedCard && (
+          <DetailContent
+            cardId={states.selectedCard.cardId}
+            cardTitle={states.selectedCard.title}
+            ModalOpenButton={null}
+            setIsCardEdit={states.setIsEditCardModalOpen}
+            isOpen={states.isCardDetailModalOpen}
+            setIsOpen={states.setIsCardDetailModalOpen}
+          >
+            <CardModal
+              cardId={states.selectedCard.cardId}
+              columnId={states.selectedCard.columnId}
+              columnTitle={states.targetCardColumnTitle}
+            />
+          </DetailContent>
+        )}
         <CreateCardModal
           isOpen={states.isCreateCardModalOpen}
           setIsOpen={states.setIsCreateCardModalOpen}
@@ -273,7 +300,6 @@ export default function Dashboard() {
           resetNewCardForm={resetNewCardForm}
           fetchColumns={fetchColumns}
         />
-
         {/*<EditCardModal
           isCardEdit={states.isEditCardModalOpen}
           setIsCardEdit={
@@ -287,7 +313,6 @@ export default function Dashboard() {
             }) as Dispatch<SetStateAction<boolean>>
           }
         />*/}
-
         <ManageColumnModal
           isOpen={states.isManageColumnModalOpen}
           setIsOpen={(open) => {

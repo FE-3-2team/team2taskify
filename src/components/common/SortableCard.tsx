@@ -43,7 +43,6 @@ export default function SortableCard({
       }}
       style={style}
       {...attributes}
-      {...listeners}
     >
       {isOver && !isDragging && <DropIndicator />}
 
@@ -51,6 +50,7 @@ export default function SortableCard({
         key={`${card.cardId}-${card.updatedAt}`}
         todoData={card}
         onClick={onClick}
+        listeners={listeners}
       />
     </div>
   );

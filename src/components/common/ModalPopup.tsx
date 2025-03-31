@@ -140,6 +140,8 @@ interface DetailContentProps {
   ModalOpenButton: ReactNode;
   cardId: number;
   setIsCardEdit: Dispatch<SetStateAction<boolean>>;
+  isOpen?: boolean;
+  setIsOpen?: (value: boolean) => void;
 }
 export function DetailContent({
   cardTitle,
@@ -147,19 +149,30 @@ export function DetailContent({
   ModalOpenButton,
   cardId,
   setIsCardEdit,
+  isOpen,
+  setIsOpen,
 }: DetailContentProps) {
-  const { isOpen, ref, setIsOpen } = useAutoClose(false);
+  const {
+    isOpen: internalIsOpen,
+    ref,
+    setIsOpen: internalSetIsOpen,
+  } = useAutoClose(false);
+
+  const modalIsOpen = isOpen !== undefined ? isOpen : internalIsOpen;
+  const modalSetIsOpen = setIsOpen ?? internalSetIsOpen;
+
   const handleButtonClick = () => {
-    setIsOpen(true);
+    modalSetIsOpen(true);
   };
 
   const handleCardDelete = async () => {
     await deleteCard(cardId);
-    setIsOpen(false);
+    modalSetIsOpen(false);
   };
   const handleEdit = () => {
-    setIsOpen(false);
+    modalSetIsOpen(false);
   };
+
   return (
     <>
       {isOpen && (
@@ -181,7 +194,7 @@ export function DetailContent({
                       setIsCardEdit(true);
                     }}
                   />
-                  <button onClick={() => setIsOpen(false)}>
+                  <button onClick={() => modalSetIsOpen(false)}>
                     <Image src={X} width={32} height={32} alt="X" />
                   </button>
                 </div>
