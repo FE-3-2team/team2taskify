@@ -1,47 +1,158 @@
+import { Dispatch, SetStateAction, useState } from "react";
 import { useRouter } from "next/router";
 import "react-datepicker/dist/react-datepicker.css";
-import Column from "@/components/common/Column";
 import Header from "@/components/common/Header";
 import { SkeletonColumn } from "@/components/common/Skeleton/Skeleton";
 import { createColumn, updateColumn, deleteColumn } from "@/api/column.api";
+import { moveCardToColumn } from "@/api/card.api";
 import CreateCardModal from "@/components/ModalContents/CreateCardModal";
 import ManageColumnModal from "@/components/ModalContents/ManageColumnModal";
 import AddColumnModal from "@/components/ModalContents/AddColumnModal";
+import EditCardModal from "@/components/ModalContents/EditCardModal";
+import { PlusIconButton } from "@/components/common/Button";
+import SortableColumn from "@/components/common/SortableColumn";
+import TodoCard from "@/components/common/TodoCard";
 import useCardForm from "@/hooks/useCardForm";
 import useColumnForm from "@/hooks/useColumnForm";
-import EditCardModal from "@/components/ModalContents/EditCardModal";
 import { useFetchColumns } from "@/hooks/useFetchColumns";
 import useEditCardForm from "@/hooks/useEditCard";
 import { useEditCardSubmit } from "@/hooks/useEditCardSubmit";
 import { useHandleEditCardClick } from "@/hooks/useHandleEditCardClick";
 import useDashboardStates from "@/hooks/useDashboardStates";
 import { useInitializeDashboard } from "@/hooks/useInitializeDashboard";
-import { PlusIconButton } from "@/components/common/Button";
+import {
+  DndContext,
+  closestCenter,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  DragStartEvent,
+  DragEndEvent,
+  DragOverlay,
+  useDndMonitor,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  horizontalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 export default function Dashboard() {
+  const [activeCard, setActiveCard] = useState<Card | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isOver, setIsOver] = useState(false);
+
   const router = useRouter();
   const { dashboardId } = router.query;
   const states = useDashboardStates();
 
   const { resetNewCardForm } = useCardForm();
-
   const { cardData, setEditedData, resetEditCardForm } = useEditCardForm();
-
   const { handleEditCardClick } = useHandleEditCardClick({
     setIsEditCardModalOpen: states.setIsEditCardModalOpen,
     setEditedData,
   });
-
   const { newColumnTitle, setNewColumnTitle, resetNewColumnForm } =
     useColumnForm();
-
   const { fetchColumns } = useFetchColumns(
     states.setColumns,
     states.setIsLoading
   );
+  const { handleEditCardSubmit } = useEditCardSubmit();
+
+  const sensors = useSensors(useSensor(PointerSensor));
+  const columnIds = states.columns.map((col) => col.id);
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    if (active.data?.current?.card) {
+      setActiveCard(active.data.current.card);
+      setIsDragging(true);
+    }
+  };
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    setIsDragging(false);
+    setActiveCard(null);
+
+    if (!over || active.id === over.id) return;
+
+    const activeCardId = active.id;
+    const overCardId = over.id;
+
+    const sourceColumn = states.columns.find((column) =>
+      column.cards.some((card) => card.cardId === activeCardId)
+    );
+
+    const targetColumn = states.columns.find((column) =>
+      column.cards.some((card) => card.cardId === overCardId)
+    );
+
+    if (!sourceColumn || !targetColumn) return;
+
+    const activeCard = sourceColumn.cards.find(
+      (card) => card.cardId === activeCardId
+    );
+    if (!activeCard) return;
+
+    if (sourceColumn.id === targetColumn.id) {
+      const updatedCards = [...sourceColumn.cards];
+      const oldIndex = updatedCards.findIndex(
+        (card) => card.cardId === activeCardId
+      );
+      const newIndex = updatedCards.findIndex(
+        (card) => card.cardId === overCardId
+      );
+
+      updatedCards.splice(oldIndex, 1);
+      updatedCards.splice(newIndex, 0, activeCard);
+
+      const newColumns = states.columns.map((col) =>
+        col.id === sourceColumn.id ? { ...col, cards: updatedCards } : col
+      );
+
+      states.setColumns(newColumns);
+    } else {
+      const sourceCards = [...sourceColumn.cards];
+      const targetCards = [...targetColumn.cards];
+
+      const newSourceCards = sourceCards.filter(
+        (card) => card.cardId !== activeCardId
+      );
+
+      const overIndex = targetCards.findIndex(
+        (card) => card.cardId === overCardId
+      );
+
+      const newTargetCards = [...targetCards];
+      newTargetCards.splice(overIndex, 0, activeCard);
+
+      const newColumns = states.columns.map((col) => {
+        if (col.id === sourceColumn.id) {
+          return { ...col, cards: newSourceCards };
+        }
+        if (col.id === targetColumn.id) {
+          return { ...col, cards: newTargetCards };
+        }
+        return col;
+      });
+
+      states.setColumns(newColumns);
+
+      try {
+        await moveCardToColumn({
+          cardId: activeCard.cardId,
+          columnId: targetColumn.id,
+        });
+      } catch (err) {
+        console.error("❌ 카드 칼럼 이동 실패", err);
+      }
+    }
+  };
 
   const handleCreateColumn = async () => {
-    if (!dashboardId || typeof dashboardId !== "string") {
+    if (!dashboardId || isNaN(Number(dashboardId))) {
       return;
     }
 
@@ -65,10 +176,9 @@ export default function Dashboard() {
     }
   };
 
-  const { handleEditCardSubmit } = useEditCardSubmit();
-
   useInitializeDashboard({
-    dashboardId,
+    dashboardId:
+      typeof dashboardId === "string" ? Number(dashboardId) : undefined,
     fetchColumns,
     setMembers: states.setMembers,
   });
@@ -77,34 +187,58 @@ export default function Dashboard() {
     <>
       <Header />
       <div className="flex desktop:flex-row flex-col desktop:items-start items-center tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)] w-full desktop:overflow-x-auto">
-        {states.isLoading ? (
-          <>
-            <SkeletonColumn />
-            <SkeletonColumn />
-            <SkeletonColumn />
-          </>
-        ) : (
-          states.columns.map((column: any) => {
-            return (
-              <Column
-                key={column.id}
-                title={column.title}
-                cards={column.cards ?? []}
-                columnId={column.id}
-                onAddCardClick={(columnId) => {
-                  states.setTargetColumnId(columnId);
-                  states.setIsCreateCardModalOpen(true);
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={columnIds}
+            strategy={horizontalListSortingStrategy}
+          >
+            {states.isLoading ? (
+              <>
+                <SkeletonColumn />
+                <SkeletonColumn />
+                <SkeletonColumn />
+              </>
+            ) : (
+              states.columns.map((column: any) => {
+                return (
+                  <SortableColumn
+                    key={column.id}
+                    column={column}
+                    onAddCardClick={(columnId) => {
+                      states.setTargetColumnId(columnId);
+                      states.setIsCreateCardModalOpen(true);
+                    }}
+                    onManageColumnClick={(columnId, title) => {
+                      states.setTargetColumnId(columnId);
+                      states.setTargetColumnTitle(title);
+                      states.setIsManageColumnModalOpen(true);
+                    }}
+                    onEditCardClick={handleEditCardClick}
+                    activeCard={activeCard}
+                  />
+                );
+              })
+            )}
+          </SortableContext>
+
+          <DragOverlay>
+            {activeCard && (
+              <div
+                style={{
+                  opacity: isDragging ? 0.5 : 1,
+                  border: isOver ? "2px dashed #aaa" : "none",
                 }}
-                onManageColumnClick={(columnId, title) => {
-                  states.setTargetColumnId(columnId);
-                  states.setTargetColumnTitle(title);
-                  states.setIsManageColumnModalOpen(true);
-                }}
-                onEditCardClick={handleEditCardClick}
-              />
-            );
-          })
-        )}
+              >
+                <TodoCard todoData={activeCard} onClick={() => {}} />
+              </div>
+            )}
+          </DragOverlay>
+        </DndContext>
         <div className="w-[308px] h-full bg-gray-100 px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center">
           <div className="desktop:w-[314px] tablet:w-[544px] w-[284px] tablet:h-[70px] h-[66px] mt-[46px]">
             <AddColumnModal
@@ -121,7 +255,9 @@ export default function Dashboard() {
               }}
               newColumnTitle={newColumnTitle}
               setNewColumnTitle={setNewColumnTitle}
-              onCreateColumn={handleCreateColumn}
+              onCreateColumn={() => {
+                handleCreateColumn();
+              }}
               onCancel={() => {
                 states.setModalContentType(null);
                 resetNewColumnForm();
@@ -138,38 +274,19 @@ export default function Dashboard() {
           fetchColumns={fetchColumns}
         />
 
-        {/* <EditCardModal
-          isOpen={states.isEditCardModalOpen}
-          setIsOpen={(open) => {
-            states.setIsEditCardModalOpen(open);
-            if (!open) resetEditCardForm();
-          }}
-          onSubmit={() =>
-            handleEditCardSubmit({
-              editCardId: cardData.cardId!,
-              editCardColumnId: cardData.columnId!,
-              editSelectedAssignee: cardData.assignee!,
-              editCardTitle: cardData.title,
-              editCardDescription: cardData.description,
-              editCardDueDate: cardData.dueDate,
-              editCardTags: cardData.tags,
-              editCardImageFile: cardData.imageFile,
-              editCardImageUrl: cardData.imageUrl,
-              fetchColumns,
-              resetEditCardForm,
-              dashboardId: String(dashboardId),
-              closeModal: () => states.setIsEditCardModalOpen(false),
-            })
+        {/*<EditCardModal
+          isCardEdit={states.isEditCardModalOpen}
+          setIsCardEdit={
+            ((open: boolean | ((prev: boolean) => boolean)) => {
+              const value =
+                typeof open === "function"
+                  ? open(states.isEditCardModalOpen)
+                  : open;
+              states.setIsEditCardModalOpen(value);
+              if (!value) resetEditCardForm();
+            }) as Dispatch<SetStateAction<boolean>>
           }
-          onCancel={() => {
-            states.setIsEditCardModalOpen(false);
-            resetEditCardForm();
-          }}
-          cardData={cardData}
-          setEditedData={setEditedData}
-          members={states.members}
-          columns={states.columns}
-        /> */}
+        />*/}
 
         <ManageColumnModal
           isOpen={states.isManageColumnModalOpen}
@@ -189,7 +306,7 @@ export default function Dashboard() {
                 title: states.targetColumnTitle,
               });
               states.setIsManageColumnModalOpen(false);
-              fetchColumns(String(dashboardId));
+              fetchColumns(Number(dashboardId));
               alert(
                 `컬럼 (${states.targetColumnId}) 이름을 '${states.targetColumnTitle}'로 변경`
               );
@@ -203,7 +320,7 @@ export default function Dashboard() {
             try {
               await deleteColumn(states.targetColumnId!);
               states.setIsManageColumnModalOpen(false);
-              fetchColumns(String(dashboardId));
+              fetchColumns(Number(dashboardId));
               alert(`컬럼(${states.targetColumnId}) 삭제`);
             } catch (err) {
               console.error(err);

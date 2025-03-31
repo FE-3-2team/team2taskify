@@ -7,7 +7,7 @@ import { AlertModal } from "./ModalContents/AlertModal";
 
 interface Props {
   title: string;
-  dashboardId: string;
+  dashboardId: number;
 }
 interface dashboardDataType extends Props {
   color: string;
@@ -19,7 +19,7 @@ export default function EditDashboard({ title, dashboardId }: Props) {
   const [message, setMessage] = useState("");
   const [isAlert, setIsAlert] = useState(false);
   const [dashboardData, setDashboardData] = useState({
-    dashboardId: "",
+    dashboardId: 0,
     title: "",
     color: "",
   });

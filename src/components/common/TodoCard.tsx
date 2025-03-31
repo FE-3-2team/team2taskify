@@ -53,7 +53,9 @@ const TodoCard: React.FC<TodoCardProps> = ({
                   />
                 </div>
                 <p className="text-xs-medium text-gray-787486">
-                  {todoData.dueDate}
+                  {todoData.dueDate
+                    ? new Date(todoData.dueDate).toLocaleDateString()
+                    : ""}
                 </p>
               </div>
             </div>

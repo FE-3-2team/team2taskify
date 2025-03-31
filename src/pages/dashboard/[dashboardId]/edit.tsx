@@ -35,7 +35,7 @@ export default function EditPage() {
     }));
   };
   const DashBoardDelete = async () => {
-    await deleteDashboard(dashboardId as string);
+    await deleteDashboard(Number(dashboardId));
     router.push("/mydashboard");
   };
 
@@ -55,7 +55,7 @@ export default function EditPage() {
             <div className="flex flex-col gap-4">
               <EditDashboard
                 title={dashboardInfo.title}
-                dashboardId={router.query.dashboardId as string}
+                dashboardId={Number(router.query.dashboardId)}
               ></EditDashboard>
               <EditMember dashboardId={dashboardId as string} />
               <InvitationHistory />
