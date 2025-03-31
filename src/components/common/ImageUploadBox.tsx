@@ -1,10 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import PlusIcon from "@/assets/icons/Plus.icon.svg";
 import { uploadCardImage } from "@/api/column.api";
 
 interface Props {
-  imageUrl: string | null;
+  imageUrl: string;
   columnId: number;
   onChangeImage: (value: string) => void;
 }
@@ -16,11 +16,14 @@ export default function ImageUploadBox({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState(imageUrl);
 
+  useEffect(() => {
+    onChangeImage(previewUrl);
+  }, [previewUrl]);
   const handleClick = () => {
     if (!previewUrl) {
       fileInputRef.current?.click();
     } else {
-      setPreviewUrl(null);
+      setPreviewUrl("");
       onChangeImage("");
     }
   };

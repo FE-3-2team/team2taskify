@@ -71,7 +71,7 @@ export async function updateCard({ cardId, cardData }: Props) {
   const formattedDate = useFormatTime(dueDate);
   const res = await instance.put(`/cards/${cardId}`, {
     columnId,
-    assignee: assignee.id,
+    assignee: assignee.userId,
     title,
     description,
     dueDate: formattedDate,

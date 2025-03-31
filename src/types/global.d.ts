@@ -37,10 +37,11 @@ declare global {
     title: string;
     description: string;
     tags: string[];
-    dueDate: Date | null;
+    dueDate: string;
     assignee: Assignee | null;
     imageUrl: string | null;
     columnId: number;
+    updatedAt?: string;
   }
 
   interface CardComment {

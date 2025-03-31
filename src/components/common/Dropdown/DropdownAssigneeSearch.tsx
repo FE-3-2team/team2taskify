@@ -5,7 +5,7 @@ import DownIcon from "@/assets/icons/TriangleDown.icon.svg";
 import Profile from "../Profile";
 
 interface DropdownAssigneeSearchProps {
-  assignee?: Assignee | null;
+  assignee: Assignee;
   assignees: Assignee[];
   onSelect: (assignee: Assignee) => void;
 }
@@ -27,6 +27,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
     : assignees;
 
   useEffect(() => {
+    onSelect(selected);
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -39,7 +40,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [selected]);
 
   return (
     <div className="w-full ">
@@ -82,7 +83,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
         {isOpen && filteredAssignees.length > 0 && (
           <div className="absolute left-0 w-full mt-[2px] bg-white border border-gray-300 rounded-md shadow-md top-full z-50 max-h-[240px] overflow-y-auto">
             {filteredAssignees.map((item) => {
-              const isSelected = assignee?.id === item.id;
+              const isSelected = selected.id === item.id;
 
               return (
                 <button
@@ -91,7 +92,6 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
                   onClick={() => {
                     setIsOpen(false);
                     setSearchTerm("");
-                    onSelect(item);
                     setSelected(item);
                   }}
                 >

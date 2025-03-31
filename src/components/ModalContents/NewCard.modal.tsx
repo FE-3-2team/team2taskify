@@ -42,7 +42,9 @@ export default function CreateCard({ columnId }: Props) {
       setIsAlert(true);
     }
   };
-
+  const handleChangeAssignee = (value: Assignee) => {
+    setCardData((prev) => ({ ...prev, assignee: value }));
+  };
   return (
     <Modal
       ModalOpenButton={<div>카드만들기</div>}
@@ -52,10 +54,9 @@ export default function CreateCard({ columnId }: Props) {
       <div className="flex flex-col w-full gap-6 tablet:gap-8">
         <h2 className="tablet:text-2xl-bold text-xl-bold">할 일 생성</h2>
         <DropdownAssigneeSearch
+          assignee={cardData.assignee}
           assignees={members}
-          onSelect={(value) => {
-            setCardData((prev) => ({ ...prev, assignee: value }));
-          }}
+          onSelect={(value) => handleChangeAssignee(value)}
         />
         <CardValueForm
           onChange={(value) => {

@@ -11,6 +11,10 @@ export default function TagInput({ tags, onChange }: props) {
   const [inputValue, setInputValue] = useState("");
   const [isError, setIsError] = useState(false);
 
+  useEffect(() => {
+    onChange(currentTags);
+  }, [currentTags]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.isComposing) return;
     const trimmedValue = inputValue.trim();
@@ -25,7 +29,6 @@ export default function TagInput({ tags, onChange }: props) {
       e.preventDefault();
       setCurrentTags((prev) => [...prev, inputValue]);
       setInputValue("");
-      onChange(currentTags);
     }
   };
 

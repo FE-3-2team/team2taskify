@@ -69,7 +69,7 @@ export default function CardValueForm({
       <ImageUploadBox
         columnId={columnId}
         imageUrl={cardData.imageUrl}
-        onChangeImage={(value) => handleChangeEdit("profileImageUrl", value)}
+        onChangeImage={(value) => handleChangeEdit("imageUrl", value)}
       />
     </div>
   );
