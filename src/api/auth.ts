@@ -12,7 +12,6 @@ export async function loginApi(email: string, password: string) {
     if (res.status === 201) {
       useAuthStore.setState({
         isLoggedIn: true,
-        userId: res.data.user.id,
         userNickname: res.data.user.nickname,
         profileImageUrl: res.data.user.profileImageUrl,
         dashboardId: null,
@@ -48,7 +47,10 @@ export async function signupApi(
   }
 }
 
-export async function changePasswordApi(currentPassword: string, newPassword: string) {
+export async function changePasswordApi(
+  currentPassword: string,
+  newPassword: string
+) {
   try {
     const res = await instance.put(
       `/auth/password`,

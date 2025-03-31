@@ -142,6 +142,7 @@ const defaultMaxLengths: Record<InputVariant, number> = {
   comment: 300,
   date: 0,
   confirmPassword: 15,
+  column: 8,
 };
 
 const UnifiedInput: FC<UnifiedInputProps> = ({
