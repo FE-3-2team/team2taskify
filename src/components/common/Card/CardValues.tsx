@@ -1,6 +1,6 @@
 //types
 export interface CardData {
-  assigneeUserId: number;
+  assignee: Assignee;
   dashboardId?: number;
   columnId: number;
   title: string;
@@ -15,7 +15,11 @@ export interface CardSubmitData extends CardData {
 }
 //initialValues
 export const INITIAL_CARD = {
-  assigneeUserId: 0,
+  assignee: {
+    id: 0,
+    nickname: "",
+    profileImageUrl: "",
+  },
   dashboardId: 0,
   columnId: 0,
   title: "",

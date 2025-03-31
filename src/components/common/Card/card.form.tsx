@@ -3,6 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
 import UnifiedInput from "../Input";
 import { CardData, INITIAL_CARD } from "./CardValues";
+import { uploadCardImage } from "@/api/column.api";
 //
 
 interface Props {
@@ -14,13 +15,10 @@ export default function CardValueForm({ editCardData, columnId }: Props) {
   const [cardData, setCardData] = useState<CardData>(
     editCardData ? editCardData : INITIAL_CARD
   );
-  // const datePickerRef = useRef<any>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  //
 
-  console.log(cardData);
-  const handleChangeImageFile = async (value: File) => {
-    setImageFile(value);
+  const handleChangeImageFile = async (imageFile: File) => {
+    const imageUrl = await uploadCardImage({ columnId, imageFile });
+    setCardData((prev) => ({ ...prev, profileImageUrl: imageUrl }));
   };
   const handleChangeEdit = (key: string, value: any) => {
     setCardData((prev) => ({ ...prev, [key]: value }));
@@ -30,19 +28,26 @@ export default function CardValueForm({ editCardData, columnId }: Props) {
     <div className="w-full h-fit py-[24px] gap-[24px] flex flex-col ">
       <UnifiedInput
         label="제목"
-        // validate={(cardData.title, "title")}
         placeholder="제목을 입력해 주세요"
         variant="title"
         value={cardData.title}
         onChange={(value) => handleChangeEdit("title", value)}
       />
-      <UnifiedInput
-        label="설명"
-        placeholder="설명을 입력해주세요"
-        variant="title"
-        value={cardData.description}
-        onChange={(value) => handleChangeEdit("description", value)}
-      />
+      <div className="w-full">
+        <label>설명</label>
+        <span
+          className={cardData.description ? "text-violet-700" : "text-gray-700"}
+        >
+          *
+        </span>
+        <input
+          type="textarea"
+          placeholder="설명을 입력해주세요"
+          value={cardData.description}
+          onChange={(value) => handleChangeEdit("description", value)}
+          className="h-[126px] w-full"
+        />
+      </div>
       <UnifiedInput
         label="마감일"
         placeholder="날짜를 선택해 주세요."
@@ -51,9 +56,10 @@ export default function CardValueForm({ editCardData, columnId }: Props) {
         onChange={(value) => handleChangeEdit("dueDate", value)}
       />
       <ImageUploadBox
-        imageFile={imageFile}
         imageUrl={cardData.imageUrl}
-        onChangeImage={handleChangeImageFile}
+        onChangeImage={(file) => {
+          handleChangeImageFile(file);
+        }}
       />
     </div>
   );

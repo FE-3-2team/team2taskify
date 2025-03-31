@@ -28,7 +28,6 @@ declare global {
   }
   interface Assignee {
     id: number;
-    userId: number;
     profileImageUrl: string | null;
     nickname: string;
   }
