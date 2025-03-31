@@ -47,6 +47,11 @@ export default function MyDashboard() {
     }
   };
   const plusDashboard = async () => {
+    if (newTitle.trim() === "") {
+      setMessage("대시보드 이름을 입력해주세요");
+      setIsAlert(true);
+      return;
+    }
     try {
       const createdDashboard = await createDashboard(newTitle, newColor);
       router.push(`/dashboard/${createdDashboard.id}`);
