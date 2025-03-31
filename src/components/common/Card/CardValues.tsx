@@ -16,6 +16,7 @@ export const INITIAL_CARD = {
     id: 0,
     nickname: "",
     profileImageUrl: "",
+    userId: 0,
   },
   dashboardId: 0,
   columnId: 0,

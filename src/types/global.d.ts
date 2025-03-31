@@ -30,6 +30,7 @@ declare global {
     id: number;
     profileImageUrl: string | null;
     nickname: string;
+    userId: number;
   }
   interface Card {
     cardId: number;

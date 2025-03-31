@@ -42,12 +42,13 @@ export async function createCard({
   cardData,
 }: CreateCardProps) {
   const { assignee, title, description, dueDate, tags, imageUrl } = cardData;
+  console.log(cardData);
   const formattedDate = useFormatTime(dueDate);
   const filteredImg = imageUrl === "" ? DEFAULT_IMG : imageUrl;
   const res = await instance.post("/cards", {
     dashboardId,
     columnId,
-    assigneeUserId: assignee.id,
+    assigneeUserId: assignee.userId,
     title,
     description,
     dueDate: formattedDate,
