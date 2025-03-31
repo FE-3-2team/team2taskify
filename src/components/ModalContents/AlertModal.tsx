@@ -13,7 +13,7 @@ export function AlertModal({ isOpen, message, onConfirm }: AlertModalProps) {
     if (isOpen) {
       timer = setTimeout(() => {
         onConfirm();
-      }, 3000);
+      }, 2000);
     }
     return () => {
       if (timer) clearTimeout(timer);
