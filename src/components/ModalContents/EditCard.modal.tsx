@@ -24,7 +24,7 @@ export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
   const [columns, setColumns] = useState<Column[]>([]);
   const [isAlert, setIsAlert] = useState(false);
   const [message, setMessage] = useState("");
-  //수정에는 대시보드 아이디가 필요없음
+
   useEffect(() => {
     handleLoad();
   }, []);

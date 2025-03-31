@@ -5,7 +5,7 @@ import DownIcon from "@/assets/icons/TriangleDown.icon.svg";
 import Profile from "../Profile";
 
 interface DropdownAssigneeSearchProps {
-  assignee: Assignee | null;
+  assignee?: Assignee | null;
   assignees: Assignee[];
   onSelect: (assignee: Assignee) => void;
 }
