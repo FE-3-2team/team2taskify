@@ -10,6 +10,7 @@ import { AlertModal } from "./AlertModal";
 import { getCardDetail } from "@/api/card.api";
 import { CardData, INITIAL_CARD } from "../common/Card/CardValues";
 import CardValueForm from "../common/Card/card.form";
+import DropdownAssigneeSearch from "../common/Dropdown/DropdownAssigneeSearch";
 
 interface Props {
   setIsCardEdit: Dispatch<SetStateAction<boolean>>;
@@ -44,7 +45,6 @@ export default function Test({ setIsCardEdit, isCardEdit, cardId }: Props) {
       setIsAlert(true);
     }
   };
-
   const handleEditSubmit = async () => {};
   return (
     <Modal
@@ -59,7 +59,7 @@ export default function Test({ setIsCardEdit, isCardEdit, cardId }: Props) {
           할 일 수정
         </h2>
 
-        <div className="w-full mb-[16px]">
+        <div className="w-full flex flex-col tablet:flex-row mb-[16px] tablet:pr-[54px] gap-[32px]">
           <DropdownProgress
             selectedTitle={
               columns.find((col) => col.id === cardData.columnId)?.title ?? ""
@@ -70,6 +70,13 @@ export default function Test({ setIsCardEdit, isCardEdit, cardId }: Props) {
               if (selected) {
                 setCardData((prev) => ({ ...prev, columnId: selected.id }));
               }
+            }}
+          />
+          <DropdownAssigneeSearch
+            assignee={cardData.assignee}
+            assignees={members}
+            onSelect={(value) => {
+              setCardData((prev) => ({ ...prev, assignee: value }));
             }}
           />
         </div>
