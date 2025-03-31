@@ -1,35 +1,40 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import PlusIcon from "@/assets/icons/Plus.icon.svg";
+import { uploadCardImage } from "@/api/column.api";
 
+interface Props {
+  imageUrl: string | null;
+  columnId: number;
+  onChangeImage: (value: string) => void;
+}
 export default function ImageUploadBox({
   imageUrl,
   onChangeImage,
-}: {
-  imageUrl: string | null;
-  onChangeImage: (file: File) => void;
-}) {
+  columnId,
+}: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  useEffect(() => {
-    if (imageFile) {
-      const objectUrl = URL.createObjectURL(imageFile);
-      setPreviewUrl(objectUrl);
-      onChangeImage(imageFile);
-      return () => URL.revokeObjectURL(objectUrl);
-    } else if (imageUrl) {
-      setPreviewUrl(imageUrl);
-    }
-  }, [imageFile, imageUrl]);
+  const [previewUrl, setPreviewUrl] = useState(imageUrl);
 
   const handleClick = () => {
-    fileInputRef.current?.click();
+    if (!previewUrl) {
+      fileInputRef.current?.click();
+    } else {
+      setPreviewUrl(null);
+      onChangeImage("");
+    }
+  };
+
+  const handleChangeImageFile = async (imageFile: File) => {
+    const imageUrl = await uploadCardImage({ columnId, imageFile });
+    onChangeImage(imageUrl);
+    setPreviewUrl(imageUrl);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
-      setImageFile(e.target.files[0]);
+      const file = e.target.files[0];
+      handleChangeImageFile(file);
     }
   };
 
