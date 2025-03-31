@@ -15,6 +15,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
   assignees,
   onSelect,
 }) => {
+  const [selected, setSelected] = useState(assignee);
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -52,11 +53,11 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
           }}
         >
           {/* 조건: 드롭다운 닫힘 + assignee 존재 → 프로필 + 이름 + 아이콘 */}
-          {!isOpen && assignee?.id && assignee?.nickname ? (
+          {!isOpen && selected ? (
             <div className="flex items-center justify-between w-full">
               <Profile
-                nickname={assignee.nickname}
-                profileImageUrl={assignee.profileImageUrl}
+                nickname={selected.nickname}
+                profileImageUrl={selected.profileImageUrl}
                 type="assignee"
               />
               <Image
@@ -91,6 +92,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
                     setIsOpen(false);
                     setSearchTerm("");
                     onSelect(item);
+                    setSelected(item);
                   }}
                 >
                   <div className="w-[16px]">
