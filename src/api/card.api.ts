@@ -85,3 +85,18 @@ export async function updateCard({
     throw new Error("카드 수정 실패");
   }
 }
+
+export async function moveCardToColumn({
+  cardId,
+  columnId,
+}: {
+  cardId: number;
+  columnId: number;
+}) {
+  try {
+    const res = await instance.put(`/cards/${cardId}`, { columnId });
+    return res.data;
+  } catch (err) {
+    throw new Error("카드 칼럼 이동 실패");
+  }
+}

@@ -4,21 +4,22 @@ import "react-datepicker/dist/react-datepicker.css";
 import Header from "@/components/common/Header";
 import { SkeletonColumn } from "@/components/common/Skeleton/Skeleton";
 import { createColumn, updateColumn, deleteColumn } from "@/api/column.api";
+import { moveCardToColumn } from "@/api/card.api";
 import CreateCardModal from "@/components/ModalContents/CreateCardModal";
 import ManageColumnModal from "@/components/ModalContents/ManageColumnModal";
 import AddColumnModal from "@/components/ModalContents/AddColumnModal";
+import EditCardModal from "@/components/ModalContents/EditCardModal";
+import { PlusIconButton } from "@/components/common/Button";
+import SortableColumn from "@/components/common/SortableColumn";
+import TodoCard from "@/components/common/TodoCard";
 import useCardForm from "@/hooks/useCardForm";
 import useColumnForm from "@/hooks/useColumnForm";
-import EditCardModal from "@/components/ModalContents/EditCardModal";
 import { useFetchColumns } from "@/hooks/useFetchColumns";
 import useEditCardForm from "@/hooks/useEditCard";
 import { useEditCardSubmit } from "@/hooks/useEditCardSubmit";
 import { useHandleEditCardClick } from "@/hooks/useHandleEditCardClick";
 import useDashboardStates from "@/hooks/useDashboardStates";
 import { useInitializeDashboard } from "@/hooks/useInitializeDashboard";
-import { PlusIconButton } from "@/components/common/Button";
-import SortableColumn from "@/components/common/SortableColumn";
-import TodoCard from "@/components/common/TodoCard";
 import {
   DndContext,
   closestCenter,
@@ -44,22 +45,36 @@ export default function Dashboard() {
   const { dashboardId } = router.query;
   const states = useDashboardStates();
 
+  const { resetNewCardForm } = useCardForm();
+  const { cardData, setEditedData, resetEditCardForm } = useEditCardForm();
+  const { handleEditCardClick } = useHandleEditCardClick({
+    setIsEditCardModalOpen: states.setIsEditCardModalOpen,
+    setEditedData,
+  });
+  const { newColumnTitle, setNewColumnTitle, resetNewColumnForm } =
+    useColumnForm();
+  const { fetchColumns } = useFetchColumns(
+    states.setColumns,
+    states.setIsLoading
+  );
+  const { handleEditCardSubmit } = useEditCardSubmit();
+
   const sensors = useSensors(useSensor(PointerSensor));
   const columnIds = states.columns.map((col) => col.id);
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     if (active.data?.current?.card) {
-      setActiveCard(active.data.current.card); // card는 드래그 시작 시 넘긴 데이터
+      setActiveCard(active.data.current.card);
       setIsDragging(true);
     }
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
     setIsDragging(false);
     setActiveCard(null);
-
-    const { active, over } = event;
 
     if (!over || active.id === over.id) return;
 
@@ -124,25 +139,17 @@ export default function Dashboard() {
       });
 
       states.setColumns(newColumns);
+
+      try {
+        await moveCardToColumn({
+          cardId: activeCard.cardId,
+          columnId: targetColumn.id,
+        });
+      } catch (err) {
+        console.error("❌ 카드 칼럼 이동 실패", err);
+      }
     }
   };
-
-  const { resetNewCardForm } = useCardForm();
-
-  const { cardData, setEditedData, resetEditCardForm } = useEditCardForm();
-
-  const { handleEditCardClick } = useHandleEditCardClick({
-    setIsEditCardModalOpen: states.setIsEditCardModalOpen,
-    setEditedData,
-  });
-
-  const { newColumnTitle, setNewColumnTitle, resetNewColumnForm } =
-    useColumnForm();
-
-  const { fetchColumns } = useFetchColumns(
-    states.setColumns,
-    states.setIsLoading
-  );
 
   const handleCreateColumn = async () => {
     if (!dashboardId || isNaN(Number(dashboardId))) {
@@ -168,8 +175,6 @@ export default function Dashboard() {
       console.error("컬럼 생성 실패", err);
     }
   };
-
-  const { handleEditCardSubmit } = useEditCardSubmit();
 
   useInitializeDashboard({
     dashboardId:
