@@ -1,6 +1,7 @@
 import { CardData } from "@/components/common/Card/CardValues";
 import { instance } from "./instance";
 import { useFormatTime } from "@/hooks/useFormatDate";
+const DEFAULT_IMG = process.env.NEXT_PUBLIC_DEFAULT_IMG;
 //카드 상세 조회
 export async function getCardDetail(cardId: number) {
   try {
@@ -42,7 +43,7 @@ export async function createCard({
 }: CreateCardProps) {
   const { assignee, title, description, dueDate, tags, imageUrl } = cardData;
   const formattedDate = useFormatTime(dueDate);
-
+  const filteredImg = imageUrl === "" ? DEFAULT_IMG : imageUrl;
   const res = await instance.post("/cards", {
     dashboardId,
     columnId,
@@ -51,11 +52,12 @@ export async function createCard({
     description,
     dueDate: formattedDate,
     tags,
-    imageUrl,
+    imageUrl: filteredImg,
   });
   return res.data;
 }
 
+//카드 수정
 interface Props {
   cardId: number;
   cardData: CardData;
@@ -63,9 +65,9 @@ interface Props {
 export async function updateCard({ cardId, cardData }: Props) {
   const { columnId, assignee, title, description, dueDate, tags, imageUrl } =
     cardData;
-  console.log(dueDate);
+  const filteredImg = imageUrl === "" ? DEFAULT_IMG : imageUrl;
+
   const formattedDate = useFormatTime(dueDate);
-  console.log(formattedDate);
   const res = await instance.put(`/cards/${cardId}`, {
     columnId,
     assignee: assignee.id,
@@ -73,7 +75,7 @@ export async function updateCard({ cardId, cardData }: Props) {
     description,
     dueDate: formattedDate,
     tags,
-    imageUrl,
+    imageUrl: filteredImg,
   });
 
   return res.data;
