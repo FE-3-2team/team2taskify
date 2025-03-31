@@ -274,3 +274,16 @@ button:hover {
   }
 }
 
+/* ::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 100px;
+  background: rgba(94, 23, 248, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-corner {
+  display: none;
+} */
