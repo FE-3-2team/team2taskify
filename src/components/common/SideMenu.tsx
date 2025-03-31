@@ -127,7 +127,7 @@ export default function SideMenu() {
       </div>
 
       {/* 페이지네이션 */}
-      <div className="flex px-2 py-4 tablet:flex">
+      <div className="flex hidden px-2 py-4 tablet:flex">
         <PaginationButton
           hasPrev={currentPage > 1}
           hasNext={hasNext}
