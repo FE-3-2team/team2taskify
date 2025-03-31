@@ -66,7 +66,7 @@ export function Modal({
       {modalIsOpen && (
         <div className="fixed inset-0 z-10 flex items-center justify-center bg-black-400/70 ">
           <div
-            className="px-4 py-6 relative flex flex-col tablet:px-6  w-[327px] tablet:w-[568px] h-auto bg-white rounded-[8px] z-20 "
+            className="px-4 py-6 relative flex flex-col tablet:px-6  w-[327px] tablet:w-[568px] h-auto bg-white rounded-[8px] z-20 overflow-y-auto max-h-[calc(100%-200px)]"
             style={{ gap: rightOnClick ? "24px" : "32px" }}
             ref={ref}
           >
