@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
 import UnifiedInput from "@/components/common/Input/Input";
 import { CardData, INITIAL_CARD } from "./CardValues";
-import { uploadCardImage } from "@/api/column.api";
 import TagInput from "../Input/tagInput";
 //
 
@@ -20,16 +19,14 @@ export default function CardValueForm({
   const [cardData, setCardData] = useState<CardData>(
     editCardData ? editCardData : INITIAL_CARD
   );
+  useEffect(() => {
+    onChange(cardData);
+  }, [cardData]);
 
-  const handleChangeImageFile = async (imageFile: File) => {
-    const imageUrl = await uploadCardImage({ columnId, imageFile });
-    handleChangeEdit("profileImageUrl", imageUrl);
-  };
   const handleChangeEdit = (key: string, value: any) => {
     setCardData((prev) => ({ ...prev, [key]: value }));
-    onChange(cardData);
   };
-  //
+
   return (
     <div className="w-full h-fit py-[24px] gap-[24px] flex flex-col ">
       <UnifiedInput
@@ -52,9 +49,9 @@ export default function CardValueForm({
           type="textarea"
           placeholder="설명을 입력해주세요"
           value={cardData.description}
-          onChange={(e) =>
-            handleChangeEdit("description", e.target.value.trim())
-          }
+          onChange={(e) => {
+            handleChangeEdit("description", e.target.value);
+          }}
           className="h-[126px] w-full border-[1px] border-gray-300 rounded-[8px]"
         />
       </div>
