@@ -1,4 +1,6 @@
+import { CardData } from "@/components/common/Card/CardValues";
 import { instance } from "./instance";
+import { useFormatTime } from "@/hooks/useFormatDate";
 //카드 상세 조회
 export async function getCardDetail(cardId: number) {
   try {
@@ -63,27 +65,27 @@ export async function createCard({
   }
 }
 
-export async function updateCard({
-  cardId,
-  data,
-}: {
+interface Props {
   cardId: number;
-  data: {
-    columnId: number;
-    assigneeUserId: number;
-    title: string;
-    description: string;
-    dueDate: string;
-    tags: string[];
-    imageUrl: string;
-  };
-}) {
-  try {
-    const res = await instance.put(`/cards/${cardId}`, data);
-    return res.data;
-  } catch (err) {
-    throw new Error("카드 수정 실패");
-  }
+  cardData: CardData;
+}
+export async function updateCard({ cardId, cardData }: Props) {
+  const { columnId, assignee, title, description, dueDate, tags, imageUrl } =
+    cardData;
+  console.log(dueDate);
+  const formattedDate = useFormatTime(dueDate);
+  console.log(formattedDate);
+  const res = await instance.put(`/cards/${cardId}`, {
+    columnId,
+    assignee: assignee.id,
+    title,
+    description,
+    dueDate: formattedDate,
+    tags,
+    imageUrl,
+  });
+
+  return res.data;
 }
 
 export async function moveCardToColumn({

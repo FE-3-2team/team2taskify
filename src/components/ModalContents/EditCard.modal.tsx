@@ -1,13 +1,12 @@
 import { Modal } from "@/components/common/ModalPopup";
 import DropdownProgress from "@/components/common/Dropdown/DropdownProgress";
-import useDashboardStates from "@/hooks/useDashboardStates";
 import { useStore } from "zustand";
 import useAuthStore from "@/utils/Zustand/zustand";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getMember } from "@/api/member";
 import { getColumns } from "@/api/column.api";
 import { AlertModal } from "./AlertModal";
-import { getCardDetail } from "@/api/card.api";
+import { getCardDetail, updateCard } from "@/api/card.api";
 import { CardData, INITIAL_CARD } from "../common/Card/CardValues";
 import CardValueForm from "../common/Card/card.form";
 import DropdownAssigneeSearch from "../common/Dropdown/DropdownAssigneeSearch";
@@ -18,7 +17,6 @@ interface Props {
   cardId: number;
 }
 export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
-  const states = useDashboardStates();
   const store = useStore(useAuthStore);
   const dashboardId = store.dashboardId;
   const [cardData, setCardData] = useState<CardData>(INITIAL_CARD);
@@ -45,7 +43,11 @@ export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
       setIsAlert(true);
     }
   };
-  const handleEditSubmit = async () => {};
+
+  const handleEditSubmit = async () => {
+    await updateCard({ cardId, cardData });
+  };
+
   return (
     <Modal
       ModalOpenButton={null}
@@ -58,7 +60,6 @@ export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
         <h2 className="tablet:text-2xl-bold text-xl-bold mb-[32px]">
           할 일 수정
         </h2>
-
         <div className="w-full flex flex-col tablet:flex-row mb-[16px] tablet:pr-[54px] gap-[32px]">
           <DropdownProgress
             selectedTitle={
@@ -80,7 +81,13 @@ export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
             }}
           />
         </div>
-        <CardValueForm columnId={cardData.columnId} editCardData={cardData} />
+        <CardValueForm
+          onChange={(value) => {
+            setCardData((prev) => ({ ...prev, ...value }));
+          }}
+          columnId={cardData.columnId}
+          editCardData={cardData}
+        />
         <AlertModal
           isOpen={isAlert}
           onConfirm={() => {

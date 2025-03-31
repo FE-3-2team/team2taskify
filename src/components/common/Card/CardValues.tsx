@@ -10,9 +10,6 @@ export interface CardData {
   imageUrl: string;
 }
 
-export interface CardSubmitData extends CardData {
-  imageFile: File;
-}
 //initialValues
 export const INITIAL_CARD = {
   assignee: {

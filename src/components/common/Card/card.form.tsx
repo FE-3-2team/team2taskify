@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
 import UnifiedInput from "@/components/common/Input/Input";
 import { CardData, INITIAL_CARD } from "./CardValues";
@@ -10,19 +9,25 @@ import TagInput from "../Input/tagInput";
 interface Props {
   editCardData?: CardData;
   columnId: number;
+  onChange: (value: CardData) => void;
 }
 //
-export default function CardValueForm({ editCardData, columnId }: Props) {
+export default function CardValueForm({
+  editCardData,
+  columnId,
+  onChange,
+}: Props) {
   const [cardData, setCardData] = useState<CardData>(
     editCardData ? editCardData : INITIAL_CARD
   );
 
   const handleChangeImageFile = async (imageFile: File) => {
     const imageUrl = await uploadCardImage({ columnId, imageFile });
-    setCardData((prev) => ({ ...prev, profileImageUrl: imageUrl }));
+    handleChangeEdit("profileImageUrl", imageUrl);
   };
   const handleChangeEdit = (key: string, value: any) => {
     setCardData((prev) => ({ ...prev, [key]: value }));
+    onChange(cardData);
   };
   //
   return (
@@ -32,7 +37,9 @@ export default function CardValueForm({ editCardData, columnId }: Props) {
         placeholder="제목을 입력해 주세요"
         variant="title"
         value={cardData.title}
-        onChange={(value) => handleChangeEdit("title", value)}
+        onChange={(value) => {
+          handleChangeEdit("title", value);
+        }}
       />
       <div className="w-full">
         <label>설명</label>
@@ -45,7 +52,9 @@ export default function CardValueForm({ editCardData, columnId }: Props) {
           type="textarea"
           placeholder="설명을 입력해주세요"
           value={cardData.description}
-          onChange={(value) => handleChangeEdit("description", value)}
+          onChange={(e) =>
+            handleChangeEdit("description", e.target.value.trim())
+          }
           className="h-[126px] w-full"
         />
       </div>
