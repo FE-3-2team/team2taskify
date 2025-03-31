@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import "react-datepicker/dist/react-datepicker.css";
 import { Modal } from "@/components/common/ModalPopup";
@@ -68,6 +68,12 @@ const CreateCardModal = ({
       alert("카드 생성 실패");
     }
   };
+
+  useEffect(() => {
+    if (!isOpen) {
+      resetNewCardForm();
+    }
+  }, [isOpen]);
 
   return (
     <Modal

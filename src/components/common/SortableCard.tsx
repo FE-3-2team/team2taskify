@@ -18,7 +18,7 @@ export default function SortableCard({
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: card.cardId,
-      data: { cardId: card.cardId, columnId, index },
+      data: { cardId: card.cardId, columnId, index, card },
     });
 
   const style = {

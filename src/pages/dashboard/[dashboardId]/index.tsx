@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction, useState } from "react";
 import { useRouter } from "next/router";
 import "react-datepicker/dist/react-datepicker.css";
 import Header from "@/components/common/Header";
@@ -16,29 +17,115 @@ import { useHandleEditCardClick } from "@/hooks/useHandleEditCardClick";
 import useDashboardStates from "@/hooks/useDashboardStates";
 import { useInitializeDashboard } from "@/hooks/useInitializeDashboard";
 import { PlusIconButton } from "@/components/common/Button";
+import SortableColumn from "@/components/common/SortableColumn";
+import TodoCard from "@/components/common/TodoCard";
 import {
   DndContext,
   closestCenter,
   useSensor,
   useSensors,
   PointerSensor,
+  DragStartEvent,
   DragEndEvent,
+  DragOverlay,
+  useDndMonitor,
 } from "@dnd-kit/core";
 import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import SortableColumn from "@/components/common/SortableColumn";
-import { Dispatch, SetStateAction } from "react";
 
 export default function Dashboard() {
+  const [activeCard, setActiveCard] = useState<Card | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isOver, setIsOver] = useState(false);
+
   const router = useRouter();
   const { dashboardId } = router.query;
   const states = useDashboardStates();
 
   const sensors = useSensors(useSensor(PointerSensor));
   const columnIds = states.columns.map((col) => col.id);
-  const handleDragEnd = (event: DragEndEvent) => {};
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    if (active.data?.current?.card) {
+      setActiveCard(active.data.current.card); // card는 드래그 시작 시 넘긴 데이터
+      setIsDragging(true);
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    setIsDragging(false);
+    setActiveCard(null);
+
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const activeCardId = active.id;
+    const overCardId = over.id;
+
+    const sourceColumn = states.columns.find((column) =>
+      column.cards.some((card) => card.cardId === activeCardId)
+    );
+
+    const targetColumn = states.columns.find((column) =>
+      column.cards.some((card) => card.cardId === overCardId)
+    );
+
+    if (!sourceColumn || !targetColumn) return;
+
+    const activeCard = sourceColumn.cards.find(
+      (card) => card.cardId === activeCardId
+    );
+    if (!activeCard) return;
+
+    if (sourceColumn.id === targetColumn.id) {
+      const updatedCards = [...sourceColumn.cards];
+      const oldIndex = updatedCards.findIndex(
+        (card) => card.cardId === activeCardId
+      );
+      const newIndex = updatedCards.findIndex(
+        (card) => card.cardId === overCardId
+      );
+
+      updatedCards.splice(oldIndex, 1);
+      updatedCards.splice(newIndex, 0, activeCard);
+
+      const newColumns = states.columns.map((col) =>
+        col.id === sourceColumn.id ? { ...col, cards: updatedCards } : col
+      );
+
+      states.setColumns(newColumns);
+    } else {
+      const sourceCards = [...sourceColumn.cards];
+      const targetCards = [...targetColumn.cards];
+
+      const newSourceCards = sourceCards.filter(
+        (card) => card.cardId !== activeCardId
+      );
+
+      const overIndex = targetCards.findIndex(
+        (card) => card.cardId === overCardId
+      );
+
+      const newTargetCards = [...targetCards];
+      newTargetCards.splice(overIndex, 0, activeCard);
+
+      const newColumns = states.columns.map((col) => {
+        if (col.id === sourceColumn.id) {
+          return { ...col, cards: newSourceCards };
+        }
+        if (col.id === targetColumn.id) {
+          return { ...col, cards: newTargetCards };
+        }
+        return col;
+      });
+
+      states.setColumns(newColumns);
+    }
+  };
 
   const { resetNewCardForm } = useCardForm();
 
@@ -98,6 +185,7 @@ export default function Dashboard() {
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
           <SortableContext
@@ -131,6 +219,19 @@ export default function Dashboard() {
               })
             )}
           </SortableContext>
+
+          <DragOverlay>
+            {activeCard && (
+              <div
+                style={{
+                  opacity: isDragging ? 0.5 : 1,
+                  border: isOver ? "2px dashed #aaa" : "none",
+                }}
+              >
+                <TodoCard todoData={activeCard} onClick={() => {}} />
+              </div>
+            )}
+          </DragOverlay>
         </DndContext>
         <div className="w-[308px] h-full bg-gray-100 px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center">
           <div className="desktop:w-[314px] tablet:w-[544px] w-[284px] tablet:h-[70px] h-[66px] mt-[46px]">
