@@ -35,7 +35,12 @@ export default function CreateCard({ columnId }: Props) {
   };
 
   const handleCreate = async () => {
-    await createCard({ dashboardId, columnId, cardData });
+    try {
+      await createCard({ dashboardId, columnId, cardData });
+    } catch (err: any) {
+      setMessage(err.response.data.message);
+      setIsAlert(true);
+    }
   };
 
   return (
