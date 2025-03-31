@@ -79,6 +79,44 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
     handleLoad();
   }, []);
 
+  const onSubmit = () => {
+    handleEditCardSubmit({
+      editCardId: cardData.cardId!,
+      editCardColumnId: cardData.columnId!,
+      editSelectedAssignee: cardData.assignee!,
+      editCardTitle: cardData.title,
+      editCardDescription: cardData.description,
+      editCardDueDate: cardData.dueDate,
+      editCardTags: cardData.tags,
+      editCardImageFile: cardData.imageFile,
+      editCardImageUrl: cardData.imageUrl,
+      fetchColumns,
+      resetEditCardForm,
+      dashboardId: String(dashboardId),
+      closeModal: () => states.setIsEditCardModalOpen(false),
+    });
+  };
+
+  const { fetchColumns } = useFetchColumns(
+    states.setColumns,
+    states.setIsLoading
+  );
+  const handleLoad = async () => {
+    try {
+      const { members } = await getMember(1, Number(dashboardId));
+      setMembers(members);
+      const columnsData = await getColumns(Number(dashboardId));
+      setColumns(columnsData);
+    } catch (err) {
+      setMessage("카드 상세보기에 실패했습니다");
+      setIsAlert(true);
+    }
+  };
+
+  useEffect(() => {
+    handleLoad();
+  }, []);
+  //
   return (
     <Modal
       ModalOpenButton={null}

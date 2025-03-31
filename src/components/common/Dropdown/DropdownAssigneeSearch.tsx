@@ -20,6 +20,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
   );
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  console.log(assignees);
   const filteredAssignees = assignees.filter((assignee) =>
     assignee.nickname.toLowerCase().includes(searchTerm.toLowerCase())
   );
