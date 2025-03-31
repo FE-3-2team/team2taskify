@@ -13,7 +13,7 @@ import useAuthStore from "@/utils/Zustand/zustand";
 const EditProfile = () => {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
-  // profileImage 타입을 string | null 로 변경하여 제거
+  // profileImage 타입을 string | null 로 관리 (기본값: ProfileImg)
   const [profileImage, setProfileImage] = useState<string | null>(ProfileImg);
   const [errorMsg, setErrorMsg] = useState("");
   const [newImageFile, setNewImageFile] = useState<File | null>(null);
@@ -21,7 +21,7 @@ const EditProfile = () => {
   const [cropping, setCropping] = useState(false);
   const [upImg, setUpImg] = useState<string | null>(null);
   const [alertModalOpen, setAlertModalOpen] = useState(false);
-  //프로필 이미지 제거 상태
+  // 프로필 이미지 제거 상태 플래그
   const [removedImage, setRemovedImage] = useState(false);
 
   const [crop, setCrop] = useState<Crop>({
@@ -45,7 +45,6 @@ const EditProfile = () => {
         setEmail(userData.email);
         setNickname(userData.nickname);
         setProfileImage(userData.profileImageUrl || ProfileImg);
-        // 초기 상태에서는 제거되지 않은 상태로 설정
         setRemovedImage(false);
       } catch (error) {
         console.error("User data fetch error:", error);
@@ -157,7 +156,7 @@ const EditProfile = () => {
     setNewImageFile(null);
   };
 
-  // 프로필 사진 제거 함수 (제거 상태 플래그를 활용)
+  // 프로필 사진 제거 함수
   const handleRemoveProfileImage = () => {
     setProfileImage(null);
     setNewImageFile(null);
@@ -179,8 +178,9 @@ const EditProfile = () => {
         });
         uploadedImageUrl = imageResponse.data.profileImageUrl;
       }
-      // removedImage가 true이면 프로필 이미지 제거를 의미하도록 null 전달
-      const currentProfileImage = removedImage ? null : profileImage || null;
+      // 기본 이미지인 경우, profileImage가 기본 이미지와 동일하면 null을 전송
+      const currentProfileImage =
+        profileImage === ProfileImg ? null : profileImage;
       const updateBody = {
         nickname,
         profileImageUrl:
@@ -225,7 +225,6 @@ const EditProfile = () => {
                     onLoadingComplete={() => setIsLoading(false)}
                     style={{ objectFit: "cover" }}
                   />
-                  {/* 기본 이미지가 아닐 때만 X 버튼 표시 */}
                   {profileImage && profileImage !== ProfileImg && (
                     <button
                       onClick={(e) => {

@@ -6,14 +6,15 @@ const useSignup = () => {
   const [loading, setLoading] = useState(false);
   const [modalMessage, setModalMessage] = useState<string | null>(null);
   const router = useRouter();
+
   const signup = async (email: string, nickname: string, password: string) => {
     setLoading(true);
     try {
       await signupApi(email, nickname, password);
-      // 회원가입 성공 시
-      setModalMessage("가입을 축하합니다!");
+
       await loginApi(email, password);
-      router.push("/mydashboard");
+
+      setModalMessage("가입을 축하합니다!");
     } catch (error: any) {
       if (error.response) {
         const status = error.response.status;
@@ -35,8 +36,10 @@ const useSignup = () => {
     }
   };
 
+  // 모달 확인 시, 메시지를 닫고 대쉬보드로 이동
   const closeModal = () => {
     setModalMessage(null);
+    router.push("/mydashboard");
   };
 
   return { signup, loading, modalMessage, closeModal };
