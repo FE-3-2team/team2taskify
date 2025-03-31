@@ -7,12 +7,14 @@ import SignupFormLayout from "./AuthFormLayout";
 import { useValidation } from "@/hooks/useValidation";
 import CheckBox from "@/assets/icons/CheckBox.svg";
 import UncheckBox from "@/assets/icons/UnCheckBox.svg";
+import { AlertModal } from "../ModalContents/AlertModal";
+import { signupApi } from "@/./api/auth";
+import { useRouter } from "next/router";
 
 interface SignupFormProps {
   logoSrc: string | StaticImageData;
   logoAlt?: string;
   logoText?: string;
-  onSignup: (email: string, nickname: string, password: string) => Promise<any>;
   logoToFormSpacingClass?: string;
   formToButtonSpacingClass?: string;
   buttonToFooterSpacingClass?: string;
@@ -22,7 +24,6 @@ export default function SignupForm({
   logoSrc,
   logoAlt = "Logo",
   logoText = "첫 방문을 환영합니다!",
-  onSignup,
   logoToFormSpacingClass,
   formToButtonSpacingClass,
   buttonToFooterSpacingClass,
@@ -32,6 +33,8 @@ export default function SignupForm({
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [terms, setTerms] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   const nicknameError = useValidation(nickname, "title");
   const emailError = useValidation(email, "email");
@@ -53,9 +56,22 @@ export default function SignupForm({
     !confirmPasswordError &&
     terms;
 
+  // 회원가입 버튼 클릭 시 API 호출 후 모달 표시
   const handleSignup = async () => {
     if (!isFormValid) return;
-    await onSignup(email, nickname, password);
+    try {
+      await signupApi(email, nickname, password);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("회원가입 실패", error);
+      // 에러 처리는 필요에 따라 추가
+    }
+  };
+
+  // 모달의 onConfirm 함수: 모달 닫기 후 대쉬보드로 이동
+  const handleModalConfirm = () => {
+    setIsModalOpen(false);
+    router.push("/mydashboard");
   };
 
   const logoSection = (
@@ -110,7 +126,7 @@ export default function SignupForm({
         />
       </div>
 
-      {/* 비밀번호 확인 입력 (compareWith 속성으로 password와 비교) */}
+      {/* 비밀번호 확인 입력 */}
       <div className="mt-4">
         <UnifiedInput
           variant="confirmPassword"
@@ -154,7 +170,9 @@ export default function SignupForm({
     <div className="w-full">
       <Button
         size="xlarge"
-        className={`text-white transition-colors ${isFormValid ? "!bg-[#5534da]" : "!bg-[#9FA6B2]"} `}
+        className={`text-white transition-colors ${
+          isFormValid ? "!bg-[#5534da]" : "!bg-[#9FA6B2]"
+        }`}
         onClick={handleSignup}
         disabled={!isFormValid}
       >
@@ -175,11 +193,18 @@ export default function SignupForm({
   );
 
   return (
-    <SignupFormLayout
-      logoSection={logoSection}
-      formSection={formSection}
-      buttonSection={buttonSection}
-      footerSection={footerSection}
-    />
+    <>
+      <SignupFormLayout
+        logoSection={logoSection}
+        formSection={formSection}
+        buttonSection={buttonSection}
+        footerSection={footerSection}
+      />
+      <AlertModal
+        isOpen={isModalOpen}
+        message="회원가입을 축하합니다"
+        onConfirm={handleModalConfirm}
+      />
+    </>
   );
 }
