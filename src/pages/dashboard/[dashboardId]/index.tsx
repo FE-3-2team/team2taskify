@@ -281,7 +281,6 @@ export default function Dashboard() {
             </Modal>
           </div>
         </div>
-
         {states.isCardDetailModalOpen && states.selectedCard && (
           <DetailContent
             cardId={states.selectedCard.cardId}
@@ -299,7 +298,7 @@ export default function Dashboard() {
             />
           </DetailContent>
         )}
-
+        console.log("🚩 index에서 넘기는 selectedCard", states.selectedCard);
         <EditCardModal
           isCardEdit={states.isEditCardModalOpen}
           setIsCardEdit={(open) => {
@@ -308,7 +307,6 @@ export default function Dashboard() {
           }}
           selectedCard={states.selectedCard}
         />
-
         <CreateCardModal
           key={states.isCreateCardModalOpen ? "open" : "closed"}
           isOpen={states.isCreateCardModalOpen}
@@ -321,7 +319,6 @@ export default function Dashboard() {
           resetNewCardForm={resetNewCardForm}
           fetchColumns={fetchColumns}
         />
-
         <ManageColumnModal
           isOpen={states.isManageColumnModalOpen}
           setIsOpen={(open) => {

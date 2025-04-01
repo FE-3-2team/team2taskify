@@ -95,7 +95,9 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
         {isOpen && filteredAssignees.length > 0 && (
           <div className="absolute left-0 w-full mt-[2px] bg-white border border-gray-300 rounded-md shadow-md top-full z-50 max-h-[240px] overflow-y-auto">
             {filteredAssignees.map((item) => {
-              const isSelected = assignee?.userId === item.userId;
+              const selectedId = assignee?.userId ?? assignee?.id;
+              const itemId = item.userId ?? item.id;
+              const isSelected = selectedId === itemId;
 
               return (
                 <button
