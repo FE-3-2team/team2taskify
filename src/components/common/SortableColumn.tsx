@@ -2,19 +2,20 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Column from "./Column";
 import type { ColumnData } from "@/types/column";
+import { Dispatch, SetStateAction } from "react";
 
 interface Props {
   column: ColumnData;
   onAddCardClick: (columnId: number) => void;
-  onManageColumnClick: (columnId: number, title: string) => void;
   onCardClick: (card: Card) => void;
   activeCard?: Card | null;
+  setIsEditColumn: Dispatch<SetStateAction<boolean>>;
 }
 
 const SortableColumn = ({
   column,
   onAddCardClick,
-  onManageColumnClick,
+  setIsEditColumn,
   onCardClick: onEditCardClick,
   activeCard,
 }: Props) => {
@@ -33,7 +34,7 @@ const SortableColumn = ({
       <Column
         column={column}
         onAddCardClick={onAddCardClick}
-        onManageColumnClick={onManageColumnClick}
+        setIsEditColumn={setIsEditColumn}
         onEditCardClick={onEditCardClick}
       />
     </div>

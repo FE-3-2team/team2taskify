@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import SortableCard from "@/components/common/SortableCard";
 import DropIndicator from "@/components/common/DropIndicator";
@@ -14,16 +14,16 @@ import PlusIcon from "@/assets/icons/Plus.icon.svg";
 interface ColumnProps {
   column: ColumnData;
   onAddCardClick: (columnId: number) => void;
-  onManageColumnClick: (columnId: number, title: string) => void;
   onEditCardClick?: (card: Card) => void;
   activeCard?: Card | null;
+  setIsEditColumn: Dispatch<SetStateAction<boolean>>;
 }
 
 const Column: React.FC<ColumnProps> = ({
   column,
   onAddCardClick,
-  onManageColumnClick,
   onEditCardClick,
+  setIsEditColumn,
   activeCard,
 }) => {
   const { id: columnId, title, cards } = column;
@@ -54,7 +54,7 @@ const Column: React.FC<ColumnProps> = ({
 
         <button
           className="tablet:w-[24px] tablet:h-[24px] w-[22px] h-[22px] relative"
-          onClick={() => onManageColumnClick(columnId, title)}
+          onClick={() => setIsEditColumn(true)}
         >
           <Image src={GearIcon} alt="Setting" fill className="object-contain" />
         </button>

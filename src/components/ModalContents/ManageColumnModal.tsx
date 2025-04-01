@@ -1,39 +1,75 @@
+import { deleteColumn, updateColumn } from "@/api/column.api";
 import { Modal } from "@/components/common/ModalPopup";
+import useDashboardStates from "@/hooks/useDashboardStates";
+import { useFetchColumns } from "@/hooks/useFetchColumns";
+import useAuthStore from "@/utils/Zustand/zustand";
+import { Dispatch, SetStateAction } from "react";
+import { useStore } from "zustand";
 
 type Props = {
   isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
   columnData: {
     id: number;
     title: string;
   };
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
   setTitle: (v: string) => void;
-  onUpdate: () => void;
-  onDelete: () => void;
 };
 
 const ManageColumnModal = ({
-  isOpen,
   setIsOpen,
+  isOpen,
   columnData,
   setTitle,
-  onUpdate,
-  onDelete,
 }: Props) => {
+  const authStore = useStore(useAuthStore);
+  const dashboardId = Number(authStore.dashboardId);
+  const states = useDashboardStates();
+
+  const { fetchColumns } = useFetchColumns(
+    states.setColumns,
+    states.setIsLoading
+  );
+
+  const onDelete = async () => {
+    const confirmDelete = confirm("정말 이 컬럼을 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+    try {
+      await deleteColumn(states.targetColumnId!);
+      states.setIsManageColumnModalOpen(false);
+      fetchColumns(Number(dashboardId));
+      alert(`컬럼(${states.targetColumnId}) 삭제`);
+    } catch (err) {
+      console.error(err);
+      alert("컬럼 삭제 실패");
+    }
+  };
+  const onUpdate = async () => {
+    try {
+      await updateColumn({
+        columnId: states.targetColumnId!,
+        title: states.targetColumnTitle,
+      });
+      states.setIsManageColumnModalOpen(false);
+      fetchColumns(Number(dashboardId));
+
+      alert(
+        `컬럼 (${states.targetColumnId}) 이름을 '${states.targetColumnTitle}'로 변경`
+      );
+    } catch (err) {
+      alert(`컬럼 (${states.targetColumnId}) 이름 변경 실패`);
+    }
+  };
+
   return (
     <Modal
       isOpen={isOpen}
-      setIsOpen={(open) => {
-        setIsOpen(open);
-        if (!open) {
-          setTitle("");
-        }
-      }}
       ModalOpenButton={null}
       rightHandlerText="변경"
       leftHandlerText="삭제"
       rightOnClick={onUpdate}
       leftOnClick={onDelete}
+      setIsOpen={setIsOpen}
     >
       <div>
         <h2 className="tablet:text-2xl-bold text-xl-bold tablet:mb-[24px] mb-[16px]">
