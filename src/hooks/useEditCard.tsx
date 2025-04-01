@@ -9,7 +9,6 @@ export default function useEditCardForm() {
     description: "",
     dueDate: null,
     tags: [],
-    imageFile: null,
     imageUrl: null,
   });
 
@@ -22,7 +21,6 @@ export default function useEditCardForm() {
       description: "",
       dueDate: null,
       tags: [],
-      imageFile: null,
       imageUrl: null,
     });
   };

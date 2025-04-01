@@ -2,9 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import CheckIcon from "@/assets/icons/Check.icon.svg";
 import DownIcon from "@/assets/icons/TriangleDown.icon.svg";
+import Profile from "../Profile";
 
 interface DropdownAssigneeSearchProps {
-  assignee: Assignee | null;
+  assignee: Assignee;
   assignees: Assignee[];
   onSelect: (assignee: Assignee) => void;
 }
@@ -14,6 +15,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
   assignees,
   onSelect,
 }) => {
+  const [selected, setSelected] = useState(assignee);
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -25,6 +27,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
     : assignees;
 
   useEffect(() => {
+    onSelect(selected);
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -37,10 +40,10 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [selected]);
 
   return (
-    <div>
+    <div className="w-full ">
       <div className="font-bold text-lg-regular mb-[10px]">담당자</div>
       <div ref={dropdownRef} className="relative w-full h-fit">
         <div
@@ -51,28 +54,13 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
           }}
         >
           {/* 조건: 드롭다운 닫힘 + assignee 존재 → 프로필 + 이름 + 아이콘 */}
-          {!isOpen && assignee?.userId && assignee?.nickname ? (
+          {!isOpen && selected ? (
             <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-[8px]">
-                <div className="flex items-center justify-center w-[22px] h-[22px] rounded-full overflow-hidden flex-shrink-0">
-                  {assignee.profileImageUrl ? (
-                    <Image
-                      src={assignee.profileImageUrl}
-                      alt={assignee.nickname}
-                      width={22}
-                      height={22}
-                      className="object-cover rounded-full"
-                    />
-                  ) : (
-                    <div className="w-[22px] h-[22px] bg-[#A3C4A2] text-white font-bold text-sm flex items-center justify-center rounded-full">
-                      {assignee.nickname.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                </div>
-                <span className="text-black text-lg-regular">
-                  {assignee.nickname}
-                </span>
-              </div>
+              <Profile
+                nickname={selected.nickname}
+                profileImageUrl={selected.profileImageUrl}
+                type="assignee"
+              />
               <Image
                 src={DownIcon}
                 alt="드롭다운 열기"
@@ -101,12 +89,12 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
 
               return (
                 <button
-                  key={item.userId}
+                  key={item.id}
                   className="flex items-center px-[16px] py-[14px] w-full h-[48px] text-left hover:bg-gray-100 rounded-md"
                   onClick={() => {
                     setIsOpen(false);
                     setSearchTerm("");
-                    onSelect(item);
+                    setSelected(item);
                   }}
                 >
                   <div className="w-[16px]">
@@ -119,27 +107,11 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
                       />
                     ) : null}
                   </div>
-                  <div
-                    className={`w-[22px] h-[22px] flex items-center justify-center rounded-full text-sm font-bold text-white ml-2 ${
-                      item.profileImageUrl ? "" : "bg-[#A3C4A2]"
-                    }`}
-                    style={
-                      item.profileImageUrl
-                        ? {
-                            backgroundImage: `url(${item.profileImageUrl})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                          }
-                        : {}
-                    }
-                  >
-                    {!item.profileImageUrl &&
-                      item.nickname.charAt(0).toUpperCase()}
-                  </div>
-
-                  <span className="ml-3 text-gray-800 text-lg-regular">
-                    {item.nickname}
-                  </span>
+                  <Profile
+                    nickname={item.nickname}
+                    profileImageUrl={item.profileImageUrl}
+                    type="assignee"
+                  />
                 </button>
               );
             })}

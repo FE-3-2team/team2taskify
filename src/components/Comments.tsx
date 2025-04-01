@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Comment from "./common/Comment.card";
 import { createComment, getComments } from "@/api/comment.api";
-import UnifiedInput from "./common/Input";
+import UnifiedInput from "@/components/common/Input/Input";
 import useAuthStore from "@/utils/Zustand/zustand";
 import { useStore } from "zustand";
 

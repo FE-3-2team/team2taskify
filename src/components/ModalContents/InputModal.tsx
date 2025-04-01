@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import UnifiedInput from "../common/Input";
+import UnifiedInput from "@/components/common/Input/Input";
 import { getColumns } from "@/api/column.api";
 
 interface InputProps {
