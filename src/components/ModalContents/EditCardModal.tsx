@@ -15,8 +15,10 @@ import { AlertModal } from "./AlertModal";
 interface Props {
   isCardEdit: boolean;
   setIsCardEdit: Dispatch<SetStateAction<boolean>>;
+  selectedCard: Card | null;
 }
-const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
+
+const EditCardModal = ({ isCardEdit, setIsCardEdit, selectedCard }: Props) => {
   const states = useDashboardStates();
   const { handleEditCardSubmit } = useEditCardSubmit();
   const { cardData, setEditedData, resetEditCardForm } = useEditCardForm();
@@ -55,7 +57,6 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
       if (!cardData.assignee && members.length > 0) {
         setEditedData({ assignee: members[0] });
       }
-      
     } catch (err) {
       setMessage("카드 상세보기에 실패했습니다");
       setIsAlert(true);
@@ -84,8 +85,23 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
     });
   };
 
-  console.log("assignee in EditCardModal", assignee);
+  useEffect(() => {
+    if (!selectedCard) return;
 
+    setEditedData({
+      cardId: selectedCard.cardId,
+      columnId: selectedCard.columnId,
+      title: selectedCard.title,
+      description: selectedCard.description,
+      dueDate: selectedCard.dueDate,
+      tags: selectedCard.tags,
+      assignee: selectedCard.assignee,
+      imageUrl: selectedCard.imageUrl,
+      imageFile: undefined,
+    });
+
+    handleLoad();
+  }, [selectedCard]);
 
   return (
     <Modal
