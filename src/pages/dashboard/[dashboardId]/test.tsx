@@ -207,7 +207,7 @@ export default function Dashboard() {
     <>
       <Header />
       <SideMenu />
-      <div className="flex desktop:flex-row flex-col  ml-[67px] tablet:ml-40 laptop:ml-[300px] tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)] w-full desktop:overflow-x-auto">
+      <div className="flex laptop:flex-row flex-col  ml-[67px] tablet:ml-40 laptop:ml-[300px] tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)]  desktop:overflow-x-auto">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}

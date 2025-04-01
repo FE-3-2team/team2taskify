@@ -11,6 +11,7 @@ interface InputProps {
   variant: "email" | "column";
   changeValue: (value: string) => void;
   setError?: Dispatch<SetStateAction<boolean>>;
+  defaultValue?: string;
 }
 export default function InputModal({
   label,
@@ -21,9 +22,10 @@ export default function InputModal({
   setError,
   dashboardId,
   isColumn,
+  defaultValue,
 }: InputProps) {
   const [currentValue, setCurrentValue] = useState(
-    isColumn ? "새로운 컬럼" : ""
+    isColumn ? "새로운 컬럼" : defaultValue ? defaultValue : ""
   );
   const [isError, setIsError] = useState(false);
   const [columnsData, setColumnsData] = useState<Column[]>([]);

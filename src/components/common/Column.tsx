@@ -34,7 +34,7 @@ const Column: React.FC<ColumnProps> = ({ column, onEditCardClick }) => {
     [cards.length]
   );
   return (
-    <div className="w-full laptop:w-[308px] tablet:max-w-[584px] bg-gray-100 px-[12px] py-[16px] flex flex-col items-center border-r border-gray-200">
+    <div className="w-full laptop:w-[354px] tablet:max-w-[584px] bg-gray-100 px-[12px] py-[16px] flex flex-col items-center border-r border-gray-200">
       <div className="flex w-full items-center justify-between mb-[24px]  h-[22px]">
         <div className="flex items-center gap-3 justify-between w-fit h-[20px]">
           <ColorChip color="#5534da" />
@@ -45,7 +45,7 @@ const Column: React.FC<ColumnProps> = ({ column, onEditCardClick }) => {
       </div>
 
       <CreateCard columnId={columnId} />
-      <div className="flex flex-col gap-[16px]">
+      <div className="flex w-full flex-col gap-[16px]">
         <SortableContext
           items={cards.map((card) => card.cardId)}
           strategy={verticalListSortingStrategy}

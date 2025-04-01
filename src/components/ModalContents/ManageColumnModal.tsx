@@ -6,6 +6,7 @@ import useAuthStore from "@/utils/Zustand/zustand";
 import Image from "next/image";
 import { useStore } from "zustand";
 import GearIcon from "@/assets/icons/Edit.icon.svg";
+import InputModal from "./InputModal";
 
 type Props = {
   setTitle: (v: string) => void;
@@ -54,7 +55,6 @@ const ManageColumnModal = ({ setTitle }: Props) => {
       alert(`컬럼 (${states.targetColumnId}) 이름 변경 실패`);
     }
   };
-
   return (
     <Modal
       className="tablet:w-[24px] bg-white tablet:h-[24px] w-[22px] h-[22px] relative"
@@ -66,19 +66,14 @@ const ManageColumnModal = ({ setTitle }: Props) => {
       rightOnClick={onUpdate}
       leftOnClick={onDelete}
     >
-      <div>
-        <h2 className="tablet:text-2xl-bold text-xl-bold tablet:mb-[24px] mb-[16px]">
-          컬럼 관리
-        </h2>
-        <p className="tablet:text-2lg-medium text-lg-medium mb-[8px]">이름</p>
-        <input
-          type="text"
-          placeholder="컬럼 이름을 입력해주세요"
-          className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
-          value={columnData.title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </div>
+      <InputModal
+        title="컬럼 관리"
+        defaultValue={columnData.title}
+        changeValue={(value) => setTitle(value)}
+        label="이름"
+        placeholder="컬럼 이름을 입력해 주세요"
+        variant="column"
+      />
     </Modal>
   );
 };
