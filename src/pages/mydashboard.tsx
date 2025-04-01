@@ -1,6 +1,6 @@
 import { createDashboard, getDashboards } from "@/api/dashboard";
 import Header from "@/components/common/Header";
-import { DetailContent, Modal } from "@/components/common/ModalPopup";
+import { Modal } from "@/components/common/ModalPopup";
 import NewDashboard from "@/components/ModalContents/NewDashboard";
 import { useEffect, useState } from "react";
 import * as B from "@/components/common/Button";
@@ -8,10 +8,7 @@ import InvitedDashboards from "@/components/InvitedDashboards/InvitedDashboards"
 import Link from "next/link";
 import { useRouter } from "next/router";
 import SideMenu from "@/components/common/SideMenu";
-import CardModal from "@/components/ModalContents/Card.modal";
 import { AlertModal } from "@/components/ModalContents/AlertModal";
-import EditCard from "@/components/ModalContents/EditCard.modal";
-import CreateCard from "@/components/ModalContents/CreateCard.modal";
 
 export interface Data {
   title: string;
@@ -43,6 +40,7 @@ export default function MyDashboard() {
       setIsAlert(true);
     }
   };
+
   const plusDashboard = async () => {
     if (newTitle.trim() === "") {
       setMessage("대시보드 이름을 입력해주세요");
@@ -79,20 +77,6 @@ export default function MyDashboard() {
         message={message}
       />
       <div className="flex flex-col py-6 px-6 tablet:py-10 tablet:px-10 gap-6 tablet:gap-12 laptop:gap-10 max-w-[1022px]">
-        {/* <EditCard
-          setIsCardEdit={setIsCardEdit}
-          isCardEdit={isCardEdit}
-          cardId={11808}
-        />
-        <DetailContent
-          cardId={11808}
-          cardTitle="부산으로 야반도주"
-          ModalOpenButton="테스트"
-          setIsCardEdit={setIsCardEdit}
-        > */}
-        {/* <CardModal cardId={11808} columnId={46358} columnTitle="To Do" /> */}
-        {/* </DetailContent> */}
-        <CreateCard columnId={46360}></CreateCard>
         <div className="flex flex-col gap-4 laptop:gap-3">
           <div className="w-full grid gap-[10px] grid-cols-1 tablet:grid-cols-2  laptop:grid-cols-3">
             <div className="w-full h-full">

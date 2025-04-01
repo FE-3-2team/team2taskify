@@ -12,6 +12,7 @@ import { useAutoClose } from "@/hooks/useAutoClose";
 import useDashboardStates from "@/hooks/useDashboardStates";
 import { deleteCard } from "@/api/card.api";
 import X from "@/assets/icons/X.icon.svg";
+import CardModal from "../ModalContents/Card.modal";
 
 interface Props {
   children?: React.ReactNode;
@@ -140,9 +141,9 @@ export function Modal({
 
 interface DetailContentProps {
   cardTitle: string;
-  children: ReactNode;
   ModalOpenButton: ReactNode;
   cardId: number;
+  columnTitle: string;
   columnId: number;
   setIsCardEdit: Dispatch<SetStateAction<boolean>>;
   isOpen?: boolean;
@@ -150,30 +151,22 @@ interface DetailContentProps {
 }
 export function DetailContent({
   cardTitle,
-  children,
+  columnTitle,
   ModalOpenButton,
   cardId,
   columnId,
   setIsCardEdit,
-  isOpen,
-  setIsOpen,
 }: DetailContentProps) {
-  const {
-    isOpen: internalIsOpen,
-    ref,
-    setIsOpen: internalSetIsOpen,
-  } = useAutoClose(false);
+  const { isOpen, ref, setIsOpen } = useAutoClose(false);
 
-  const modalIsOpen = isOpen !== undefined ? isOpen : internalIsOpen;
-  const modalSetIsOpen = setIsOpen ?? internalSetIsOpen;
   const states = useDashboardStates();
 
   const handleButtonClick = () => {
-    modalSetIsOpen(true);
+    setIsOpen(true);
   };
 
   const handleEdit = () => {
-    modalSetIsOpen(false);
+    setIsOpen(false);
   };
 
   const handleCardDelete = async () => {
@@ -193,7 +186,7 @@ export function DetailContent({
       return updated;
     });
 
-    modalSetIsOpen(false);
+    setIsOpen(false);
 
     window.location.reload();
   };
@@ -219,12 +212,16 @@ export function DetailContent({
                       setIsCardEdit(true);
                     }}
                   />
-                  <button onClick={() => modalSetIsOpen(false)}>
+                  <button onClick={() => setIsOpen(false)}>
                     <Image src={X} width={32} height={32} alt="X" />
                   </button>
                 </div>
               </div>
-              {children}
+              <CardModal
+                columnTitle={columnTitle}
+                cardId={cardId}
+                columnId={columnId}
+              />
             </div>
           </div>
         </div>

@@ -8,6 +8,8 @@ import { createCard } from "@/api/card.api";
 import { CardData, INITIAL_CARD } from "../common/Card/CardValues";
 import CardValueForm from "../common/Card/card.form";
 import DropdownAssigneeSearch from "../common/Dropdown/DropdownAssigneeSearch";
+import PlusIcon from "@/assets/icons/Plus.icon.svg";
+import Image from "next/image";
 
 interface Props {
   columnId: number;
@@ -47,7 +49,17 @@ export default function CreateCard({ columnId }: Props) {
   };
   return (
     <Modal
-      ModalOpenButton={<div>카드만들기</div>}
+      className="bg-white border border-gray-300  rounded-[6px] mb-4 h-10"
+      ModalOpenButton={
+        <div className="relative w-[22px] h-[22px] rounded-[4px] object-contain bg-violet-100">
+          <Image
+            src={PlusIcon}
+            alt="Add new todo"
+            fill
+            className="object-contain"
+          />
+        </div>
+      }
       rightOnClick={handleCreate}
       rightHandlerText="생성"
     >

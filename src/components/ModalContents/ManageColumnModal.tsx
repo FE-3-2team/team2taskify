@@ -3,29 +3,23 @@ import { Modal } from "@/components/common/ModalPopup";
 import useDashboardStates from "@/hooks/useDashboardStates";
 import { useFetchColumns } from "@/hooks/useFetchColumns";
 import useAuthStore from "@/utils/Zustand/zustand";
-import { Dispatch, SetStateAction } from "react";
+import Image from "next/image";
 import { useStore } from "zustand";
+import GearIcon from "@/assets/icons/Edit.icon.svg";
 
 type Props = {
-  isOpen: boolean;
-  columnData: {
-    id: number;
-    title: string;
-  };
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
   setTitle: (v: string) => void;
 };
 
-const ManageColumnModal = ({
-  setIsOpen,
-  isOpen,
-  columnData,
-  setTitle,
-}: Props) => {
+const ManageColumnModal = ({ setTitle }: Props) => {
   const authStore = useStore(useAuthStore);
   const dashboardId = Number(authStore.dashboardId);
   const states = useDashboardStates();
 
+  const columnData = {
+    id: states.targetColumnId!,
+    title: states.targetColumnTitle,
+  };
   const { fetchColumns } = useFetchColumns(
     states.setColumns,
     states.setIsLoading
@@ -63,13 +57,14 @@ const ManageColumnModal = ({
 
   return (
     <Modal
-      isOpen={isOpen}
-      ModalOpenButton={null}
+      className="tablet:w-[24px] bg-white tablet:h-[24px] w-[22px] h-[22px] relative"
+      ModalOpenButton={
+        <Image src={GearIcon} alt="Setting" fill className="object-contain" />
+      }
       rightHandlerText="변경"
       leftHandlerText="삭제"
       rightOnClick={onUpdate}
       leftOnClick={onDelete}
-      setIsOpen={setIsOpen}
     >
       <div>
         <h2 className="tablet:text-2xl-bold text-xl-bold tablet:mb-[24px] mb-[16px]">
