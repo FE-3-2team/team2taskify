@@ -5,8 +5,6 @@ import Header from "@/components/common/Header";
 import { SkeletonColumn } from "@/components/common/Skeleton/Skeleton";
 import { createColumn, updateColumn, deleteColumn } from "@/api/column.api";
 import { moveCardToColumn } from "@/api/card.api";
-import CreateCardModal from "@/components/ModalContents/CreateCard.modal";
-import ManageColumnModal from "@/components/ModalContents/ManageColumnModal";
 import { PlusIconButton } from "@/components/common/Button";
 import SortableColumn from "@/components/common/SortableColumn";
 import TodoCard from "@/components/common/TodoCard";
@@ -24,11 +22,11 @@ import {
   closestCenter,
   useSensor,
   useSensors,
-  PointerSensor,
   DragStartEvent,
   DragEndEvent,
   DragOverlay,
-  useDndMonitor,
+  TouchSensor,
+  MouseSensor,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -37,6 +35,7 @@ import {
 import InputModal from "@/components/ModalContents/InputModal";
 import { Modal, DetailContent } from "@/components/common/ModalPopup";
 import EditCardModal from "@/components/ModalContents/EditCard.modal";
+import SideMenu from "@/components/common/SideMenu";
 
 export default function Dashboard() {
   const [isEditColumn, setIsEditColumn] = useState(false);
@@ -62,7 +61,19 @@ export default function Dashboard() {
   );
   const { handleEditCardSubmit } = useEditCardSubmit();
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    })
+  );
   const columnIds = states.columns.map((col) => col.id);
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -186,7 +197,6 @@ export default function Dashboard() {
     setMembers: states.setMembers,
   });
 
-  useEffect(() => {}, [states.isCardDetailModalOpen, states.selectedCard]);
   useEffect(() => {
     if (!states.isCreateCardModalOpen) {
       resetNewCardForm();
@@ -196,7 +206,8 @@ export default function Dashboard() {
   return (
     <>
       <Header />
-      <div className="flex desktop:flex-row flex-col desktop:items-start items-center tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)] w-full desktop:overflow-x-auto">
+      <SideMenu />
+      <div className="flex desktop:flex-row flex-col  ml-[67px] tablet:ml-40 laptop:ml-[300px] tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)] w-full desktop:overflow-x-auto">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -231,7 +242,6 @@ export default function Dashboard() {
                       states.setTargetCardColumnTitle(column.title);
                       states.setIsCardDetailModalOpen(true);
                     }}
-                    activeCard={activeCard}
                   />
                 );
               })
@@ -278,42 +288,6 @@ export default function Dashboard() {
             </Modal>
           </div>
         </div>
-        {/* {states.isCardDetailModalOpen && states.selectedCard && (
-          <DetailContent
-            cardId={states.selectedCard.cardId}
-            columnId={states.selectedCard.columnId}
-            cardTitle={states.selectedCard.title}
-            ModalOpenButton={null}
-            setIsCardEdit={states.setIsEditCardModalOpen}
-            isOpen={states.isCardDetailModalOpen}
-            setIsOpen={states.setIsCardDetailModalOpen}
-          >
-            <CardModal
-              cardId={states.selectedCard.cardId}
-              columnId={states.selectedCard.columnId}
-              columnTitle={states.targetCardColumnTitle}
-            />
-          </DetailContent>
-        )} */}
-
-        {/* <EditCardModal
-          isCardEdit={states.isEditCardModalOpen}
-          setIsCardEdit={(open) => {
-            states.setIsEditCardModalOpen(open);
-            if (!open) resetEditCardForm();
-          }}
-          selectedCard={states.selectedCard}
-        /> */}
-        {/* <CreateCardModal columnId={} /> */}
-        <ManageColumnModal
-          isOpen={isEditColumn}
-          setIsOpen={setIsEditColumn}
-          columnData={{
-            id: states.targetColumnId!,
-            title: states.targetColumnTitle,
-          }}
-          setTitle={states.setTargetColumnTitle}
-        />
       </div>
     </>
   );
