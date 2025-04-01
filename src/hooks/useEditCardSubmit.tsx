@@ -72,9 +72,9 @@ export const useEditCardSubmit = () => {
     try {
       await updateCard({
         cardId: editCardId,
-        data: {
+        cardData: {
           columnId: editCardColumnId,
-          assigneeUserId,
+          assignee: editSelectedAssignee,
           title: editCardTitle,
           description: editCardDescription,
           dueDate: editCardDueDate

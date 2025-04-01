@@ -42,6 +42,7 @@ declare global {
     imageUrl: string | null;
     columnId: number;
     updatedAt?: string;
+    imageFile?: File | null;
   }
 
   interface CardComment {

@@ -11,6 +11,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getMember } from "@/api/member";
 import { getColumns } from "@/api/column.api";
 import { AlertModal } from "./AlertModal";
+import { formatDateTime } from "@/utils/date";
 
 interface Props {
   isCardEdit: boolean;
@@ -74,9 +75,9 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit, selectedCard }: Props) => {
       editSelectedAssignee: cardData.assignee!,
       editCardTitle: cardData.title,
       editCardDescription: cardData.description,
-      editCardDueDate: cardData.dueDate,
+      editCardDueDate: new Date(cardData.dueDate),
       editCardTags: cardData.tags,
-      editCardImageFile: cardData.imageFile,
+      editCardImageFile: cardData.imageFile ?? null,
       editCardImageUrl: cardData.imageUrl,
       fetchColumns,
       resetEditCardForm,
@@ -103,7 +104,9 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit, selectedCard }: Props) => {
       columnId: selectedCard.columnId,
       title: selectedCard.title,
       description: selectedCard.description,
-      dueDate: selectedCard.dueDate,
+      dueDate: selectedCard.dueDate
+        ? formatDateTime(new Date(selectedCard.dueDate))
+        : undefined,
       tags: selectedCard.tags,
       assignee: patchedAssignee,
       imageUrl: selectedCard.imageUrl,
@@ -149,14 +152,16 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit, selectedCard }: Props) => {
           setCardTitle={(v) => setEditedData({ title: v })}
           cardDescription={description}
           setCardDescription={(v) => setEditedData({ description: v })}
-          cardDueDate={dueDate}
-          setCardDueDate={(v) => setEditedData({ dueDate: v })}
+          cardDueDate={dueDate ? new Date(dueDate) : null}
+          setCardDueDate={(v) =>
+            setEditedData({ dueDate: v ? formatDateTime(v) : undefined })
+          }
           cardTags={tags}
           setCardTags={(v) => {
             const nextTags = typeof v === "function" ? v(tags) : v;
             setEditedData({ tags: nextTags });
           }}
-          cardImageFile={imageFile}
+          cardImageFile={imageFile ?? null}
           setCardImageFile={(f) => setEditedData({ imageFile: f })}
           cardImageUrl={imageUrl}
           setCardImageUrl={(url) => setEditedData({ imageUrl: url })}
