@@ -13,13 +13,16 @@ import useAuthStore from "@/utils/Zustand/zustand";
 const EditProfile = () => {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
-  const [profileImage, setProfileImage] = useState<string>(ProfileImg);
+  // profileImage 타입을 string | null 로 관리 (기본값: ProfileImg)
+  const [profileImage, setProfileImage] = useState<string | null>(ProfileImg);
   const [errorMsg, setErrorMsg] = useState("");
   const [newImageFile, setNewImageFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [cropping, setCropping] = useState(false);
   const [upImg, setUpImg] = useState<string | null>(null);
   const [alertModalOpen, setAlertModalOpen] = useState(false);
+  // 프로필 이미지 제거 상태 플래그
+  const [removedImage, setRemovedImage] = useState(false);
 
   const [crop, setCrop] = useState<Crop>({
     unit: "%",
@@ -42,6 +45,7 @@ const EditProfile = () => {
         setEmail(userData.email);
         setNickname(userData.nickname);
         setProfileImage(userData.profileImageUrl || ProfileImg);
+        setRemovedImage(false);
       } catch (error) {
         console.error("User data fetch error:", error);
       }
@@ -68,6 +72,7 @@ const EditProfile = () => {
       setUpImg(imageUrl);
       setCropping(true);
       setNewImageFile(file);
+      setRemovedImage(false);
       setIsLoading(false);
     }
   };
@@ -134,7 +139,7 @@ const EditProfile = () => {
           return;
         }
         const file = new File([blob], fileName, { type: blob.type });
-        window.URL.revokeObjectURL(profileImage);
+        if (profileImage) window.URL.revokeObjectURL(profileImage);
         const newCroppedImageUrl = window.URL.createObjectURL(file);
         resolve(newCroppedImageUrl);
       }, "image/jpeg");
@@ -153,9 +158,9 @@ const EditProfile = () => {
 
   // 프로필 사진 제거 함수
   const handleRemoveProfileImage = () => {
-    // 제거 시 기본값(ProfileImg)으로 되돌림
-    setProfileImage(ProfileImg);
+    setProfileImage(null);
     setNewImageFile(null);
+    setRemovedImage(true);
   };
 
   const handleSave = async () => {
@@ -173,7 +178,9 @@ const EditProfile = () => {
         });
         uploadedImageUrl = imageResponse.data.profileImageUrl;
       }
-      const currentProfileImage = profileImage ? profileImage : null;
+      // 기본 이미지인 경우, profileImage가 기본 이미지와 동일하면 null을 전송
+      const currentProfileImage =
+        profileImage === ProfileImg ? null : profileImage;
       const updateBody = {
         nickname,
         profileImageUrl:
@@ -212,14 +219,13 @@ const EditProfile = () => {
               {!cropping && (
                 <>
                   <Image
-                    src={profileImage}
+                    src={profileImage || ProfileImg}
                     alt="Profile"
                     fill
                     onLoadingComplete={() => setIsLoading(false)}
                     style={{ objectFit: "cover" }}
                   />
-                  {/* 기본 이미지가 아닐 때만 X 버튼 표시 */}
-                  {profileImage !== ProfileImg && (
+                  {profileImage && profileImage !== ProfileImg && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -303,7 +309,7 @@ const EditProfile = () => {
 
       <AlertModal
         isOpen={alertModalOpen}
-        message="프로필 사진이 변경되었습니다"
+        message="프로필이 변경되었습니다"
         onConfirm={() => setAlertModalOpen(false)}
       />
     </>

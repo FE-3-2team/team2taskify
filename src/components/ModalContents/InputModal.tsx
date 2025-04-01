@@ -1,5 +1,5 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import UnifiedInput, { BaseInput } from "../common/Input";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import UnifiedInput from "../common/Input";
 import { getColumns } from "@/api/column.api";
 
 interface InputProps {
@@ -7,9 +7,10 @@ interface InputProps {
   placeholder: string;
   title: string;
   isColumn?: boolean;
-  dashboardId?: string;
-  variant: "email";
+  dashboardId?: number;
+  variant: "email" | "column";
   changeValue: (value: string) => void;
+  setError?: Dispatch<SetStateAction<boolean>>;
 }
 export default function InputModal({
   label,
@@ -17,16 +18,19 @@ export default function InputModal({
   placeholder,
   variant,
   changeValue,
+  setError,
   dashboardId,
   isColumn,
 }: InputProps) {
-  const [currentValue, setCurrentValue] = useState("");
+  const [currentValue, setCurrentValue] = useState(
+    isColumn ? "새로운 컬럼" : ""
+  );
   const [isError, setIsError] = useState(false);
   const [columnsData, setColumnsData] = useState<Column[]>([]);
 
   useEffect(() => {
     columnsDuplicated();
-  }, []);
+  }, [changeValue]);
 
   const columnsDuplicated = async () => {
     if (!isColumn && !dashboardId) return;
@@ -35,10 +39,11 @@ export default function InputModal({
   };
 
   const handleChange = (value: string) => {
-    if (isColumn && currentValue) {
+    if (setError && currentValue !== "") {
       const isDuplicate = columnsData.some(
         (column: Column) => column.title.trim() === value.trim()
       );
+      setError(isDuplicate);
       setIsError(isDuplicate);
     }
     setCurrentValue(value);

@@ -7,7 +7,8 @@ export type InputVariant =
   | "confirmPassword"
   | "title"
   | "comment"
-  | "date";
+  | "date"
+  | "column";
 
 // hooks/useValidation.ts
 export const defaultValidate = (

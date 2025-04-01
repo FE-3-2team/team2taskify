@@ -7,12 +7,14 @@ import SignupFormLayout from "./AuthFormLayout";
 import { useValidation } from "@/hooks/useValidation";
 import CheckBox from "@/assets/icons/CheckBox.svg";
 import UncheckBox from "@/assets/icons/UnCheckBox.svg";
+import { AlertModal } from "../ModalContents/AlertModal";
+import { signupApi, loginApi } from "@/api/auth";
+import { useRouter } from "next/router";
 
 interface SignupFormProps {
   logoSrc: string | StaticImageData;
   logoAlt?: string;
   logoText?: string;
-  onSignup: (email: string, nickname: string, password: string) => Promise<any>;
   logoToFormSpacingClass?: string;
   formToButtonSpacingClass?: string;
   buttonToFooterSpacingClass?: string;
@@ -22,7 +24,6 @@ export default function SignupForm({
   logoSrc,
   logoAlt = "Logo",
   logoText = "첫 방문을 환영합니다!",
-  onSignup,
   logoToFormSpacingClass,
   formToButtonSpacingClass,
   buttonToFooterSpacingClass,
@@ -32,6 +33,8 @@ export default function SignupForm({
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [terms, setTerms] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   const nicknameError = useValidation(nickname, "title");
   const emailError = useValidation(email, "email");
@@ -55,7 +58,20 @@ export default function SignupForm({
 
   const handleSignup = async () => {
     if (!isFormValid) return;
-    await onSignup(email, nickname, password);
+    try {
+      await signupApi(email, nickname, password);
+
+      const loginData = await loginApi(email, password);
+
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("회원가입 또는 로그인 실패", error);
+    }
+  };
+
+  const handleModalConfirm = () => {
+    setIsModalOpen(false);
+    router.push("/mydashboard");
   };
 
   const logoSection = (
@@ -77,7 +93,6 @@ export default function SignupForm({
 
   const formSection = (
     <div className="flex flex-col w-full">
-      {/* 이메일 입력 */}
       <div>
         <UnifiedInput
           variant="email"
@@ -87,8 +102,6 @@ export default function SignupForm({
           onChange={setEmail}
         />
       </div>
-
-      {/* 닉네임 입력 */}
       <div className="mt-4">
         <UnifiedInput
           variant="title"
@@ -98,8 +111,6 @@ export default function SignupForm({
           onChange={setNickname}
         />
       </div>
-
-      {/* 비밀번호 입력 */}
       <div className="mt-4">
         <UnifiedInput
           variant="password"
@@ -109,8 +120,6 @@ export default function SignupForm({
           onChange={setPassword}
         />
       </div>
-
-      {/* 비밀번호 확인 입력 (compareWith 속성으로 password와 비교) */}
       <div className="mt-4">
         <UnifiedInput
           variant="confirmPassword"
@@ -121,8 +130,6 @@ export default function SignupForm({
           compareWith={password}
         />
       </div>
-
-      {/* 이용약관 체크박스 */}
       <label htmlFor="terms" className="flex items-center cursor-pointer">
         <input
           type="checkbox"
@@ -154,7 +161,9 @@ export default function SignupForm({
     <div className="w-full">
       <Button
         size="xlarge"
-        className={`text-white transition-colors ${isFormValid ? "!bg-[#5534da]" : "!bg-[#9FA6B2]"} `}
+        className={`text-white transition-colors ${
+          isFormValid ? "!bg-[#5534da]" : "!bg-[#9FA6B2]"
+        }`}
         onClick={handleSignup}
         disabled={!isFormValid}
       >
@@ -175,11 +184,18 @@ export default function SignupForm({
   );
 
   return (
-    <SignupFormLayout
-      logoSection={logoSection}
-      formSection={formSection}
-      buttonSection={buttonSection}
-      footerSection={footerSection}
-    />
+    <>
+      <SignupFormLayout
+        logoSection={logoSection}
+        formSection={formSection}
+        buttonSection={buttonSection}
+        footerSection={footerSection}
+      />
+      <AlertModal
+        isOpen={isModalOpen}
+        message="회원가입을 축하합니다"
+        onConfirm={handleModalConfirm}
+      />
+    </>
   );
 }

@@ -7,8 +7,7 @@ import { createColumn, updateColumn, deleteColumn } from "@/api/column.api";
 import { moveCardToColumn } from "@/api/card.api";
 import CreateCardModal from "@/components/ModalContents/CreateCardModal";
 import ManageColumnModal from "@/components/ModalContents/ManageColumnModal";
-import AddColumnModal from "@/components/ModalContents/AddColumnModal";
-import EditCardModal from "@/components/ModalContents/EditCardModal";
+// import EditCardModal from "@/components/ModalContents/EditCardModal";
 import { PlusIconButton } from "@/components/common/Button";
 import SortableColumn from "@/components/common/SortableColumn";
 import TodoCard from "@/components/common/TodoCard";
@@ -36,13 +35,14 @@ import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { DetailContent } from "@/components/common/ModalPopup";
+import InputModal from "@/components/ModalContents/InputModal";
+import { Modal, DetailContent } from "@/components/common/ModalPopup";
 
 export default function Dashboard() {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isOver, setIsOver] = useState(false);
-
+  const [isDuplicate, setIsDuplicate] = useState(false);
   const router = useRouter();
   const { dashboardId } = router.query;
   const states = useDashboardStates();
@@ -256,28 +256,29 @@ export default function Dashboard() {
         </DndContext>
         <div className="w-[308px] h-full bg-gray-100 px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center">
           <div className="desktop:w-[314px] tablet:w-[544px] w-[284px] tablet:h-[70px] h-[66px] mt-[46px]">
-            <AddColumnModal
+            <Modal
+              rightHandlerText="생성"
+              rightOnClick={handleCreateColumn}
+              className="bg-white border-gray-300 text-2lg-bold border-[1px]"
+              variant={isDuplicate ? "disabled" : "primary"}
               ModalOpenButton={
                 <div className="flex items-center gap-[12px] cursor-pointer text-black-400 text-lg-bold tablet:text-2lg-bold">
                   새로운 컬럼 추가하기
                   <PlusIconButton />
                 </div>
               }
-              isOpen={states.modalContentType === "addColumn"}
-              setIsOpen={(open) => {
-                states.setModalContentType(open ? "addColumn" : null);
-                if (!open) resetNewColumnForm();
-              }}
-              newColumnTitle={newColumnTitle}
-              setNewColumnTitle={setNewColumnTitle}
-              onCreateColumn={() => {
-                handleCreateColumn();
-              }}
-              onCancel={() => {
-                states.setModalContentType(null);
-                resetNewColumnForm();
-              }}
-            />
+            >
+              <InputModal
+                dashboardId={Number(dashboardId)}
+                isColumn
+                setError={setIsDuplicate}
+                label="컬럼 이름"
+                placeholder=""
+                title="새 컬럼 생성"
+                variant="column"
+                changeValue={setNewColumnTitle}
+              />
+            </Modal>
           </div>
         </div>
 
