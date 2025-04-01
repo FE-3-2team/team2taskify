@@ -28,23 +28,23 @@ declare global {
   }
   interface Assignee {
     id: number;
-    userId: number;
     profileImageUrl: string | null;
     nickname: string;
+    userId: number;
   }
   interface Card {
     cardId: number;
     title: string;
     description: string;
     tags: string[];
-    dueDate: Date | null;
+    dueDate: string;
     assignee: Assignee | null;
-    imageFile: File | null;
     imageUrl: string | null;
     columnId: number;
-    createdAt?: Date;
-    updatedAt?: Date;
+    updatedAt?: string;
+    imageFile?: File | null;
   }
+
   interface CardComment {
     id: number;
     content: string;

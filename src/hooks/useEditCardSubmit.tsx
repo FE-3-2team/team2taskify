@@ -34,6 +34,9 @@ export const useEditCardSubmit = () => {
     dashboardId,
     closeModal,
   }: Params) => {
+    const assigneeUserId =
+      editSelectedAssignee.userId ?? editSelectedAssignee.id;
+
     if (!editCardId) {
       console.error("editCardId is null");
       return;
@@ -69,12 +72,14 @@ export const useEditCardSubmit = () => {
     try {
       await updateCard({
         cardId: editCardId,
-        data: {
+        cardData: {
           columnId: editCardColumnId,
-          assigneeUserId: editSelectedAssignee.userId,
+          assignee: editSelectedAssignee,
           title: editCardTitle,
           description: editCardDescription,
-          dueDate: editCardDueDate ? formatDateTime(editCardDueDate) : "",
+          dueDate: editCardDueDate
+            ? formatDateTime(new Date(editCardDueDate))
+            : "",
           tags: editCardTags,
           imageUrl: imageUrlToSubmit ?? "",
         },
@@ -83,7 +88,8 @@ export const useEditCardSubmit = () => {
       alert("카드가 수정되었습니다.");
       closeModal();
       resetEditCardForm();
-      fetchColumns(Number(dashboardId));
+      window.location.reload();
+      //fetchColumns(Number(dashboardId));
     } catch (err) {
       console.error(err);
       alert("카드 수정 실패");

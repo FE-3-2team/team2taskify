@@ -14,6 +14,15 @@ export default function useDashboardStates() {
   const [targetColumnTitle, setTargetColumnTitle] = useState<string>("");
   const [members, setMembers] = useState<Assignee[]>([]);
   const [newColumnTitle, setNewColumnTitle] = useState("");
+  const [targetCardId, setTargetCardId] = useState<number | null>(null);
+  const [targetCardColumnId, setTargetCardColumnId] = useState<number | null>(
+    null
+  );
+  const [targetCardColumnTitle, setTargetCardColumnTitle] =
+    useState<string>("");
+  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const [isCardDetailModalOpen, setIsCardDetailModalOpen] = useState(false);
 
   return {
     columns,
@@ -36,5 +45,17 @@ export default function useDashboardStates() {
     setMembers,
     newColumnTitle,
     setNewColumnTitle,
+    targetCardId,
+    setTargetCardId,
+    targetCardColumnId,
+    setTargetCardColumnId,
+    targetCardColumnTitle,
+    setTargetCardColumnTitle,
+    isCardModalOpen,
+    setIsCardModalOpen,
+    selectedCard,
+    setSelectedCard,
+    isCardDetailModalOpen,
+    setIsCardDetailModalOpen,
   };
 }

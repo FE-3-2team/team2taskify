@@ -11,12 +11,15 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getMember } from "@/api/member";
 import { getColumns } from "@/api/column.api";
 import { AlertModal } from "./AlertModal";
+import { formatDateTime } from "@/utils/date";
 
 interface Props {
   isCardEdit: boolean;
   setIsCardEdit: Dispatch<SetStateAction<boolean>>;
+  selectedCard: Card | null;
 }
-const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
+
+const EditCardModal = ({ isCardEdit, setIsCardEdit, selectedCard }: Props) => {
   const states = useDashboardStates();
   const { handleEditCardSubmit } = useEditCardSubmit();
   const { cardData, setEditedData, resetEditCardForm } = useEditCardForm();
@@ -55,7 +58,6 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
       if (!cardData.assignee && members.length > 0) {
         setEditedData({ assignee: members[0] });
       }
-      
     } catch (err) {
       setMessage("카드 상세보기에 실패했습니다");
       setIsAlert(true);
@@ -73,9 +75,9 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
       editSelectedAssignee: cardData.assignee!,
       editCardTitle: cardData.title,
       editCardDescription: cardData.description,
-      editCardDueDate: cardData.dueDate,
+      editCardDueDate: new Date(cardData.dueDate),
       editCardTags: cardData.tags,
-      editCardImageFile: cardData.imageFile,
+      editCardImageFile: cardData.imageFile ?? null,
       editCardImageUrl: cardData.imageUrl,
       fetchColumns,
       resetEditCardForm,
@@ -84,8 +86,35 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
     });
   };
 
-  console.log("assignee in EditCardModal", assignee);
+  useEffect(() => {
+    if (!selectedCard) return;
 
+    const patchedAssignee = selectedCard.assignee
+      ? {
+          ...selectedCard.assignee,
+          userId:
+            selectedCard.assignee.userId ??
+            selectedCard.assignee.id ??
+            undefined,
+        }
+      : null;
+
+    setEditedData({
+      cardId: selectedCard.cardId,
+      columnId: selectedCard.columnId,
+      title: selectedCard.title,
+      description: selectedCard.description,
+      dueDate: selectedCard.dueDate
+        ? formatDateTime(new Date(selectedCard.dueDate))
+        : undefined,
+      tags: selectedCard.tags,
+      assignee: patchedAssignee,
+      imageUrl: selectedCard.imageUrl,
+      imageFile: undefined,
+    });
+
+    handleLoad();
+  }, [selectedCard]);
 
   return (
     <Modal
@@ -123,14 +152,16 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit }: Props) => {
           setCardTitle={(v) => setEditedData({ title: v })}
           cardDescription={description}
           setCardDescription={(v) => setEditedData({ description: v })}
-          cardDueDate={dueDate}
-          setCardDueDate={(v) => setEditedData({ dueDate: v })}
+          cardDueDate={dueDate ? new Date(dueDate) : null}
+          setCardDueDate={(v) =>
+            setEditedData({ dueDate: v ? formatDateTime(v) : undefined })
+          }
           cardTags={tags}
           setCardTags={(v) => {
             const nextTags = typeof v === "function" ? v(tags) : v;
             setEditedData({ tags: nextTags });
           }}
-          cardImageFile={imageFile}
+          cardImageFile={imageFile ?? null}
           setCardImageFile={(f) => setEditedData({ imageFile: f })}
           cardImageUrl={imageUrl}
           setCardImageUrl={(url) => setEditedData({ imageUrl: url })}

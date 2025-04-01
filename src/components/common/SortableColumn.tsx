@@ -7,7 +7,7 @@ interface Props {
   column: ColumnData;
   onAddCardClick: (columnId: number) => void;
   onManageColumnClick: (columnId: number, title: string) => void;
-  onEditCardClick: (card: Card) => void;
+  onCardClick: (card: Card) => void;
   activeCard?: Card | null;
 }
 
@@ -15,7 +15,7 @@ const SortableColumn = ({
   column,
   onAddCardClick,
   onManageColumnClick,
-  onEditCardClick,
+  onCardClick: onEditCardClick,
   activeCard,
 }: Props) => {
   const { attributes, listeners, setNodeRef, transform, transition } =

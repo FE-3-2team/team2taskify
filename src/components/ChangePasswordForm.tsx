@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/common/Button";
-import UnifiedInput from "@/components/common/Input";
+import UnifiedInput from "@/components/common/Input/Input";
 import { AlertModal } from "@/components/ModalContents/AlertModal";
 import { changePasswordApi } from "@/api/auth";
 
@@ -12,7 +12,8 @@ export default function ChangePasswordForm() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const allFilled = currentPassword && newPassword && confirmPassword;
-  const isFormValid = newPassword.length >= 8 && newPassword === confirmPassword;
+  const isFormValid =
+    newPassword.length >= 8 && newPassword === confirmPassword;
 
   const handleSubmit = async () => {
     if (!currentPassword) {
@@ -34,27 +35,26 @@ export default function ChangePasswordForm() {
     }
 
     try {
-        await changePasswordApi(currentPassword, newPassword);
-    
-        setErrorMessage("비밀번호가 성공적으로 변경되었습니다.");
-        setErrorModalOpen(true);
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
+      await changePasswordApi(currentPassword, newPassword);
 
-      } catch (err: any) {
-        console.log("error.response:", err?.response);
-        console.log("error.data:", err?.response?.data);
-        console.log("error.message:", err?.message);
+      setErrorMessage("비밀번호가 성공적으로 변경되었습니다.");
+      setErrorModalOpen(true);
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err: any) {
+      console.log("error.response:", err?.response);
+      console.log("error.data:", err?.response?.data);
+      console.log("error.message:", err?.message);
 
-        if (err.message.toLowerCase().includes("password")) {
-          setErrorMessage("현재 비밀번호가 일치하지 않습니다.");
-        } else {
-          setErrorMessage(err.message);
-        }
-        setErrorModalOpen(true);
+      if (err.message.toLowerCase().includes("password")) {
+        setErrorMessage("현재 비밀번호가 일치하지 않습니다.");
+      } else {
+        setErrorMessage(err.message);
       }
-    };
+      setErrorModalOpen(true);
+    }
+  };
 
   return (
     <div className="w-full max-w-[284px] tablet:max-w-[672px] p-[16px] tablet:p-[24px] bg-white rounded-[8px] tablet:rounded-[16px]">

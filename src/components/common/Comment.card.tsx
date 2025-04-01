@@ -13,7 +13,7 @@ export default function Comment({ comment, onClickDelete }: Props) {
   const { nickname, profileImageUrl } = comment.author;
   const [currentValue, setCurrentValue] = useState(comment.content);
   const { updatedAt, id } = comment;
-  const formattedDate = useFormatTime(updatedAt);
+  const formattedDate = useFormatTime(String(updatedAt));
 
   const handleEdit = async () => {
     if (isEdit && comment.content !== currentValue) {

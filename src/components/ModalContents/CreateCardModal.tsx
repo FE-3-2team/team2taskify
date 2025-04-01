@@ -62,8 +62,9 @@ const CreateCardModal = ({
         cardImageFile,
       });
 
-      handleClose();
+      resetNewCardForm();
       fetchColumns(dashboardId);
+      setIsOpen(false);
     } catch (err) {
       alert("카드 생성 실패");
     }
@@ -93,6 +94,7 @@ const CreateCardModal = ({
           할 일 생성
         </h2>
         <CardForm
+          key={isOpen ? "open" : "closed"}
           members={members}
           selectedAssignee={selectedAssignee}
           setSelectedAssignee={setSelectedAssignee}
