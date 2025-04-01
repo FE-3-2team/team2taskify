@@ -61,11 +61,6 @@ const Column: React.FC<ColumnProps> = ({ column, setIsEditColumn }) => {
             >
               {currentCards.map((card, index) => (
                 <>
-                  <EditCard
-                    setIsCardEdit={setIsCardEdit}
-                    isCardEdit={isCardEdit}
-                    cardId={card.cardId}
-                  />
                   <DetailContent
                     columnTitle={column.title}
                     cardId={card.cardId}
@@ -85,7 +80,13 @@ const Column: React.FC<ColumnProps> = ({ column, setIsEditColumn }) => {
                       />
                     }
                     setIsCardEdit={setIsCardEdit}
+                    setCurrentCards={setCurrentCards}
                   ></DetailContent>
+                  <EditCard
+                    setIsCardEdit={setIsCardEdit}
+                    isCardEdit={isCardEdit}
+                    cardId={card.cardId}
+                  />
                 </>
               ))}
             </SortableContext>

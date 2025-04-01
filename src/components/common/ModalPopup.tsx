@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, ReactNode, SetStateAction, useEffect } from "react";
 import Image from "next/image";
 import Button from "@/components/common/Button/Button";
 import DropdownEditDel from "./Dropdown/DropdownEditDel";
@@ -25,7 +19,7 @@ interface Props {
   size?: "xxsmall" | "xsmall" | "small" | "medium" | "large" | "xlarge"; // 크기별 스타일 적용
   variant?: "primary" | "secondary" | "outline" | "disabled" | "create"; // 색상/디자인 적용
   isOpen?: boolean;
-  setIsOpen?: (e: any) => void;
+  setIsOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 export function Modal({
@@ -46,8 +40,9 @@ export function Modal({
     ref,
     setIsOpen: internalSetIsOpen,
   } = useAutoClose(false);
-  const modalIsOpen = isOpen !== undefined ? isOpen : internalIsOpen;
-  const modalSetIsOpen = setIsOpen ?? internalSetIsOpen;
+
+  const modalIsOpen = isOpen ? isOpen : internalIsOpen;
+  const modalSetIsOpen = setIsOpen ? setIsOpen : internalSetIsOpen;
 
   useEffect(() => {
     if (!modalIsOpen) return;
@@ -62,7 +57,7 @@ export function Modal({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [modalIsOpen, setIsOpen, ref]);
+  }, []);
 
   return (
     <>
@@ -146,6 +141,7 @@ interface DetailContentProps {
   columnTitle: string;
   columnId: number;
   setIsCardEdit: Dispatch<SetStateAction<boolean>>;
+  setCurrentCards: Dispatch<SetStateAction<Card[]>>;
   isOpen?: boolean;
   setIsOpen?: (value: boolean) => void;
 }
@@ -155,40 +151,19 @@ export function DetailContent({
   ModalOpenButton,
   cardId,
   columnId,
+  setCurrentCards,
   setIsCardEdit,
 }: DetailContentProps) {
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
-
-  const states = useDashboardStates();
 
   const handleButtonClick = () => {
     setIsOpen(true);
   };
 
-  const handleEdit = () => {
-    setIsOpen(false);
-  };
-
   const handleCardDelete = async () => {
     await deleteCard(cardId);
-
-    states.setColumns((prevColumns) => {
-      const updated = prevColumns.map((col) => {
-        if (col.id === columnId) {
-          const filteredCards = col.cards.filter(
-            (card) => card.cardId !== cardId
-          );
-
-          return { ...col, cards: filteredCards };
-        }
-        return col;
-      });
-      return updated;
-    });
-
+    setCurrentCards((prev) => prev.filter((card) => card.cardId !== cardId));
     setIsOpen(false);
-
-    window.location.reload();
   };
 
   return (
@@ -208,7 +183,7 @@ export function DetailContent({
                   <DropdownEditDel
                     onDelete={handleCardDelete}
                     onEdit={() => {
-                      handleEdit();
+                      setIsOpen(false);
                       setIsCardEdit(true);
                     }}
                   />

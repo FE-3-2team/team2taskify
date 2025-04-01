@@ -22,7 +22,6 @@ export default function MyDashboard() {
   const [newTitle, setNewTitle] = useState("");
   const [message, setMessage] = useState("");
   const [isAlert, setIsAlert] = useState(false);
-  const [isCardEdit, setIsCardEdit] = useState(false); //수정하기 모달 로직 setIsCardEdit은 모달 상세보기 로도 연결
   const router = useRouter();
   //
   useEffect(() => {
