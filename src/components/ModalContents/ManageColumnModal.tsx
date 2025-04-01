@@ -1,58 +1,41 @@
 import { deleteColumn, updateColumn } from "@/api/column.api";
 import { Modal } from "@/components/common/ModalPopup";
-import useDashboardStates from "@/hooks/useDashboardStates";
-import { useFetchColumns } from "@/hooks/useFetchColumns";
-import useAuthStore from "@/utils/Zustand/zustand";
 import Image from "next/image";
-import { useStore } from "zustand";
 import GearIcon from "@/assets/icons/Edit.icon.svg";
 import InputModal from "./InputModal";
+import { Dispatch, SetStateAction, useState } from "react";
 
 type Props = {
-  setTitle: (v: string) => void;
+  title: string;
+  columnId: number;
+  setCurrentTitle: Dispatch<SetStateAction<string>>;
+  setIsDeleted: Dispatch<SetStateAction<boolean>>;
 };
 
-const ManageColumnModal = ({ setTitle }: Props) => {
-  const authStore = useStore(useAuthStore);
-  const dashboardId = Number(authStore.dashboardId);
-  const states = useDashboardStates();
-
-  const columnData = {
-    id: states.targetColumnId!,
-    title: states.targetColumnTitle,
-  };
-  const { fetchColumns } = useFetchColumns(
-    states.setColumns,
-    states.setIsLoading
-  );
+const ManageColumnModal = ({
+  title,
+  columnId,
+  setCurrentTitle,
+  setIsDeleted,
+}: Props) => {
+  const [newTitle, setNewTitle] = useState(title);
 
   const onDelete = async () => {
     const confirmDelete = confirm("정말 이 컬럼을 삭제하시겠습니까?");
     if (!confirmDelete) return;
     try {
-      await deleteColumn(states.targetColumnId!);
-      states.setIsManageColumnModalOpen(false);
-      fetchColumns(Number(dashboardId));
-      alert(`컬럼(${states.targetColumnId}) 삭제`);
+      await deleteColumn(columnId);
+      setIsDeleted(true);
     } catch (err) {
-      console.error(err);
       alert("컬럼 삭제 실패");
     }
   };
   const onUpdate = async () => {
     try {
-      await updateColumn({
-        columnId: states.targetColumnId!,
-        title: states.targetColumnTitle,
-      });
-      states.setIsManageColumnModalOpen(false);
-      fetchColumns(Number(dashboardId));
-
-      alert(
-        `컬럼 (${states.targetColumnId}) 이름을 '${states.targetColumnTitle}'로 변경`
-      );
+      await updateColumn(columnId, newTitle);
+      setCurrentTitle(newTitle);
     } catch (err) {
-      alert(`컬럼 (${states.targetColumnId}) 이름 변경 실패`);
+      alert(`컬럼 이름 변경 실패`);
     }
   };
   return (
@@ -68,8 +51,8 @@ const ManageColumnModal = ({ setTitle }: Props) => {
     >
       <InputModal
         title="컬럼 관리"
-        defaultValue={columnData.title}
-        changeValue={(value) => setTitle(value)}
+        defaultValue={newTitle}
+        changeValue={(value) => setNewTitle(value)}
         label="이름"
         placeholder="컬럼 이름을 입력해 주세요"
         variant="column"

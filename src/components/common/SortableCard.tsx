@@ -11,13 +11,11 @@ export default function SortableCard({
   card,
   columnId,
   index,
-  onClick,
   lastCardRef,
 }: {
   card: Card;
   columnId: number;
   index: number;
-  onClick: () => void;
   lastCardRef?: (node: HTMLDivElement | null) => void;
 }) {
   const {
@@ -53,7 +51,6 @@ export default function SortableCard({
       <TodoCard
         key={`${card.cardId}-${card.updatedAt}`}
         todoData={card}
-        onClick={onClick}
         listeners={listeners}
       />
     </div>

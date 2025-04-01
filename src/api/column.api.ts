@@ -26,28 +26,14 @@ export async function createColumn({
   }
 }
 
-export async function updateColumn({
-  columnId,
-  title,
-}: {
-  columnId: number;
-  title: string;
-}) {
-  try {
-    const res = await instance.put(`/columns/${columnId}`, { title });
-    return res.data;
-  } catch (err) {
-    throw new Error("컬럼 이름 변경 실패");
-  }
+export async function updateColumn(columnId: number, title: string) {
+  const res = await instance.put(`/columns/${columnId}`, { title });
+  return res.data;
 }
 
 export async function deleteColumn(columnId: number) {
-  try {
-    const res = await instance.delete(`/columns/${columnId}`);
-    return res.data;
-  } catch (err) {
-    throw new Error("컬럼 삭제 실패");
-  }
+  const res = await instance.delete(`/columns/${columnId}`);
+  return res.data;
 }
 
 export async function uploadCardImage({

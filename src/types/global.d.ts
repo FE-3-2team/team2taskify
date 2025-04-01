@@ -45,6 +45,9 @@ declare global {
     imageFile?: File | null;
   }
 
+  interface ColumnData extends Column {
+    cards: Card[];
+  }
   interface CardComment {
     id: number;
     content: string;
@@ -90,7 +93,7 @@ declare global {
     title: string;
     teamId: string;
     dashboardId: number;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: string;
+    updatedAt?: string;
   }
 }

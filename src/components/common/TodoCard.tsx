@@ -6,13 +6,11 @@ import CalendarIcon from "@/assets/icons/Calendar.svg";
 
 interface TodoCardProps {
   todoData: Card;
-  onClick: () => void;
   listeners?: any;
 }
 
 const TodoCard: React.FC<TodoCardProps> = ({
   todoData,
-  onClick,
   listeners,
 }: TodoCardProps) => {
   const [isImageError, setIsImageError] = useState(false);
@@ -20,7 +18,6 @@ const TodoCard: React.FC<TodoCardProps> = ({
 
   return (
     <div
-      onClick={onClick}
       {...listeners}
       className="w-full tablet:px-[20px] desktop:py-[16px] tablet:py-[14px] px-[12px] py-[6px] border rounded-[6px] border-gray-300 bg-white flex items-center justify-center cursor-pointer"
     >

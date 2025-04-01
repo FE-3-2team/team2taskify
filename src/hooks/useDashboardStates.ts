@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { ColumnData } from "@/types/column";
 
 export default function useDashboardStates() {
   const [columns, setColumns] = useState<ColumnData[]>([]);
