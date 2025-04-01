@@ -42,7 +42,9 @@ export default function TagInput({ tags, onChange }: props) {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="mb-2 text-sm text-gray-700 text-lg-regular">태그</p>
+      <p className="mb-2 text-sm text-gray-700 text-md-medium tablet:text-2lg-medium">
+        태그
+      </p>
       <div className="w-full min-h-[50px] border border-gray-300 rounded-[8px] px-[12px] py-[10px]  items-center flex flex-wrap gap-[8px] bg-white cursor-text">
         {currentTags.map((tag, idx) => (
           <div
