@@ -1,7 +1,7 @@
 import { Modal } from "@/components/common/ModalPopup";
 import { useStore } from "zustand";
 import useAuthStore from "@/utils/Zustand/zustand";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getMember } from "@/api/member";
 import { AlertModal } from "./AlertModal";
 import { createCard } from "@/api/card.api";
@@ -13,8 +13,9 @@ import Image from "next/image";
 
 interface Props {
   columnId: number;
+  setCurrentCards: Dispatch<SetStateAction<Card[]>>;
 }
-export default function CreateCard({ columnId }: Props) {
+export default function CreateCard({ columnId, setCurrentCards }: Props) {
   const store = useStore(useAuthStore);
   const dashboardId = Number(store.dashboardId);
   const [cardData, setCardData] = useState<CardData>(INITIAL_CARD);
@@ -38,7 +39,8 @@ export default function CreateCard({ columnId }: Props) {
 
   const handleCreate = async () => {
     try {
-      await createCard({ dashboardId, columnId, cardData });
+      const newCard = await createCard({ dashboardId, columnId, cardData });
+      setCurrentCards((prev) => [...prev, newCard]);
     } catch (err: any) {
       setMessage(err.response.data.message);
       setIsAlert(true);

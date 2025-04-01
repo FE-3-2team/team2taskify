@@ -19,7 +19,7 @@ const Column: React.FC<ColumnProps> = ({ column, setIsEditColumn }) => {
   const [isCardEdit, setIsCardEdit] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(column.title);
   const [isDeleted, setIsDeleted] = useState(false);
-  const { id: columnId, title, cards } = column;
+  const [currentCards, setCurrentCards] = useState(column.cards);
 
   const observer = useRef<IntersectionObserver | null>(null);
   const lastCardRef = useCallback(
@@ -31,7 +31,7 @@ const Column: React.FC<ColumnProps> = ({ column, setIsEditColumn }) => {
       });
       if (node) observer.current.observe(node);
     },
-    [cards.length]
+    [currentCards.length]
   );
   return (
     <>
@@ -43,7 +43,7 @@ const Column: React.FC<ColumnProps> = ({ column, setIsEditColumn }) => {
               <p className="text-black-400 text-lg-bold mr-[12px]">
                 {currentTitle}
               </p>
-              <CardCount count={cards.length} />
+              <CardCount count={currentCards.length} />
             </div>
             <ManageColumnModal
               setCurrentTitle={setCurrentTitle}
@@ -53,13 +53,13 @@ const Column: React.FC<ColumnProps> = ({ column, setIsEditColumn }) => {
             />
           </div>
 
-          <CreateCard columnId={columnId} />
+          <CreateCard columnId={column.id} setCurrentCards={setCurrentCards} />
           <div className="flex w-full flex-col gap-[16px]">
             <SortableContext
-              items={cards.map((card) => card.cardId)}
+              items={currentCards.map((card) => card.cardId)}
               strategy={verticalListSortingStrategy}
             >
-              {cards.map((card, index) => (
+              {currentCards.map((card, index) => (
                 <>
                   <EditCard
                     setIsCardEdit={setIsCardEdit}
@@ -75,10 +75,12 @@ const Column: React.FC<ColumnProps> = ({ column, setIsEditColumn }) => {
                       <SortableCard
                         key={`card-${card.cardId ?? index}`}
                         card={card}
-                        columnId={columnId}
+                        columnId={column.id}
                         index={index}
                         lastCardRef={
-                          index === cards.length - 1 ? lastCardRef : undefined
+                          index === currentCards.length - 1
+                            ? lastCardRef
+                            : undefined
                         }
                       />
                     }
