@@ -88,7 +88,8 @@ export const useEditCardSubmit = () => {
       alert("카드가 수정되었습니다.");
       closeModal();
       resetEditCardForm();
-      fetchColumns(Number(dashboardId));
+      window.location.reload();
+      //fetchColumns(Number(dashboardId));
     } catch (err) {
       console.log("📤 카드 수정 제출", {
         cardId: editCardId,
