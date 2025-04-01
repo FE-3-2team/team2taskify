@@ -11,7 +11,7 @@ import SideMenu from "@/components/common/SideMenu";
 import CardModal from "@/components/ModalContents/Card.modal";
 import { AlertModal } from "@/components/ModalContents/AlertModal";
 import EditCard from "@/components/ModalContents/EditCard.modal";
-import CreateCard from "@/components/ModalContents/NewCard.modal";
+import CreateCard from "@/components/ModalContents/CreateCard.modal";
 
 export interface Data {
   title: string;
