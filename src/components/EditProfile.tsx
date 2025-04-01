@@ -4,7 +4,7 @@ import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { ClipLoader } from "react-spinners";
 import { instance } from "@/api/instance";
-import UnifiedInput from "@/components/common/Input";
+import UnifiedInput from "@/components/common/Input/Input";
 import Button from "@/components/common/Button/Button";
 import ProfileImg from "@/assets/icons/CardProfile.svg";
 import { AlertModal } from "@/components/ModalContents/AlertModal";

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import UnifiedInput from "../common/Input";
+import UnifiedInput from "@/components/common/Input/Input";
 import Button from "../common/Button/Button";
 import LoginFormLayout from "./AuthFormLayout";
 import { useRouter } from "next/router";

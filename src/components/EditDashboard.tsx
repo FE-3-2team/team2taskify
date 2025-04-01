@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import ColorChip from "./common/Chip/Color.chip";
 import { editDashboard } from "@/api/dashboard";
-import { BaseInput } from "@/components/common/Input";
+import { BaseInput } from "@/components/common/Input/Input";
 import { Button } from "./common/Button";
 import { AlertModal } from "./ModalContents/AlertModal";
 

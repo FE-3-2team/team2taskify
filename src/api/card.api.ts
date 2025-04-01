@@ -1,4 +1,7 @@
+import { CardData } from "@/components/common/Card/CardValues";
 import { instance } from "./instance";
+import { useFormatTime } from "@/hooks/useFormatDate";
+const DEFAULT_IMG = process.env.NEXT_PUBLIC_DEFAULT_IMG;
 //카드 상세 조회
 export async function getCardDetail(cardId: number) {
   try {
@@ -27,63 +30,56 @@ export async function deleteCard(cardId: number) {
   }
 }
 
+//카드 생성
+interface CreateCardProps {
+  dashboardId: number;
+  columnId: number;
+  cardData: CardData;
+}
 export async function createCard({
   dashboardId,
   columnId,
-  assigneeUserId,
-  title,
-  description,
-  dueDate,
-  tags,
-  imageUrl,
-}: {
-  dashboardId: number;
-  columnId: number;
-  assigneeUserId: number;
-  title: string;
-  description: string;
-  dueDate: string;
-  tags: string[];
-  imageUrl: string;
-}) {
-  try {
-    const res = await instance.post("/cards", {
-      dashboardId,
-      columnId,
-      assigneeUserId,
-      title,
-      description,
-      dueDate,
-      tags,
-      imageUrl,
-    });
-    return res.data;
-  } catch (err) {
-    throw new Error("카드 생성 실패");
-  }
+  cardData,
+}: CreateCardProps) {
+  const { assignee, title, description, dueDate, tags, imageUrl } = cardData;
+  console.log(cardData);
+  const formattedDate = useFormatTime(dueDate);
+  const filteredImg = imageUrl === "" ? DEFAULT_IMG : imageUrl;
+  const res = await instance.post("/cards", {
+    dashboardId,
+    columnId,
+    assigneeUserId: assignee.userId,
+    title,
+    description,
+    dueDate: formattedDate,
+    tags,
+    imageUrl: filteredImg,
+  });
+  return res.data;
 }
 
-export async function updateCard({
-  cardId,
-  data,
-}: {
+//카드 수정
+interface Props {
   cardId: number;
-  data: {
-    columnId: number;
-    assigneeUserId: number;
-    title: string;
-    description: string;
-    dueDate: string;
-    tags: string[];
-    imageUrl: string;
-  };
-}) {
-  try {
-    const res = await instance.put(`/cards/${cardId}`, data);
-    return res.data;
-  } catch (err) {
-    throw new Error("카드 수정 실패");
-  }
+  cardData: CardData;
+}
+export async function updateCard({ cardId, cardData }: Props) {
+  const { columnId, assignee, title, description, dueDate, tags, imageUrl } =
+    cardData;
+  const filteredImg = imageUrl === "" ? DEFAULT_IMG : imageUrl;
+
+  const formattedDate = useFormatTime(dueDate);
+  const res = await instance.put(`/cards/${cardId}`, {
+    columnId,
+    assignee: assignee.userId,
+    title,
+    description,
+    dueDate: formattedDate,
+    tags,
+    imageUrl: filteredImg,
+  });
+
+  return res.data;
 }
 
 export async function moveCardToColumn({
