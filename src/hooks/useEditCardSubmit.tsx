@@ -34,6 +34,9 @@ export const useEditCardSubmit = () => {
     dashboardId,
     closeModal,
   }: Params) => {
+    const assigneeUserId =
+      editSelectedAssignee.userId ?? editSelectedAssignee.id;
+
     if (!editCardId) {
       console.error("editCardId is null");
       return;
@@ -71,10 +74,12 @@ export const useEditCardSubmit = () => {
         cardId: editCardId,
         data: {
           columnId: editCardColumnId,
-          assigneeUserId: editSelectedAssignee.userId,
+          assigneeUserId,
           title: editCardTitle,
           description: editCardDescription,
-          dueDate: editCardDueDate ? formatDateTime(editCardDueDate) : "",
+          dueDate: editCardDueDate
+            ? formatDateTime(new Date(editCardDueDate))
+            : "",
           tags: editCardTags,
           imageUrl: imageUrlToSubmit ?? "",
         },
@@ -85,6 +90,17 @@ export const useEditCardSubmit = () => {
       resetEditCardForm();
       fetchColumns(Number(dashboardId));
     } catch (err) {
+      console.log("📤 카드 수정 제출", {
+        cardId: editCardId,
+        columnId: editCardColumnId,
+        assigneeUserId,
+        title: editCardTitle,
+        description: editCardDescription,
+        dueDate: editCardDueDate,
+        tags: editCardTags,
+        imageUrl: imageUrlToSubmit,
+      });
+
       console.error(err);
       alert("카드 수정 실패");
     }
