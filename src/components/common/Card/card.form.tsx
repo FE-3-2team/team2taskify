@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
 import UnifiedInput from "@/components/common/Input/Input";
 import { CardData, INITIAL_CARD } from "./CardValues";
-import TagInput from "../Input/tagInput";
+import TagInput from "@/components/common/Input/tagInput";
 //
 
 interface Props {

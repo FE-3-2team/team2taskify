@@ -42,11 +42,10 @@ export const defaultValidate = (
   } else if (variant === "title") {
     // 예: 닉네임은 최소 2글자 이상으로 제한 (추가 조건 필요시 더 추가)
     if (value.length < 2 || value.length > 10)
-      return "닉네임은 2자 이상 10자 이하로 작성해주세요.";
+      return "2자 이상 10자 이하로 작성해주세요.";
     // 추가로 알파벳, 한글, 숫자만 허용하는 경우:
     const nicknameRegex = /^[A-Za-z0-9가-힣]+$/;
-    if (!nicknameRegex.test(value))
-      return "닉네임에 특수문자는 사용할 수 없습니다.";
+    if (!nicknameRegex.test(value)) return " 특수문자는 사용할 수 없습니다.";
   } else if (variant === "comment") {
     if (value.length > 300) return "최대 300자 까지 입력할 수 있습니다.";
   }
