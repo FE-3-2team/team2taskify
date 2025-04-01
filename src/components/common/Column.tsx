@@ -1,4 +1,4 @@
-import { useRef, useCallback, Dispatch, SetStateAction, useState } from "react";
+import { useRef, useCallback, useState } from "react";
 import SortableCard from "@/components/common/SortableCard";
 import {
   SortableContext,
@@ -13,9 +13,9 @@ import ColorChip from "./Button/ColorChipSmall";
 
 interface ColumnProps {
   column: ColumnData;
-  setIsEditColumn: Dispatch<SetStateAction<boolean>>;
 }
-const Column: React.FC<ColumnProps> = ({ column, setIsEditColumn }) => {
+
+const Column: React.FC<ColumnProps> = ({ column }) => {
   const [isCardEdit, setIsCardEdit] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(column.title);
   const [isDeleted, setIsDeleted] = useState(false);

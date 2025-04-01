@@ -1,16 +1,11 @@
 import { getColumns } from "@/api/column.api";
 import { getCards } from "@/api/card.api";
-import { getDashboardInfo } from "@/api/dashboard";
-import { useStore } from "zustand";
-import useAuthStore from "@/utils/Zustand/zustand";
 
 export function useFetchColumns(setColumns: any, setIsLoading: any) {
-  const authStore = useStore(useAuthStore);
-  const dashboardId = Number(authStore.dashboardId);
   const fetchColumns = async (pageId: number) => {
     try {
       setIsLoading(true);
-      const columnList = await getColumns(dashboardId);
+      const columnList = await getColumns(pageId);
 
       const fullColumns = await Promise.all(
         columnList.map(async (col) => {

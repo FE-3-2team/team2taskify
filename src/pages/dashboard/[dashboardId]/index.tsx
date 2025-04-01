@@ -6,9 +6,7 @@ import { moveCardToColumn } from "@/api/card.api";
 import { PlusIconButton } from "@/components/common/Button";
 import SortableColumn from "@/components/common/SortableColumn";
 import TodoCard from "@/components/common/TodoCard";
-
 import { useFetchColumns } from "@/hooks/useFetchColumns";
-
 import {
   DndContext,
   closestCenter,
@@ -27,30 +25,28 @@ import {
 import InputModal from "@/components/ModalContents/InputModal";
 import { Modal } from "@/components/common/ModalPopup";
 import SideMenu from "@/components/common/SideMenu";
-import { useStore } from "zustand";
-import useAuthStore from "@/utils/Zustand/zustand";
+import { useRouter } from "next/router";
 
 export default function Dashboard() {
-  const authStore = useStore(useAuthStore);
-  const dashboardId = Number(authStore.dashboardId);
+  const router = useRouter();
+  const { dashboardId } = router.query;
   const [isLoading, setIsLoading] = useState(false);
   const [columnsData, setColumnsData] = useState<ColumnData[]>([]);
-  const [isEditColumn, setIsEditColumn] = useState(false);
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [isOver, setIsOver] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState("");
   //
-  const { fetchColumns } = useFetchColumns(setColumnsData, setIsLoading);
 
   useEffect(() => {
+    if (!dashboardId) return;
     handleLoad();
-  }, []);
+  }, [dashboardId]);
 
   const handleLoad = async () => {
-    if (!dashboardId) return;
-    await fetchColumns(dashboardId);
+    const { fetchColumns } = useFetchColumns(setColumnsData, setIsLoading);
+
+    await fetchColumns(Number(dashboardId));
   };
 
   //드래그앤 드랍 로직
@@ -194,13 +190,7 @@ export default function Dashboard() {
               </>
             ) : (
               columnsData.map((column: any) => {
-                return (
-                  <SortableColumn
-                    key={column.id}
-                    column={column}
-                    setIsEditColumn={setIsEditColumn}
-                  />
-                );
+                return <SortableColumn key={column.id} column={column} />;
               })
             )}
           </SortableContext>
@@ -210,7 +200,6 @@ export default function Dashboard() {
               <div
                 style={{
                   opacity: isDragging ? 0.5 : 1,
-                  border: isOver ? "2px dashed #aaa" : "none",
                 }}
               >
                 <TodoCard todoData={activeCard} />
@@ -233,7 +222,7 @@ export default function Dashboard() {
               }
             >
               <InputModal
-                dashboardId={dashboardId}
+                dashboardId={Number(dashboardId)}
                 isColumn
                 setError={setIsDuplicate}
                 label="컬럼 이름"

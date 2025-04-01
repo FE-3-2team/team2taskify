@@ -2,10 +2,6 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import TodoCard from "@/components/common/TodoCard";
 import DropIndicator from "@/components/common/DropIndicator";
-import { DetailContent } from "./ModalPopup";
-import CardModal from "../ModalContents/Card.modal";
-import useDashboardStates from "@/hooks/useDashboardStates";
-import { useState } from "react";
 
 export default function SortableCard({
   card,
@@ -35,7 +31,6 @@ export default function SortableCard({
     transition,
     opacity: isDragging ? 0.5 : 1,
   };
-  const states = useDashboardStates();
 
   return (
     <div

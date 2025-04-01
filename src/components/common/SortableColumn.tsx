@@ -1,14 +1,12 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Column from "./Column";
-import { Dispatch, SetStateAction } from "react";
 
 interface Props {
   column: ColumnData;
-  setIsEditColumn: Dispatch<SetStateAction<boolean>>;
 }
 
-const SortableColumn = ({ column, setIsEditColumn }: Props) => {
+const SortableColumn = ({ column }: Props) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: column.id,
@@ -21,7 +19,7 @@ const SortableColumn = ({ column, setIsEditColumn }: Props) => {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Column column={column} setIsEditColumn={setIsEditColumn} />
+      <Column column={column} />
     </div>
   );
 };

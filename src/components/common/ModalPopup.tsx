@@ -3,7 +3,6 @@ import Image from "next/image";
 import Button from "@/components/common/Button/Button";
 import DropdownEditDel from "./Dropdown/DropdownEditDel";
 import { useAutoClose } from "@/hooks/useAutoClose";
-import useDashboardStates from "@/hooks/useDashboardStates";
 import { deleteCard } from "@/api/card.api";
 import X from "@/assets/icons/X.icon.svg";
 import CardModal from "../ModalContents/Card.modal";
