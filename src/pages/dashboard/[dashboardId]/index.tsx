@@ -298,7 +298,7 @@ export default function Dashboard() {
             />
           </DetailContent>
         )}
-        console.log("🚩 index에서 넘기는 selectedCard", states.selectedCard);
+
         <EditCardModal
           isCardEdit={states.isEditCardModalOpen}
           setIsCardEdit={(open) => {

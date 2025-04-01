@@ -12,8 +12,6 @@ import { getMember } from "@/api/member";
 import { getColumns } from "@/api/column.api";
 import { AlertModal } from "./AlertModal";
 
-console.log("🚩 EditCardModal 렌더됨");
-
 interface Props {
   isCardEdit: boolean;
   setIsCardEdit: Dispatch<SetStateAction<boolean>>;
@@ -66,11 +64,6 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit, selectedCard }: Props) => {
   };
 
   useEffect(() => {
-    console.log("🧑‍🤝‍🧑 members from API:", members);
-    console.log(
-      "🧑‍💻 selected assignee id:",
-      selectedCard?.assignee?.userId ?? selectedCard?.assignee?.id
-    );
     handleLoad();
   }, []);
 
@@ -105,10 +98,6 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit, selectedCard }: Props) => {
         }
       : null;
 
-    console.log("🐛 selectedCard:", selectedCard);
-
-    console.log("🧪 selectedCard.assignee", selectedCard.assignee);
-
     setEditedData({
       cardId: selectedCard.cardId,
       columnId: selectedCard.columnId,
@@ -120,7 +109,6 @@ const EditCardModal = ({ isCardEdit, setIsCardEdit, selectedCard }: Props) => {
       imageUrl: selectedCard.imageUrl,
       imageFile: undefined,
     });
-    console.log("🧪 selectedCard 받음", selectedCard);
 
     handleLoad();
   }, [selectedCard]);

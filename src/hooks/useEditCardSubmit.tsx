@@ -91,17 +91,6 @@ export const useEditCardSubmit = () => {
       window.location.reload();
       //fetchColumns(Number(dashboardId));
     } catch (err) {
-      console.log("📤 카드 수정 제출", {
-        cardId: editCardId,
-        columnId: editCardColumnId,
-        assigneeUserId,
-        title: editCardTitle,
-        description: editCardDescription,
-        dueDate: editCardDueDate,
-        tags: editCardTags,
-        imageUrl: imageUrlToSubmit,
-      });
-
       console.error(err);
       alert("카드 수정 실패");
     }
