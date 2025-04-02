@@ -30,9 +30,6 @@ export default function CreateCard({ columnId, setCurrentCards }: Props) {
     handleLoad();
   }, []);
 
-  useEffect(() => {
-    console.log(cardData);
-  }, [cardData]);
   const handleLoad = async () => {
     if (!dashboardId) return;
     try {

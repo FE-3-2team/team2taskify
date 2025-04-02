@@ -5,7 +5,6 @@ import useAuthStore from "@/utils/Zustand/zustand";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getMember } from "@/api/member";
 import { getColumns } from "@/api/column.api";
-import { AlertModal } from "./AlertModal";
 import { getCardDetail, updateCard } from "@/api/card.api";
 import {
   CardData,
@@ -32,8 +31,7 @@ export default function EditCard({
   const [cardData, setCardData] = useState<CardData>(INITIAL_CARD);
   const [members, setMembers] = useState<Assignee[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
-  const [isAlert, setIsAlert] = useState(false);
-  const [message, setMessage] = useState("");
+  const [currColId, setCurrColId] = useState(columnId);
   const [currentAssignee, setCurrentAssignee] =
     useState<Assignee>(INITIAL_ASSIGNEE);
 
@@ -41,6 +39,9 @@ export default function EditCard({
     handleLoad();
   }, []);
 
+  useEffect(() => {
+    console.log(cardData);
+  }, [cardData]);
   const handleLoad = async () => {
     if (!dashboardId) return;
     try {
@@ -57,7 +58,12 @@ export default function EditCard({
   };
 
   const handleEditSubmit = async () => {
-    await updateCard({ cardId, assignee: currentAssignee, cardData, columnId });
+    await updateCard({
+      cardId,
+      assignee: currentAssignee,
+      cardData,
+      columnId: currColId,
+    });
   };
 
   return (
@@ -81,7 +87,7 @@ export default function EditCard({
             onChange={(title) => {
               const selected = columns.find((col) => col.title === title);
               if (selected) {
-                setCardData((prev) => ({ ...prev, columnId: selected.id }));
+                setCurrColId(selected.id);
               }
             }}
           />
@@ -99,13 +105,6 @@ export default function EditCard({
           }}
           columnId={columnId}
           editCardData={cardData}
-        />
-        <AlertModal
-          isOpen={isAlert}
-          onConfirm={() => {
-            setIsAlert(false);
-          }}
-          message={message}
         />
       </div>
     </Modal>
