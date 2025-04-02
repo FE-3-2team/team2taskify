@@ -143,6 +143,7 @@ interface DetailContentProps {
   setCurrentCards: Dispatch<SetStateAction<Card[]>>;
   isOpen?: boolean;
   setIsOpen?: (value: boolean) => void;
+  setEditCardId: Dispatch<SetStateAction<number>>;
 }
 export function DetailContent({
   cardTitle,
@@ -152,6 +153,7 @@ export function DetailContent({
   columnId,
   setCurrentCards,
   setIsCardEdit,
+  setEditCardId,
 }: DetailContentProps) {
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
 
@@ -184,6 +186,7 @@ export function DetailContent({
                     onEdit={() => {
                       setIsOpen(false);
                       setIsCardEdit(true);
+                      setEditCardId(cardId);
                     }}
                   />
                   <button onClick={() => setIsOpen(false)}>

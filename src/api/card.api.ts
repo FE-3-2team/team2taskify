@@ -13,7 +13,6 @@ export async function getCards(columnId: number): Promise<Card[]> {
     params: { columnId },
   });
 
-  // console.log("getCards 응답 결과:", res.data);
   return res.data.cards;
 }
 
