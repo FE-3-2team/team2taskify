@@ -33,10 +33,11 @@ interface CreateCardProps {
   cardData: CardData;
 }
 export async function createCard({
-  dashboardId,
   columnId,
+  dashboardId,
   cardData,
 }: CreateCardProps) {
+  console.log(columnId, dashboardId, cardData);
   const { assignee, title, description, dueDate, tags, imageUrl } = cardData;
   const assigneeUserId = assignee.userId;
   const formattedDate = useFormatTime(dueDate);

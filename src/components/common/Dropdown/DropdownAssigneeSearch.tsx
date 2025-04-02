@@ -27,7 +27,6 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
     : assignees;
 
   useEffect(() => {
-    onSelect(selected);
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -41,6 +40,10 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [selected]);
+
+  const handleClickSelect = (value: Assignee) => {
+    onSelect(value);
+  };
 
   return (
     <div className="w-full ">
@@ -102,6 +105,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
                     setIsOpen(false);
                     setSearchTerm("");
                     setSelected(item);
+                    handleClickSelect(item);
                   }}
                 >
                   <div className="w-[16px]">

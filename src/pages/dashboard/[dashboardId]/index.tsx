@@ -26,6 +26,7 @@ import InputModal from "@/components/ModalContents/InputModal";
 import { Modal } from "@/components/common/ModalPopup";
 import SideMenu from "@/components/common/SideMenu";
 import { useRouter } from "next/router";
+import { getDashboardInfo } from "@/api/dashboard";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -39,11 +40,13 @@ export default function Dashboard() {
   //
 
   useEffect(() => {
-    if (!dashboardId) return;
-    handleLoad();
+    if (dashboardId) {
+      handleLoad();
+    }
   }, [dashboardId]);
 
   const handleLoad = async () => {
+    await getDashboardInfo(Number(dashboardId));
     const { fetchColumns } = useFetchColumns(setColumnsData, setIsLoading);
 
     await fetchColumns(Number(dashboardId));

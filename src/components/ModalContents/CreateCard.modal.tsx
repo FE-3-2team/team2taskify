@@ -39,7 +39,8 @@ export default function CreateCard({ columnId, setCurrentCards }: Props) {
 
   const handleCreate = async () => {
     try {
-      const newCard = await createCard({ dashboardId, columnId, cardData });
+      console.log(columnId, dashboardId, cardData);
+      const newCard = await createCard({ columnId, dashboardId, cardData });
       setCurrentCards((prev) => [...prev, newCard]);
     } catch (err: any) {
       setMessage(err.response.data.message);

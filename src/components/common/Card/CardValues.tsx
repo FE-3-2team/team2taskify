@@ -1,8 +1,6 @@
 //types
 export interface CardData {
   assignee: Assignee;
-  dashboardId?: number;
-  columnId: number;
   title: string;
   description: string;
   dueDate: string;
@@ -18,8 +16,6 @@ export const INITIAL_CARD = {
     profileImageUrl: "",
     userId: 0,
   },
-  dashboardId: 0,
-  columnId: 0,
   title: "",
   description: "",
   dueDate: "",
