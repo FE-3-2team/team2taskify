@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ImageUploadBox from "@/components/common/ImageUploadBox";
 import UnifiedInput from "@/components/common/Input/Input";
 import { CardData, INITIAL_CARD } from "./CardValues";
-import TagInput from "../Input/tagInput";
+import TagInput from "@/components/common/Input/tagInput";
 //
 
 interface Props {
@@ -39,12 +39,17 @@ export default function CardValueForm({
         }}
       />
       <div className="w-full">
-        <label>설명</label>
-        <span
-          className={cardData.description ? "text-violet-700" : "text-gray-700"}
-        >
-          *
-        </span>
+        <label className=" flex gap-[2px] text-md-medium tablet:text-2lg-medium">
+          설명
+          <span
+            className={
+              cardData.description ? "text-violet-200" : "text-gray-700"
+            }
+          >
+            *
+          </span>
+        </label>
+
         <input
           type="textarea"
           placeholder="설명을 입력해주세요"

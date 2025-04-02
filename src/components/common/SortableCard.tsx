@@ -7,13 +7,11 @@ export default function SortableCard({
   card,
   columnId,
   index,
-  onClick,
   lastCardRef,
 }: {
   card: Card;
   columnId: number;
   index: number;
-  onClick: () => void;
   lastCardRef?: (node: HTMLDivElement | null) => void;
 }) {
   const {
@@ -28,7 +26,6 @@ export default function SortableCard({
     id: card.cardId,
     data: { cardId: card.cardId, columnId, index, card },
   });
-
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -43,14 +40,13 @@ export default function SortableCard({
       }}
       style={style}
       {...attributes}
-      {...listeners}
     >
       {isOver && !isDragging && <DropIndicator />}
 
       <TodoCard
         key={`${card.cardId}-${card.updatedAt}`}
         todoData={card}
-        onClick={onClick}
+        listeners={listeners}
       />
     </div>
   );

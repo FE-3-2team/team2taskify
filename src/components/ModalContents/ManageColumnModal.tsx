@@ -1,53 +1,62 @@
+import { deleteColumn, updateColumn } from "@/api/column.api";
 import { Modal } from "@/components/common/ModalPopup";
+import Image from "next/image";
+import GearIcon from "@/assets/icons/Edit.icon.svg";
+import InputModal from "./InputModal";
+import { Dispatch, SetStateAction, useState } from "react";
 
 type Props = {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  columnData: {
-    id: number;
-    title: string;
-  };
-  setTitle: (v: string) => void;
-  onUpdate: () => void;
-  onDelete: () => void;
+  title: string;
+  columnId: number;
+  setCurrentTitle: Dispatch<SetStateAction<string>>;
+  setIsDeleted: Dispatch<SetStateAction<boolean>>;
 };
 
 const ManageColumnModal = ({
-  isOpen,
-  setIsOpen,
-  columnData,
-  setTitle,
-  onUpdate,
-  onDelete,
+  title,
+  columnId,
+  setCurrentTitle,
+  setIsDeleted,
 }: Props) => {
+  const [newTitle, setNewTitle] = useState(title);
+
+  const onDelete = async () => {
+    const confirmDelete = confirm("정말 이 컬럼을 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+    try {
+      await deleteColumn(columnId);
+      setIsDeleted(true);
+    } catch (err) {
+      alert("컬럼 삭제 실패");
+    }
+  };
+  const onUpdate = async () => {
+    try {
+      await updateColumn(columnId, newTitle);
+      setCurrentTitle(newTitle);
+    } catch (err) {
+      alert(`컬럼 이름 변경 실패`);
+    }
+  };
   return (
     <Modal
-      isOpen={isOpen}
-      setIsOpen={(open) => {
-        setIsOpen(open);
-        if (!open) {
-          setTitle("");
-        }
-      }}
-      ModalOpenButton={null}
+      className="tablet:w-[24px] bg-white tablet:h-[24px] w-[22px] h-[22px] relative"
+      ModalOpenButton={
+        <Image src={GearIcon} alt="Setting" fill className="object-contain" />
+      }
       rightHandlerText="변경"
       leftHandlerText="삭제"
       rightOnClick={onUpdate}
       leftOnClick={onDelete}
     >
-      <div>
-        <h2 className="tablet:text-2xl-bold text-xl-bold tablet:mb-[24px] mb-[16px]">
-          컬럼 관리
-        </h2>
-        <p className="tablet:text-2lg-medium text-lg-medium mb-[8px]">이름</p>
-        <input
-          type="text"
-          placeholder="컬럼 이름을 입력해주세요"
-          className="border border-gray-300 rounded-[8px] px-[16px] py-[15px] w-full h-[50px] tablet:text-lg-regular text-md-regular text-black-200"
-          value={columnData.title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </div>
+      <InputModal
+        title="컬럼 관리"
+        defaultValue={newTitle}
+        changeValue={(value) => setNewTitle(value)}
+        label="이름"
+        placeholder="컬럼 이름을 입력해 주세요"
+        variant="column"
+      />
     </Modal>
   );
 };

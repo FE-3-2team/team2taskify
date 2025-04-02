@@ -3,65 +3,70 @@ import { useState } from "react";
 import { Tags } from "@/components/common/Chip/Tag.chip";
 import useCardImageVisibility from "@/hooks/useCardImageVisibility";
 import CalendarIcon from "@/assets/icons/Calendar.svg";
+import { Badge } from "./Badge";
+import { useFormatDate } from "@/hooks/useFormatDate";
+const DEFAULT_IMG = process.env.NEXT_PUBLIC_DEFAULT_IMG;
 
 interface TodoCardProps {
   todoData: Card;
-  onClick: () => void;
+  listeners?: any;
 }
 
 const TodoCard: React.FC<TodoCardProps> = ({
   todoData,
-  onClick,
+  listeners,
 }: TodoCardProps) => {
   const [isImageError, setIsImageError] = useState(false);
   const isCardImageVisible = useCardImageVisibility(todoData.imageUrl);
-
+  const formattedDate = useFormatDate(todoData.dueDate);
+  const formattedImg =
+    todoData.imageUrl === DEFAULT_IMG ? "" : todoData.imageUrl;
   return (
     <div
-      onClick={onClick}
-      className="desktop:w-[314px] tablet:w-[544px] w-[284px] tablet:px-[20px] desktop:py-[16px] tablet:py-[14px] px-[12px] py-[6px] border rounded-[6px] border-gray-300 bg-white flex items-center justify-center cursor-pointer"
+      {...listeners}
+      className="w-full  h-fit tablet:py-[14px] desktop:py-[16px]  px-3 py-3 laptop:px-4 laptop:py-5 border rounded-[6px] border-gray-300 bg-white flex items-center justify-center cursor-pointer"
     >
-      <div className="tablet:w-[504px] w-[260px] desktop:h-fit tablet:h-[64px] flex flex-col desktop:flex-col desktop:w-full tablet:flex-row items-between justify-start gap-[4px] desktop:gap-[16px]">
-        {isCardImageVisible && !isImageError && (
-          <div className="tablet:mt-[0] mt-[6px] tablet:h-[64px] tablet:w-[92px] rounded-[6px] tablet:rounded-[4px] desktop:rounded-[6px] w-[260px] h-[152px] tablet:mr-[20px] desktop:w-[274px] desktop:h-[160px] overflow-hidden relative">
+      <div className="flex w-full flex-col laptop:flex-col tablet:justify-between  tablet:flex-row  gap-[4px] desktop:gap-[16px]">
+        {formattedImg && (
+          <div className="w-full tablet:w-[91px] laptop:w-full relative h-[152px] tablet:h-[53px] laptop:h-[160px] rounded-[6px] tablet:rounded-[4px]  overflow-hidden ">
             <Image
-              src={todoData.imageUrl ?? ""}
-              alt="task"
               fill
+              src={formattedImg}
+              alt="task"
               className="object-cover"
-              onError={() => setIsImageError(true)}
               unoptimized
             />
           </div>
         )}
-        <div className="flex items-end justify-between w-full">
-          <div className="flex flex-col gap-[6px] desktop:gap-[10px] justify-between">
-            <div className="font-semibold tablet:leading-[40px] desktop:leading-[16px] leading-[16px] tablet:text-lg-medium text-md-medium">
-              {todoData.title}
-            </div>
-            <div
-              className={`flex flex-col desktop:items-start items-start tablet:items-center desktop:gap-[8px] gap-[6px] justify-between tablet:flex-row  tablet:h-[28px] desktop:flex-col h-fit desktop:h-fit ${todoData.tags.length > 0 ? "tablet:gap-[16px]" : "tablet:gap-[0]"}`}
-            >
-              <Tags tags={todoData.tags} />
-              <div className="flex flex-row gap-[4px]">
-                <div className="tablet:w-[18px] tablet:h-[18px] w-[14px] h-[14px] relative">
-                  <Image
-                    src={CalendarIcon}
-                    alt="calendar"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
+
+        <div className="flex w-full flex-col  gap-[6px]">
+          <p className="text-start tablet:text-lg-medium text-md-semibold">
+            {todoData.title}
+          </p>
+          <div className="flex w-full flex-col tablet:flex-row tablet:gap-4 gap-[10px] laptop:gap-[10px] ">
+            <Tags tags={todoData.tags} />
+
+            <div className={`flex  w-full justify-between  `}>
+              <div className="flex flex-row gap-[2px] ">
+                <Image
+                  src={CalendarIcon}
+                  alt="calendar"
+                  width={15}
+                  height={15}
+                  className="object-contain"
+                />
                 <p className="text-xs-medium text-gray-787486">
-                  {todoData.dueDate
-                    ? new Date(todoData.dueDate).toLocaleDateString()
-                    : ""}
+                  {todoData.dueDate ? formattedDate : ""}
                 </p>
               </div>
+              {todoData.assignee && (
+                <Badge
+                  nickname={todoData.assignee.nickname}
+                  img={todoData.assignee.profileImageUrl}
+                  type="column"
+                />
+              )}
             </div>
-          </div>
-          <div className="rounded-full bg-green tablet:w-[24px] tablet:h-[24px] w-[22px] h-[22px] flex items-center justify-center text-xs-semibold text-white-FFFFFF">
-            P
           </div>
         </div>
       </div>

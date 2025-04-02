@@ -1,32 +1,26 @@
-import { useRef, useCallback } from "react";
-import Image from "next/image";
+import { useRef, useCallback, useState } from "react";
 import SortableCard from "@/components/common/SortableCard";
-import DropIndicator from "@/components/common/DropIndicator";
-import useDashboardStates from "@/hooks/useDashboardStates";
-import { ColumnData } from "@/types/column";
 import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import GearIcon from "@/assets/icons/Edit.icon.svg";
-import PlusIcon from "@/assets/icons/Plus.icon.svg";
+import CreateCard from "../ModalContents/CreateCard.modal";
+import ManageColumnModal from "../ModalContents/ManageColumnModal";
+import { DetailContent } from "./ModalPopup";
+import EditCard from "../ModalContents/EditCard.modal";
+import CardCount from "./Chip/CardCount.chip";
+import ColorChip from "./Button/ColorChipSmall";
 
 interface ColumnProps {
   column: ColumnData;
-  onAddCardClick: (columnId: number) => void;
-  onManageColumnClick: (columnId: number, title: string) => void;
-  onEditCardClick?: (card: Card) => void;
-  activeCard?: Card | null;
 }
 
-const Column: React.FC<ColumnProps> = ({
-  column,
-  onAddCardClick,
-  onManageColumnClick,
-  onEditCardClick,
-  activeCard,
-}) => {
-  const { id: columnId, title, cards } = column;
+const Column: React.FC<ColumnProps> = ({ column }) => {
+  const [isCardEdit, setIsCardEdit] = useState(false);
+  const [currentTitle, setCurrentTitle] = useState(column.title);
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [currentCards, setCurrentCards] = useState(column.cards);
+
   const observer = useRef<IntersectionObserver | null>(null);
   const lastCardRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -37,61 +31,69 @@ const Column: React.FC<ColumnProps> = ({
       });
       if (node) observer.current.observe(node);
     },
-    [cards.length]
+    [currentCards.length]
   );
-  const states = useDashboardStates();
-
   return (
-    <div className="w-[308px] h-full bg-gray-100 px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center border-r border-gray-200">
-      <div className="flex items-center justify-between mb-[24px] desktop:w-[314px] tablet:w-[544px] w-[284px] h-[22px]">
-        <div className="flex items-center justify-between w-fit h-[20px]">
-          <div className="w-[8px] h-[8px] rounded-full bg-violet-200 mr-[8px]" />
-          <div className="text-black-400 text-lg-bold mr-[12px]">{title}</div>
-          <div className="w-[20px] h-[20px] rounded-[4px] bg-gray-200 text-xs-medium text-center">
-            {cards?.length ?? 0}
+    <>
+      {isDeleted ? null : (
+        <div className="w-full laptop:w-[354px] tablet:max-w-[584px] bg-gray-100 px-[12px] py-[16px] flex flex-col items-center border-r border-gray-200">
+          <div className="flex w-full items-center justify-between mb-[24px]  h-[22px]">
+            <div className="flex items-center gap-3 justify-between w-fit h-[20px]">
+              <ColorChip color="#5534da" />
+              <p className="text-black-400 text-lg-bold mr-[12px]">
+                {currentTitle}
+              </p>
+              <CardCount count={currentCards.length} />
+            </div>
+            <ManageColumnModal
+              setCurrentTitle={setCurrentTitle}
+              columnId={column.id}
+              title={currentTitle}
+              setIsDeleted={setIsDeleted}
+            />
+          </div>
+
+          <CreateCard columnId={column.id} setCurrentCards={setCurrentCards} />
+          <div className="flex w-full flex-col gap-[16px]">
+            <SortableContext
+              items={currentCards.map((card) => card.cardId)}
+              strategy={verticalListSortingStrategy}
+            >
+              {currentCards.map((card, index) => (
+                <>
+                  <DetailContent
+                    columnTitle={column.title}
+                    cardId={card.cardId}
+                    columnId={card.columnId}
+                    cardTitle={card.title}
+                    ModalOpenButton={
+                      <SortableCard
+                        key={`card-${card.cardId ?? index}`}
+                        card={card}
+                        columnId={column.id}
+                        index={index}
+                        lastCardRef={
+                          index === currentCards.length - 1
+                            ? lastCardRef
+                            : undefined
+                        }
+                      />
+                    }
+                    setIsCardEdit={setIsCardEdit}
+                    setCurrentCards={setCurrentCards}
+                  ></DetailContent>
+                  <EditCard
+                    setIsCardEdit={setIsCardEdit}
+                    isCardEdit={isCardEdit}
+                    cardId={card.cardId}
+                  />
+                </>
+              ))}
+            </SortableContext>
           </div>
         </div>
-
-        <button
-          className="tablet:w-[24px] tablet:h-[24px] w-[22px] h-[22px] relative"
-          onClick={() => onManageColumnClick(columnId, title)}
-        >
-          <Image src={GearIcon} alt="Setting" fill className="object-contain" />
-        </button>
-      </div>
-
-      <button
-        onClick={() => onAddCardClick(columnId)}
-        className=" bg-white border border-gray-300 desktop:w-[314px] tablet:w-[544px] w-[284px] h-[40px] rounded-[6px] flex items-center justify-center mb-[16px]"
-      >
-        <div className="relative w-[22px] h-[22px] rounded-[4px] object-contain bg-violet-100">
-          <Image
-            src={PlusIcon}
-            alt="Add new todo"
-            fill
-            className="object-contain"
-          />
-        </div>
-      </button>
-
-      <div className="flex flex-col gap-[16px]">
-        <SortableContext
-          items={cards.map((card) => card.cardId)}
-          strategy={verticalListSortingStrategy}
-        >
-          {cards.map((card, index) => (
-            <SortableCard
-              key={`card-${card.cardId ?? index}`}
-              card={card}
-              columnId={columnId}
-              index={index}
-              onClick={() => onEditCardClick?.(card)}
-              lastCardRef={index === cards.length - 1 ? lastCardRef : undefined}
-            />
-          ))}
-        </SortableContext>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

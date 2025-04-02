@@ -22,7 +22,7 @@ export function Tag({ value }: Props) {
     <div
       className={`flex justify-center items-center py-[2px] px-[6px] w-fit rounded-sm text-xs-regular ${colorClasses[randomNum]}`}
     >
-      {value}
+      <p className="overflow-hidden">{value}</p>
     </div>
   );
 }
@@ -32,7 +32,7 @@ interface TagsProps {
 }
 export function Tags({ tags }: TagsProps) {
   return (
-    <div className="flex justify-center w-fit h-[20px] gap-2">
+    <div className="flex items-center justify-start w-full h-[20px] gap-2">
       {tags.map((tag) => {
         return <Tag key={tag} value={tag} />;
       })}

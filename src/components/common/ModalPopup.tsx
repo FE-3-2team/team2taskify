@@ -1,16 +1,11 @@
-import { useAutoClose } from "@/hooks/useAutoClose";
-import X from "@/assets/icons/X.icon.svg";
-import Button from "@/components/common/Button/Button";
+import { Dispatch, ReactNode, SetStateAction, useEffect } from "react";
 import Image from "next/image";
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import Button from "@/components/common/Button/Button";
 import DropdownEditDel from "./Dropdown/DropdownEditDel";
+import { useAutoClose } from "@/hooks/useAutoClose";
 import { deleteCard } from "@/api/card.api";
+import X from "@/assets/icons/X.icon.svg";
+import CardModal from "../ModalContents/Card.modal";
 
 interface Props {
   children?: React.ReactNode;
@@ -23,7 +18,7 @@ interface Props {
   size?: "xxsmall" | "xsmall" | "small" | "medium" | "large" | "xlarge"; // 크기별 스타일 적용
   variant?: "primary" | "secondary" | "outline" | "disabled" | "create"; // 색상/디자인 적용
   isOpen?: boolean;
-  setIsOpen?: (e: any) => void;
+  setIsOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 export function Modal({
@@ -44,8 +39,10 @@ export function Modal({
     ref,
     setIsOpen: internalSetIsOpen,
   } = useAutoClose(false);
-  const modalIsOpen = isOpen !== undefined ? isOpen : internalIsOpen;
-  const modalSetIsOpen = setIsOpen ?? internalSetIsOpen;
+
+  const modalIsOpen = isOpen ? isOpen : internalIsOpen;
+  const modalSetIsOpen = setIsOpen ? setIsOpen : internalSetIsOpen;
+
   useEffect(() => {
     if (!modalIsOpen) return;
 
@@ -59,7 +56,7 @@ export function Modal({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [modalIsOpen, setIsOpen, ref]);
+  }, []);
 
   return (
     <>
@@ -138,30 +135,36 @@ export function Modal({
 
 interface DetailContentProps {
   cardTitle: string;
-  children: ReactNode;
   ModalOpenButton: ReactNode;
   cardId: number;
+  columnTitle: string;
+  columnId: number;
   setIsCardEdit: Dispatch<SetStateAction<boolean>>;
+  setCurrentCards: Dispatch<SetStateAction<Card[]>>;
+  isOpen?: boolean;
+  setIsOpen?: (value: boolean) => void;
 }
 export function DetailContent({
   cardTitle,
-  children,
+  columnTitle,
   ModalOpenButton,
   cardId,
+  columnId,
+  setCurrentCards,
   setIsCardEdit,
 }: DetailContentProps) {
   const { isOpen, ref, setIsOpen } = useAutoClose(false);
+
   const handleButtonClick = () => {
     setIsOpen(true);
   };
 
   const handleCardDelete = async () => {
     await deleteCard(cardId);
+    setCurrentCards((prev) => prev.filter((card) => card.cardId !== cardId));
     setIsOpen(false);
   };
-  const handleEdit = () => {
-    setIsOpen(false);
-  };
+
   return (
     <>
       {isOpen && (
@@ -179,7 +182,7 @@ export function DetailContent({
                   <DropdownEditDel
                     onDelete={handleCardDelete}
                     onEdit={() => {
-                      handleEdit();
+                      setIsOpen(false);
                       setIsCardEdit(true);
                     }}
                   />
@@ -188,7 +191,11 @@ export function DetailContent({
                   </button>
                 </div>
               </div>
-              {children}
+              <CardModal
+                columnTitle={columnTitle}
+                cardId={cardId}
+                columnId={columnId}
+              />
             </div>
           </div>
         </div>

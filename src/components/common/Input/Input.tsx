@@ -16,6 +16,7 @@ import {
   defaultValidate,
   InputVariant,
 } from "@/hooks/useValidation";
+import clsx from "clsx";
 
 export interface BaseInputProps {
   id?: string;
@@ -200,9 +201,12 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
       <div className={`mb-4 ${className}`}>
         <label
           htmlFor="date-input"
-          className="block mb-2 text-sm text-gray-700 text-lg-regular"
+          className="block mb-2 text-sm text-gray-700 text-md-medium tablet:text-2lg-medium"
         >
           {label}
+          <span className={selectedDate ? "text-violet-200" : "text-gray-700"}>
+            *
+          </span>
         </label>
         <DatePicker
           selected={selectedDate}
@@ -218,12 +222,14 @@ const UnifiedInput: FC<UnifiedInputProps> = ({
     <div className={`mb-4 ${className}`}>
       <label
         htmlFor={inputId}
-        className="block mb-2 text-sm text-gray-700 text-lg-regular"
+        className="flex items-center gap-[2px] mb-2 text-sm text-gray-700 text-md-medium tablet:text-2lg-medium"
       >
         {label}
         {variant === "title" && !hideAsterisk && (
           <span
-            className={value && !error ? "text-violet-700" : "text-gray-700"}
+            className={clsx(
+              value && !error ? "text-violet-200" : "text-gray-700"
+            )}
           >
             *
           </span>

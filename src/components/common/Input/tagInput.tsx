@@ -18,7 +18,7 @@ export default function TagInput({ tags, onChange }: props) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.isComposing) return;
     const trimmedValue = inputValue.trim();
-    if (currentTags.length > 3) {
+    if (currentTags.length > 2) {
       setIsError(true);
       setIsError(Boolean(trimmedValue));
       return;
@@ -42,7 +42,9 @@ export default function TagInput({ tags, onChange }: props) {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="mb-2 text-sm text-gray-700 text-lg-regular">태그</p>
+      <p className="mb-2 text-sm text-gray-700 text-md-medium tablet:text-2lg-medium">
+        태그
+      </p>
       <div className="w-full min-h-[50px] border border-gray-300 rounded-[8px] px-[12px] py-[10px]  items-center flex flex-wrap gap-[8px] bg-white cursor-text">
         {currentTags.map((tag, idx) => (
           <div
@@ -63,7 +65,7 @@ export default function TagInput({ tags, onChange }: props) {
           placeholder="입력 후 Enter"
         />
       </div>
-      {isError && <p className="text-red">태그는 4개 까지 가능합니다</p>}
+      {isError && <p className="text-red">태그는 3개 까지 가능합니다</p>}
     </div>
   );
 }

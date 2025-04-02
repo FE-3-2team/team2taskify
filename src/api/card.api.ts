@@ -4,12 +4,8 @@ import { useFormatTime } from "@/hooks/useFormatDate";
 const DEFAULT_IMG = process.env.NEXT_PUBLIC_DEFAULT_IMG;
 //카드 상세 조회
 export async function getCardDetail(cardId: number) {
-  try {
-    const res = await instance.get(`/cards/${cardId}`);
-    return res.data;
-  } catch {
-    throw new Error();
-  }
+  const res = await instance.get(`/cards/${cardId}`);
+  return res.data;
 }
 //카드 목록 조회
 export async function getCards(columnId: number): Promise<Card[]> {
@@ -37,18 +33,19 @@ interface CreateCardProps {
   cardData: CardData;
 }
 export async function createCard({
-  dashboardId,
   columnId,
+  dashboardId,
   cardData,
 }: CreateCardProps) {
+  console.log(columnId, dashboardId, cardData);
   const { assignee, title, description, dueDate, tags, imageUrl } = cardData;
-  console.log(cardData);
+  const assigneeUserId = assignee.userId;
   const formattedDate = useFormatTime(dueDate);
   const filteredImg = imageUrl === "" ? DEFAULT_IMG : imageUrl;
   const res = await instance.post("/cards", {
     dashboardId,
     columnId,
-    assigneeUserId: assignee.userId,
+    assigneeUserId,
     title,
     description,
     dueDate: formattedDate,

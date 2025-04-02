@@ -6,6 +6,8 @@ import { getCardDetail } from "@/api/card.api";
 import CommentsArea from "../Comments";
 import { AlertModal } from "./AlertModal";
 //
+const DEFAULT_IMG = process.env.NEXT_PUBLIC_DEFAULT_IMG;
+
 interface Props {
   cardId: number;
   columnTitle: string;
@@ -16,10 +18,10 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
   const [card, setCard] = useState<Card>();
   const [message, setMessage] = useState("");
   const [isAlert, setIsAlert] = useState(false);
-
+  const formattedImg = card?.imageUrl === DEFAULT_IMG ? null : card?.imageUrl;
   useEffect(() => {
     handleLoad();
-  }, []);
+  }, [cardId]);
   //
   const handleLoad = async () => {
     if (!cardId) return;
@@ -64,10 +66,10 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
                 {card.description}
               </p>
               <div className="flex items-center justify-center mb-6 laptop:mb-4">
-                {card.imageUrl && (
+                {formattedImg && (
                   <img
                     className="max-w-[445px] h-full max-h-[300px] w-full  object-contain   rounded-[6px]"
-                    src={card.imageUrl}
+                    src={formattedImg}
                   />
                 )}
               </div>

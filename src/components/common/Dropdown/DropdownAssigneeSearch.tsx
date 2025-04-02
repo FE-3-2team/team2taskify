@@ -27,7 +27,6 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
     : assignees;
 
   useEffect(() => {
-    onSelect(selected);
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -42,9 +41,20 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
     };
   }, [selected]);
 
+  const handleClickSelect = (value: Assignee) => {
+    onSelect(value);
+  };
+
   return (
     <div className="w-full ">
-      <div className="font-bold text-lg-regular mb-[10px]">담당자</div>
+      <div className="text-md-medium tablet:text-2lg-medium mb-[10px]">
+        담당자
+        <span
+          className={selected.nickname ? "text-violet-200" : "text-gray-700"}
+        >
+          *
+        </span>
+      </div>
       <div ref={dropdownRef} className="relative w-full h-fit">
         <div
           className="w-full h-[48px] px-[16px] py-[11px] bg-white border border-gray-300 rounded-md flex items-center justify-between gap-[6px] cursor-pointer"
@@ -83,7 +93,9 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
         {isOpen && filteredAssignees.length > 0 && (
           <div className="absolute left-0 w-full mt-[2px] bg-white border border-gray-300 rounded-md shadow-md top-full z-50 max-h-[240px] overflow-y-auto">
             {filteredAssignees.map((item) => {
-              const isSelected = selected.id === item.id;
+              const selectedId = assignee?.userId ?? assignee?.id;
+              const itemId = item.userId ?? item.id;
+              const isSelected = selectedId === itemId;
 
               return (
                 <button
@@ -93,6 +105,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
                     setIsOpen(false);
                     setSearchTerm("");
                     setSelected(item);
+                    handleClickSelect(item);
                   }}
                 >
                   <div className="w-[16px]">
