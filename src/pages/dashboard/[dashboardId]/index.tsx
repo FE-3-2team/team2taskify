@@ -176,9 +176,9 @@ export default function Dashboard() {
   //드래그앤 드랍 로직 끝
   return (
     <>
-      <Header />
-      <SideMenu />
       <div className="flex laptop:flex-row flex-col  ml-[67px] tablet:ml-40 laptop:ml-[300px] tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)]  laptop:overflow-x-auto">
+        <SideMenu />
+        <Header />
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
