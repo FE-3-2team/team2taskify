@@ -14,6 +14,8 @@ interface Props {
   columns: Column[];
   editCardId: number;
   editCardData: EditCardData;
+  setCurrentCard: Dispatch<SetStateAction<Card[]>>;
+  currentCards: Card[];
 }
 export default function EditCard({
   setIsCardEdit,
@@ -23,17 +25,27 @@ export default function EditCard({
   cardId,
   editCardId,
   editCardData,
+  setCurrentCard,
+  currentCards,
 }: Props) {
   const [cardData, setCardData] = useState(editCardData);
   const [currColId, setCurrColId] = useState(columnId);
 
+  const handleCurrentCard = (updatedCard: Card) => {
+    const targetCard = currentCards.filter(
+      (card) => card.cardId !== editCardId
+    );
+    setCurrentCard([...targetCard, updatedCard]);
+  };
   const handleEditSubmit = async () => {
-    await updateCard({
+    if (cardId !== editCardId) return;
+    const updatedCard = await updateCard({
       cardId: editCardId,
       assignee: cardData.assignee,
       cardData,
       columnId: currColId,
     });
+    handleCurrentCard(updatedCard);
   };
   if (columnId === 0) return null;
   return (

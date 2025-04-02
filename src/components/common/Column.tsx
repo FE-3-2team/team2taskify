@@ -102,6 +102,8 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
                   columnId={column.id}
                   columns={columns}
                   editCardData={editCardData}
+                  setCurrentCard={setCurrentCards}
+                  currentCards={currentCards}
                 />
               )}
               {currentCards.map((card, index) => (
