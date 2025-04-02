@@ -86,6 +86,7 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
                     setIsCardEdit={setIsCardEdit}
                     isCardEdit={isCardEdit}
                     cardId={card.cardId}
+                    columnId={card.columnId}
                   />
                 </>
               ))}

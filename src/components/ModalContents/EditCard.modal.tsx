@@ -15,8 +15,14 @@ interface Props {
   setIsCardEdit: Dispatch<SetStateAction<boolean>>;
   isCardEdit: boolean;
   cardId: number;
+  columnId: number;
 }
-export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
+export default function EditCard({
+  setIsCardEdit,
+  isCardEdit,
+  columnId,
+  cardId,
+}: Props) {
   const store = useStore(useAuthStore);
   const dashboardId = store.dashboardId;
   const [cardData, setCardData] = useState<CardData>(INITIAL_CARD);
@@ -45,7 +51,7 @@ export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
   };
 
   const handleEditSubmit = async () => {
-    await updateCard({ cardId, cardData });
+    await updateCard({ cardId, cardData, columnId });
   };
 
   return (
@@ -63,7 +69,7 @@ export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
         <div className="w-full flex flex-col tablet:flex-row mb-[16px] tablet:pr-[54px] gap-[32px]">
           <DropdownProgress
             selectedTitle={
-              columns.find((col) => col.id === cardData.columnId)?.title ?? ""
+              columns.find((col) => col.id === columnId)?.title ?? ""
             }
             options={columns.map((col) => col.title)}
             onChange={(title) => {
@@ -85,7 +91,7 @@ export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
           onChange={(value) => {
             setCardData((prev) => ({ ...prev, ...value }));
           }}
-          columnId={cardData.columnId}
+          columnId={columnId}
           editCardData={cardData}
         />
         <AlertModal

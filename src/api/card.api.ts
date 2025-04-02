@@ -59,10 +59,10 @@ export async function createCard({
 interface Props {
   cardId: number;
   cardData: CardData;
+  columnId: number;
 }
-export async function updateCard({ cardId, cardData }: Props) {
-  const { columnId, assignee, title, description, dueDate, tags, imageUrl } =
-    cardData;
+export async function updateCard({ columnId, cardId, cardData }: Props) {
+  const { assignee, title, description, dueDate, tags, imageUrl } = cardData;
   const filteredImg = imageUrl === "" ? DEFAULT_IMG : imageUrl;
 
   const formattedDate = useFormatTime(dueDate);
