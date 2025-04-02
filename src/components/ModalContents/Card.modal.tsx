@@ -37,7 +37,7 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
   return (
     <>
       {card ? (
-        <div className="flex flex-col w-full h-[calc(100%-35px)] pt-10 overflow-scroll">
+        <div className="flex flex-col w-full h-[calc(100%-35px)] pt-10 overflow-y-auto">
           <div className="mb-4 tablet:hidden">
             {card.assignee && (
               <AssigneeCard
