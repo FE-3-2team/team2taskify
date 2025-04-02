@@ -18,7 +18,7 @@ export default function TagInput({ tags, onChange }: props) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.isComposing) return;
     const trimmedValue = inputValue.trim();
-    if (currentTags.length > 3) {
+    if (currentTags.length > 2) {
       setIsError(true);
       setIsError(Boolean(trimmedValue));
       return;
@@ -65,7 +65,7 @@ export default function TagInput({ tags, onChange }: props) {
           placeholder="입력 후 Enter"
         />
       </div>
-      {isError && <p className="text-red">태그는 4개 까지 가능합니다</p>}
+      {isError && <p className="text-red">태그는 3개 까지 가능합니다</p>}
     </div>
   );
 }
