@@ -7,7 +7,11 @@ import { getMember } from "@/api/member";
 import { getColumns } from "@/api/column.api";
 import { AlertModal } from "./AlertModal";
 import { getCardDetail, updateCard } from "@/api/card.api";
-import { CardData, INITIAL_CARD } from "../common/Card/CardValues";
+import {
+  CardData,
+  INITIAL_ASSIGNEE,
+  INITIAL_CARD,
+} from "../common/Card/CardValues";
 import CardValueForm from "../common/Card/card.form";
 import DropdownAssigneeSearch from "../common/Dropdown/DropdownAssigneeSearch";
 
@@ -30,6 +34,8 @@ export default function EditCard({
   const [columns, setColumns] = useState<Column[]>([]);
   const [isAlert, setIsAlert] = useState(false);
   const [message, setMessage] = useState("");
+  const [currentAssignee, setCurrentAssignee] =
+    useState<Assignee>(INITIAL_ASSIGNEE);
 
   useEffect(() => {
     handleLoad();
@@ -42,16 +48,16 @@ export default function EditCard({
       setMembers(members);
       const columnsData = await getColumns(Number(dashboardId));
       setColumns(columnsData);
-      const cardData = await getCardDetail(cardId);
-      setCardData(cardData);
+      const currentCardData = await getCardDetail(cardId);
+      setCurrentAssignee(currentCardData.assignee);
+      setCardData(currentCardData);
     } catch (err) {
-      setMessage("카드 수정 시도에 실패했습니다");
-      setIsAlert(true);
+      console.error(err);
     }
   };
 
   const handleEditSubmit = async () => {
-    await updateCard({ cardId, cardData, columnId });
+    await updateCard({ cardId, assignee: currentAssignee, cardData, columnId });
   };
 
   return (
@@ -80,10 +86,10 @@ export default function EditCard({
             }}
           />
           <DropdownAssigneeSearch
-            assignee={cardData.assignee}
+            assignee={currentAssignee}
             assignees={members}
-            onSelect={(value) => {
-              setCardData((prev) => ({ ...prev, assignee: value }));
+            onClick={(value) => {
+              setCurrentAssignee(value);
             }}
           />
         </div>

@@ -7,13 +7,13 @@ import Profile from "../Profile";
 interface DropdownAssigneeSearchProps {
   assignee: Assignee;
   assignees: Assignee[];
-  onSelect: (assignee: Assignee) => void;
+  onClick: (assignee: Assignee) => void;
 }
 
 const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
   assignee,
   assignees,
-  onSelect,
+  onClick,
 }) => {
   const [selected, setSelected] = useState(assignee);
   const [isOpen, setIsOpen] = useState(false);
@@ -40,10 +40,6 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [selected]);
-
-  const handleClickSelect = (value: Assignee) => {
-    onSelect(value);
-  };
 
   return (
     <div className="w-full ">
@@ -105,7 +101,7 @@ const DropdownAssigneeSearch: React.FC<DropdownAssigneeSearchProps> = ({
                     setIsOpen(false);
                     setSearchTerm("");
                     setSelected(item);
-                    handleClickSelect(item);
+                    onClick(item);
                   }}
                 >
                   <div className="w-[16px]">
