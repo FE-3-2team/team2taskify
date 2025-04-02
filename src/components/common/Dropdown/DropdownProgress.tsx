@@ -16,6 +16,7 @@ const DropdownProgress: React.FC<DropdownProgressProps> = ({
   onChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState(selectedTitle);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const DropdownProgress: React.FC<DropdownProgressProps> = ({
           className="flex items-center justify-between w-full h-[48px] px-[9px] py-2 bg-white border border-gray-300 rounded-lg"
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          <Status value={selectedTitle} />
+          <Status value={selected} />
           <Image src={DownIcon} alt="" width={26} height={26} />
         </button>
 
@@ -55,6 +56,7 @@ const DropdownProgress: React.FC<DropdownProgressProps> = ({
                 }
                 onClick={() => {
                   setIsOpen(false);
+                  setSelected(title);
                   onChange(title);
                 }}
               >

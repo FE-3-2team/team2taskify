@@ -3,9 +3,12 @@ import { useStore } from "zustand";
 import useAuthStore from "@/utils/Zustand/zustand";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getMember } from "@/api/member";
-import { AlertModal } from "./AlertModal";
 import { createCard } from "@/api/card.api";
-import { CardData, INITIAL_CARD } from "../common/Card/CardValues";
+import {
+  CardData,
+  INITIAL_ASSIGNEE,
+  INITIAL_CARD,
+} from "../common/Card/CardValues";
 import CardValueForm from "../common/Card/card.form";
 import DropdownAssigneeSearch from "../common/Dropdown/DropdownAssigneeSearch";
 import PlusIcon from "@/assets/icons/Plus.icon.svg";
@@ -18,10 +21,11 @@ interface Props {
 export default function CreateCard({ columnId, setCurrentCards }: Props) {
   const store = useStore(useAuthStore);
   const dashboardId = Number(store.dashboardId);
+  const [currentAssignee, setCurrentAssignee] =
+    useState<Assignee>(INITIAL_ASSIGNEE);
   const [cardData, setCardData] = useState<CardData>(INITIAL_CARD);
   const [members, setMembers] = useState<Assignee[]>([]);
-  const [isAlert, setIsAlert] = useState(false);
-  const [message, setMessage] = useState("");
+
   useEffect(() => {
     handleLoad();
   }, []);
@@ -32,24 +36,25 @@ export default function CreateCard({ columnId, setCurrentCards }: Props) {
       const { members } = await getMember(1, Number(dashboardId));
       setMembers(members);
     } catch (err: any) {
-      setMessage(err.response.data.message);
-      setIsAlert(true);
+      console.log(err);
     }
   };
 
   const handleCreate = async () => {
+    if (!dashboardId) return;
     try {
-      console.log(columnId, dashboardId, cardData);
-      const newCard = await createCard({ columnId, dashboardId, cardData });
+      const newCard = await createCard({
+        columnId,
+        assigneeUserId: currentAssignee.userId,
+        dashboardId,
+        cardData,
+      });
       setCurrentCards((prev) => [...prev, newCard]);
     } catch (err: any) {
-      setMessage(err.response.data.message);
-      setIsAlert(true);
+      console.log(err);
     }
   };
-  const handleChangeAssignee = (value: Assignee) => {
-    setCardData((prev) => ({ ...prev, assignee: value }));
-  };
+
   return (
     <Modal
       className="bg-white border border-gray-300  rounded-[6px] mb-4 h-10"
@@ -69,9 +74,11 @@ export default function CreateCard({ columnId, setCurrentCards }: Props) {
       <div className="flex flex-col w-full gap-6 tablet:gap-8">
         <h2 className="tablet:text-2xl-bold text-xl-bold">할 일 생성</h2>
         <DropdownAssigneeSearch
-          assignee={cardData.assignee}
+          assignee={currentAssignee}
           assignees={members}
-          onSelect={(value) => handleChangeAssignee(value)}
+          onClick={(value) => {
+            setCurrentAssignee(value);
+          }}
         />
         <CardValueForm
           onChange={(value) => {
@@ -79,13 +86,6 @@ export default function CreateCard({ columnId, setCurrentCards }: Props) {
           }}
           columnId={columnId}
           editCardData={cardData}
-        />
-        <AlertModal
-          isOpen={isAlert}
-          onConfirm={() => {
-            setIsAlert(false);
-          }}
-          message={message}
         />
       </div>
     </Modal>

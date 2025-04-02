@@ -31,15 +31,16 @@ interface CreateCardProps {
   dashboardId: number;
   columnId: number;
   cardData: CardData;
+  assigneeUserId: number;
 }
 export async function createCard({
   columnId,
   dashboardId,
   cardData,
+  assigneeUserId,
 }: CreateCardProps) {
   console.log(columnId, dashboardId, cardData);
-  const { assignee, title, description, dueDate, tags, imageUrl } = cardData;
-  const assigneeUserId = assignee.userId;
+  const { title, description, dueDate, tags, imageUrl } = cardData;
   const formattedDate = useFormatTime(dueDate);
   const filteredImg = imageUrl === "" ? DEFAULT_IMG : imageUrl;
   const res = await instance.post("/cards", {
@@ -59,16 +60,22 @@ export async function createCard({
 interface Props {
   cardId: number;
   cardData: CardData;
+  columnId: number;
+  assignee: Assignee;
 }
-export async function updateCard({ cardId, cardData }: Props) {
-  const { columnId, assignee, title, description, dueDate, tags, imageUrl } =
-    cardData;
+export async function updateCard({
+  columnId,
+  assignee,
+  cardId,
+  cardData,
+}: Props) {
+  const { title, description, dueDate, tags, imageUrl } = cardData;
   const filteredImg = imageUrl === "" ? DEFAULT_IMG : imageUrl;
 
   const formattedDate = useFormatTime(dueDate);
   const res = await instance.put(`/cards/${cardId}`, {
     columnId,
-    assignee: assignee.userId,
+    assignee,
     title,
     description,
     dueDate: formattedDate,

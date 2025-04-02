@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import SortableCard from "@/components/common/SortableCard";
 import {
   SortableContext,
@@ -86,6 +86,7 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
                     setIsCardEdit={setIsCardEdit}
                     isCardEdit={isCardEdit}
                     cardId={card.cardId}
+                    columnId={card.columnId}
                   />
                 </>
               ))}

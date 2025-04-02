@@ -5,9 +5,12 @@ import useAuthStore from "@/utils/Zustand/zustand";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { getMember } from "@/api/member";
 import { getColumns } from "@/api/column.api";
-import { AlertModal } from "./AlertModal";
 import { getCardDetail, updateCard } from "@/api/card.api";
-import { CardData, INITIAL_CARD } from "../common/Card/CardValues";
+import {
+  CardData,
+  INITIAL_ASSIGNEE,
+  INITIAL_CARD,
+} from "../common/Card/CardValues";
 import CardValueForm from "../common/Card/card.form";
 import DropdownAssigneeSearch from "../common/Dropdown/DropdownAssigneeSearch";
 
@@ -15,20 +18,30 @@ interface Props {
   setIsCardEdit: Dispatch<SetStateAction<boolean>>;
   isCardEdit: boolean;
   cardId: number;
+  columnId: number;
 }
-export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
+export default function EditCard({
+  setIsCardEdit,
+  isCardEdit,
+  columnId,
+  cardId,
+}: Props) {
   const store = useStore(useAuthStore);
   const dashboardId = store.dashboardId;
   const [cardData, setCardData] = useState<CardData>(INITIAL_CARD);
   const [members, setMembers] = useState<Assignee[]>([]);
   const [columns, setColumns] = useState<Column[]>([]);
-  const [isAlert, setIsAlert] = useState(false);
-  const [message, setMessage] = useState("");
+  const [currColId, setCurrColId] = useState(columnId);
+  const [currentAssignee, setCurrentAssignee] =
+    useState<Assignee>(INITIAL_ASSIGNEE);
 
   useEffect(() => {
     handleLoad();
   }, []);
 
+  useEffect(() => {
+    console.log(cardData);
+  }, [cardData]);
   const handleLoad = async () => {
     if (!dashboardId) return;
     try {
@@ -36,16 +49,21 @@ export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
       setMembers(members);
       const columnsData = await getColumns(Number(dashboardId));
       setColumns(columnsData);
-      const cardData = await getCardDetail(cardId);
-      setCardData(cardData);
+      const currentCardData = await getCardDetail(cardId);
+      setCurrentAssignee(currentCardData.assignee);
+      setCardData(currentCardData);
     } catch (err) {
-      setMessage("카드 수정 시도에 실패했습니다");
-      setIsAlert(true);
+      console.error(err);
     }
   };
 
   const handleEditSubmit = async () => {
-    await updateCard({ cardId, cardData });
+    await updateCard({
+      cardId,
+      assignee: currentAssignee,
+      cardData,
+      columnId: currColId,
+    });
   };
 
   return (
@@ -63,21 +81,21 @@ export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
         <div className="w-full flex flex-col tablet:flex-row mb-[16px] tablet:pr-[54px] gap-[32px]">
           <DropdownProgress
             selectedTitle={
-              columns.find((col) => col.id === cardData.columnId)?.title ?? ""
+              columns.find((col) => col.id === columnId)?.title ?? ""
             }
             options={columns.map((col) => col.title)}
             onChange={(title) => {
               const selected = columns.find((col) => col.title === title);
               if (selected) {
-                setCardData((prev) => ({ ...prev, columnId: selected.id }));
+                setCurrColId(selected.id);
               }
             }}
           />
           <DropdownAssigneeSearch
-            assignee={cardData.assignee}
+            assignee={currentAssignee}
             assignees={members}
-            onSelect={(value) => {
-              setCardData((prev) => ({ ...prev, assignee: value }));
+            onClick={(value) => {
+              setCurrentAssignee(value);
             }}
           />
         </div>
@@ -85,15 +103,8 @@ export default function EditCard({ setIsCardEdit, isCardEdit, cardId }: Props) {
           onChange={(value) => {
             setCardData((prev) => ({ ...prev, ...value }));
           }}
-          columnId={cardData.columnId}
+          columnId={columnId}
           editCardData={cardData}
-        />
-        <AlertModal
-          isOpen={isAlert}
-          onConfirm={() => {
-            setIsAlert(false);
-          }}
-          message={message}
         />
       </div>
     </Modal>

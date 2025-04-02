@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import PlusIcon from "@/assets/icons/Plus.icon.svg";
 import { uploadCardImage } from "@/api/column.api";
+const DEFAULT_IMG = process.env.NEXT_PUBLIC_DEFAULT_IMG;
 
 interface Props {
   imageUrl: string;
@@ -14,8 +15,8 @@ export default function ImageUploadBox({
   columnId,
 }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const formattedImg = imageUrl === DEFAULT_IMG ? "" : imageUrl;
   const [previewUrl, setPreviewUrl] = useState(imageUrl);
-
   useEffect(() => {
     onChangeImage(previewUrl);
   }, [previewUrl]);
@@ -59,7 +60,7 @@ export default function ImageUploadBox({
         className="w-[76px] h-[76px] bg-gray-200 rounded-[8px] flex items-center justify-center cursor-pointer"
         onClick={handleClick}
       >
-        {previewUrl ? (
+        {formattedImg !== "" ? (
           <div className="w-[76px] h-[76px] relative overflow-hidden">
             <img
               src={previewUrl}
