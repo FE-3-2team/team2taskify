@@ -37,19 +37,22 @@ export default function Dashboard() {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState("");
+  const [isDropEnd, setIsDropEnd] = useState(true);
   //
 
   useEffect(() => {
+    if (!isDropEnd) return;
     if (dashboardId) {
       handleLoad();
     }
-  }, [dashboardId]);
+  }, [dashboardId, isDropEnd]);
 
   const handleLoad = async () => {
     await getDashboardInfo(Number(dashboardId));
     const { fetchColumns } = useFetchColumns(setColumnsData, setIsLoading);
 
     await fetchColumns(Number(dashboardId));
+    setIsDropEnd(false);
   };
 
   //드래그앤 드랍 로직
@@ -150,6 +153,7 @@ export default function Dashboard() {
           cardId: activeCard.cardId,
           columnId: targetColumn.id,
         });
+        setIsDropEnd(true);
       } catch (err) {
         console.error("❌ 카드 칼럼 이동 실패", err);
       }

@@ -37,7 +37,7 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
   return (
     <>
       {card ? (
-        <div className="flex flex-col w-full h-[calc(100%-35px)] pt-10 overflow-scroll">
+        <div className="flex flex-col w-full h-[calc(100%-35px)] pt-10 overflow-y-auto">
           <div className="mb-4 tablet:hidden">
             {card.assignee && (
               <AssigneeCard
@@ -56,7 +56,7 @@ export default function CardModal({ cardId, columnTitle, columnId }: Props) {
           />
           <div className="flex tablet:gap-[13px] justify-between">
             <div className="flex flex-col justify-center w-full ">
-              <div className="flex items-center gap-4 mb-4 tablet:gap-5">
+              <div className="flex items-center w-full gap-4 mb-4 tablet:gap-5">
                 <Status value={columnTitle} />
                 <div className="w-[1px] bg-gray-300 h-[20px]" />
                 <Tags tags={card.tags} />

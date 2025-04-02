@@ -7,6 +7,11 @@ export interface CardData {
   tags: string[];
   imageUrl: string;
 }
+export interface EditCardData extends CardData {
+  columnId: number;
+  assignee: Assignee;
+  members: Assignee[];
+}
 //initialValues
 export const INITIAL_CARD = {
   title: "",
@@ -21,4 +26,11 @@ export const INITIAL_ASSIGNEE = {
   nickname: "",
   profileImageUrl: "",
   userId: 0,
+};
+
+export const INITIAL_EDIT_CARD = {
+  columnId: 0,
+  assignee: INITIAL_ASSIGNEE,
+  members: [INITIAL_ASSIGNEE],
+  ...INITIAL_CARD,
 };
