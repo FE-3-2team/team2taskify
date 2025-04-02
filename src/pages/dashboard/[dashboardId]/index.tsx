@@ -176,69 +176,71 @@ export default function Dashboard() {
   //드래그앤 드랍 로직 끝
   return (
     <>
-      <div className="flex laptop:flex-row flex-col  ml-[67px] tablet:ml-40 laptop:ml-[300px] tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)]  laptop:overflow-x-auto">
+      <div className="flex flex-col">
         <SideMenu />
         <Header />
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={columnsData}
-            strategy={horizontalListSortingStrategy}
+        <div className="flex laptop:flex-row flex-col  ml-[67px] tablet:ml-40 laptop:ml-[300px] tablet:h-[calc(100dvh_-_70px)] h-[calc(100dvh_-_60px)]  laptop:overflow-x-auto">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
           >
-            {isLoading ? (
-              <>
-                <SkeletonColumn />
-                <SkeletonColumn />
-                <SkeletonColumn />
-              </>
-            ) : (
-              columnsData.map((column: any) => {
-                return <SortableColumn key={column.id} column={column} />;
-              })
-            )}
-          </SortableContext>
-
-          <DragOverlay>
-            {activeCard && (
-              <div
-                style={{
-                  opacity: isDragging ? 0.5 : 1,
-                }}
-              >
-                <TodoCard todoData={activeCard} />
-              </div>
-            )}
-          </DragOverlay>
-        </DndContext>
-        <div className="w-[308px] h-full bg-gray-100 px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center">
-          <div className="desktop:w-[314px] tablet:w-[544px] w-[284px] tablet:h-[70px] h-[66px] mt-[46px]">
-            <Modal
-              rightHandlerText="생성"
-              rightOnClick={handleCreateColumn}
-              className="bg-white border-gray-300 text-2lg-bold border-[1px]"
-              variant={isDuplicate ? "disabled" : "primary"}
-              ModalOpenButton={
-                <div className="flex items-center gap-[12px] cursor-pointer text-black-400 text-lg-bold tablet:text-2lg-bold">
-                  새로운 컬럼 추가하기
-                  <PlusIconButton />
-                </div>
-              }
+            <SortableContext
+              items={columnsData}
+              strategy={horizontalListSortingStrategy}
             >
-              <InputModal
-                dashboardId={Number(dashboardId)}
-                isColumn
-                setError={setIsDuplicate}
-                label="컬럼 이름"
-                placeholder=""
-                title="새 컬럼 생성"
-                variant="column"
-                changeValue={(value) => setNewColumnTitle(value)}
-              />
-            </Modal>
+              {isLoading ? (
+                <>
+                  <SkeletonColumn />
+                  <SkeletonColumn />
+                  <SkeletonColumn />
+                </>
+              ) : (
+                columnsData.map((column: any) => {
+                  return <SortableColumn key={column.id} column={column} />;
+                })
+              )}
+            </SortableContext>
+
+            <DragOverlay>
+              {activeCard && (
+                <div
+                  style={{
+                    opacity: isDragging ? 0.5 : 1,
+                  }}
+                >
+                  <TodoCard todoData={activeCard} />
+                </div>
+              )}
+            </DragOverlay>
+          </DndContext>
+          <div className="w-[308px] h-full bg-gray-100 px-[12px] py-[16px] tablet:w-[584px] desktop:w-[354px] flex flex-col items-center">
+            <div className="desktop:w-[314px] tablet:w-[544px] w-[284px] tablet:h-[70px] h-[66px] mt-[46px]">
+              <Modal
+                rightHandlerText="생성"
+                rightOnClick={handleCreateColumn}
+                className="bg-white border-gray-300 text-2lg-bold border-[1px]"
+                variant={isDuplicate ? "disabled" : "primary"}
+                ModalOpenButton={
+                  <div className="flex items-center gap-[12px] cursor-pointer text-black-400 text-lg-bold tablet:text-2lg-bold">
+                    새로운 컬럼 추가하기
+                    <PlusIconButton />
+                  </div>
+                }
+              >
+                <InputModal
+                  dashboardId={Number(dashboardId)}
+                  isColumn
+                  setError={setIsDuplicate}
+                  label="컬럼 이름"
+                  placeholder=""
+                  title="새 컬럼 생성"
+                  variant="column"
+                  changeValue={(value) => setNewColumnTitle(value)}
+                />
+              </Modal>
+            </div>
           </div>
         </div>
       </div>
