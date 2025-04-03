@@ -1,15 +1,37 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
   margin: 0px;
   padding: 0px;
+  height: 100vh;
+  background-color: #fafafa;
+  font-family:
+    "Pretendard Variable",
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    Roboto,
+    "Helvetica Neue",
+    "Segoe UI",
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    sans-serif;
 }
 
 * {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 
 a {
@@ -20,3 +42,258 @@ a {
 li {
   text-decoration: none;
 }
+
+button {
+  cursor: pointer;
+  transition: opacity 0.1s ease-in-out;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+
+
+@theme {
+  /* 컬러가이드 */
+  --color-*: initial;
+  --color-black-400: #000000;
+  --color-black-300: #171717;
+  --color-black-200: #333236;
+  --color-black-100: #4b4b4b;
+  --color-gray-500: #787486;
+  --color-gray-400: #9fa6b2;
+  --color-gray-300: #d9d9d9;
+  --color-gray-200: #eeeeee;
+  --color-gray-100: #fafafa;
+  --color-white: #ffffff;
+  --color-violet-200: #5534da;
+  --color-violet-100: #f1effd;
+  --color-red: #d6173a;
+  --color-green: #7ac555;
+  --color-green-100: #e7f7db;
+  --color-green-200: #86d549;
+  --color-purple: #760dde;
+  --color-orange: #ffa500;
+  --color-blue: #76a6ea;
+  --color-blue-200: #dbe6f7;
+  --color-blue-300: #4981d5;
+  --color-pink: #e876ea;
+  --color-pink200: #d25b68;
+  --color-pink300: #f4d7da;
+  --color-pink400: #f7dbf0;
+  --color-pink500: #d549b6;
+
+  --color-brown: #f9eee3;
+
+  /* 폰트가이드 */
+  --text-3xl-bold: 32px;
+  --text-3xl-bold--line-height: 42px;
+  --text-3xl-bold--font-weight: bold;
+
+  --text-3xl-semibold: 32px;
+  --text-3xl-semibold--line-height: 42px;
+  --text-3xl-semibold--font-weight: 600;
+
+  --text-2xl-bold: 24px;
+  --text-2xl-bold--line-height: 32px;
+  --text-2xl-bold--font-weight: bold;
+
+  --text-2xl-semibold: 24px;
+  --text-2xl-semibold--line-height: 32px;
+  --text-2xl-semibold--font-weight: 600;
+
+  --text-2xl-medium: 24px;
+  --text-2xl-medium--line-height: 32px;
+  --text-2xl-medium--font-weight: 500;
+
+  --text-2xl-regular: 24px;
+  --text-2xl-regular--line-height: 32px;
+  --text-2xl-regular--font-weight: 400;
+
+  --text-xl-bold: 20px;
+  --text-xl-bold--line-height: 32px;
+  --text-xl-bold--font-weight: bold;
+
+  --text-xl-semibold: 20px;
+  --text-xl-semibold--line-height: 32px;
+  --text-xl-semibold--font-weight: 600;
+
+  --text-xl-medium: 20px;
+  --text-xl-medium--line-height: 32px;
+  --text-xl-medium--font-weight: 500;
+
+  --text-xl-regular: 20px;
+  --text-xl-regular--line-height: 32px;
+  --text-xl-regular--font-weight: 400;
+
+  --text-2lg-bold: 18px;
+  --text-2lg-bold--line-height: 26px;
+  --text-2lg-bold--font-weight: bold;
+
+  --text-2lg-semibold: 18px;
+  --text-2lg-semibold--line-height: 26px;
+  --text-2lg-semibold--font-weight: 600;
+
+  --text-2lg-medium: 18px;
+  --text-2lg-medium--line-height: 26px;
+  --text-2lg-medium--font-weight: 500;
+
+  --text-2lg-regular: 18px;
+  --text-2lg-regular--line-height: 26px;
+  --text-2lg-regular--font-weight: 400;
+
+  --text-lg-bold: 16px;
+  --text-lg-bold--line-height: 26px;
+  --text-lg-bold--font-weight: bold;
+
+  --text-lg-semibold: 16px;
+  --text-lg-semibold--line-height: 26px;
+  --text-lg-semibold--font-weight: 600;
+
+  --text-lg-medium: 16px;
+  --text-lg-medium--line-height: 26px;
+  --text-lg-medium--font-weight: 500;
+
+  --text-lg-regular: 16px;
+  --text-lg-regular--line-height: 26px;
+  --text-lg-regular--font-weight: 400;
+
+  --text-md-bold: 14px;
+  --text-md-bold--line-height: 24px;
+  --text-md-bold--font-weight: bold;
+
+  --text-md-semibold: 14px;
+  --text-md-semibold--line-height: 24px;
+  --text-md-semibold--font-weight: 600;
+
+  --text-md-medium: 14px;
+  --text-md-medium--line-height: 24px;
+  --text-md-medium--font-weight: 500;
+
+  --text-md-regular: 14px;
+  --text-md-regular--line-height: 24px;
+  --text-md-regular--font-weight: 400;
+
+  --text-sm-semibold: 13px;
+  --text-sm-semibold--line-height: 22px;
+  --text-sm-semibold--font-weight: 600;
+
+  --text-sm-medium: 13px;
+  --text-sm-medium--line-height: 22px;
+  --text-sm-medium--font-weight: 500;
+
+  --text-xs-semibold: 12px;
+  --text-xs-semibold--line-height: 20px;
+  --text-xs-semibold--font-weight: 600;
+
+  --text-xs-medium: 12px;
+  --text-xs-medium--line-height: 18px;
+  --text-xs-medium--font-weight: 500;
+
+  --text-xs-regular: 12px;
+  --text-xs-regular--line-height: 18px;
+  --text-xs-regular--font-weight: 400;
+
+  /* 반응형 브레이크포인트 설정 */
+  --breakpoint-*: initial;
+  --breakpoint-tablet: 744px;
+  --breakpoint-laptop: 1024px;
+  --breakpoint-desktop: 1921px;
+
+  /* 폰트 추가 */
+  --font-montserrat: "Montserrat", "sans-serif";
+}
+
+/* --- 💫 skeleton 애니메이션 --- */
+.shimmer-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background-color: #e5e7eb; /* 기본 배경 (회색) */
+}
+
+.shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  animation: shimmerMove 1.5s infinite;
+}
+
+@keyframes shimmerMove {
+  0% {
+    transform: translateX(-100%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(100%) skewX(-20deg);
+  }
+}
+
+
+/* --- 로더 --- */
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid rgb(166, 78, 255);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin: 100px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 9999;
+}
+
+@media (max-width: 768px) {
+  .mobile-hide-after-10 > :nth-child(n + 11) {
+    display: none;
+  }
+}
+
+/* 마우스효과 */
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #c084fc 0%, transparent 60%);
+  border-radius: 50%;
+  opacity: 0.8;
+  pointer-events: none;
+  animation: fade-out 0.8s ease-out forwards;
+}
+
+@keyframes fade-out {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-10px, 10px) scale(0.5);
+    opacity: 0;
+  }
+}
+
